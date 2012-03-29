@@ -239,8 +239,14 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
     trans->PAppend("DELETE FROM petition WHERE petitionguid IN (%s)",  ssInvalidPetitionGUIDs.str().c_str());
     trans->PAppend("DELETE FROM petition_sign WHERE petitionguid IN (%s)", ssInvalidPetitionGUIDs.str().c_str());
-    trans->PAppend("INSERT INTO petition (ownerguid, petitionguid, name, type) VALUES ('%u', '%u', '%s', '%u')",
-        _player->GetGUIDLow(), charter->GetGUIDLow(), name.c_str(), type);
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_INS_PETITION);
+    stmt->setUInt32(0, _player->GetGUIDLow());
+    stmt->setUInt32(1, charter->GetGUIDLow());
+    stmt->setString(2, name);
+    stmt->setUInt8(3, uint8(type));
+    trans->Append(stmt);
+
     CharacterDatabase.CommitTransaction(trans);
 }
 
@@ -334,7 +340,7 @@ void WorldSession::SendPetitionQueryOpcode(uint64 petitionguid)
         Field* fields = result->Fetch();
         ownerguid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
         name      = fields[1].GetString();
-        type      = fields[2].GetUInt32();
+        type      = fields[2].GetUInt8();
     }
     else
     {
@@ -480,7 +486,7 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket & recv_data)
     fields = result->Fetch();
     uint64 ownerGuid = MAKE_NEW_GUID(fields[0].GetUInt32(), 0, HIGHGUID_PLAYER);
     uint8 signs = fields[1].GetUInt8();
-    uint32 type = fields[2].GetUInt32();
+    uint8 type = fields[2].GetUInt8();
 
     uint32 playerGuid = _player->GetGUIDLow();
     if (GUID_LOPART(ownerGuid) == playerGuid)
@@ -901,8 +907,15 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket & recv_data)
     }
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    trans->PAppend("DELETE FROM petition WHERE petitionguid = '%u'", GUID_LOPART(petitionGuid));
-    trans->PAppend("DELETE FROM petition_sign WHERE petitionguid = '%u'", GUID_LOPART(petitionGuid));
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PETITION_BY_GUID);
+    stmt->setUInt32(0, GUID_LOPART(petitionGuid));
+    trans->Append(stmt);
+
+    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DEL_PETITION_SIGNATURE);
+    stmt->setUInt32(0, GUID_LOPART(petitionGuid));
+    trans->Append(stmt);
+
     CharacterDatabase.CommitTransaction(trans);
 
     // created
