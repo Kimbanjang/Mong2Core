@@ -431,7 +431,11 @@ public:
                 Start(false, true, 0, NULL);
         }
 
+<<<<<<< HEAD
         void WaypointReached(uint32 id)
+=======
+        void WaypointReached(uint32 /*waypointId*/)
+>>>>>>> KBJ/master
         {
             switch (id)
             {

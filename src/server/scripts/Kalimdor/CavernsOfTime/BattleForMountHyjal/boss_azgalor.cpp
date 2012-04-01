@@ -111,9 +111,9 @@ public:
             }
         }
 
-        void WaypointReached(uint32 i)
+        void WaypointReached(uint32 waypointId)
         {
-            if (i == 7 && instance)
+            if (waypointId == 7 && instance)
             {
                 Unit* target = Unit::GetUnit((*me), instance->GetData64(DATA_THRALL));
                 if (target && target->isAlive())
@@ -121,9 +121,9 @@ public:
             }
         }
 
-        void JustDied(Unit* victim)
+        void JustDied(Unit* killer)
         {
-            hyjal_trashAI::JustDied(victim);
+            hyjal_trashAI::JustDied(killer);
             if (instance && IsEvent)
                 instance->SetData(DATA_AZGALOREVENT, DONE);
             DoPlaySoundToSet(me, SOUND_ONDEATH);
@@ -241,7 +241,7 @@ public:
         {
         }
 
-        void WaypointReached(uint32 /*i*/)
+        void WaypointReached(uint32 /*waypointId*/)
         {
         }
 
@@ -251,7 +251,7 @@ public:
                 AttackStart(who);
         }
 
-        void JustDied(Unit* /*victim*/)
+        void JustDied(Unit* /*killer*/)
         {
         }
 

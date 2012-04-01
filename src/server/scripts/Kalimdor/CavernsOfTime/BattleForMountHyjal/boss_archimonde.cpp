@@ -343,9 +343,9 @@ public:
             ++SoulChargeCount;
         }
 
-        void JustDied(Unit* victim)
+        void JustDied(Unit* killer)
         {
-            hyjal_trashAI::JustDied(victim);
+            hyjal_trashAI::JustDied(killer);
             DoScriptText(SAY_DEATH, me);
 
             if (instance)
@@ -644,7 +644,11 @@ public:
 
             DoMeleeAttackIfReady();
         }
-        void WaypointReached(uint32 /*i*/){}
+
+        void WaypointReached(uint32 /*waypointId*/)
+        {
+
+        }
     };
 
 };
