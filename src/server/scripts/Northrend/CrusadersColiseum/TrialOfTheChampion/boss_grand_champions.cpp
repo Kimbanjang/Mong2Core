@@ -229,7 +229,6 @@ struct npc_mounted_championAI : ScriptedAI
             } else buffTimer = urand(1000, 2000);
         }else buffTimer -= uiDiff;
 
-<<<<<<< HEAD
         if (chargeTimer <= uiDiff)
         {
             if(Unit* target = SelectTarget(SELECT_TARGET_FARTHEST))
@@ -237,26 +236,6 @@ struct npc_mounted_championAI : ScriptedAI
                 DoResetThreat();
                 me->AddThreat(target, 5.0f);
                 DoCast(target, SPELL_CHARGE, true);
-=======
-            if (uiType <= 3)
-                Start(false, true, 0, NULL);
-        }
-
-        void WaypointReached(uint32 waypointId)
-        {
-            if (!instance)
-                return;
-
-            switch (waypointId)
-            {
-                case 2:
-                    if (uiWaypointPath == 3 || uiWaypointPath == 2)
-                        instance->SetData(DATA_MOVEMENT_DONE, instance->GetData(DATA_MOVEMENT_DONE)+1);
-                    break;
-                case 3:
-                    instance->SetData(DATA_MOVEMENT_DONE, instance->GetData(DATA_MOVEMENT_DONE)+1);
-                    break;
->>>>>>> KBJ/master
             }
             chargeTimer = 5000;
         }else chargeTimer -= uiDiff;

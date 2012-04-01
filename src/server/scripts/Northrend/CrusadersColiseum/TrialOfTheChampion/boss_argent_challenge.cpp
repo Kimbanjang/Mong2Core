@@ -659,15 +659,9 @@ public:
                     instance->SetData(MINION_ENCOUNTER, IN_PROGRESS);
         }
 
-<<<<<<< HEAD
         void DamageTaken(Unit* /*attacker*/, uint32 & damage)
         {
             if(damage >= me->GetHealth() && !shieldCasted)
-=======
-        void WaypointReached(uint32 waypointId)
-        {
-            if (waypointId == 0)
->>>>>>> KBJ/master
             {
                 damage = 0;
                 DoCast(me, SPELL_DIVINE_SHIELD, true);
