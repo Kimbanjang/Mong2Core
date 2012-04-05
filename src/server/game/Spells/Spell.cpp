@@ -2477,6 +2477,14 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
 
         caster->DealSpellDamage(&damageInfo, true);
 
+        // Improved Devouring Plague
+        if (m_spellInfo->Id == 63675 && damageInfo.damage && caster->isAlive())
+        {
+            uint32 healthGain = damageInfo.damage * 15 / 100;
+            healthGain = caster->SpellHealingBonus(caster, m_spellInfo, healthGain, HEAL);
+            caster->HealBySpell(caster, m_spellInfo, healthGain);
+        } 
+
         // Haunt
         if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->SpellFamilyFlags[1] & 0x40000 && m_spellAura && m_spellAura->GetEffect(1))
         {
@@ -5546,6 +5554,13 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                 break;
             }
+            case SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN:
+            {
+                // Pain Suppression
+                if (m_spellInfo->Id == 33206)
+                    if (!m_caster->HasAura(63248) && m_caster->HasAuraType(SPELL_AURA_MOD_STUN))
+                        return SPELL_FAILED_STUNNED; 
+			}
             default:
                 break;
         }

@@ -3128,6 +3128,9 @@ void SpellMgr::LoadDbcDataCorrections()
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
                 spellInfo->EffectRadiusIndex[0] = EFFECT_RADIUS_7_YARDS;
                 break;
+            case 68766: // Desecration
+                spellInfo->rangeIndex = 2;
+                break;
             // Master Shapeshifter: missing stance data for forms other than bear - bear version has correct data
             // To prevent aura staying on target after talent unlearned
             case 48420:
@@ -3138,6 +3141,9 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 48422:
                 spellInfo->Stances = 1 << (FORM_TREE - 1);
+                break;
+            case 61607: // Mark of Blood
+                spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
                 break;
             case 51466: // Elemental Oath (Rank 1)
             case 51470: // Elemental Oath (Rank 2)
@@ -3319,6 +3325,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 70860: // Frozen Throne Teleport
             case 70861: // Sindragosa's Lair Teleport
                 spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_DB;
+                spellInfo->speed = 0;
                 break;
             case 69055: // Saber Lash (Lord Marrowgar)
             case 70814: // Saber Lash (Lord Marrowgar)

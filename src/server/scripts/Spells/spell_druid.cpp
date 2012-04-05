@@ -31,6 +31,34 @@ enum DruidSpells
     DRUID_NATURES_SPLENDOR              = 57865
 };
 
+// 50334 Berserk
+class spell_dru_berserk : public SpellScriptLoader
+{
+    public:
+        spell_dru_berserk() : SpellScriptLoader("spell_dru_berserk") {}
+
+        class spell_dru_berserk_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_dru_berserk_AuraScript);
+            void HandleEffectApply(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Unit* target = GetTarget())
+                    if (target->GetTypeId() == TYPEID_PLAYER)
+                        target->ToPlayer()->RemoveSpellCategoryCooldown(971, true);
+            }
+
+            void Register()
+            {
+                OnEffectApply += AuraEffectApplyFn(spell_dru_berserk_AuraScript::HandleEffectApply, EFFECT_2, SPELL_AURA_MECHANIC_IMMUNITY, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_dru_berserk_AuraScript();
+        }
+};
+
 // 54846 Glyph of Starfire
 class spell_dru_glyph_of_starfire : public SpellScriptLoader
 {
@@ -369,6 +397,7 @@ class spell_dru_starfall_dummy : public SpellScriptLoader
 
 void AddSC_druid_spell_scripts()
 {
+    new spell_dru_berserk();
     new spell_dru_glyph_of_starfire();
     new spell_dru_moonkin_form_passive();
     new spell_dru_primal_tenacity();

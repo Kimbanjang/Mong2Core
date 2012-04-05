@@ -30,6 +30,7 @@ enum PaladinSpells
 {
     PALADIN_SPELL_DIVINE_PLEA                    = 54428,
     PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF     = 67480,
+    PALADIN_SPELL_BLESSING_OF_SANCTUARY_HELPER   = 20912,
 
     PALADIN_SPELL_HOLY_SHOCK_R1                  = 20473,
     PALADIN_SPELL_HOLY_SHOCK_R1_DAMAGE           = 25912,
@@ -43,6 +44,9 @@ enum PaladinSpells
     SPELL_DIVINE_STORM                           = 53385,
     SPELL_DIVINE_STORM_DUMMY                     = 54171,
     SPELL_DIVINE_STORM_HEAL                      = 54172,
+
+    PALADIN_SPELL_RIGHTEOUS_DEFENCE              = 31789,
+    PALADIN_SPELL_RIGHTEOUS_DEFENCE_EFFECT_1     = 31790,
 };
 
 // 31850 - Ardent Defender
@@ -190,14 +194,16 @@ class spell_pal_blessing_of_sanctuary : public SpellScriptLoader
             {
                 Unit* target = GetTarget();
                 if (Unit* caster = GetCaster())
-                    caster->CastSpell(target, PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, true);
+                    caster->CastSpell(target, PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, true);		
+	            target->CastSpell(target, PALADIN_SPELL_BLESSING_OF_SANCTUARY_HELPER, true);
             }
 
             void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
             {
                 Unit* target = GetTarget();
                 target->RemoveAura(PALADIN_SPELL_BLESSING_OF_SANCTUARY_BUFF, GetCasterGUID());
-            }
+	            target->RemoveAura(PALADIN_SPELL_BLESSING_OF_SANCTUARY_HELPER);
+	        }
 
             void Register()
             {
@@ -413,6 +419,41 @@ class spell_pal_divine_storm_dummy : public SpellScriptLoader
         }
 };
 
+class spell_pal_righteous_defense : public SpellScriptLoader
+{
+    public:
+        spell_pal_righteous_defense() : SpellScriptLoader("spell_pal_righteous_defense") { }
+
+        class spell_pal_righteous_defense_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_pal_righteous_defense_SpellScript);
+
+            bool Validate(SpellInfo const* /*spellEntry*/)
+            {
+                if (!sSpellMgr->GetSpellInfo(PALADIN_SPELL_RIGHTEOUS_DEFENCE))
+                    return false;
+                return true;
+            }
+
+            void HandleSpellEffectTriggerSpell(SpellEffIndex /*effIndex*/)
+            {
+                if (Unit* caster = GetCaster())
+                    if (Unit* targetUnit = GetHitUnit())
+                        caster->CastSpell(targetUnit, PALADIN_SPELL_RIGHTEOUS_DEFENCE_EFFECT_1, true);
+            }
+
+            void Register()
+            {
+                OnEffectHitTarget += SpellEffectFn(spell_pal_righteous_defense_SpellScript::HandleSpellEffectTriggerSpell, EFFECT_1, SPELL_EFFECT_TRIGGER_SPELL);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_pal_righteous_defense_SpellScript();
+        }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -423,4 +464,5 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_judgement_of_command();
     new spell_pal_divine_storm();
     new spell_pal_divine_storm_dummy();
+    new spell_pal_righteous_defense();
 }

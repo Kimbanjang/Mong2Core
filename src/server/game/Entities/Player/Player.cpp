@@ -1662,6 +1662,12 @@ void Player::Update(uint32 p_time)
         }
     }
 
+    // Remueve montura cuando usas dispersion en ella.
+    if (HasAura(47585) && HasAuraType(SPELL_AURA_MOUNTED))
+    {
+        ToPlayer()->RemoveAurasByType(SPELL_AURA_MOUNTED);
+    }
+
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
     {
         if (roll_chance_i(3) && GetTimeInnEnter() > 0)      // freeze update
@@ -5221,6 +5227,12 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 
     if (GetSession()->IsARecruiter() || (GetSession()->GetRecruiterId() != 0))
         SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_REFER_A_FRIEND);
+
+    if (getDeathState() == GHOULED)
+    {
+        RemoveAurasDueToSpell(46619);
+        RemoveAllControlled();
+    }
 
     setDeathState(ALIVE);
 
@@ -11561,6 +11573,10 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
             // check this only in game
             if (not_loading)
             {
+                //don't allow warrior and rogue class 100% ARP 100% crit chance exploit 
+                if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) && (pProto->Class == ITEM_CLASS_WEAPON || pProto->Class == ITEM_CLASS_ARMOR)) 
+                    return EQUIP_ERR_CANT_DO_RIGHT_NOW; 
+
                 // May be here should be more stronger checks; STUNNED checked
                 // ROOT, CONFUSED, DISTRACTED, FLEEING this needs to be checked.
                 if (HasUnitState(UNIT_STATE_STUNNED))
@@ -13183,7 +13199,13 @@ void Player::SwapItem(uint16 src, uint16 dst)
         }
         else if (IsEquipmentPos(dst))
         {
-            uint16 dest;
+	        if (GetTradeData())
+		    {
+			    SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pSrcItem, pDstItem);
+				return;
+	        }
+
+			uint16 dest;
             InventoryResult msg = CanEquipItem(dstslot, dest, pSrcItem, false);
             if (msg != EQUIP_ERR_OK)
             {
@@ -13294,6 +13316,12 @@ void Player::SwapItem(uint16 src, uint16 dst)
     // Check bag swap with item exchange (one from empty in not bag possition (equipped (not possible in fact) or store)
     if (Bag* srcBag = pSrcItem->ToBag())
     {
+        if (GetTradeData())
+        {
+            SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pSrcItem, pDstItem);
+            return;
+        }
+
         if (Bag* dstBag = pDstItem->ToBag())
         {
             Bag* emptyBag = NULL;
@@ -25096,6 +25124,11 @@ void Player::ActivateSpec(uint8 spec)
     /*RemoveAllAurasOnDeath();
     if (GetPet())
         GetPet()->RemoveAllAurasOnDeath();*/
+
+	// Fix Exploit DK Improved Presences
+    RemoveAurasDueToSpell(48263);
+    RemoveAurasDueToSpell(48265);
+    RemoveAurasDueToSpell(48266);
 
     //RemoveAllAuras(GetGUID(), NULL, false, true); // removes too many auras
     //ExitVehicle(); // should be impossible to switch specs from inside a vehicle..

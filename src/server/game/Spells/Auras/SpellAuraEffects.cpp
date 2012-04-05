@@ -681,6 +681,9 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
                 // Bonus from Glyph of Lightwell
                 if (AuraEffect* modHealing = caster->GetAuraEffect(55673, 0))
                     AddPctN(amount, modHealing->GetAmount());
+				// Bonus from talent Spiritual Healing
+                if (AuraEffect* modHealing = caster->GetAuraEffect(SPELL_AURA_ADD_PCT_MODIFIER, SPELLFAMILY_PRIEST, 46, 1))
+                    AddPctN(amount, modHealing->GetAmount());
             }
             break;
         case SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN:
@@ -898,6 +901,34 @@ void AuraEffect::CalculateSpellMod()
                             m_spellmod->value = GetAmount()/7;
                         }
                         break;
+						case 64949: // Idol of the Flourishing Life
+                            if (!m_spellmod)
+                            {
+                                m_spellmod = new SpellModifier(GetBase());
+                                m_spellmod->op = SpellModOp(GetMiscValue());
+                                m_spellmod->type = SPELLMOD_FLAT;
+                                m_spellmod->spellId = GetId();
+                                m_spellmod->mask[1] = 0x2000000;
+                            }
+                            m_spellmod->value = GetAmount();
+                            break;
+                    }
+                    break;
+                case SPELLFAMILY_PALADIN:
+                    switch (GetId())
+                    {
+                        case 60792: // Libram of Tolerance
+                        case 64956: // Libram of the Resolute
+                            if (!m_spellmod)
+                            {
+                                m_spellmod = new SpellModifier(GetBase());
+                                m_spellmod->op = SpellModOp(GetMiscValue());
+                                m_spellmod->type = SPELLMOD_FLAT;
+                                m_spellmod->spellId = GetId();
+                                m_spellmod->mask[0] = 0x80000000;
+                            }
+                            m_spellmod->value = GetAmount();
+                            break;
                     }
                     break;
                 default:
@@ -1095,6 +1126,18 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
 {
     switch (GetAuraType())
     {
+        case SPELL_AURA_PERIODIC_DAMAGE:
+            switch (GetId())
+            {
+                case 45032: // Curse of Agony - Sathrovarr
+                case 45034:
+                    if((m_tickNumber-1) % 5 == 0 && (m_tickNumber-1) > 0)
+                        SetAmount(GetAmount() * 2);
+                    break;
+                default: 
+                    break;
+            }
+            break;
         case SPELL_AURA_DUMMY:
             // Haunting Spirits
             if (GetId() == 7057)
@@ -1180,6 +1223,11 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
                         case 59911: // Tenacity (vehicle)
                            GetBase()->RefreshDuration();
                            break;
+                        case 63000: // Trample Scourge (vehicle)
+                            if (!caster || caster->GetTypeId() != TYPEID_PLAYER)
+                                return;
+                            caster->CastSpell(caster,63001,true);
+                            break;
                         case 66823: case 67618: case 67619: case 67620: // Paralytic Toxin
                             // Get 0 effect aura
                             if (AuraEffect* slow = GetBase()->GetEffect(0))
@@ -1282,6 +1330,9 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
         case SPELL_AURA_PERIODIC_DAMAGE:
         case SPELL_AURA_PERIODIC_DAMAGE_PERCENT:
             HandlePeriodicDamageAurasTick(target, caster);
+            // Hack for Consecration to enter in combat and PvP mode
+            if (GetSpellInfo()->Effects[GetEffIndex()].TriggerSpell == SPELL_EFFECT_PERSISTENT_AREA_AURA && caster->isAlive())
+                caster->CombatStart(target);
             break;
         case SPELL_AURA_PERIODIC_LEECH:
             HandlePeriodicHealthLeechAuraTick(target, caster);
@@ -1306,10 +1357,20 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
             HandlePeriodicPowerBurnAuraTick(target, caster);
             break;
         case SPELL_AURA_DUMMY:
-            // Haunting Spirits
-            if (GetId() == 7057)
-                target->CastSpell((Unit*)NULL, GetAmount(), true);
-            break;
+			switch (GetId())
+            {
+      		    case 7057: // Haunting Spirits
+            		target->CastSpell((Unit*)NULL, GetAmount(), true);
+            		break;
+                case 68614: // Concentrated Irresistible Cologne Spill
+                    caster->CastSpell(target, 68934, false);
+                    break;
+                case 68798: // Concentrated Alluring Perfume Spill
+                    caster->CastSpell(target, 68927, false);
+                    break;
+				default:
+            		break;
+			}
         default:
             break;
     }
@@ -3359,11 +3420,23 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
         target->ApplySpellImmune(GetId(), IMMUNITY_STATE, *iter, apply);
 
     // Patch 3.0.3 Bladestorm now breaks all snares and roots on the warrior when activated.
-    if (apply && GetId() == 46924)
+    if (GetId() == 46924)
     {
         target->RemoveAurasByType(SPELL_AURA_MOD_ROOT);
         target->RemoveAurasByType(SPELL_AURA_MOD_DECREASE_SPEED);
+        target->ApplySpellImmune(GetId(), IMMUNITY_ID, 13810, apply);   // Frost Trap
+        target->ApplySpellImmune(GetId(), IMMUNITY_ID, 55741, apply);   // Desecration Rank 1
+        target->ApplySpellImmune(GetId(), IMMUNITY_ID, 68766, apply);   // Desecration Rank 2
+        target->ApplySpellImmune(GetId(), IMMUNITY_ID, 605, apply);     // Mind Control
+        target->ApplySpellImmune(GetId(), IMMUNITY_STATE, SPELL_AURA_TRANSFORM, apply);
+        target->ApplySpellImmune(GetId(), IMMUNITY_MECHANIC, IMMUNE_TO_MOVEMENT_IMPAIRMENT_AND_LOSS_CONTROL_MASK, apply);
+        target->ApplySpellImmune(GetId(), IMMUNITY_MECHANIC, MECHANIC_CHARM, apply);
+        target->ApplySpellImmune(GetId(), IMMUNITY_MECHANIC, MECHANIC_POLYMORPH, apply);
     }
+
+	// stop handling the effect if it was removed by linked event
+    if (apply && aurApp->GetRemoveMode())
+        return;
 
     if (apply && GetSpellInfo()->AttributesEx & SPELL_ATTR1_DISPEL_AURAS_ON_IMMUNITY)
         for (std::list <AuraType>::iterator iter = immunity_list.begin(); iter != immunity_list.end(); ++iter)
@@ -4775,8 +4848,12 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     break;
                 case 52916: // Honor Among Thieves
                     if (target->GetTypeId() == TYPEID_PLAYER)
+					{
                         if (Unit* spellTarget = ObjectAccessor::GetUnit(*target, target->ToPlayer()->GetComboTarget()))
                             target->CastSpell(spellTarget, 51699, true);
+                        else if (Unit * spellTarget = target->ToPlayer()->GetSelectedUnit())
+                            target->CastSpell(spellTarget, 51699, true);
+                    }
                    break;
                 case 28832: // Mark of Korth'azz
                 case 28833: // Mark of Blaumeux
@@ -5924,6 +6001,13 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
                         target->SummonCreature(17870, 0, 0, 0, target->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 0);
                         return;
                     }
+                    case 31944:// Doomfire
+                    {
+                        const int32 damage = 2250 - (150 * m_tickNumber-1) > 0 ? 2250 - (150 * m_tickNumber-1) : 0;
+                        target->CastCustomSpell(target, 31969, &damage, NULL, NULL, true, 0, this);
+
+                        return;
+					}
                     // Flame Quills
                     case 34229:
                     {
@@ -5959,6 +6043,28 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
                     case 39857:
                         triggerSpellId = 39856;
                         break;
+					// Prismatic Shield
+                    case 40879: 
+                    {
+                        switch (rand()%6)
+                        {
+                            case 0: triggerSpellId = 40880; break;
+                            case 1: triggerSpellId = 40882; break;
+                            case 2: triggerSpellId = 40883; break;
+                            case 3: triggerSpellId = 40891; break;
+                            case 4: triggerSpellId = 40896; break;
+                            case 5: triggerSpellId = 40897; break;
+                        }
+                        break;
+                    }
+					// Aura of Desire
+                    case 41350: 
+                    {
+                        AuraEffect * aurEff = this->GetBase()->GetEffect(EFFECT_1);
+                        int32 amount = aurEff->GetAmount() - 5 < -100 ? -100 : aurEff->GetAmount() - 5;
+                        aurEff->ChangeAmount(amount, false);
+                        return;
+                    }
                     // Personalized Weather
                     case 46736:
                         triggerSpellId = 46737;
@@ -6052,6 +6158,10 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
             // Slime Pool (Dreadscale & Acidmaw)
             case 66882:
                 target->CastCustomSpell(triggerSpellId, SPELLVALUE_RADIUS_MOD, (int32)((((float)m_tickNumber / 60) * 0.9f + 0.1f) * 10000 * 2 / 3), NULL, true, NULL, this);
+                return;
+            // Arcane Overload
+            case 56432:
+                target->CastCustomSpell(triggerSpellId, SPELLVALUE_RADIUS_MOD, (100 - (m_tickNumber + 5) * 2) * 100, NULL, true, NULL, this);
                 return;
             // Beacon of Light
             case 53563:
@@ -6152,6 +6262,7 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
         {
             case 43093: case 31956: case 38801:  // Grievous Wound
             case 35321: case 38363: case 39215:  // Gushing Wound
+            case 48920:                          // Grievous Bite 
                 if (target->IsFullHealth())
                 {
                     target->RemoveAurasDueToSpell(GetSpellInfo()->Id);
@@ -6166,6 +6277,12 @@ void AuraEffect::HandlePeriodicDamageAurasTick(Unit* target, Unit* caster) const
                     target->RemoveAurasDueToSpell(GetSpellInfo()->Id);
                     return;
                 }
+                break;
+            }
+            case 22682: // Shadow Flame
+            {
+                if(m_tickNumber == GetTotalTicks())
+                   caster->CastSpell(target,22993,true);
                 break;
             }
         }

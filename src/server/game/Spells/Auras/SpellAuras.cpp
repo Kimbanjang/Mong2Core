@@ -1552,12 +1552,24 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             break;
         case SPELLFAMILY_DRUID:
             // Enrage
-            if ((GetSpellInfo()->SpellFamilyFlags[0] & 0x80000) && GetSpellInfo()->SpellIconID == 961)
+            if (GetSpellInfo()->SpellFamilyFlags[0] & 0x80000)
             {
-                if (target->HasAura(70726)) // Item - Druid T10 Feral 4P Bonus
+                if (target->HasAura(70726)) // Druid T10 Feral 4P Bonus
+                {
                     if (apply)
                         target->CastSpell(target, 70725, true);
-                break;
+                } else if (AuraEffect * auraEff = target->GetAuraEffectOfRankedSpell(1178, 0)) {
+                    int32 value = auraEff->GetAmount();
+                    int32 mod;
+                    switch (auraEff->GetId())
+                    {
+                        case 1178: mod = 27; break;
+                        case 9635: mod = 16; break;
+                    }
+                    mod = value / 100 * mod;
+                    value = value + (apply ? -mod : mod);
+                    auraEff->ChangeAmount(value);
+                }
             }
             break;
         case SPELLFAMILY_ROGUE:
@@ -1713,15 +1725,36 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 else
                 {
                     // Remove passive auras
-                    if (presence == 48266 || bloodPresenceAura)
-                        target->RemoveAurasDueToSpell(63611);
-                    if (presence == 48263 || frostPresenceAura)
-                        target->RemoveAurasDueToSpell(61261);
-                    if (presence == 48265 || unholyPresenceAura)
+                    target->RemoveAurasDueToSpell(63611);
+                    target->RemoveAurasDueToSpell(61261);
+                    target->RemoveAurasDueToSpell(63622);
+                    target->RemoveAurasDueToSpell(65095);
+                    target->RemoveAurasDueToSpell(49772);
+                }
+            }
+            if (GetSpellInfo()->GetSpellSpecific() == SPELL_SPECIFIC_AURA)
+            {
+                if (GetCasterGUID() == target->GetGUID())
+                {   // Sanctified Retribution
+                    if (target->HasAura(31869))
                     {
-                        if (presence == 48265 && unholyPresenceAura)
-                            target->RemoveAurasDueToSpell(63622);
-                        target->RemoveAurasDueToSpell(49772);
+                        target->RemoveAurasDueToSpell(63531);
+                        if (apply)
+                            target->CastSpell(target, 63531, true);
+                    }
+                    // Improved Devotion Aura
+                    else if (target->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_PALADIN, 291, 1))
+                    {
+                        target->RemoveAurasDueToSpell(63514);
+                        if (apply)
+                            target->CastSpell(target, 63514, true);
+                    }
+                    // Improved Concentration Aura
+                    else if (target->GetAuraEffect(SPELL_AURA_ADD_FLAT_MODIFIER, SPELLFAMILY_PALADIN, 1487, 0))
+                    {
+                        target->RemoveAurasDueToSpell(63510);
+                        if (apply)
+                            target->CastSpell(target, 63510, true);
                     }
                 }
             }
@@ -1747,7 +1780,39 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
             }
             break;
     }
-}
+    if (GetSpellInfo()->IsPassive() && !GetCastItemGUID())
+        for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
+        {
+            if (m_effects[i] && m_effects[i]->GetAuraType() == SPELL_AURA_MECHANIC_DURATION_MOD)
+            {
+                uint32 spell_immune;
+
+                switch(m_effects[i]->GetMiscValue())
+                {
+                    case 5:  
+                        spell_immune = 55357; 
+                        break;                    
+                    case 7: 
+                    case 11: 
+                        spell_immune = 55378; 
+                        break;
+                    case 9:  
+                        spell_immune = 55366;
+                        break;
+                    case 12: 
+                        spell_immune = 55358; 
+                        break;
+                    default:
+                        break;
+                }
+                if (spell_immune)
+                {
+                    if (apply) target->RemoveAurasDueToSpell(spell_immune);
+                    target->ApplySpellImmune(0, IMMUNITY_ID, spell_immune, apply);
+                }
+            }
+        }
+}      
 
 bool Aura::CanBeAppliedOn(Unit* target)
 {
