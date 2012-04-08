@@ -1497,7 +1497,7 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
             }
             else
             {
-               if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*itr)->GetSpellInfo()))
+                if (ToPlayer()->HasItemFitToSpellRequirements((*itr)->GetSpellInfo()))
                     bonusPct += (*itr)->GetAmount();
             }
         }
@@ -1507,6 +1507,7 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
             maxArmorPen = float(400 + 85 * victim->getLevel());
         else
             maxArmorPen = 400 + 85 * victim->getLevel() + 4.5f * 85 * (victim->getLevel() - 59);
+
         // Cap armor penetration to this number
         maxArmorPen = std::min((armor + maxArmorPen) / 3, armor);
         // Figure out how much armor do we ignore
@@ -1543,7 +1544,8 @@ void Unit::CalcAbsorbResist(Unit* victim, SpellSchoolMask schoolMask, DamageEffe
     DamageInfo dmgInfo = DamageInfo(this, victim, damage, spellInfo, schoolMask, damagetype);
 
     // Magic damage, check for resists
-    if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0)
+    // Ignore spells that cant be resisted
+    if ((schoolMask & SPELL_SCHOOL_MASK_NORMAL) == 0 && (spellInfo->AttributesEx4 & SPELL_ATTR4_IGNORE_RESISTANCES) == 0)
     {
         float victimResistance = float(victim->GetResistance(schoolMask));
         victimResistance += float(GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, schoolMask));
@@ -5805,7 +5807,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Glyph of Polymorph
                 case 56375:
                 {
-                    if(!target)
+                    if (!target)
                         return false;
                     target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE, 0, target->GetAura(32409)); // SW:D shall not be removed.
                     target->RemoveAurasByType(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
@@ -5864,7 +5866,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Blessing of Ancient Kings (Val'anyr, Hammer of Ancient Kings)
                 case 64411:
                 {
-                    if(!victim)
+                    if (!victim)
                         return false;
                     basepoints0 = int32(CalculatePctN(damage, 15));
                     if (AuraEffect* aurEff = victim->GetAuraEffect(64413, 0, GetGUID()))
@@ -6197,7 +6199,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             // Divine Aegis
             if (dummySpell->SpellIconID == 2820)
             {
-                if(!target)
+                if (!target)
                     return false;
 
                 // Multiple effects stack, so let's try to find this aura.
@@ -6367,7 +6369,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 // Glyph of Shred
                 case 54815:
                 {
-                    if(!target)
+                    if (!target)
                         return false;
 
                     // try to find spell Rip on the target
@@ -6673,7 +6675,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     // Explosive Shot
                     if (procSpell->SpellFamilyFlags[2] & 0x200)
                     {
-                        if(!victim)
+                        if (!victim)
                             return false;
                         if (AuraEffect const* pEff = victim->GetAuraEffect(SPELL_AURA_PERIODIC_DUMMY, SPELLFAMILY_HUNTER, 0x0, 0x80000000, 0x0, GetGUID()))
                             basepoints0 = pEff->GetSpellInfo()->CalcPowerCost(this, SpellSchoolMask(pEff->GetSpellInfo()->SchoolMask)) * 4/10/3;
@@ -15164,7 +15166,7 @@ Unit* Unit::SelectNearbyTarget(Unit* exclude, float dist) const
         return NULL;
 
     // select random
-    return SelectRandomContainerElement(targets);
+    return Trinity::Containers::SelectRandomContainerElement(targets);
 }
 
 void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply)
@@ -17806,26 +17808,35 @@ bool Unit::SetHover(bool enable)
 
 void Unit::SendMovementHover()
 {
+    if (GetTypeId() == TYPEID_PLAYER)
+        ToPlayer()->SendMovementSetHover(HasUnitMovementFlag(MOVEMENTFLAG_HOVER));
+
     WorldPacket data(MSG_MOVE_HOVER, 64);
     data.append(GetPackGUID());
     BuildMovementPacket(&data);
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
 }
 
 void Unit::SendMovementWaterWalking()
 {
+    if (GetTypeId() == TYPEID_PLAYER)
+        ToPlayer()->SendMovementSetWaterWalking(HasUnitMovementFlag(MOVEMENTFLAG_WATERWALKING));
+
     WorldPacket data(MSG_MOVE_WATER_WALK, 64);
     data.append(GetPackGUID());
     BuildMovementPacket(&data);
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
 }
 
 void Unit::SendMovementFeatherFall()
 {
+    if (GetTypeId() == TYPEID_PLAYER)
+        ToPlayer()->SendMovementSetFeatherFall(HasUnitMovementFlag(MOVEMENTFLAG_FALLING_SLOW));
+
     WorldPacket data(MSG_MOVE_FEATHER_FALL, 64);
     data.append(GetPackGUID());
     BuildMovementPacket(&data);
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
 }
 
 void Unit::SendMovementGravityChange()
@@ -17833,7 +17844,7 @@ void Unit::SendMovementGravityChange()
     WorldPacket data(MSG_MOVE_GRAVITY_CHNG, 64);
     data.append(GetPackGUID());
     BuildMovementPacket(&data);
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
 }
 
 void Unit::SendMovementCanFlyChange()
@@ -17858,5 +17869,5 @@ void Unit::SendMovementCanFlyChange()
     WorldPacket data(MSG_MOVE_UPDATE_CAN_FLY, 64);
     data.append(GetPackGUID());
     BuildMovementPacket(&data);
-    SendMessageToSet(&data, true);
+    SendMessageToSet(&data, false);
 }
