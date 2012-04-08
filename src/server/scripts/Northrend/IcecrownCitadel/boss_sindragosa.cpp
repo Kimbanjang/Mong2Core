@@ -336,15 +336,12 @@ class boss_sindragosa : public CreatureScript
                         me->SetReactState(REACT_DEFENSIVE);
                         if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == POINT_MOTION_TYPE)
                             me->GetMotionMaster()->MovementExpired();
-<<<<<<< HEAD
                          
                         if (Unit* target = me->getVictim()) 
 							DoStartMovement(target); 
                         else if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM,0,300.0f,true)) 
                             DoStartMovement(target); 
 
-=======
->>>>>>> KBJ/master
                         _isInAirPhase = false;
                         // trigger Asphyxiation
                         EntryCheckPredicate pred(NPC_ICE_TOMB);
