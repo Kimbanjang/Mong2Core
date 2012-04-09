@@ -1089,6 +1089,8 @@ class Player : public Unit, public GridObject<Player>
             m_summon_y = y;
             m_summon_z = z;
         }
+
+        bool HasActiveSummonRequest() { return m_summon_expire > time(NULL); }
         void SummonIfPossible(bool agree);
 
         bool Create(uint32 guidlow, CharacterCreateInfo* createInfo);

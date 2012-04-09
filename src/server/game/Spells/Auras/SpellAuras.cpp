@@ -1779,6 +1779,8 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                 }
             }
             break;
+        default:
+            break;
     }
     if (GetSpellInfo()->IsPassive() && !GetCastItemGUID())
         for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)

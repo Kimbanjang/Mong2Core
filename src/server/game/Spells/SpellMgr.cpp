@@ -75,6 +75,9 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
             // Gnaw
             else if (spellproto->Id == 47481)
                 return DIMINISHING_CONTROLLED_STUN;
+            // Screams of the Dead
+            else if (spellproto->Id == 51750)
+                return DIMINISHING_NONE;
             break;
         }
         // Event spells
@@ -2893,6 +2896,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 72444: // Mark of the Fallen Champion (Deathbringer Saurfang)
             case 72445: // Mark of the Fallen Champion (Deathbringer Saurfang)
             case 72446: // Mark of the Fallen Champion (Deathbringer Saurfang)
+            case 64442: // Blade Warding (Damage)
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_IGNORE_ARMOR;
                 break;
             case 64422: // Sonic Screech (Auriaya)
@@ -3035,6 +3039,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 39365: // Thundering Storm
             case 41071: // Raise Dead (HACK)
             case 52124: // Sky Darkener Assault
+            case 41172: // Rapid Shot
             case 42442: // Vengeance Landing Cannonfire
             case 45863: // Cosmetic - Incinerate to Random Target
             case 25425: // Shoot
@@ -3043,6 +3048,8 @@ void SpellMgr::LoadDbcDataCorrections()
             case 61588: // Blazing Harpoon
             case 52479: // Gift of the Harvester
             case 48246: // Ball of Flame
+            case 64623: // Frost Bomb
+            case 66545: // Summon Memory
                 spellInfo->MaxAffectedTargets = 1;
                 break;
             case 41376: // Spite
@@ -3142,6 +3149,9 @@ void SpellMgr::LoadDbcDataCorrections()
             case 48422:
                 spellInfo->Stances = 1 << (FORM_TREE - 1);
                 break;
+            case 55689: // Glyph of Shadow (to prevent glyph aura loss)
+                spellInfo->Stances = 0;
+                break;
             case 61607: // Mark of Blood
                 spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
                 break;
@@ -3217,6 +3227,9 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->EffectImplicitTargetA[1] = TARGET_UNIT_CASTER;
                 spellInfo->EffectImplicitTargetB[0] = 0;
                 spellInfo->EffectImplicitTargetB[1] = 0;
+                break;
+            case 61367: // Windfury, TODO: remove this when spell 32910 works as supposed
+                spellInfo->EffectTriggerSpell[0] = 65976;
                 break;
             case 53241: // Marked for Death (Rank 1)
             case 53243: // Marked for Death (Rank 2)

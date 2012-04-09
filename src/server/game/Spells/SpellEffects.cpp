@@ -396,10 +396,18 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         damage = unitTarget->CountPctFromMaxHealth(50);
                         break;
                     }
+                    case 50341: // Touch the Nightmare
+                    {
+                        if (effIndex == EFFECT_2)
+                            damage = unitTarget->CountPctFromMaxHealth(30);
+                        break;
+                    }
                     case 20625: // Ritual of Doom Sacrifice
                     case 29142: // Eyesore Blaster
                     case 35139: // Throw Boom's Doom
                     case 42393: // Brewfest - Attack Keg
+                    case 46198: // Cold Slap
+                    case 46588: // Ice Spear
                     case 55269: // Deathly Stare
                     case 56578: // Rapid-Fire Harpoon
                     case 62775: // Tympanic Tantrum
@@ -412,6 +420,16 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     {
                         // about +4 base spell dmg per level
                         damage = (m_caster->getLevel() - 60) * 4 + 60;
+                        break;
+                    }
+                    // Blade Warding (Damage)
+                    case 64442:
+                    {
+                        uint8 multiplie = m_caster->GetAura(64440)->GetStackAmount();
+                        if(!multiplie)
+                            return;
+                        damage = urand(600 * multiplie, 800 * multiplie);
+                        // damage = m_spellInfo->Effects[0].CalcBaseValue(m_caster) * multiplie; //bad, with every StackAmount the damage value range becomes bigger and bigger
                         break;
                     }
                 }
@@ -1652,6 +1670,10 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
         if (unitTarget->HasAura(48920) && (unitTarget->GetHealth() + addhealth >= unitTarget->GetMaxHealth()))
             unitTarget->RemoveAura(48920);
 
+        // Hex of Mending
+        if (unitTarget->HasAura(67534))
+            unitTarget->CastCustomSpell(67535, SPELLVALUE_BASE_POINT0, addhealth, NULL, true);
+
         m_damage -= addhealth;
     }
 }
@@ -2524,7 +2546,9 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
 
             // The spell that this effect will trigger. It has SPELL_AURA_CONTROL_VEHICLE
             uint32 spell = VEHICLE_SPELL_RIDE_HARDCODED;
-            if (SpellInfo const* spellProto = sSpellMgr->GetSpellInfo(m_spellInfo->Effects[effIndex].CalcValue()))
+
+            SpellInfo const* spellProto = sSpellMgr->GetSpellInfo(m_spellInfo->Effects[effIndex].CalcValue());
+            if (spellProto && spellProto->HasAura(SPELL_AURA_CONTROL_VEHICLE))
                 spell = spellProto->Id;
 
             // Hard coded enter vehicle spell
@@ -3615,6 +3639,10 @@ void Spell::EffectThreat(SpellEffIndex /*effIndex*/)
     if (!unitTarget->CanHaveThreatList())
         return;
 
+    // Wind Shear - estimated value
+    if (m_spellInfo->Id == 57994)
+        damage = -int32(pow(float(m_caster->getLevel()), 2.0f) / 3);
+
     unitTarget->AddThreat(m_caster, float(damage));
 }
 
@@ -4129,6 +4157,21 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     cTarget->RemoveCorpse();
                     break;
                 }
+
+                // Shared Bonds
+                case 34789:
+                case 41362:
+                {
+                    if (!unitTarget)
+                        return;
+
+                    //[*Hack*]
+                    SpellInfo* triggeredSpellInfo = (SpellInfo*)sSpellMgr->GetSpellInfo(41363);
+                    triggeredSpellInfo->AttributesEx = SPELL_ATTR1_NO_THREAT;
+
+                    m_caster->CastSpell(unitTarget, triggeredSpellInfo, true);
+                    break;
+                }
                 case 48025:                                     // Headless Horseman's Mount
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
@@ -4311,6 +4354,13 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     sprintf(buf, "%s causually tosses %s [Worn Troll Dice]. One %u and one %u.", m_caster->GetName(), gender, urand(1, 6), urand(1, 6));
                     m_caster->MonsterTextEmote(buf, 0);
                     break;
+                }
+                // Drop of Gnomes
+                case 49109:
+                {
+                    Position pos;
+                    m_caster->GetPosition(&pos);
+                    m_caster->SummonCreature(27163, pos,TEMPSUMMON_TIMED_DESPAWN,60000);
                 }
                 // Vigilance
                 case 50725:
@@ -4723,17 +4773,14 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                 case 62482: // Grab Crate
                 {
                     if (unitTarget)
-                    {
-                        if (Unit* seat = m_caster->GetVehicleBase())
-                        {
-                            if (Unit* parent = seat->GetVehicleBase())
-                            {
-                                // TODO: a hack, range = 11, should after some time cast, otherwise too far
-                                m_caster->CastSpell(parent, 62496, true);
-                                unitTarget->CastSpell(parent, m_spellInfo->Effects[EFFECT_0].CalcValue());
-                            }
-                        }
-                    }
+                        if (Vehicle* mechanicSeat = m_caster->GetVehicle())
+                            if (Vehicle* demolisher = mechanicSeat->GetBase()->GetVehicle())
+                                if (mechanicSeat->HasEmptySeat(1))
+                                {
+                                    // TODO: a hack, range = 11, should after some time cast, otherwise too far
+                                    mechanicSeat->GetBase()->CastSpell(mechanicSeat->GetBase(), 62496, true);
+                                    unitTarget->CastSpell(mechanicSeat->GetBase(), m_spellInfo->Effects[EFFECT_0].CalcValue());
+                                }
                     return;
                 }
                 case 60123: // Lightwell
@@ -5161,6 +5208,9 @@ void Spell::EffectStuck(SpellEffIndex /*effIndex*/)
     sLog->outDebug(LOG_FILTER_SPELLS_AURAS, "Spell Effect: Stuck");
     sLog->outDetail("Player %s (guid %u) used auto-unstuck future at map %u (%f, %f, %f)", target->GetName(), target->GetGUIDLow(), m_caster->GetMapId(), m_caster->GetPositionX(), target->GetPositionY(), target->GetPositionZ());
 
+    if (target && target->getClass() == CLASS_DEATH_KNIGHT)
+        return;
+
     if (target->isInFlight())
         return;
 
@@ -5187,6 +5237,10 @@ void Spell::EffectSummonPlayer(SpellEffIndex /*effIndex*/)
 
     // Evil Twin (ignore player summon, but hide this for summoner)
     if (unitTarget->HasAura(23445))
+        return;
+
+    // (temporary) prevent cancel existing request due to a new request, leaving the new one invalid
+    if (unitTarget->ToPlayer()->HasActiveSummonRequest())
         return;
 
     float x, y, z;
@@ -6652,7 +6706,7 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
         if (ItemTemplate const* proto = m_CastItem->GetTemplate())
             if (proto->RequiredSkill == SKILL_ENGINEERING)
                 if (uint16 skill202 = caster->ToPlayer()->GetSkillValue(SKILL_ENGINEERING))
-                    level = skill202 / 5;
+                    level = std::max(uint8(skill202/5), caster->getLevel());
 
     float radius = 5.0f;
     int32 duration = m_spellInfo->GetDuration();

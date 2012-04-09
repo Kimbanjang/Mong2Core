@@ -3763,15 +3763,24 @@ void AuraEffect::HandleAuraModStat(AuraApplication const* aurApp, uint8 mode, bo
         return;
     }
 
-    for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++)
+    for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
     {
         // -1 or -2 is all stats (misc < -2 checked in function beginning)
         if (GetMiscValue() < 0 || GetMiscValue() == i)
         {
-            //target->ApplyStatMod(Stats(i), m_amount, apply);
-            target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, float(GetAmount()), apply);
+            float amount = float(GetAmount());
+
+            if (!GetSpellInfo()->CanStackEffectValues() && amount > 0)
+            {
+                int32 multiStatMod = target->GetMaxStackableAuraModifier(SPELL_AURA_MOD_STAT, this, -1);
+                int32 singleStatMod = target->GetMaxStackableAuraModifier(SPELL_AURA_MOD_STAT, this, i);
+                amount -= std::max<int32>(multiStatMod, singleStatMod);
+                amount = std::max<float>(amount, 0.f);
+            }
+
+            target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_VALUE, amount, apply);
             if (target->GetTypeId() == TYPEID_PLAYER || target->ToCreature()->isPet())
-                target->ApplyStatBuffMod(Stats(i), (float)GetAmount(), apply);
+                target->ApplyStatBuffMod(Stats(i), amount, apply);
         }
     }
 }
@@ -3891,13 +3900,23 @@ void AuraEffect::HandleModTotalPercentStat(AuraApplication const* aurApp, uint8 
     float healthPct = target->GetHealthPct();
     bool alive = target->isAlive();
 
-    for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++)
+    for (int32 i = STAT_STRENGTH; i < MAX_STATS; ++i)
     {
         if (GetMiscValue() == i || GetMiscValue() == -1)
         {
-            target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(GetAmount()), apply);
+            float amount = float(GetAmount());
+
+            if (!GetSpellInfo()->CanStackEffectValues() && amount > 0)
+            {
+                int32 multiStatMod = target->GetMaxStackableAuraModifier(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, this, -1);
+                int32 singleStatMod = target->GetMaxStackableAuraModifier(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, this, i);
+                amount -= std::max<int32>(multiStatMod, singleStatMod);
+                amount = std::max<float>(amount, 0.f);
+            }
+
+            target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, amount, apply);
             if (target->GetTypeId() == TYPEID_PLAYER || target->ToCreature()->isPet())
-                target->ApplyStatPercentBuffMod(Stats(i), float(GetAmount()), apply);
+                target->ApplyStatPercentBuffMod(Stats(i), amount, apply);
         }
     }
 
@@ -3990,18 +4009,26 @@ void AuraEffect::HandleAuraModIncreaseHealth(AuraApplication const* aurApp, uint
 
     Unit* target = aurApp->GetTarget();
 
+    int32 amount = GetAmount();
+
+    if (!GetSpellInfo()->CanStackEffectValues() && amount > 0)
+    {
+        amount -= target->GetMaxStackableAuraModifier(SPELL_AURA_230, this);
+        amount = std::max<int32>(amount, 0);
+    }
+
     if (apply)
     {
-        target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, float(GetAmount()), apply);
-        target->ModifyHealth(GetAmount());
+        target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, float(amount), apply);
+        target->ModifyHealth(amount);
     }
     else
     {
-        if (int32(target->GetHealth()) > GetAmount())
-            target->ModifyHealth(-GetAmount());
+        if (int32(target->GetHealth()) > amount)
+            target->ModifyHealth(-amount);
         else
             target->SetHealth(1);
-        target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, float(GetAmount()), apply);
+        target->HandleStatModifier(UNIT_MOD_HEALTH, TOTAL_VALUE, float(amount), apply);
     }
 }
 
@@ -4391,7 +4418,15 @@ void AuraEffect::HandleAuraModAttackPower(AuraApplication const* aurApp, uint8 m
 
     Unit* target = aurApp->GetTarget();
 
-    target->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, float(GetAmount()), apply);
+    float amount = float(GetAmount());
+
+    if (!GetSpellInfo()->CanStackEffectValues() && amount > 0)
+    {
+        amount -= target->GetMaxStackableAuraModifier(SPELL_AURA_MOD_ATTACK_POWER, this);
+        amount = std::max<float>(amount, 0.f);
+    }
+
+    target->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, amount, apply);
 }
 
 void AuraEffect::HandleAuraModRangedAttackPower(AuraApplication const* aurApp, uint8 mode, bool apply) const
@@ -4404,7 +4439,15 @@ void AuraEffect::HandleAuraModRangedAttackPower(AuraApplication const* aurApp, u
     if ((target->getClassMask() & CLASSMASK_WAND_USERS) != 0)
         return;
 
-    target->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, float(GetAmount()), apply);
+    float amount = float(GetAmount());
+
+    if (!GetSpellInfo()->CanStackEffectValues() && amount > 0)
+    {
+        amount -= target->GetMaxStackableAuraModifier(SPELL_AURA_MOD_RANGED_ATTACK_POWER, this);
+        amount = std::max<float>(amount, 0.f);
+    }
+
+    target->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, amount, apply);
 }
 
 void AuraEffect::HandleAuraModAttackPowerPercent(AuraApplication const* aurApp, uint8 mode, bool apply) const
@@ -4857,22 +4900,22 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                         {
                             case 1: damage = 0;     break;
                             case 2: damage = 500;   break;
-                            case 3: damage = 1000;  break;
-                            case 4: damage = 1500;  break;
-                            case 5: damage = 4000;  break;
-                            case 6: damage = 12000; break;
-                            default:damage = 20000 + 1000 * (GetBase()->GetStackAmount() - 7); break;
+                            case 3: damage = 1500;  break;
+                            case 4: damage = 4000;  break;
+                            case 5: damage = 12000; break;
+                            case 6: damage = 20000; break;
+                            default:damage = 20000 + 1000 * (GetBase()->GetStackAmount() - 6); break;
                         }
                         if (damage)
-                            caster->CastCustomSpell(28836, SPELLVALUE_BASE_POINT0, damage, target);
+                            caster->CastCustomSpell(28836, SPELLVALUE_BASE_POINT0, damage, target, true);
                     }
                     break;
                 case 63322: // Saronite Vapors
                 {
-                    if (caster)
+                    int32 mana = int32(100 * pow(2.0f, GetBase()->GetStackAmount() - 1)); // mana restore - 100 * 2^(stackamount - 1)
+                    int32 damage = mana * 2; // damage
+                    if(caster && target)
                     {
-                        int32 mana = int32(GetAmount() * pow(2.0f, GetBase()->GetStackAmount())); // mana restore - bp * 2^stackamount
-                        int32 damage = mana * 2; // damage
                         caster->CastCustomSpell(target, 63337, &mana, NULL, NULL, true);
                         caster->CastCustomSpell(target, 63338, &damage, NULL, NULL, true);
                     }
@@ -4881,7 +4924,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 case 71563:
                     if (Aura* newAura = target->AddAura(71564, target))
                         newAura->SetStackAmount(newAura->GetSpellInfo()->StackAmount);
-                        break;
+                    break;
                 case 59628: // Tricks of the Trade
                     if (caster && caster->GetMisdirectionTarget())
                         target->SetReducedThreatPercent(100, caster->GetMisdirectionTarget()->GetGUID());
@@ -5126,12 +5169,9 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                 case 57723: // Exhaustion
                 case 57724: // Sated
                 {
-                    switch (GetId())
-                    {
-                        case 57723: target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); break; // Heroism
-                        case 57724: target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply);  break; // Bloodlust
-                    }
-                    break;
+                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); // Heroism
+                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply); // Bloodlust
+                    break; // needs to be after the two immunes
                 }
                 case 57819: // Argent Champion
                 case 57820: // Ebon Champion
@@ -5710,6 +5750,14 @@ void AuraEffect::HandlePeriodicDummyAuraTick(Unit* target, Unit* caster) const
                         target->RemoveAura(64821);
                     }
                     break;
+                case 68614: // Concentrated Irresistible Cologne Spill
+                    if (!target->HasAura(68530))
+                        caster->CastSpell(target, 68934, true);
+                    break;
+                case 68798: // Concentrated Alluring Perfume Spill
+                    if (!target->HasAura(68529))
+                        caster->CastSpell(target, 68927, true);
+                    break;
             }
             break;
         case SPELLFAMILY_MAGE:
@@ -6135,10 +6183,11 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
             case 66882:
                 target->CastCustomSpell(triggerSpellId, SPELLVALUE_RADIUS_MOD, (int32)((((float)m_tickNumber / 60) * 0.9f + 0.1f) * 10000 * 2 / 3), NULL, true, NULL, this);
                 return;
-            // Arcane Overload
-            case 56432:
-                target->CastCustomSpell(triggerSpellId, SPELLVALUE_RADIUS_MOD, (100 - (m_tickNumber + 5) * 2) * 100, NULL, true, NULL, this);
-                return;
+            // Soar
+            case 50325:
+                if (caster && caster->isInCombat())
+                    return;
+                break;
             // Beacon of Light
             case 53563:
             {
@@ -6146,6 +6195,10 @@ void AuraEffect::HandlePeriodicTriggerSpellAuraTick(Unit* target, Unit* caster) 
                 GetBase()->GetUnitOwner()->CastSpell(target, triggeredSpellInfo, true, 0, this, GetBase()->GetUnitOwner()->GetGUID());
                 return;
             }
+            // Arcane Overload
+            case 56432:
+                target->CastCustomSpell(triggerSpellId, SPELLVALUE_RADIUS_MOD, (100 - (m_tickNumber + 5) * 2) * 100, NULL, true, NULL, this);
+                return;
             // Slime Spray - temporary here until preventing default effect works again
             // added on 9.10.2010
             case 69508:
