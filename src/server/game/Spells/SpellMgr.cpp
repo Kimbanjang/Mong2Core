@@ -3231,6 +3231,16 @@ void SpellMgr::LoadDbcDataCorrections()
             case 61367: // Windfury, TODO: remove this when spell 32910 works as supposed
                 spellInfo->EffectTriggerSpell[0] = 65976;
                 break;
+			case 8076: // Strength of Earth (Rank 1)
+			case 8162: // Strength of Earth (Rank 2)
+			case 8163: // Strength of Earth (Rank 3)
+			case 10441: // Strength of Earth (Rank 4)
+			case 25362: // Strength of Earth (Rank 5)
+			case 25527: // Strength of Earth (Rank 6)
+			case 57621: // Strength of Earth (Rank 7)
+			case 58646: // Strength of Earth (Rank 8)
+				spellInfo->Effect[2] = 0;
+				break;
             case 53241: // Marked for Death (Rank 1)
             case 53243: // Marked for Death (Rank 2)
             case 53244: // Marked for Death (Rank 3)
