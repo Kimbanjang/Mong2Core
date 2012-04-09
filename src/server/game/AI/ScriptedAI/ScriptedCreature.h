@@ -27,6 +27,8 @@
 #define CAST_PLR(a)     (dynamic_cast<Player*>(a))
 #define CAST_CRE(a)     (dynamic_cast<Creature*>(a))
 #define CAST_AI(a, b)   (dynamic_cast<a*>(b))
+#define MAX_AGGRO_PULSE_TIMER            5000
+
 
 class InstanceScript;
 
@@ -36,8 +38,8 @@ class SummonList : public std::list<uint64>
         explicit SummonList(Creature* creature) : me(creature) {}
         void Summon(Creature* summon) { push_back(summon->GetGUID()); }
         void Despawn(Creature* summon) { remove(summon->GetGUID()); }
-        void DespawnEntry(uint32 entry);
-        void DespawnAll();
+        void DespawnEntry(uint32 entry, uint32 msTimeToDespawn = 0);
+        void DespawnAll(uint32 msTimeToDespawn = 0);
 
         template <class Predicate> void DoAction(int32 info, Predicate& predicate, uint16 max = 0)
         {
@@ -276,9 +278,9 @@ struct ScriptedAI : public CreatureAI
 struct Scripted_NoMovementAI : public ScriptedAI
 {
     Scripted_NoMovementAI(Creature* creature) : ScriptedAI(creature) 
-	{
+    {
         SetImmuneToPushPullEffects(true);
-	}
+    }
     virtual ~Scripted_NoMovementAI() {}
 
     //Called at each attack of me by any victim
@@ -291,6 +293,7 @@ class BossAI : public ScriptedAI
         BossAI(Creature* creature, uint32 bossId);
         virtual ~BossAI() {}
 
+        uint32 inFightAggroCheck_Timer;
         InstanceScript* const instance;
         BossBoundaryMap const* GetBoundary() const { return _boundary; }
 
@@ -315,6 +318,7 @@ class BossAI : public ScriptedAI
         void _EnterCombat();
         void _JustDied();
         void _JustReachedHome() { me->setActive(false); }
+        void _DoAggroPulse(const uint32 diff);
 
         bool CheckInRoom()
         {

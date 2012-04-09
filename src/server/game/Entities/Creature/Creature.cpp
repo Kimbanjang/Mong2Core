@@ -677,7 +677,8 @@ void Creature::DoFleeToGetAssistance()
     if (!getVictim())
         return;
 
-    if (HasAuraType(SPELL_AURA_PREVENTS_FLEEING))
+    //prevent Creatures from fleeing with special debuffs and in stuns
+    if (HasAuraType(SPELL_AURA_PREVENTS_FLEEING) || HasAuraType(SPELL_AURA_MOD_STUN))
         return;
 
     float radius = sWorld->getFloatConfig(CONFIG_CREATURE_FAMILY_FLEE_ASSISTANCE_RADIUS);
@@ -1520,8 +1521,16 @@ void Creature::setDeathState(DeathState s)
 
     if (s == JUST_DIED)
     {
-        m_corpseRemoveTime = time(NULL) + m_corpseDelay;
-        m_respawnTime = time(NULL) + m_respawnDelay + m_corpseDelay;
+        if (GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_RESPAWN_IGNORE)
+        {
+            m_corpseRemoveTime = time(NULL) + 10;
+            m_respawnTime = time(NULL) + m_respawnDelay + 10;
+        }
+        else
+        {
+            m_corpseRemoveTime = time(NULL) + m_corpseDelay;
+            m_respawnTime = time(NULL) + m_respawnDelay + m_corpseDelay;
+        }
 
         // always save boss respawn time at death to prevent crash cheating
         if (sWorld->getBoolConfig(CONFIG_SAVE_RESPAWN_TIME_IMMEDIATELY) || isWorldBoss())
@@ -1570,11 +1579,11 @@ void Creature::setDeathState(DeathState s)
         SetUInt32Value(UNIT_NPC_FLAGS, cinfo->npcflag);
         ClearUnitState(uint32(UNIT_STATE_ALL_STATE));
         SetMeleeDamageSchool(SpellSchools(cinfo->dmgschool));
+        Unit::setDeathState(ALIVE);
         LoadCreaturesAddon(true);
         Motion_Initialize();
         if (GetCreatureData() && GetPhaseMask() != GetCreatureData()->phaseMask)
             SetPhaseMask(GetCreatureData()->phaseMask, false);
-        Unit::setDeathState(ALIVE);
     }
 }
 

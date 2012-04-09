@@ -841,6 +841,26 @@ namespace Trinity
             uint32 i_lowguid;
     };
 
+    class CreatureFocusCheck
+    {
+        public:
+            CreatureFocusCheck(WorldObject const* obj, uint32 focusId, float range) : i_obj(obj), i_focusId(focusId), i_range(range) {}
+            bool operator()(Creature* u) const
+            {
+
+                if (u->GetSpellFocusId() != i_focusId)
+                    return false;
+
+                float dist = i_range;
+
+                return u->IsWithinDistInMap(i_obj, dist);
+            }
+        private:
+            WorldObject const* i_obj;
+            uint32 i_focusId;
+            float i_range;
+    };
+
     class AnyFriendlyUnitInObjectRangeCheck
     {
         public:
