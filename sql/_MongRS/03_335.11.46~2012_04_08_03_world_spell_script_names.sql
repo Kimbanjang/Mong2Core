@@ -22676,3 +22676,118 @@ INSERT INTO `conditions`(`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`
 
 UPDATE `spell_dbc` SET `EffectApplyAuraName1`=4 WHERE `Id`=56817;
 
+DELETE FROM `gameobject_template` WHERE `entry`=202931;
+INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `size`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `WDBVerified`) VALUES
+(202931, 5, 9463, 'Serpent Offering', '', '', '', 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.17, 0, 0, 0, 0, 0, 0, 12340); -- -Unknown-
+
+UPDATE `gameobject_template` SET `questItem1`=30527, `questItem2`=30524, `questItem3`=30525, `questItem4`=30526 WHERE `entry`=184815; -- Sealed Coffin
+-- UPDATE `gameobject_template` SET `data0`=2061, `WDBVerified`=12340 WHERE `entry`=151951; -- Idol Oven Fire
+-- UPDATE `gameobject_template` SET `type`=5, `data3`=0, `data5`=0 WHERE `entry`=188187; -- Snow Pile
+UPDATE `gameobject_template` SET `size`=0.45 WHERE `entry`=190169; -- Tiger Lily
+UPDATE `gameobject_template` SET `unk1`='' WHERE `entry`=190549; -- The Zephyr
+-- UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=191300; -- Fire
+UPDATE `gameobject_template` SET `displayId`=7836 WHERE `entry`=196485; -- Saronite Rock
+--  UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=126337; -- 126337
+--  UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=126338; -- 126338
+--  UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=126339; -- 126339
+--  UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=126340; -- 126340
+--  UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=126341; -- 126341
+--  UPDATE `gameobject_template` SET `data0`=2061 WHERE `entry`=126345; -- 126345
+UPDATE `gameobject_template` SET `data2`=23787, `data7`=3605, `data19`=0 WHERE `entry`=202443; -- Dedication of Honor
+UPDATE `gameobject_template` SET `type`=10 WHERE `entry`=166872; -- Supply Crate
+UPDATE `gameobject_template` SET `data6`=-1000 WHERE `entry`=178559; -- Larva Spewer
+
+/*
+GameObject (Entry: 126337 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 126338 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 126339 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 126340 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 126341 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 126345 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 151951 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+GameObject (Entry: 191300 GoType: 8) have data0=2061 but SpellFocus (Id: 2061) not exist.
+Gameobject (Entry: 188192 GoType: 3) have data7=188187 but GO (Entry 188187) have not GAMEOBJECT_TYPE_TRAP (6) type.
+*/
+
+DELETE FROM `spell_script_names` WHERE `spell_id` in (7384,7887,11584,11585);
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(7384,	'spell_warr_overpower'),
+(7887,	'spell_warr_overpower'),
+(11584,	'spell_warr_overpower'),
+(11585,	'spell_warr_overpower');
+
+UPDATE `spell_proc_event` SET `SpellFamilyMask0`=0x80000000, `SpellFamilyMask1`=0 WHERE `entry`=67363; -- Fixes Libram of Veracity proc
+
+UPDATE `spell_proc_event` SET `SpellFamilyMask0`=0x10 WHERE `entry`=60132; -- Oblit/Scourge Strike Runic Power Up (T7 4s)
+
+DELETE FROM `spell_dbc` WHERE `Id`=64748; -- Item - Death Knight T8 Tank 4P Bonus
+INSERT INTO `spell_dbc` (`Id`,`Dispel`,`Mechanic`,`Attributes`,`AttributesEx`,`AttributesEx2`,`AttributesEx3`,`AttributesEx4`,`AttributesEx5`,`AttributesEx6`,`AttributesEx7`,`Stances`,`StancesNot`,`Targets`,`CastingTimeIndex`,`AuraInterruptFlags`,`ProcFlags`,`ProcChance`,`ProcCharges`,`MaxLevel`,`BaseLevel`,`SpellLevel`,`DurationIndex`,`RangeIndex`,`StackAmount`,`EquippedItemClass`,`EquippedItemSubClassMask`,`EquippedItemInventoryTypeMask`,`Effect1`,`Effect2`,`Effect3`,`EffectDieSides1`,`EffectDieSides2`,`EffectDieSides3`,`EffectRealPointsPerLevel1`,`EffectRealPointsPerLevel2`,`EffectRealPointsPerLevel3`,`EffectBasePoints1`,`EffectBasePoints2`,`EffectBasePoints3`,`EffectMechanic1`,`EffectMechanic2`,`EffectMechanic3`,`EffectImplicitTargetA1`,`EffectImplicitTargetA2`,`EffectImplicitTargetA3`,`EffectImplicitTargetB1`,`EffectImplicitTargetB2`,`EffectImplicitTargetB3`,`EffectRadiusIndex1`,`EffectRadiusIndex2`,`EffectRadiusIndex3`,`EffectApplyAuraName1`,`EffectApplyAuraName2`,`EffectApplyAuraName3`,`EffectAmplitude1`,`EffectAmplitude2`,`EffectAmplitude3`,`EffectMultipleValue1`,`EffectMultipleValue2`,`EffectMultipleValue3`,`EffectMiscValue1`,`EffectMiscValue2`,`EffectMiscValue3`,`EffectMiscValueB1`,`EffectMiscValueB2`,`EffectMiscValueB3`,`EffectTriggerSpell1`,`EffectTriggerSpell2`,`EffectTriggerSpell3`,`EffectSpellClassMaskA1`,`EffectSpellClassMaskA2`,`EffectSpellClassMaskA3`,`EffectSpellClassMaskB1`,`EffectSpellClassMaskB2`,`EffectSpellClassMaskB3`,`EffectSpellClassMaskC1`,`EffectSpellClassMaskC2`,`EffectSpellClassMaskC3`,`MaxTargetLevel`,`SpellFamilyName`,`SpellFamilyFlags1`,`SpellFamilyFlags2`,`SpellFamilyFlags3`,`MaxAffectedTargets`,`DmgClass`,`PreventionType`,`DmgMultiplier1`,`DmgMultiplier2`,`DmgMultiplier3`,`AreaGroupId`,`SchoolMask`,`Comment`) VALUES
+(64748,1,0,384,0,0,0,0,131080,0,0,0,0,0,1,0,0,101,0,0,80,80,28,1,0,-1,0,0,6,0,0,1,0,1,'0','0','0',-11,0,-11,0,0,0,1,0,0,0,0,0,0,0,0,87,0,0,0,0,0,'0','0','0',1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16777829,0,0,0,15,0,0,0,0,0,0,'1','1','1',0,32,'Item - Death Knight T8 Tank 4P Bonus');
+
+-- GO required by spell 70477 - Cleanse Quel'Delar
+DELETE FROM `gameobject_template` WHERE `entry`=300246;
+INSERT INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `IconName`, `castBarCaption`, `unk1`, `faction`, `flags`, `size`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `AIName`, `ScriptName`, `WDBVerified`) VALUES
+(300246, 8, 0, 'TEMP Sunwell', '', '', '', 0, 0, 1, 0, 0, 0, 0, 0, 0, 1641, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', '', 1);
+
+DELETE FROM `spell_dbc` WHERE `Id`=64934; -- Item - Warrior T8 Protection 4P Bonus
+INSERT INTO `spell_dbc`(`Id`,`Dispel`,`Mechanic`,`Attributes`,`AttributesEx`,`AttributesEx2`,`AttributesEx3`,`AttributesEx4`,`AttributesEx5`,`AttributesEx6`,`AttributesEx7`,`Stances`,`StancesNot`,`Targets`,`CastingTimeIndex`,`AuraInterruptFlags`,`ProcFlags`,`ProcChance`,`ProcCharges`,`MaxLevel`,`BaseLevel`,`SpellLevel`,`DurationIndex`,`RangeIndex`,`StackAmount`,`EquippedItemClass`,`EquippedItemSubClassMask`,`EquippedItemInventoryTypeMask`,`Effect1`,`Effect2`,`Effect3`,`EffectDieSides1`,`EffectDieSides2`,`EffectDieSides3`,`EffectRealPointsPerLevel1`,`EffectRealPointsPerLevel2`,`EffectRealPointsPerLevel3`,`EffectBasePoints1`,`EffectBasePoints2`,`EffectBasePoints3`,`EffectMechanic1`,`EffectMechanic2`,`EffectMechanic3`,`EffectImplicitTargetA1`,`EffectImplicitTargetA2`,`EffectImplicitTargetA3`,`EffectImplicitTargetB1`,`EffectImplicitTargetB2`,`EffectImplicitTargetB3`,`EffectRadiusIndex1`,`EffectRadiusIndex2`,`EffectRadiusIndex3`,`EffectApplyAuraName1`,`EffectApplyAuraName2`,`EffectApplyAuraName3`,`EffectAmplitude1`,`EffectAmplitude2`,`EffectAmplitude3`,`EffectMultipleValue1`,`EffectMultipleValue2`,`EffectMultipleValue3`,`EffectMiscValue1`,`EffectMiscValue2`,`EffectMiscValue3`,`EffectMiscValueB1`,`EffectMiscValueB2`,`EffectMiscValueB3`,`EffectTriggerSpell1`,`EffectTriggerSpell2`,`EffectTriggerSpell3`,`EffectSpellClassMaskA1`,`EffectSpellClassMaskA2`,`EffectSpellClassMaskA3`,`EffectSpellClassMaskB1`,`EffectSpellClassMaskB2`,`EffectSpellClassMaskB3`,`EffectSpellClassMaskC1`,`EffectSpellClassMaskC2`,`EffectSpellClassMaskC3`,`MaxTargetLevel`,`SpellFamilyName`,`SpellFamilyFlags1`,`SpellFamilyFlags2`,`SpellFamilyFlags3`,`MaxAffectedTargets`,`DmgClass`,`PreventionType`,`DmgMultiplier1`,`DmgMultiplier2`,`DmgMultiplier3`,`AreaGroupId`,`SchoolMask`,`Comment`) VALUES
+(64934,1,0,384,0,0,0,0,131080,0,0,0,0,0,1,0,0,101,0,0,80,80,28,1,0,-1,0,0,6,0,0,1,0,1,'0','0','0',-21,0,-11,0,0,0,1,0,0,0,0,0,0,0,0,87,0,0,0,0,0,'0','0','0',126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16777829,0,0,0,4,0,0,0,0,0,0,'1','1','1',0,32, 'Item - Warrior T8 Protection 4P Bonus');
+
+DELETE FROM `page_text` WHERE entry IN (2177,2295,2296,2297,2301,2302,2303,2308,2309,3036,3045,3046,3047,3049,3050,3051,3052,3053,3378,3544,3563,3564,3565);
+INSERT INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(2177, 'Valea Twinblades \nWarrior of the Scarlet Crusade\nCitizen of Alterac \nLast seen deep in the Eastern Plaguelands', 0),
+(2295, 'Before the Age of Memory, the gentle Earthmother breathed upon the golden mists of dawn. Where the amber clouds came to rest, there were endless fields of flowing wheat and barley. This was the basin of her works - the great basket of life and hope.', 2296),
+(2296, 'The Earthmother\'s eyes shone down upon the lands she had breathed into creation. Her right eye, An\'she (the sun), gave warmth and light to the land. Her left eye, Mu\'sha (the moon), gave peace and sleep to the stirring creatures of the dawning. Such was the power of her gaze that the Earthmother closed one dreaming eye for every turning of the sky. Thus, her loving gaze turned day into night for the first dawning of the world.   $B', 2297),
+(2297, 'While the right eye shone down upon the golden dawn, the Earthmother\'s gentle hands spread out across the golden plains. Wherever the shadow of her arms passed, a noble people arose from the rich soil. The Shu\'halo (the tauren) arose to give thanks and prayer to their loving mother. There, in the endless fields of dawn, the children of the earth swore themselves to her grace and vowed to bless her name until the final darkening of the world.', 0),
+(2301, 'Into the brave hearts of her pure children, the Earthmother placed the love of the hunt. For the creatures of the first dawn were savage and fierce. They hid from the Earthmother, finding solace in the shadows and the wild places of the land. The Shu\'halo hunted these beasts wherever they could be found and tamed them with the Earthmother\'s blessing. ', 2302),
+(2302, 'One great spirit eluded them, however. Apa\'ro (known as Malorne to the night elves), was a proud stag of snow white fur. His antlers scraped the roof of the heavens and his mighty hooves stamped out the deep places of the world. The Shu\'halo hunted Apa\'ro to the corners of the dawning world - and closed in to snare the proud stag.', 2303),
+(2303, 'Seeking to escape, the great stag leapt into the sky. Yet, as his escape seemed assured, his mighty antlers tangled in the stars which held him fast. Though he kicked and struggled, Apa\'ro could not loose himself from the heavens. It was then that Mu\'sha found him as she chased her brother, An\'she, towards the dawn. Mu\'sha saw the mighty stag as he struggled and fell in love with him immediately. ', 2304),
+(2308, 'As the mists of dawn faded and the Age of Memory advanced, the demigod, Cenarius, went his own way through the fields of the world. The Shu\'halo (tauren) were sorrowful at his passing and forgot much of the druidism he had taught them. As the generations passed, they forgot how to speak with the trees and the wild things of the land. The dark whispers from the deeps of the world drifted up to their ears once again.', 2309),
+(2309, 'Though the children of the earth closed out the evil whisperings, a terrible curse befell their roaming tribes. Out of the black lands of the west came a horde of murderous creatures - the centaur. Cannibals and ravagers, the centaur fell upon the Shu\'halo like a plague. Though the braves and hunters fought with the Earthmother\'s blessing in their hearts, the centaur could not be defeated.', 2310),
+(3544, 'You have found the wreckage of a mysterious object. Beyond the flames, you are able to make out an insignia marked "M:1815212085". You wonder what world this object must be from...', 0),
+(3378, 'INVINCIBLE$B$BBeloved steed of Prince Arthas Menethil$B$BLoyal and great of heart in life, may you find peace in death.$B$BPure streams and green pastures, devoted friend.', 0),
+(3565, 'Gritting his teeth, Marcus gestured as light flashed over him, restoring his strength.$B$BTavi stared anxiously as he rose to his full height, engulfing her in his shadow.  He thrust his hand forward, sending a wave of righteous force through her.  Eyes rolled back as she wavered for several seconds before regaining consciousness.$B$B"I\'ve recently taken the path of... retribution."$B$BThe mischievous smirk returned to her face, "Well then, this is going to be fun."$B$B<The remaining pages have a level 99 requirement to read.>', 0),
+(3564, 'Marcus took both her hands in one of his as he reassured her, "It\'s fine.  What is your specialization?"$B$BHer head snapped up, eyes burning with renewed life as shadowy energy channeled through her hands into Marcus, dropping him to his knees in agony.$B$B"Affliction, actually."$B', 3565),
+(3563, '"Interested in some more company?" she purred as her hands weaved through a complex summoning ritual, stopping only when she felt the warmth of a new presence behind her.$B$BAll color drained from Marcus\'s face as he struggled to protest.  "I... I don\'t think that\'s appropriate."$B$BConfused, Tavi turned to see what was wrong.  A hideous fel hound stood ready, drooling onto the floor as it stared intently at the half-armored paladin.$B$B"No!  No that\'s not what I meant." she stammered as she dispelled the hungry demon.  "I\'m sorry, that\'s not really my specialization...."', 3564),
+(3045, 'First Watch, Eight Bells$BWatches changed.  All is well.', 3046),
+(3046, 'Middle Watch, One Bell$BCedric found attempting to break into Captain\'s wine cabinet.  Disciplined.', 3047),
+(3047, 'Middle Watch, Two Bells$BCedric climbed rigging, became tangled and fell.  Attended by ship\'s surgeon.  Sent below to sober up.', 3049),
+(3049, 'Middle Watch, Four Bells$BBottle of rum found in Cedric\'s pants.  Disciplined.', 3050),
+(3050, 'Middle Watch, Five Bells$BCedric\'s clothes found.  Cedric found separately.  Cedric disciplined.', 3051),
+(3051, 'Middle Watch, Six Bells$BCedric singing loudly.  Woke Captain.  Cedric disciplined by Captain.', 3052),
+(3052, 'Middle Watch, Eight Bells$BWatches changed.  All quiet.  Two men sent to locate Cedric.$B', 3053),
+(3053, 'Morning Watch, One Bell$BFire in Captain\'s quarters.  All hands roused.  Throwing powder overboard. ', 0),
+(3036, 'The mighty creature\'s maw opened wide, tossing bolts of icy water toward our vessel. Those terrible jaws clamped down upon the bow of our ship, tearing it from the hull. Sailors and cargo were thrown violently into the sea as the remnants of the ship disappeared beneath the waves.$B$BThe last thing I remember was flying from the broken hull, hitting the inky waters, and plunging beneath the waves. The world went dark and I thought for certain I\'d drawn my last breath. When I awoke in Theramore\'s infirmary, I knew someone had to tell our story.', 0);
+
+UPDATE `gameobject_template` SET `faction`=54 WHERE `entry`=178164;
+SET @GUID := 247;
+DELETE FROM `gameobject` WHERE `guid`=@GUID;
+INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`rotation0`,`rotation1`,`rotation2`,`rotation3`,`spawntimesecs`,`animprogress`,`state`) VALUES
+(@GUID,178164,409,1,1,736.6528,-1176.32,-118.0967,-0.6806787,0,0,0,1,120,255,1); -- Hot Coal, damage
+
+UPDATE `game_event` SET `start_time` = '2012-04-08 00:01:00' WHERE `eventEntry` =9; -- Noblegarden
+UPDATE `game_event` SET `start_time` = '2012-04-29 00:01:00' WHERE `eventEntry` =10; -- Children's Week
+
+UPDATE `spell_proc_event` SET `procFlags`=0 WHERE `entry`=70805;
+
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_ice_tomb_dummy';
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(69712,'spell_sindragosa_ice_tomb_dummy');
+
+-- Gymer <King of Storm Giants>
+UPDATE `creature_template` SET `unit_class`=4,`spell1`=55426,`spell2`=55429,`spell3`=55516,`spell4`=55421,`VehicleId`=205 WHERE `entry`=29884;
+
+DELETE FROM `spell_dbc` WHERE `Id`=31934; -- Blessed Life
+INSERT INTO `spell_dbc` (`Id`,`Dispel`,`Mechanic`,`Attributes`,`AttributesEx`,`AttributesEx2`,`AttributesEx3`,`AttributesEx4`,`AttributesEx5`,`AttributesEx6`,`AttributesEx7`,`Stances`,`StancesNot`,`Targets`,`CastingTimeIndex`,`AuraInterruptFlags`,`ProcFlags`,`ProcChance`,`ProcCharges`,`MaxLevel`,`BaseLevel`,`SpellLevel`,`DurationIndex`,`RangeIndex`,`StackAmount`,`EquippedItemClass`,`EquippedItemSubClassMask`,`EquippedItemInventoryTypeMask`,`Effect1`,`Effect2`,`Effect3`,`EffectDieSides1`,`EffectDieSides2`,`EffectDieSides3`,`EffectRealPointsPerLevel1`,`EffectRealPointsPerLevel2`,`EffectRealPointsPerLevel3`,`EffectBasePoints1`,`EffectBasePoints2`,`EffectBasePoints3`,`EffectMechanic1`,`EffectMechanic2`,`EffectMechanic3`,`EffectImplicitTargetA1`,`EffectImplicitTargetA2`,`EffectImplicitTargetA3`,`EffectImplicitTargetB1`,`EffectImplicitTargetB2`,`EffectImplicitTargetB3`,`EffectRadiusIndex1`,`EffectRadiusIndex2`,`EffectRadiusIndex3`,`EffectApplyAuraName1`,`EffectApplyAuraName2`,`EffectApplyAuraName3`,`EffectAmplitude1`,`EffectAmplitude2`,`EffectAmplitude3`,`EffectMultipleValue1`,`EffectMultipleValue2`,`EffectMultipleValue3`,`EffectMiscValue1`,`EffectMiscValue2`,`EffectMiscValue3`,`EffectMiscValueB1`,`EffectMiscValueB2`,`EffectMiscValueB3`,`EffectTriggerSpell1`,`EffectTriggerSpell2`,`EffectTriggerSpell3`,`EffectSpellClassMaskA1`,`EffectSpellClassMaskA2`,`EffectSpellClassMaskA3`,`EffectSpellClassMaskB1`,`EffectSpellClassMaskB2`,`EffectSpellClassMaskB3`,`EffectSpellClassMaskC1`,`EffectSpellClassMaskC2`,`EffectSpellClassMaskC3`,`MaxTargetLevel`,`SpellFamilyName`,`SpellFamilyFlags1`,`SpellFamilyFlags2`,`SpellFamilyFlags3`,`MaxAffectedTargets`,`DmgClass`,`PreventionType`,`DmgMultiplier1`,`DmgMultiplier2`,`DmgMultiplier3`,`AreaGroupId`,`SchoolMask`,`Comment`) VALUES
+(31934,0,0,384,0,0,0,0,0,0,0,131072,0,0,1,0,1048576,100,1,0,0,0,21,1,0,-1,0,0,6,0,0,1,0,0,'0','0','0',-51,0,0,0,0,0,1,0,0,0,0,0,0,0,0,87,0,0,0,0,0,'0','0','0',127,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'1','0','0',0,0,'Blessed Life');
+
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sindragosa_mystic_buffet';
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(70127,'spell_sindragosa_mystic_buffet'),
+(72528,'spell_sindragosa_mystic_buffet'),
+(72529,'spell_sindragosa_mystic_buffet'),
+(72530,'spell_sindragosa_mystic_buffet');
+
+DELETE FROM `spell_script_names` WHERE `spell_id`=-1064;
+INSERT INTO `spell_script_names` VALUES
+(-1064, 'spell_sha_chain_heal');
