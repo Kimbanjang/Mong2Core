@@ -194,7 +194,7 @@ class boss_lord_marrowgar : public CreatureScript
                         case EVENT_BONE_STORM_MOVE:
                         {
                             if(IsHeroic())
-                                events.ScheduleEvent(EVENT_BONE_STORM_MOVE, _boneStormDuration/4);
+                                events.ScheduleEvent(EVENT_BONE_STORM_MOVE, _boneStormDuration/3.5);
                             else
                                 events.ScheduleEvent(EVENT_BONE_STORM_MOVE, _boneStormDuration/3);
 
