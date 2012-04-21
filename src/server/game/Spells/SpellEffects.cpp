@@ -390,34 +390,6 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         if (!unitTarget->HasAura(27825))
                             return;
                         break;
-<<<<<<< HEAD
-                    // Cataclysmic Bolt
-                    case 38441:
-                    {
-                        damage = unitTarget->CountPctFromMaxHealth(50);
-                        break;
-                    }
-                    case 50341: // Touch the Nightmare
-                    {
-                        if (effIndex == EFFECT_2)
-                            damage = unitTarget->CountPctFromMaxHealth(30);
-                        break;
-                    }
-                    case 20625: // Ritual of Doom Sacrifice
-                    case 29142: // Eyesore Blaster
-                    case 35139: // Throw Boom's Doom
-                    case 42393: // Brewfest - Attack Keg
-                    case 46198: // Cold Slap
-                    case 46588: // Ice Spear
-                    case 55269: // Deathly Stare
-                    case 56578: // Rapid-Fire Harpoon
-                    case 62775: // Tympanic Tantrum
-                    {
-                        damage = unitTarget->CountPctFromMaxHealth(damage);
-                        break;
-                    }
-=======
->>>>>>> KBJ/master
                     // Gargoyle Strike
                     case 51963:
                     {
