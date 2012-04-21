@@ -100,7 +100,7 @@ public:
 
        void JustDied(Unit* pKiller) { }
 
-       void WaypointReached(uint32 waypointId)
+       void WaypointReached(uint32 i)
        {
            if(pInstance->GetData(DATA_ICE_WALL_1) == IN_PROGRESS)
            {
@@ -126,7 +126,7 @@ public:
                SetEscortPaused(true);
            }
 
-           switch(waypointId)
+           switch(i)
            {
                case 66:
                    SetEscortPaused(true);

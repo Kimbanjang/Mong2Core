@@ -902,20 +902,6 @@ public:
     }
 };
 
-class npc_helper_5raid1 : public CreatureScript
-{
-public:
-	npc_helper_5raid1() : CreatureScript("npc_helper_5raid1") {}
-
-	bool OnGossipHello(Player* player, Creature* creature)
-	{
-		player->RemoveAurasDueToSpell(15007);	
-		player->TeleportTo(658, 435.743f, 212.413f, 528.709f, 6.25646f);
-
-        return true;
-	}
-};
-
 void AddSC_forge_of_souls()
 {
     new npc_sylvanas_fos();
@@ -928,5 +914,4 @@ void AddSC_forge_of_souls()
     new mob_soulguard_animator();
     new mob_soulguard_adept();
     new mob_soul_horror();
-	new npc_helper_5raid1();
 }

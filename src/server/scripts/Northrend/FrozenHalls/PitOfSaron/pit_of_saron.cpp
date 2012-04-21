@@ -307,21 +307,6 @@ class spell_trash_mob_glacial_strike : public SpellScriptLoader
         }
 };
 
-
-class npc_helper_5raid2 : public CreatureScript
-{
-public:
-	npc_helper_5raid2() : CreatureScript("npc_helper_5raid2") {}
-
-	bool OnGossipHello(Player* player, Creature* creature)
-	{
-		player->RemoveAurasDueToSpell(15007);	
-		player->TeleportTo(668, 5239.01f, 1932.64f, 707.695f, 0.800565f);
-
-        return true;
-	}
-};
-
 void AddSC_pit_of_saron()
 {
     new mob_ymirjar_flamebearer();
@@ -329,5 +314,4 @@ void AddSC_pit_of_saron()
     new mob_iceborn_protodrake();
     new mob_geist_ambusher();
     new spell_trash_mob_glacial_strike();
-	new npc_helper_5raid2();
 }

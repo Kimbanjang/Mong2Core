@@ -236,8 +236,6 @@ class boss_devourer_of_souls : public CreatureScript
                             DoScriptText(SAY_SYLVANAS_OUTRO, summon);
                     }
                 }
-
-				Creature* kbjHelper = me->SummonCreature(210001, 4910.74f , 2199.75f , 638.73f , 5.2074f);
             }
 
             void SpellHitTarget(Unit* /*target*/, const SpellInfo* spell)

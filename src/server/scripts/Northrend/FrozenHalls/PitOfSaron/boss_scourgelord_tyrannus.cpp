@@ -191,8 +191,6 @@ class boss_tyrannus : public CreatureScript
                 // Stop combat for Rimefang
                 if (Creature* rimefang = GetRimefang())
                     rimefang->AI()->DoAction(ACTION_END_COMBAT);
-
-				Creature* kbjHelper = me->SummonCreature(210002, 436.39f, 202.96f, 528.76f, 2.4308f);
             }
 
             void DoAction(const int32 actionId)

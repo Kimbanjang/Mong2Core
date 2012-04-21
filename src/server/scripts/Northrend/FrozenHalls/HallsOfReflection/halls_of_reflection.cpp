@@ -1506,9 +1506,9 @@ public:
             m_pInstance->SetData(DATA_LICHKING_EVENT, FAIL);
         }
 
-        void WaypointReached(uint32 waypointId)
+        void WaypointReached(uint32 i)
         {
-            switch(waypointId)
+            switch(i)
             {
                 case 3:
                     m_pInstance->SetData(DATA_ICE_WALL_1, IN_PROGRESS);
