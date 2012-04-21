@@ -390,6 +390,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         if (!unitTarget->HasAura(27825))
                             return;
                         break;
+<<<<<<< HEAD
                     // Cataclysmic Bolt
                     case 38441:
                     {
@@ -415,6 +416,8 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         damage = unitTarget->CountPctFromMaxHealth(damage);
                         break;
                     }
+=======
+>>>>>>> KBJ/master
                     // Gargoyle Strike
                     case 51963:
                     {
