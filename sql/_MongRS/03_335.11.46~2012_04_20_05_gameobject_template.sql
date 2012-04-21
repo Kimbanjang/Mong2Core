@@ -22791,3 +22791,1725 @@ INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
 DELETE FROM `spell_script_names` WHERE `spell_id`=-1064;
 INSERT INTO `spell_script_names` VALUES
 (-1064, 'spell_sha_chain_heal');
+
+-- Update proper modelid for Celestial Steed (31957 is wrong)
+UPDATE `creature_template` SET `modelid1`=31958,`modelid2`=0 WHERE `entry`=40625;
+UPDATE `creature_template` SET `WDBVerified`=12340 WHERE `entry`=40624; -- Verified
+
+-- Remove temp entry 68686 and replace with wdb verified 38686
+UPDATE `creature_template` SET `difficulty_entry_3`=38686 WHERE `entry`=36950;
+UPDATE `creature_template` SET `minlevel`=82,`maxlevel`=82,`exp`=2,`faction_A`=84,`faction_H`=84,`mindmg`=488,`maxdmg`=642,`attackpower`=782,`unit_flags`=32832,`dynamicflags`=8,`minrangedmg`=363,`maxrangedmg`=521,`rangedattackpower`=121 WHERE `entry`=38686;
+DELETE FROM `creature_template` WHERE `entry`=68686;
+-- Druid
+UPDATE `spell_bonus_data` SET `direct_bonus`=0,`dot_bonus`=0 WHERE `entry` IN (779,1822,60089);
+DELETE FROM `spell_bonus_data` WHERE `entry` IN (1079,9007,22568);
+INSERT INTO `spell_bonus_data` (`entry`,`direct_bonus`,`dot_bonus`,`ap_bonus`,`ap_dot_bonus`,`comments`) VALUES
+(1079,0,0,-1,-1, 'Druid - Rip'),
+(9007,0,0,-1,-1, 'Druid - Pounce Bleed'),
+(22568,0,0,-1,-1, 'Druid - Ferocious Bite');
+
+-- Hunter
+UPDATE `spell_bonus_data` SET `direct_bonus`=0,`dot_bonus`=0 WHERE `entry` IN (3044,3674,53352,13812,13797,1978,42243);
+UPDATE `spell_bonus_data` SET `ap_dot_bonus`=0.1 WHERE `entry`=13812;
+DELETE FROM `spell_bonus_data` WHERE `entry` IN (24131,53353);
+INSERT INTO `spell_bonus_data` (`entry`,`direct_bonus`,`dot_bonus`,`ap_bonus`,`ap_dot_bonus`,`comments`) VALUES
+(24131,0,0,-1,-1, 'Hunter - Wyvern Sting (triggered)'),
+(53353,0,0,-1,-1, 'Hunter - Chimera Shot (Serpent)');
+DELETE FROM `spell_ranks` WHERE `first_spell_id`=24131;
+INSERT INTO `spell_ranks` VALUES
+(24131,24131,1),
+(24131,24134,2),
+(24131,24135,3),
+(24131,27069,4),
+(24131,49009,5),
+(24131,49010,6);
+
+-- Rogue
+UPDATE `spell_bonus_data` SET `direct_bonus`=0,`dot_bonus`=0 WHERE `entry` IN (2818,2819,11353,11354,25349,26968,27187,57969,57970);
+
+-- Howling blast
+UPDATE `spell_bonus_data` SET `ap_bonus`=0.2 WHERE `entry`=49184;
+-- Fixes some spell power stacking exploits
+DELETE FROM `spell_bonus_data` WHERE `entry` IN (44525,18798,16614,7712,13897);
+INSERT INTO `spell_bonus_data` (`entry`,`direct_bonus`,`dot_bonus`,`ap_bonus`,`ap_dot_bonus`,`comments`) VALUES
+(44525,0,0,-1,-1, 'Enchant Weapon - Icebreaker'),
+(18798,0,0,-1,-1, 'Item - Freezing Band'),
+(16614,0,0,-1,-1, 'Item - Storm Gauntlets'),
+(7712,0,0,-1,-1, 'Item - Fiery Retributer | Blazefury Medallion'),
+(13897,0,0,-1,-1, 'Enchant Weapon - Fiery Weapon');
+-- Update modelid for Invincible (with not bugged animation)
+UPDATE `creature_template` SET `modelid1`=31007,`modelid2`=0,`WDBVerified`=-12340 WHERE `entry`=38545;
+DELETE FROM `trinity_string` WHERE `entry` IN(555,556);
+DELETE FROM `command` WHERE `name`='hover';
+UPDATE `smart_scripts` SET `target_type`=`action_param6` WHERE
+(`entryorguid`=369200 AND `source_type`=9 AND `id`=3) OR
+(`entryorguid`=369201 AND `source_type`=9 AND `id`=3) OR
+(`entryorguid`=3692 AND `source_type`=0 AND `id`=2) OR
+(`entryorguid`=3692 AND `source_type`=0 AND `id`=3) OR
+(`entryorguid`=3584 AND `source_type`=0 AND `id`=3) OR
+(`entryorguid`=3584 AND `source_type`=0 AND `id`=4) OR
+(`entryorguid`=954600 AND `source_type`=9 AND `id`=2) OR
+(`entryorguid`=954600 AND `source_type`=9 AND `id`=3) OR
+(`entryorguid`=7207 AND `source_type`=0 AND `id`=1) OR
+(`entryorguid`=7207 AND `source_type`=0 AND `id`=2) OR
+(`entryorguid`=911700 AND `source_type`=9 AND `id`=3);
+
+UPDATE `smart_scripts` SET `action_param6`=0 WHERE
+(`entryorguid`=369200 AND `source_type`=9 AND `id`=3) OR
+(`entryorguid`=369201 AND `source_type`=9 AND `id`=3) OR
+(`entryorguid`=3692 AND `source_type`=0 AND `id`=2) OR
+(`entryorguid`=3692 AND `source_type`=0 AND `id`=3) OR
+(`entryorguid`=3584 AND `source_type`=0 AND `id`=3) OR
+(`entryorguid`=3584 AND `source_type`=0 AND `id`=4) OR
+(`entryorguid`=954600 AND `source_type`=9 AND `id`=2) OR
+(`entryorguid`=954600 AND `source_type`=9 AND `id`=3) OR
+(`entryorguid`=7207 AND `source_type`=0 AND `id`=1) OR
+(`entryorguid`=7207 AND `source_type`=0 AND `id`=2) OR
+(`entryorguid`=911700 AND `source_type`=9 AND `id`=3);
+-- Gnomish Playback Device (item 52709) Targeting condition -- by norfik closes #2169
+DELETE FROM `conditions` WHERE `SourceEntry`=74222 AND `ConditionValue2` IN (1268, 7955, 6119);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
+(17, 0, 74222, 1, 31, 3, 1268, 0, 63, '', 'Gnomish Playback Device on Ozzie Togglevolt'),
+(17, 0, 74222, 2, 31, 3, 7955, 0, 63, '', 'Gnomish Playback Device on Milli Featherwhistle'),
+(17, 0, 74222, 3, 31, 3, 6119, 0, 63, '', 'Gnomish Playback Device on Tog Rustsprocket');
+
+-- fix revenge ap coeff -- by ric101 closes #3344
+UPDATE `spell_bonus_data` SET `ap_bonus` = 0.310 WHERE `entry` = 6572; 
+
+-- fix life seed sp coeff -- by warpten closes #4162
+DELETE FROM `spell_bonus_data` WHERE `entry`=48503;
+INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`, `ap_dot_bonus`, `comments`) VALUES
+(48503,0,0,0,0, 'Druid - Living Seed Heal');
+
+-- fix glyph of shadowflame proc only allow on damage. by kandera closes #3530
+UPDATE `spell_proc_event` SET `procEx` = procEx|262144 WHERE`entry` = 63310; -- Glyph of shadowflame fix
+
+-- Disable deprecated quests /in 2.4/ from Midsummer Festival - The Festival of Fire {A/H} by trista closes #5982
+DELETE FROM `disables` WHERE `sourceType` = 1 AND `entry` in (9367,9368);
+INSERT INTO `disables` (`sourceType`,`entry`,`flags`,`params_0`,`params_1`,`comment`) VALUES
+(1,9367,0,0,0,'Disable quest The Festival of Fire {A}/Deprecated after 2.4 Midsummer Festival revamp/'),
+(1,9368,0,0,0,'Disable quest The Festival of Fire {H}/Deprecated after 2.4 Midsummer Festival revamp/');
+
+-- fix gameobject spawn for just maces sign -- by mrsmite closes #5849
+DELETE FROM `gameobject` WHERE `guid` = 10714;
+UPDATE `gameobject` SET `guid` = 10714 WHERE `guid` = 61895 AND `id` = 2157;
+
+-- update npc texts. by helias closes #6098
+DELETE FROM `npc_text` WHERE `ID` IN (10719,10782,10783,10787,10788,2838,9072,9110,10310,13293,13641,14089,15077,15155,15240,15412,15866,15873,15877,8663,8244,8254,8255,8282,8291,8296,8298,11093,3464,4776,4713,12130,13002,9984,12977,12978,10918,10999,10986,10991);
+INSERT INTO `npc_text` (`ID`, `text0_0`, `text0_1`, `lang0`, `prob0`, `em0_0`, `em0_1`, `em0_2`, `em0_3`, `em0_4`, `em0_5`) VALUES 
+(10719, '<The chime of A"dal"s voice echoes reassuringly through your mind.>$B$BWorry not, child.  Look in your pack and you will find it once more.', NULL, 0, 1, 0, 0, 0, 0, 0, 0),
+(10782, 'Sayoc, da ugly orc here, teach you daggers. You want teaching in other places, you talk to Ileda in da Farstrider Square of Silvermoon or Archibald in the War Quarter of Undercity, hokay?', 'Sayoc, da ugly orc here, teach you daggers. You want teaching in other places, you talk to Ileda in da Farstrider Square of Silvermoon or Archibald in the War Quarter of Undercity, hokay?', 1, 1, 0, 0, 0, 0, 0, 0),
+(10783, 'You want to punch things, yah? Talk to Sayoc right here. He teach you.', 'You want to punch things, yah? Talk to Sayoc right here. He teach you.', 1, 1, 0, 0, 0, 0, 0, 0),
+(10787, 'Ileda of da blood elves, in Farstrider Square of Silvermoon, train her students in both one and two-handed swords. Archibald, da Undercity"s weapon master, also train you, mon. He in da War Quarter.', 'Ileda of da blood elves, in Farstrider Square of Silvermoon, train her students in both one and two-handed swords. Archibald, da Undercity"s weapon master, also train you, mon. He in da War Quarter.', 1, 1, 0, 0, 0, 0, 0, 0),
+(10788, 'Hanashi here knows staves. If you want a sturdier instructor, go to Thunder Bluff. Ansekhwa will teach you on the lower central rise there.', '', 1, 1, 0, 0, 0, 0, 0, 0),
+(2838, '', 'Sure thing, $N. Here"s another for you.', 0, 1, 0, 0, 0, 0, 0, 0),
+(9072, 'A search of the corpse"s clothing and equipment reveals the insignia you need, undamaged by the battle and foul environment.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(9110, 'Say, you happen to see that arch in the lake to the west?  I wonder where that goes?  I should go divin" over there.', '', 0, 1, 0, 1, 0, 0, 0, 0),
+(10310, 'You must be exalted with the blood elves before I will teach you a riding skill, $c.', '', 1, 1, 0, 1, 0, 0, 0, 0),
+(13293, 'Please hurry, $N. I am in a great deal of pain and time is running out.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(13641, '<Brann looks at you expectantly.>', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(14089, 'I"ve got a lead on Norgannon"s keystone, which guards access to Ulduar"s archives, but the Titans divided it into two pieces and secreted them away.$B$BOne of the pieces, the keystone"s shell, is held within the Inventor"s Library on the northern coast, south of Ulduar itself. The first thing you"ll need to do is retrieve the fragments of an access disk from the library"s guardians.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(15077, 'There you are! I was beginning to think that the Sunreavers had intercepted you. Are you ready to deliver the tome to our representatives in Icecrown?', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(15155, 'These appear to be the remains of Thalorien Dawnseeker, the last wielder of Quel"Delar.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(15240, 'I will escort you into the Sunwell when you"re ready.', 'I will escort you into the Sunwell when you"re ready.', 0, 1, 0, 0, 0, 0, 0, 0),
+(15412, 'We got the final barrier blockin" entry to Frostwing Halls down, $g lad:lass;. Only Sindragosa stands between the Lich King and divine retribution! What are ye waitin" for?!', '', 0, 1, 0, 5, 0, 0, 0, 0),
+(15866, 'De Darkspears have a home again! An" we couldn"t have done it wit"out ya helpin", $N. Now, we celebrate!', '', 0, 1, 0, 1, 0, 1, 0, 0),
+(15873, 'Vol"jin told me ta keep hittin" da drum till he gets back.  If ya be waitin" for him, he"d be back soon to take back da Isles.$B$BJust wait here and enjoy da music!', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(15877, 'We require da help of allies on da islands.$B$BZen"tabra has been watching over da animals of de Islands for some time now.  We"d need her help and da help of da animal creatures.$B$BBwonsamdi is a powerful loa dat controls de spirits of de dead on da islands.  His blessing is crucial for our attack.$B$BOnce our allies have joined us, Zalazane and his army of mind-controlled trolls will have no chance!  Then, da Echo Isles will be de Darkspears!', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(8663, 'Thank you for delivering that list!  My leg is almost recovered enough that I"ll be able to walk back to the crash site.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(8244, 'We"ve been so wrapped up in this war, some of us forgot to make time for love.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(8254, 'You work with machines for so long, sometimes you forget about real hearts.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(8255, '', 'When you have lived as long as I, it becomes easy to forget about love for years. It is always good to be reminded.', 0, 1, 0, 0, 0, 0, 0, 0),
+(8282, '', 'You look like you"ve had your heart broken. Come back when you"re not so sad.', 0, 1, 0, 25, 0, 153, 0, 0),
+(8291, 'What, you don"t have a token to give me? Don"t you love me?', '', 0, 1, 0, 18, 0, 0, 0, 0),
+(8296, 'It looks like you"ve already found love. You can give me a love token, but I"m not giving you anything nice. I"m waiting for someone special.', 'It looks like you"ve already found love. You can give me a love token, but I"m not giving you anything nice. I"m waiting for someone special.', 0, 1, 0, 1, 0, 0, 0, 0),
+(8298, 'I"d like you better if you would apply some perfume.', 'I"d like you better if you would apply some perfume.', 0, 1, 0, 24, 0, 0, 0, 0),
+(11093, 'Let"s get out of here!', '', 0, 1, 0, 5, 0, 0, 0, 0),
+(3464, '', 'You do fine work, but it"s a bit rough around the edges. Don"t worry about it, it will come with practice. Speaking of which, how about we see what you"ve been working on?', 7, 1, 0, 0, 0, 0, 0, 0),
+(4776, 'The battle is over, and the people of Darrowshire are saved.', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(4713, 'The Nightmare is finally over!  Darrowshire, forgive me!', '', 0, 1, 0, 15, 0, 0, 0, 0),
+(12130, '<Old Icefin eyes you warily, his fishy eye blinking as he bobs his head up and down once in a curt dismissal.>', '', 0, 1, 0, 0, 0, 0, 0, 0),
+(13002, 'There ya go, mon. Try ta be more careful with this one, won"t ya?$b$bNow head down ta Drak"Zin Ruins and drink it near the pedestal!', NULL, 0, 1, 0, 0, 0, 0, 0, 0),
+(9984, 'What are ye doin" here?! Get yer chatty self ta Alterac Vallery, where ye"re needed!', '', 7, 1, 1, 5, 0, 0, 0, 0),
+(12977, 'Blight, Blight, Blight... that"s all I hear about around here. I miss the diversity!$b$bHere, here. You have pets, yes? Of course you do. Of course. Little pets. I have a mixture for them. It will make them ca-- ah, clever and strong creatures, yes. Yes. ', '', 1, 1, 396, 5, 0, 0, 0, 0),
+(12978, 'Careful with it. It"s unstable and loses its potency quickly. Use it soon! And... preferably within eyesight, yes...', '', 1, 1, 5, 0, 0, 0, 0, 0),
+(10918, 'The boy"s too stupid still to say it -- not enough crystal exposure yet -- but, he"s thankful for what you did in getting him those flasks.$B$BNow, only nine more sons to go.  Gah!$B$B<Both of Torkus"s heads sigh.>$B$BWant to take one of them off of our hands?  We"ll sell him to you cheap.', '', 0, 1, 0, 1, 0, 5, 0, 6),
+(10999, 'Friend! It"s been too long.  What can we get for you?', '', 0, 1, 1, 1, 0, 0, 0, 0),
+(10986, 'Our drinks should quench even the mightiest of thirsts.', '', 0, 1, 1, 396, 0, 0, 0, 0),
+(10991, 'What can I say, $N?  Yer the finest o" the Sha"tari Skyguard!$B$BJust don"t be lettin" that go ta yer head.  I can still teach ya a thing or two, $G lad : lass;!$B$B<Sky Commander Keller grins at you and winks.>', '', 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- Fix Kor'kron War Rider flying by trista closes #5569
+UPDATE `creature_template` SET `inhabittype`=5,`speed_walk`=1, `speed_run`=1 WHERE `entry`=26813;
+
+-- Gretta the Arbiter (Storm Peaks, Brunhilldar) by mweinelt closes #5493
+-- Daily Quest Pooling
+-- Source: http://www.wowwiki.com/Gretta_the_Arbiter
+SET @pool_id := 354;
+
+DELETE FROM `pool_template` WHERE `entry` = @pool_id;
+INSERT INTO `pool_template` (`entry`, `max_limit`, `description`) VALUES
+(@pool_id, 1, 'Gretta the Arbiter - Daily Quests');
+
+DELETE FROM `pool_quest` WHERE `entry` IN (13424, 13423, 13422, 13425);
+INSERT INTO `pool_quest` (`entry`, `pool_entry`, `description`) VALUES
+(13424, @pool_id, 'Back to the Pit'),
+(13423, @pool_id, 'Defending Your Title'),
+(13422, @pool_id, 'Maintaining Discipline'),
+(13425, @pool_id, 'The Aberrations Must Die');
+
+-- Pathing for Arzeth the Merciless Entry: 19354 by kiperr closes #5510
+SET @NPC := 69051;
+SET @PATH := @NPC * 10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=-617.6182,`position_y`=4800.323,`position_z`=38.53064 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`,`mount`,`auras`) VALUES (@NPC,@PATH,1,0, '');
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,-546.5514,4799.893,33.83914,0,0,0,100,0),
+(@PATH,2,-512.5808,4799.929,32.09928,0,0,0,100,0),
+(@PATH,3,-480.9247,4799.97,28.25657,0,0,0,100,0),
+(@PATH,4,-512.6269,4799.873,32.09928,0,0,0,100,0),
+(@PATH,5,-542.1885,4799.724,33.71414,0,0,0,100,0),
+(@PATH,6,-570.3811,4800.449,34.60215,0,0,0,100,0),
+(@PATH,7,-592.3809,4800.299,35.85215,0,0,0,100,0),
+(@PATH,8,-617.6182,4800.323,38.53064,0,0,0,100,0),
+(@PATH,9,-659.4124,4799.819,49.09505,0,0,0,100,0),
+(@PATH,10,-582.4199,4800.242,34.97715,0,0,0,100,0),
+(@PATH,11,-546.5514,4799.893,33.83914,0,0,0,100,0),
+(@PATH,12,-542.1885,4799.724,33.71414,0,0,0,100,0),
+(@PATH,13,-570.3811,4800.449,34.60215,0,0,0,100,0),
+(@PATH,14,-592.3809,4800.299,35.85215,0,0,0,100,0),
+(@PATH,15,-617.6182,4800.323,38.53064,0,0,0,100,0),
+(@PATH,16,-659.4124,4799.819,49.09505,0,0,0,100,0),
+(@PATH,17,-512.5808,4799.929,32.09928,0,0,0,100,0),
+(@PATH,18,-480.9247,4799.97,28.25657,0,0,0,100,0),
+(@PATH,19,-512.6269,4799.873,32.09928,0,0,0,100,0),
+(@PATH,20,-542.1885,4799.724,33.71414,0,0,0,100,0),
+(@PATH,21,-570.3811,4800.449,34.60215,0,0,0,100,0),
+(@PATH,22,-592.3809,4800.299,35.85215,0,0,0,100,0),
+(@PATH,23,-617.6182,4800.323,38.53064,0,0,0,100,0),
+(@PATH,24,-659.4124,4799.819,49.09505,0,0,0,100,0),
+(@PATH,25,-582.4199,4800.242,34.97715,0,0,0,100,0),
+(@PATH,26,-512.6269,4799.873,32.09928,0,0,0,100,0),
+(@PATH,27,-542.1885,4799.724,33.71414,0,0,0,100,0),
+(@PATH,28,-570.3811,4800.449,34.60215,0,0,0,100,0),
+(@PATH,29,-592.3809,4800.299,35.85215,0,0,0,100,0),
+(@PATH,30,-617.6182,4800.323,38.53064,0,0,0,100,0);
+
+-- Dark Portal - corrects the entry position and orientation by cdawg closes #5470
+UPDATE `areatrigger_teleport` SET `target_position_x`=-248.149292, `target_position_y`=921.874953, `target_position_z`=84.388448, `target_orientation`=1.584155 WHERE `id`=4354;
+
+-- Add pamphlets to mail loot by gecko32 closes #5408
+DELETE FROM `mail_loot_template` WHERE `entry` BETWEEN 224 AND 233;
+INSERT INTO `mail_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
+(224, 46875, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Elwynn Forest
+(225, 46876, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Darnassus
+(226, 46877, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Dun Morogh drawf
+(227, 46879, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Azuremyst Isle
+(228, 46878, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Dun Morogh gnome
+(229, 46884, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Mulgore
+(230, 46883, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Durator
+(231, 46880, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Orgrimmar
+(232, 46882, 100, 1, 0, 1, 1), -- Riding Training Pamphlet Eversong Woods
+(233, 46881, 100, 1, 0, 1, 1); -- Riding Training Pamphlet Tirisfal Glades
+
+-- fix coordinates for cannoneer whessan by mosoo closes #5406
+UPDATE `creature` SET `position_x`=-2093.53, `position_y`=-3496.47, `position_z`=130.084, `orientation`=3.008 WHERE `id`=3455 LIMIT 1;
+
+-- fix quest requirement for the last of her kind by shlomi 1515 closes #4875
+UPDATE `quest_template` SET `PrevQuestID` = 12900 WHERE `id` = 12983;
+
+-- Add rep reward to ICC25 Trash by gecko32 closes #5457
+DELETE FROM `creature_onkill_reputation` WHERE `creature_id` IN (37655,38031,38057,38058,38059,38061,38062,38063,38064,38072,38073,38074,38075,38076,38098,38099,38100,38101,38102,38103,38105,38108,38110,38126,38130,38131,38132,38133,38139,38151,38219,38220,38418,38445,38446,38479,38480,38481);
+INSERT INTO `creature_onkill_reputation` (`creature_id`, `RewOnKillRepFaction1`, `RewOnKillRepFaction2`, `MaxStanding1`, `IsTeamAward1`, `RewOnKillRepValue1`, `MaxStanding2`, `IsTeamAward2`, `RewOnKillRepValue2`, `TeamDependent`) VALUES
+(37655, 1156, 0, 7, 0, 45, 0, 0, 0, 0), -- Decaying colossus
+(38031, 1156, 0, 7, 0, 45, 0, 0, 0, 0), -- Deathbound Ward
+(38057, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Servant of the throne
+(38058, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Nerub'ar Broodkeeper
+(38059, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Ancient Skeletal Soldier
+(38061, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- The Damned
+(38062, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Plague Scientist
+(38063, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Vengeful Fleshreaper
+(38064, 1156, 0, 7, 0, 150, 0, 0, 0, 0), -- Stinky
+(38072, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Deathspeacker Attedent
+(38073, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Deathspeacker Disciple
+(38074, 1156, 0, 7, 0, 45, 0, 0, 0, 0), -- Deathspeacker High Preist
+(38075, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Deathspeacker Servant
+(38076, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Deathspeacker Zealot
+(38098, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Advisor
+(38099, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Archmage
+(38100, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Blood Knight
+(38101, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Lieutenant
+(38102, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Commander
+(38103, 1156, 0, 7, 0, 150, 0, 0, 0, 0), -- Precious
+(38105, 1156, 0, 7, 0, 2, 0, 0, 0, 0), -- Plagued Zombie
+(38108, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Blighted Abomination
+(38110, 1156, 0, 7, 0, 30, 0, 0, 0, 0), -- Pustulating Horror
+(38126, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Ymirjar Frostbinder
+(38130, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Ymirjar Deathbringer
+(38131, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Ymirjar Huntress
+(38132, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Ymirjar Battle-Maiden
+(38133, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Ymirjar Warlord
+(38139, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Frostwarden Handler
+(38151, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Frostwing Whelp
+(38219, 1156, 0, 7, 0, 150, 0, 0, 0, 0), -- Spinestalker
+(38220, 1156, 0, 7, 0, 150, 0, 0, 0, 0), -- Rimefang
+(38418, 1156, 0, 7, 0, 45, 0, 0, 0, 0), -- Val'kyr Herald
+(38445, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Spire Minion
+(38446, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Frenzied Abomination
+(38479, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Tactician
+(38480, 1156, 0, 7, 0, 15, 0, 0, 0, 0), -- Darkfallen Noble
+(38481, 1156, 0, 7, 0, 15, 0, 0, 0, 0); -- Spire Gargoyle
+
+-- fix procs by warpten closes #4467 for 
+-- Needle-Encrusted Scorpion
+DELETE FROM `spell_proc_event` WHERE `entry`=71404;
+INSERT INTO `spell_proc_event` (`entry`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`procFlags`,`procEx`,`ppmRate`,`CustomChance`,`Cooldown`) VALUES
+(71404,0,0,0,0,0,0,2,0,0,50);
+
+-- Black Magic
+DELETE FROM `spell_proc_event` WHERE `entry`=59630;
+INSERT INTO `spell_proc_event` (`entry`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`procFlags`,`procEx`,`ppmRate`,`CustomChance`,`Cooldown`) VALUES
+(59630,0,0,0,0,0,0,0,0,0,35);
+
+-- Environment Creature Hight Update by shlomi1515 closes #4043
+UPDATE `creature` SET `position_z`=558.210022 WHERE `guid` IN (85141,85143,85154,85153,85142,85151,85152,85150);
+UPDATE `creature` SET `position_z`=586.302 WHERE `guid` IN (85145,85144,85146);
+UPDATE `creature` SET `position_z`=586.263 WHERE `guid` IN (85147,85148,85149);
+
+-- fix winterskorn raider not landing by nayd closes #3899
+UPDATE `creature_template` SET `InhabitType`=`InhabitType`|1 WHERE `entry`=23665;
+
+-- fix head of onyxia's loot closes by kandera #3851
+UPDATE `item_template` SET `flags` = flags|4096 WHERE `entry` IN (18422,18423,49644,49643);
+
+-- fix visual for plagued dragonsflayer tribesman by shlomi1515 closes #3518
+DELETE FROM `creature_addon` WHERE `guid` = 97540;
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry` IN (38308,38309,37824); -- Professor Putricide triggers
+UPDATE `creature_template` SET `ScriptName`='npc_gas_cloud' WHERE `entry`=37562; -- Gas Cloud
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_putricide_ooze_summon';
+DELETE FROM `spell_target_position` WHERE `id` IN (71413,71414);
+INSERT INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`target_position_y`,`target_position_z`,`target_orientation`) VALUES
+(71414,631,4335.00,3206.75,389.399,0),
+(71413,631,4380.43,3206.55,389.398,0);
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN (71615,71618,71412,71415);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`Comment`) VALUES
+(13,4,71615,31,3,37690,'Putricide - Tear Gas on Slime Puddle'),
+(13,1,71618,31,3,37562,'Putricide - Tear Gas on Gas Cloud'),
+(13,2,71618,31,3,37697,'Putricide - Tear Gas on Volatile Ooze'),
+(13,4,71618,31,3,38159,'Putricide - Tear Gas on Choking Gas Bomb');
+
+UPDATE `spell_script_names` SET `ScriptName`='spell_putricide_clear_aura_effect_value' WHERE `ScriptName`='spell_putricide_clear_mutated_plague';
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(71620,'spell_putricide_clear_aura_effect_value');
+ALTER TABLE `battleground_template` ADD `StartMaxDist` float NOT NULL DEFAULT 0 AFTER `HordeStartO`;
+
+UPDATE `battleground_template` SET `StartMaxDist`=200 WHERE `id`=30; -- IC
+UPDATE `battleground_template` SET `StartMaxDist`=100 WHERE `id`=1; -- AV
+UPDATE `battleground_template` SET `StartMaxDist`=75 WHERE `id` IN (2,3,7); -- WSG, AB, EotS
+
+UPDATE `battleground_template` SET `MinLvl`=1 WHERE `id`=32;
+-- Blackened Naaru Silver proc cooldown
+DELETE FROM `spell_proc_event` WHERE `entry`=45355;
+INSERT INTO `spell_proc_event`(`entry`,`schoolmask`,`spellfamilyname`,`spellfamilymask0`,`spellfamilymask1`,`spellfamilymask2`,`procflags`,`procex`,`ppmrate`,`customchance`,`cooldown`) VALUES
+(45355,0,0,0,0,0,0,0,0,0,45);
+-- Add Bogblossom to this Bogblossom object for the druid quest (other one already contains it)
+DELETE FROM `gameobject_loot_template` WHERE (`entry`=10961) AND (`item`=31950);
+INSERT INTO `gameobject_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES (10961,31950,-100,0,0,1,1);
+-- Add missing gameobject_loot_templates to prevent startup errors
+DELETE FROM `gameobject_loot_template` WHERE `entry` IN (3458,3459,3460,3461,15920,16841,26878,27725);
+INSERT INTO `gameobject_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES 
+(3458,4594,100,0,0,1,1), -- Rockscale Cod on Feast Fish
+(3459,3771,100,0,0,1,1), -- Wild Hog Shank On Feast Boar
+(3460,4538,100,0,0,1,1), -- Snapvine Watermelon on Feast Fruit
+(3461,1708,100,0,0,1,1), -- Sweet Nectar on Feast Goblet
+(15920,17822,-100,0,0,1,1), -- Weird Map on weird object
+(16841,18950,-100,0,0,1,1), -- Chambermaid Pillaclenchers Pillow on Pillaclencher's Ornate Pillow
+(26878,45062,100,0,0,1,1), -- Dusty Journal on Dusty Journal (different ID)
+(27725,49648,100,0,0,1,1); -- Borrowed Tabard on Clean Laundry (might need condition!)
+UPDATE `creature_template_addon` SET `auras`='50453' WHERE `entry`=28017;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=28017;
+UPDATE `creature_template` SET `ainame` = '' WHERE `entry`=28017;
+UPDATE `spell_bonus_data` SET `direct_bonus`=0.8930 WHERE `entry`=51505;
+DELETE FROM `spell_proc_event` WHERE `entry`=53601;
+INSERT INTO `spell_proc_event` (`entry`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`procFlags`,`procEx`,`ppmRate`,`CustomChance`,`Cooldown`) VALUES
+(53601, 0, 0, 0x00000000, 0x00000000, 0x00000000, 0, 0, 0, 0, 6);
+DELETE FROM `spell_proc_event` WHERE `entry` IN (51486,51485,51483);
+SET @Event = 26; -- Pilgrim's Bounty
+DELETE FROM `game_event` WHERE `eventEntry`=@Event;
+INSERT INTO `game_event` (`eventEntry`,`start_time`,`end_time`,`occurence`,`length`,`holiday`,`description`,`world_event`) VALUES
+(@Event,'2012-11-18 01:00:00','2020-12-31 05:00:00',525600,10020,404,'Pilgrim\'s Bounty',0);
+SET @GUID1 := 41781;
+SET @GUID2 := 41783;
+
+DELETE FROM creature WHERE guid IN (@GUID1,@GUID2);
+INSERT INTO `creature`
+(`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`)
+VALUES
+(@GUID1  ,38453,571,1,1,3561.821,-2736.367,136.0317,0), -- Arcturis in Grizzly Hills
+(@GUID2,35189,571,1,1,7101.845,-1443.734,924.2609,0.178631); -- Skoll in The Storm Peaks
+
+UPDATE `creature_template` SET `faction_A` = 190, `faction_H`=190 WHERE `entry` IN (38453,35189);
+
+SET @NPC= @GUID1*10;
+-- Add pathing for Arcturis
+DELETE FROM `creature_addon` WHERE `guid` = @GUID1;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`mount`,`bytes1`,`bytes2`,`emote`,`auras`) VALUES
+(@GUID1,@NPC,0,0,0,0,''); -- Add path for Acturis
+-- Add waypoint data for the path:
+DELETE FROM `waypoint_data` WHERE `id`=@NPC;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`) VALUES
+(@NPC,1,3563.499,-2737.698,137.1898),
+(@NPC,2,3565.249,-2738.698,138.4398),
+(@NPC,3,3566.749,-2739.948,139.9398),
+(@NPC,4,3568.249,-2740.698,140.6898),
+(@NPC,5,3567.839,-2741.380,141.9256),
+(@NPC,6,3569.999,-2741.948,142.1898),
+(@NPC,7,3570.749,-2742.448,143.1898),
+(@NPC,8,3572.676,-2743.528,144.8479);
+UPDATE `npc_spellclick_spells` SET `spell_id`=57053 WHERE `npc_entry`=30066 AND `spell_id`=56678;
+UPDATE `creature_template` SET `spell1`=55812 WHERE `entry`=30066;
+UPDATE `creature` SET `spawntimesecs`=39600 WHERE `guid` IN (41781,41783); -- Set the spawntime to 11 hours for Arcturis & Skoll
+-- ----------------------
+-- -- Various Cleanups --
+-- ----------------------
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=10 AND `SourceGroup`=34105; 
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=4 AND `SourceGroup` IN (27081,27085,27073,26963,26955);
+DELETE FROM `reference_loot_template` WHERE `entry` IN (12020,12021,12022,34105,34125,34126,34127,34128,34129,34130);
+DELETE FROM `gameobject_loot_template` WHERE `entry`=10961; -- Bad Bogblossom fix was bad
+UPDATE `gameobject_template` SET `data1`=26956 WHERE `entry`=194315;
+-- -------------------------------
+-- -- Variables and definitions -- 
+-- -------------------------------
+-- Freya 10 man
+SET @Freya10k0ID := 194324; -- Freyas Gift 10man ALL elders alive
+SET @Freya10k1ID := 194326; -- Freyas Gift 10man killed 1 elder
+SET @Freya10k2ID := 194328; -- Freyas Gift 10man killed 2 elder
+SET @Freya10k3ID := 194330; -- Freyas Gift 10man killed 3 elder
+-- Freya 25 man
+SET @Freya25k0ID := 194325; -- Freyas Gift 25man ALL elders alive
+SET @Freya25k1ID := 194327; -- Freyas Gift 25man killed 1 elder
+SET @Freya25k2ID := 194329; -- Freyas Gift 25man killed 2 elder
+SET @Freya25k3ID := 194331; -- Freyas Gift 25man killed 3 elder
+-- Hodir
+SET @Hodir10nID := 194307; -- Cache of Winter 10man
+SET @Hodir10hID := 194200; -- Rare Cache of Winter 10man
+SET @Hodir25nID := 194308; -- Cache of Winter 25man
+SET @Hodir25hID := 194201; -- Rare Cache of Winter 25man
+-- Mimiron
+SET @Mimiron10nID := 194789; -- Cache of Innovations 10man
+SET @Mimiron25nID := 194956; -- Cache of Innovations 25man
+SET @Mimiron10hID := 194957; -- Cache of Innovation 10 man Hardmode
+SET @Mimiron25hID := 194958; -- Cache of Innovation 25 man Hardmode
+-- Thorim
+SET @Thorim10nID := 194312; -- Cache of Storms 10man
+SET @Thorim10hID := 194313; -- Cache of Storms 10 man Hardmode
+SET @Thorim25nID := 194314; -- Cache of Storms 25man
+SET @Thorim25hID := 194315; -- Cache of Storms 25 man Hardmode
+
+-- Use procedure to get Lootid from data1 field and assign it to a variable
+-- Freya 10
+CALL `sp_get_go_lootid`(@Freya10k0ID,@Freya10k0);
+CALL `sp_get_go_lootid`(@Freya10k1ID,@Freya10k1);
+CALL `sp_get_go_lootid`(@Freya10k2ID,@Freya10k2);
+CALL `sp_get_go_lootid`(@Freya10k3ID,@Freya10k3);
+-- Freya 25
+CALL `sp_get_go_lootid`(@Freya25k0ID,@Freya25k0);
+CALL `sp_get_go_lootid`(@Freya25k1ID,@Freya25k1);
+CALL `sp_get_go_lootid`(@Freya25k2ID,@Freya25k2);
+CALL `sp_get_go_lootid`(@Freya25k3ID,@Freya25k3);
+-- Hodir 10
+CALL `sp_get_go_lootid`(@Hodir10nID,@Hodir10n);
+CALL `sp_get_go_lootid`(@Hodir10hID,@Hodir10h);
+-- Hodir 25
+CALL `sp_get_go_lootid`(@Hodir25nID,@Hodir25n);
+CALL `sp_get_go_lootid`(@Hodir25hID,@Hodir25h);
+-- Mimiron
+CALL `sp_get_go_lootid`(@Mimiron10nID,@Mimiron10n);
+CALL `sp_get_go_lootid`(@Mimiron10hID,@Mimiron10h);
+CALL `sp_get_go_lootid`(@Mimiron25nID,@Mimiron25n);
+CALL `sp_get_go_lootid`(@Mimiron25hID,@Mimiron25h);
+-- Thorim
+CALL `sp_get_go_lootid`(@Thorim10nID,@Thorim10n);
+CALL `sp_get_go_lootid`(@Thorim10hID,@Thorim10h);
+CALL `sp_get_go_lootid`(@Thorim25nID,@Thorim25n);
+CALL `sp_get_go_lootid`(@Thorim25hID,@Thorim25h);
+-- Set References
+SET @Freya10Ref := 34365; 
+SET @Freya25Ref := @Freya10Ref+1;
+SET @Hodir10Ref := @Freya10Ref+2; 
+SET @Hodir25Ref := @Freya10Ref+3;
+SET @Mimiron10Ref := @Freya10Ref+4;
+SET @Mimiron25Ref := @Freya10Ref+5;
+SET @Thorim10Ref := @Freya10Ref+6;
+SET @Thorim25Ref := @Freya10Ref+7;
+SET @HandToken := 12026; 
+SET @LegToken := @HandToken+1;
+SET @LegsToken := @HandToken+2;
+SET @ChestToken := @HandToken+3;
+SET @HeadToken := @HandToken+4;
+SET @GloveToken := @HandToken+5;
+SET @ShoulderToken := @HandToken+6;
+SET @HelmToken := @HandToken+7;
+SET @Recipe := 34154;
+-- -------------------------
+-- -- Reference Templates --
+-- -------------------------
+-- Delete previous templates if existing
+DELETE FROM `reference_loot_template` WHERE `entry` BETWEEN @Freya10Ref AND @Freya10Ref+7;
+DELETE FROM `reference_loot_template` WHERE `entry` BETWEEN @HandToken AND @HandToken+7;
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- Freya 10 man
+(@Freya10Ref,45934,0,1,1,1,1), -- Unraveling Reach	
+(@Freya10Ref,45935,0,1,1,1,1), -- Ironbark Faceguard
+(@Freya10Ref,45941,0,1,1,1,1), -- Chestguard of the Lasher
+(@Freya10Ref,45936,0,1,1,1,1), -- Legplates of Flourishing Resolve
+(@Freya10Ref,45940,0,1,1,1,1), -- Tunic of the Limber Stalker
+-- Freya 25 man
+(@Freya25Ref,45483,0,1,1,1,1), -- Boots of the Servant
+(@Freya25Ref,45482,0,1,1,1,1), -- Leggings of the Lifetender
+(@Freya25Ref,45481,0,1,1,1,1), -- Gauntlets of Ruthless Reprisal
+(@Freya25Ref,45480,0,1,1,1,1), -- Nymph Heart Charm
+(@Freya25Ref,45479,0,1,1,1,1), -- The Lifebinder
+-- Freya Tokens
+(@HandToken,45644,0,1,1,1,1), -- Gloves of the Wayward Conqueror
+(@HandToken,45645,0,1,1,1,1), -- Gloves of the Wayward Protector
+(@HandToken,45646,0,1,1,1,1), -- Gloves of the Wayward Vanquisher
+(@LegToken,45653,0,1,1,1,1), -- Legplates of the Wayward Conqueror
+(@LegToken,45654,0,1,1,1,1), -- Legplates of the Wayward Protector
+(@LegToken,45655,0,1,1,1,1), -- Legplates of the Wayward Vanquisher
+-- Hodir 10 man
+(@Hodir10Ref,45874,0,1,1,1,1), -- Signet of Winter
+(@Hodir10Ref,45458,0,1,1,1,1), -- Stormedge
+(@Hodir10Ref,45873,0,1,1,1,1), -- Winter's Frigid Embrace
+(@Hodir10Ref,45872,0,1,1,1,1), -- Avalanche
+(@Hodir10Ref,45454,0,1,1,1,1), -- Cowl of Icy Breaths
+-- Hodir 25 man
+(@Hodir25Ref,45452,0,1,1,1,1), -- Frostplate Greaves
+(@Hodir25Ref,45454,0,1,1,1,1), -- Frost-Bound Chain Bracers
+(@Hodir25Ref,45453,0,1,1,1,1), -- Winter's Icy Embrace
+(@Hodir25Ref,45450,0,1,1,1,1), -- Northern Barrier
+(@Hodir25Ref,45451,0,1,1,1,1), -- Frozen Loop
+-- Hodir Tokens
+(@LegsToken,45650,0,1,1,1,1), -- Leggings of the Wayward Conqueror
+(@LegsToken,45651,0,1,1,1,1), -- Leggings of the Wayward Protector
+(@LegsToken,45652,0,1,1,1,1), -- Leggings of the Wayward Vanquisher
+(@ChestToken,45632,0,1,1,1,1), -- Breastplate of the Wayward Conqueror
+(@ChestToken,45633,0,1,1,1,1), -- Breastplate of the Wayward Protector
+(@ChestToken,45634,0,1,1,1,1), -- Breastplate of the Wayward Vanquisher
+-- Mimiron 10 man
+(@Mimiron10Ref,45974,0,1,1,1,1), -- Shoulderguards of Assimilation
+(@Mimiron10Ref,45976,0,1,1,1,1), -- Static Charge Handwraps
+(@Mimiron10Ref,45972,0,1,1,1,1), -- Pulse Baton
+(@Mimiron10Ref,45973,0,1,1,1,1), -- Stylish Power Cape
+(@Mimiron10Ref,45975,0,1,1,1,1), -- Cable of the Metrognome
+-- Mimiron 25 man
+(@Mimiron25Ref,45492,0,1,1,1,1), -- Malleable Steelweave Mantle
+(@Mimiron25Ref,45493,0,1,1,1,1), -- Asimov's Drape
+(@Mimiron25Ref,45490,0,1,1,1,1), -- Pandora's Plea
+(@Mimiron25Ref,45491,0,1,1,1,1), -- Waistguard of the Creator
+(@Mimiron25Ref,45489,0,1,1,1,1), -- Insanity's Grip
+-- Mimiron Tokens
+(@HeadToken,45647,0,1,1,1,1), -- Helm of the Wayward Conqueror
+(@HeadToken,45648,0,1,1,1,1), -- Helm of the Wayward Protector
+(@HeadToken,45649,0,1,1,1,1), -- Helm of the Wayward Vanquisher
+(@GloveToken,45641,0,1,1,1,1), -- Gauntlets of the Wayward Conqueror
+(@GloveToken,45642,0,1,1,1,1), -- Gauntlets of the Wayward Protector
+(@GloveToken,45643,0,1,1,1,1), -- Gauntlets of the Wayward Vanquisher
+-- Thorim 10 man
+(@Thorim10Ref,45927,0,1,1,1,1), -- Handwraps of Resonance
+(@Thorim10Ref,45894,0,1,1,1,1), -- Leggings of Unstable Discharge
+(@Thorim10Ref,45895,0,1,1,1,1), -- Belt of the Blood Pit
+(@Thorim10Ref,45893,0,1,1,1,1), -- Guise of the Midgard Serpent
+(@Thorim10Ref,45892,0,1,1,1,1), -- Legacy of Thunder
+-- Throim 25 man
+(@Thorim25Ref,45468,0,1,1,1,1), -- Leggings of Lost Love
+(@Thorim25Ref,45466,0,1,1,1,1), -- Scale of Fates
+(@Thorim25Ref,45467,0,1,1,1,1), -- Belt of the Betrayed
+(@Thorim25Ref,45469,0,1,1,1,1), -- Sif's Promise
+(@Thorim25Ref,45463,0,1,1,1,1), -- Vulmir, the Northern Tempest
+-- Thorim Tokens
+(@ShoulderToken,45659,0,1,1,1,1), -- Spaulders of the Wayward Conqueror
+(@ShoulderToken,45660,0,1,1,1,1), -- Spaulders of the Wayward Protector
+(@ShoulderToken,45661,0,1,1,1,1), -- Spaulders of the Wayward Vanquisher
+(@HelmToken,45638,0,1,1,1,1), --  Crown of the Wayward Conqueror
+(@HelmToken,45639,0,1,1,1,1), --  Crown of the Wayward Protector
+(@HelmToken,45640,0,1,1,1,1); --  Crown of the Wayward Vanquisher
+-- -------------------------------
+-- -- Gameobject Loot Templates --
+-- -------------------------------
+-- Delete previous templates if existing
+DELETE FROM `gameobject_loot_template` WHERE `entry` IN (@Freya10k3,@Freya10k2,@Freya10k1,@Freya10k0,@Freya25k3,@Freya25k2,@Freya25k1,@Freya25k0,@Hodir10n,@Hodir10h,@Hodir25n,@Hodir25h,@Mimiron10n,@Mimiron10h,@Mimiron25n,@Mimiron25h,@Thorim10n,@Thorim10h,@Thorim25n,@Thorim25h);
+INSERT INTO `gameobject_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- ------------------
+-- -- Freya 10 man --
+-- ------------------
+-- Normal Mode:
+(@Freya10k3,1,100,1,0,-@Freya10Ref,1), -- 1 from normal loot
+(@Freya10k3,2,100,1,0,-@HandToken,1), -- 1 from tokens
+(@Freya10k3,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya10k3,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+-- Hard Mode: 1 elder alive
+(@Freya10k2,1,100,1,0,-@Freya10Ref,1), -- 1 from normal loot
+(@Freya10k2,2,100,1,0,-@HandToken,1), -- 1 from tokens
+(@Freya10k2,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya10k2,47241,100,1,0,2,2), -- 2x Emblem of Triumph
+(@Freya10k2,45087,100,1,0,1,1), -- Runed Orb
+(@Freya10k2,3,100,1,0,-34349,1), -- 1x Emblem of Triumph for Alive Elders
+-- Hard Mode: 2 elders alive
+(@Freya10k1,1,100,1,0,-@Freya10Ref,1), -- 1 from normal loot
+(@Freya10k1,2,100,1,0,-@HandToken,1), -- 1 from tokens
+(@Freya10k1,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya10k1,47241,100,1,0,3,3), -- 3x Emblem of Triumph
+(@Freya10k1,45087,100,1,0,1,1), -- Runed Orb
+(@Freya10k1,3,100,1,0,-@Recipe,1), -- 1 from Recipe
+(@Freya10k1,4,100,1,0,-34349,2), -- 2x Emblem of Triumph for Alive Elders
+-- Hard Mode: 3 elders alive
+(@Freya10k0,1,100,1,0,-@Freya10Ref,1), -- 1 from normal loot
+(@Freya10k0,2,100,1,0,-@HandToken,1), -- 1 from tokens
+(@Freya10k0,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya10k0,47241,100,1,0,3,3), -- 3x Emblem of Triumph (self)
+(@Freya10k0,45087,100,1,0,1,1), -- Runed Orb
+(@Freya10k0,3,100,1,0,-@Recipe,1), -- 1 from Recipe
+(@Freya10k0,45788,-100,1,0,1,1), -- Freya's Sigil 10 man QUEST ONLY
+(@Freya10k0,4,100,1,0,-34349,1), -- 3x Emblem of Triumph for Alive Elders
+-- 1 from Hardmode items:
+(@Freya10k0,45943,0,1,1,1,1), -- Gloves of Whispering Winds
+(@Freya10k0,45946,0,1,1,1,1), -- Fire Orchid Signet
+(@Freya10k0,45945,0,1,1,1,1), -- Seed of Budding Carnage
+(@Freya10k0,45947,0,1,1,1,1), -- Serilas, Blood Blade of Invar One-Arm
+(@Freya10k0,45294,0,1,1,1,1), -- Petrified Ivy Sprig
+-- ------------------ 
+-- -- Freya 25 man -- 
+-- ------------------
+-- Normal Mode:
+(@Freya25k3,1,100,1,0,-@Freya25Ref,1), -- 1 from normal loot
+(@Freya25k3,2,100,1,0,-@LegToken,2), -- 2 from tokens
+(@Freya25k3,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+(@Freya25k3,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya25k3,3,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Freya25k3,45087,10,1,0,1,1), -- Chance on Runed Orb
+(@Freya25k3,45083,5,1,0,1,1), -- Fragment of Val'anyr
+-- Hard Mode: 1 elder alive
+(@Freya25k2,1,100,1,0,-@Freya25Ref,1), -- 1 from normal loot
+(@Freya25k2,2,100,1,0,-@LegToken,2), -- 2 from tokens
+(@Freya25k2,47241,100,1,0,2,2), -- 2x Emblem of Triumph
+(@Freya25k2,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya25k2,3,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Freya25k2,4,10,1,0,-34350,1), -- Chance on Runed Orb
+(@Freya25k2,45087,100,1,0,2,2), -- 2x Runed Orb
+(@Freya25k2,45083,7,1,0,1,1), -- Fragment of Val'anyr
+(@Freya25k2,5,100,1,0,-34349,1), -- 1x Emblem of Triumph for Alive Elder
+-- Hard Mode: 2 elders alive
+(@Freya25k1,1,100,1,0,-@Freya25Ref,1), -- 1 from normal loot
+(@Freya25k1,2,100,1,0,-@LegToken,2), -- 2 from tokens
+(@Freya25k1,47241,100,1,0,3,3), -- 3x Emblem of Triumph
+(@Freya25k1,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya25k1,3,10,1,0,-34350,1), -- Chance on Runed Orb
+(@Freya25k1,45087,100,1,0,2,2), -- 2x Runed Orb
+(@Freya25k1,4,100,1,0,-@Recipe,1), -- Recipe
+(@Freya25k1,5,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Freya25k1,45083,9,1,0,1,1), -- Fragment of Val'anyr
+(@Freya25k1,6,100,1,0,-34349,2), -- 2x Emblem of Triumph for Alive Elder
+-- Hard Mode: 3 elders alive
+(@Freya25k0,1,100,1,0,-@Freya25Ref,1), -- 1 from normal loot
+(@Freya25k0,2,100,1,0,-@LegToken,2), -- 2 from tokens
+(@Freya25k0,47241,100,1,0,3,3), -- 3x Emblem of Triumph
+(@Freya25k0,46110,100,1,0,1,1), -- Alchemist's Cache
+(@Freya25k0,3,10,1,0,-34350,1), -- Chance on Runed Orb
+(@Freya25k0,45087,100,1,0,2,2), -- 2x Runed Orb
+(@Freya25k0,4,100,1,0,-@Recipe,1), -- Recipe
+(@Freya25k0,5,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Freya25k0,45814,-100,1,0,1,1), -- Freya's Sigil 25 man QUEST ONLY
+(@Freya25k0,45083,20,1,0,1,1), -- Fragment of Val'anyr
+(@Freya25k2,6,100,1,0,-34349,3), -- 3x Emblem of Triumph for Alive Elder
+-- 1 from Hardmode items
+(@Freya25k0,45484,0,1,1,1,1), -- Bladetwister
+(@Freya25k0,45486,0,1,1,1,1), -- Drape of the Sullen Goddess
+(@Freya25k0,45487,0,1,1,1,1), -- Handguards of Revitalization
+(@Freya25k0,45488,0,1,1,1,1), -- Leggings of the Enslaved Idol
+(@Freya25k0,45613,0,1,1,1,1), -- Dreambinder
+(@Freya25k0,45485,0,1,1,1,1), -- Bronze Pendant of the Vanir
+-- ------------------
+-- -- Hodir 10 man -- 
+-- ------------------
+(@Hodir10n,1,100,1,0,-@Hodir10Ref,1), -- 1x Normal Loot Item
+(@Hodir10n,2,100,1,0,-@LegsToken,1), -- 1x Token
+(@Hodir10n,47241,100,1,0,1,1), -- Emblem of Triumph
+-- Hard mode:
+(@Hodir10h,1,100,1,0,-@Hodir10Ref,1), -- 1x Normal Loot Item
+(@Hodir10h,2,100,1,0,-@LegsToken,1), -- 1x Token
+(@Hodir10h,47241,100,1,0,1,1), -- Emblem of Triumph
+(@Hodir10h,45786,-100,1,0,1,1), -- Hodir's Sigil
+-- 1 from Hardmode items
+(@Hodir10h,45887,0,1,1,1,1), -- Ice Layered Barrier
+(@Hodir10h,45888,0,1,1,1,1), -- Bitter Cold Armguards
+(@Hodir10h,45886,0,1,1,1,1), -- Icecore Staff
+(@Hodir10h,45876,0,1,1,1,1), -- Shiver
+(@Hodir10h,45877,0,1,1,1,1), -- The Boreal Guard
+-- ------------------
+-- -- Hodir 25 man -- 
+-- ------------------
+(@Hodir25n,1,100,1,0,-@Hodir25Ref,1), -- 1x Normal Loot Item
+(@Hodir25n,2,100,1,0,-@ChestToken,1), -- 1x Token
+(@Hodir25n,47241,100,1,0,1,1), -- Emblem of Triumph
+(@Hodir25n,3,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Hodir25n,45087,10,1,0,1,1), -- Chance on Runed Orb
+(@Hodir25n,45083,10,1,0,1,1), -- Fragment of Val'anyr
+-- Hard mode:
+(@Hodir25h,1,100,1,0,-@Hodir25Ref,1), -- 1x Normal Loot Item
+(@Hodir25h,2,100,1,0,-@ChestToken,2), -- 2x Token
+(@Hodir25h,47241,100,1,0,1,1), -- Emblem of Triumph
+(@Hodir25h,45815,-100,1,0,1,1), -- Hodir's Sigil
+(@Hodir25h,3,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Hodir25h,45087,10,1,0,1,1), -- Chance on Runed Orb
+(@Hodir25h,45083,20,1,0,1,1), -- Fragment of Val'anyr
+-- --------------------
+-- -- Mimiron 10 man --
+-- --------------------
+(@Mimiron10n,1,100,1,0,-@Mimiron10Ref,1), -- 1x Normal Loot Item
+(@Mimiron10n,2,100,1,0,-@HeadToken,1), -- 1x Token
+(@Mimiron10n,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+-- Hardmode 10 man
+(@Mimiron10h,1,100,1,0,-@Mimiron10Ref,1), -- 1x Normal Loot Item
+(@Mimiron10h,2,100,1,0,-@HeadToken,1), -- 1x Token
+(@Mimiron10h,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+(@Mimiron10h,45787,-100,1,0,1,1), -- Mimiron's Sigel (QUEST ONLY, HARDMODE ONLY)
+-- 1 from Hardmode items
+(@Mimiron10h,45989,0,1,1,1,1), -- Tempered Mercury Greaves
+(@Mimiron10h,45982,0,1,1,1,1), -- Fused Alloy Legplates
+(@Mimiron10h,45993,0,1,1,1,1), -- Mimiron's Flight Goggles
+(@Mimiron10h,45988,0,1,1,1,1), -- Greaves of the Iron Army
+(@Mimiron10h,45990,0,1,1,1,1), -- Fusion Blade
+-- --------------------
+-- -- Mimiron 25 man --
+-- --------------------
+(@Mimiron25n,1,100,1,0,-@Mimiron25Ref,1), -- 1x Normal Loot Item
+(@Mimiron25n,2,100,1,0,-@GloveToken,2), -- 2x Token
+(@Mimiron25n,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+(@Mimiron25n,3,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Mimiron25n,45087,10,1,0,1,1), -- Chance on Runed Orb
+(@Mimiron25n,45083,8,1,0,1,1), -- Fragment of Val'anyr Normal
+-- Hard Mode 25 man
+(@Mimiron25h,1,100,1,0,-@Mimiron25Ref,1), -- 1x Normal Loot Item
+(@Mimiron25h,2,100,1,0,-@GloveToken,2), -- 2x Token
+(@Mimiron25h,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+(@Mimiron25h,3,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Mimiron25h,45087,10,1,0,1,1), -- Chance on Runed Orb
+(@Mimiron25h,45816,-100,1,0,1,1), -- Mimiron's Sigel (QUEST ONLY, HARDMODE ONLY)
+(@Mimiron25h,45083,18,1,0,1,1), -- Fragment of Val'anyr Hardmode
+-- 1 from Hardmode items
+(@Mimiron25h,45496,0,1,1,1,1), -- Titanskin Cloak
+(@Mimiron25h,45494,0,1,1,1,1), -- Delirium's Touch
+(@Mimiron25h,45663,0,1,1,1,1), -- Armbands of Bedlam
+(@Mimiron25h,45620,0,1,1,1,1), -- Starshard Edge
+(@Mimiron25h,45495,0,1,1,1,1), -- Conductive Seal
+(@Mimiron25h,45497,0,1,1,1,1), -- Crown of Luminescence
+-- -------------------
+-- -- Thorim 10 man -- 
+-- -------------------
+(@Thorim10n,1,100,1,0,-@Thorim10Ref,1), -- 1x Normal Loot Item
+(@Thorim10n,2,100,1,0,-@ShoulderToken,1), -- 1x Token
+(@Thorim10n,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+-- Hardmode 10 man
+(@Thorim10h,1,100,1,0,-@Thorim10Ref,1), -- 1x Normal Loot Item
+(@Thorim10h,2,100,1,0,-@ShoulderToken,1), -- 1x Token
+(@Thorim10h,47241,100,1,0,1,1), -- 1x Emblem of Triumph
+(@Thorim10h,45784,-100,2,0,1,1), -- Thorim's Sigil (QUEST ONLY, HARDMODE ONLY)
+-- 1 from Hardmode items
+(@Thorim10h,45933,0,2,1,1,1), -- Pendant of the Shallow Grave
+(@Thorim10h,45929,0,2,1,1,1), -- Sif's Remembrance
+(@Thorim10h,45928,0,2,1,1,1), -- Gauntlets of the Thunder God
+(@Thorim10h,45931,0,2,1,1,1), -- Mjolnir Runestone
+(@Thorim10h,45930,0,2,1,1,1), -- Combatant's Bootblade
+-- -------------------
+-- -- Thorim 25 man -- 
+-- -------------------
+(@Thorim25n,1,100,3,0,-@Thorim25Ref,1), -- 1x Normal Loot Item
+(@Thorim25n,2,100,3,0,-@HelmToken,2), -- 2x Token
+(@Thorim25n,47241,100,3,0,1,1), -- 1x Emblem of Triumph
+(@Thorim25n,3,10,3,0,-@Recipe,1), -- Chance on Recipe
+(@Thorim25n,45087,10,3,0,1,1), -- Chance on Runed Orb
+(@Thorim25n,45083,8,1,0,1,1), -- Fragment of Val'anyr Normal
+-- Hardmode 25 man
+(@Thorim25h,1,100,3,0,-@Thorim25Ref,1), -- 1x Normal Loot Item
+(@Thorim25h,2,100,3,0,-@HelmToken,2), -- 2x Token
+(@Thorim25h,47241,100,3,0,1,1), -- 1x Emblem of Triumph
+(@Thorim25h,3,10,3,0,-@Recipe,1), -- Chance on Recipe
+(@Thorim25h,45087,10,3,0,1,1), -- Chance on Runed Orb
+(@Thorim25h,45817,-100,1,0,1,1), -- Thorim's Sigil (QUEST ONLY, HARDMODE ONLY)
+(@Thorim25h,45083,18,1,0,1,1), -- Fragment of Val'anyr Hardmode
+-- 1 from Hardmode items
+(@Thorim25h,45471,0,1,1,1,1), -- Fate's Clutch
+(@Thorim25h,45570,0,1,1,1,1), -- Skyforge Crossbow
+(@Thorim25h,45472,0,1,1,1,1), -- Warhelm of the Champion
+(@Thorim25h,45474,0,1,1,1,1), -- Pauldrons of the Combatant
+(@Thorim25h,45470,0,1,1,1,1), -- Wisdom's Hold
+(@Thorim25h,45473,0,1,1,1,1); -- Embrace of the Gladiator
+
+-- Increase dropchance for Venture Co. Explosives
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance`=-10 WHERE `entry` IN(28123,28124) AND `item`=39651;
+-- implement missing Northrend pickpocket loot
+-- reference IDs
+SET @NEWREF0 := 10026;
+SET @NEWREF1 := @NEWREF0+1;
+SET @NEWREF2 := @NEWREF0+2;
+SET @NEWREF3 := @NEWREF0+3;
+SET @NEWREF4 := @NEWREF0+4;
+SET @NEWREF5 := @NEWREF0+5;
+SET @NEWREF6 := @NEWREF0+6;
+SET @NEWREF7 := @NEWREF0+7;
+SET @NEWREF8 := @NEWREF0+8;
+SET @NEWREF9 := @NEWREF0+9;
+-- new references
+DELETE FROM `reference_loot_template` WHERE entry IN (@NEWREF0, @NEWREF1, @NEWREF2, @NEWREF3, @NEWREF4, @NEWREF5, @NEWREF6, @NEWREF7, @NEWREF8, @NEWREF9);
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`mincountOrRef`,`maxcount`) VALUES
+(@NEWREF0,33447,25,1,1),-- Runic Healing Potion
+(@NEWREF0,35953,30,1,1),-- Mead Basted Caribou
+(@NEWREF0,38260,50,1,1),-- Empty Tobacco Pouch
+(@NEWREF0,43575,80,1,1),-- Reinforced Junkbox
+(@NEWREF1,36862,4,1,1),-- Wrogn Troll Dice
+(@NEWREF1,40202,20,1,1),-- Sizzling Grizzly Flank
+(@NEWREF2,33452,30,1,1),-- Honey-Spiced Lichen
+(@NEWREF2,38269,35,1,1),-- Soggy Handkerchief
+(@NEWREF3,33454,15,1,1),-- Salted Venison
+(@NEWREF3,38261,13,1,1),-- Ben House Key
+(@NEWREF4,38263,19,1,1),-- Too-Small Amband
+(@NEWREF4,38264,18,1,1),-- A Very Pretty Rock
+(@NEWREF5,29448,9,1,1),-- Mag'har Mild Cheese
+(@NEWREF5,29450,13,1,1),-- Telaari Grapes
+(@NEWREF5,37467,40,1,1),-- A Steamy Romance Novel: Forbidden Love
+(@NEWREF6,35947,25,1,1),-- Sparkling Frostcap
+(@NEWREF6,38269,40,1,1),-- Soggy Handkerchief
+(@NEWREF7,33447,25,1,1),-- Runic Healing Potion
+(@NEWREF7,35947,25,1,1),-- Sparkling Frostcap
+(@NEWREF7,38269,40,1,1),-- Soggy Handkerchief
+(@NEWREF7,43575,80,1,1),-- Reinforced Junkbox
+(@NEWREF8,35948,11,1,1),-- Savory Snowplum
+(@NEWREF8,35950,9,1,1),-- Sweet Potato Bread
+(@NEWREF8,35952,8,1,1),-- Briny Hardcheese
+(@NEWREF9,33447,25,1,1),-- Runic Healing Potion
+(@NEWREF9,38260,50,1,1),-- Empty Tobacco Pouch
+(@NEWREF9,43575,80,1,1); -- Reinforced Junkbox
+-- implement pickpokect loot
+UPDATE `creature_template` SET `pickpocketloot`=entry WHERE `entry` IN (25800,23667,23674,23760,23796,23865,23875,23963,24069,24262,24400,24460,25351,25427,25428,25429,25430,25601,25801,26073,26202,26334,26413,26447,26480,26481,26620,26621,26624,26626,26635,26636,26637,26639,26658,26681,26696,26727,26729,26800,26802,26836,26948,27105,27210,27211,/**/27234,27235,27247,27278,27289,27334,27342,27431,27533,27580,27639,27640,27699,27800,27859,27860,27961,27964,27965,28494,28496,28565,28803,28837,28838,28848,28961,28965,29369,29407,29553,29554,29656,29793,29820,29822,29836,29874,29875,29885,29920,30283,30319,30856,30868,31396,31554,32263);
+UPDATE `creature_template` SET `pickpocketloot`=25430 WHERE `entry` IN (23654,23656,23663,23665,25434,26728,26827,26926,27554,32572);
+UPDATE `creature_template` SET `pickpocketloot`=26481 WHERE `entry` IN (23662,23940,24016,24161,26493,26655,27007,27009);
+UPDATE `creature_template` SET `pickpocketloot`=25351 WHERE `entry` IN (23993,24540,25224,25383,26343,26492,26891,26946,27224,27226,27283,27360,27552,27799,27823,27826,28564,28750);
+UPDATE `creature_template` SET `pickpocketloot`=27533 WHERE `entry` IN (26555,26669,26670,26694,26830,27871,28022,28108,28242,28268,28419,29123,29133,29722,29738,30701,30894,30922,30949,31139,31150,31779,31847,32278,32505);
+UPDATE `creature_template` SET `pickpocketloot`=30319 WHERE `entry` IN (30111,30179);
+DELETE FROM `pickpocketing_loot_template` WHERE entry IN (25800,23656,23662,23663,23665,23667,23674,23760,23796,23865,23875,23940,23963,23993,24016,24069,24161,24262,24400,24460,24540,25224,25351,25383,25427,25428,25429,25430,25434,25601,25801,26073,26202,26334,26343,26413,26447,26480,26481,26492,26493,26555,26620,26621,26624,26626,26635,26636,26637,26639,26655,26658,26669,26670,26681,26694,26696,26727,26728,26729,26800,26802,26827,26830,26836,26891,26926,26946,26948,27007,27009,27105,27210,27211,27224,27226,27234,27235,27247,27278,27283,27289,27334,27342,27360,27431,27533,27552,27554,27580,27639,27640,27699,27799,27800,27823,27826,27859,27860,27871,27961,27964,27965,28022,28108,28242,28268,28419,28494,28496,28564,28565,28750,28803,28837,28838,28848,28961,28965,29123,29133,29369,29407,29553,29554,29656,29722,29738,29793,29820,29822,29836,29874,29875,29885,29920,30111,30179,30283,30319,30701,30856,30868,30894,30922,30949,31139,31150,31396,31554,31779,31847,32263,32278,32505,32572);
+INSERT INTO `pickpocketing_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- Plague Walker
+(30283,43575,100,0,1,1),-- Reinforced Junkbox
+(30283,0,100,0,-@NEWREF6,1),
+-- Twilight Darkcaster
+(30319,0,100,0,-@NEWREF0,1),
+(30319,33449,11,0,1,1),-- Crusty Flatbread
+(30319,1,100,0,-@NEWREF1,1),
+(30319,2,100,0,-@NEWREF3,1),
+-- High Priest Talet-Kha
+(26073,43575,58,0,1,1),-- Reinforced Junkbox
+(26073,0,100,0,-@NEWREF5,1),
+(26073,33449,8,0,1,1),-- Crusty Flatbread
+(26073,33447,8,0,1,1),-- Runic Healing Potion
+-- Nedar, Lord of Rhinos
+(25801,0,100,0,-@NEWREF5,1),
+(25801,33447,6,0,1,1),-- Runic Healing Potion
+(25801,38261,6,0,1,1),-- Bent House Key
+-- Clam Master K
+(25800,43575,47,0,1,1),-- Reinforced Junkbox
+(25800,0,100,0,-@NEWREF5,1),
+(25800,38261,15,0,1,1),-- Bent House Key
+(25800,33449,5,0,1,1),-- Crusty Flatbread
+(25800,33447,5,0,1,1),-- Runic Healing Potion
+-- Magmothregar
+(25430,0,100,0,-@NEWREF3,1),
+(25430,1,100,0,-@NEWREF9,1),
+(25430,33449,7,0,1,1),-- Crusty Flatbread
+(25430,36862,4,0,1,1),-- Wrogn Troll Dice
+-- Kaganishu
+(25427,43575,43,0,1,1),-- Reinforced Junkbox
+(25427,33454,35,0,1,1),-- Salted Venison
+(25427,0,100,0,-@NEWREF4,1),
+(25427,33447,8,0,1,1),-- Runic Healing Potion
+-- Prince Valanar
+(25601,43575,43,0,1,1),-- Reinforced Junkbox
+(25601,37467,39,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(25601,33447,9,0,1,1),-- Runic Healing Potion
+(25601,38261,9,0,1,1),-- Bent House Key
+(25601,33449,4,0,1,1),-- Crusty Flatbread
+(25601,29450,4,0,1,1),-- Telaari Grapes
+-- Ghostly Sage
+(25351,43575,42,0,1,1),-- Reinforced Junkbox
+(25351,0,100,0,-@NEWREF2,1),
+(25351,33447,10,0,1,1),-- Runic Healing Potion
+-- Luthion the Vile
+(27860,43575,42,0,1,1),-- Reinforced Junkbox
+(27860,0,100,0,-@NEWREF5,1),
+(27860,38261,13,0,1,1),-- Bent House Key
+(27860,33449,6,0,1,1),-- Crusty Flatbread
+(27860,33447,6,0,1,1),-- Runic Healing Potion
+-- Reckless Scavenger
+(26658,0,100,0,-@NEWREF2,1),
+(26658,43575,40,0,1,1),-- Reinforced Junkbox
+-- Ziggurat Defender
+(26202,43575,40,0,1,1),-- Reinforced Junkbox
+(26202,0,100,0,-@NEWREF2,1),
+(26202,33447,7,0,1,1),-- Runic Healing Potion
+(26202,29569,3,0,1,1),-- Strong Junkbox
+-- Magmoth Forager
+(25429,43575,39,0,1,1),-- Reinforced Junkbox
+(25429,33454,27,0,1,1),-- Salted Venison
+(25429,0,100,0,-@NEWREF4,1),
+(25429,33447,10,0,1,1),-- Runic Healing Potion
+(25429,38266,0.5,0,1,1),-- Rotund Relic
+-- Magmoth Shaman
+(25428,43575,39,0,1,1),-- Reinforced Junkbox
+(25428,33454,28,0,1,1),-- Salted Venison
+(25428,0,100,0,-@NEWREF4,1),
+(25428,33447,9,0,1,1),-- Runic Healing Potion
+(25428,38266,0.5,0,1,1),-- Rotund Relic
+-- Vanthryn the Merciless
+(27859,43575,39,0,1,1),-- Reinforced Junkbox
+(27859,0,100,0,-@NEWREF5,1),
+(27859,33449,12,0,1,1),-- Crusty Flatbread
+(27859,38261,12,0,1,1),-- Bent House Key
+(27859,33447,3,0,1,1),-- Runic Healing Potion
+-- Unbound Corrupter
+(30868,43575,47,0,1,1),-- Reinforced Junkbox
+(30868,40202,18,0,1,1),-- Sizzling Grizzly Flank
+(30868,33447,16,0,1,1),-- Runic Healing Potion
+(30868,0,100,0,-@NEWREF4,1),
+-- Unbound Trickster
+(30856,43575,38,0,1,1),-- Reinforced Junkbox
+(30856,0,100,0,-@NEWREF4,1),
+(30856,33447,19,0,1,1),-- Runic Healing Potion
+(30856,40202,14,0,1,1),-- Sizzling Grizzly Flank
+-- Kreug Oathbreaker
+(27105,43575,63,0,1,1),-- Reinforced Junkbox
+(27105,33447,25,0,1,1),-- Runic Healing Potion
+(27105,38269,13,0,1,1),-- Soggy Handkerchief
+-- Lead Cannoneer Zierhut
+(27235,43575,53,0,1,1),-- Reinforced Junkbox
+(27235,0,100,0,-@NEWREF5,1),
+(27235,33447,8,0,1,1),-- Runic Healing Potion
+(27235,38261,8,0,1,1),-- Bent House Key
+-- Devout Bodyguard
+(27247,43575,50,0,1,1),-- Reinforced Junkbox
+(27247,37467,42,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(27247,33447,8,0,1,1),-- Runic Healing Potion
+(27247,29450,8,0,1,1),-- Telaari Grapes
+(27247,38261,8,0,1,1),-- Bent House Key
+-- Magnataur Alpha
+(26481,0,100,0,-@NEWREF9,1),
+(26481,1,100,0,-@NEWREF3,1),
+(26481,33449,5,0,1,1),-- Crusty Flatbread
+-- High General Abbendis
+(27210,43575,48,0,1,1),-- Reinforced Junkbox
+(27210,0,100,0,-@NEWREF5,1),
+(27210,33449,10,0,1,1),-- Crusty Flatbread
+(27210,33447,10,0,1,1),-- Runic Healing Potion
+(27210,38261,8,0,1,1),-- Bent House Key
+-- Anub'ar Dreadweaver
+(26413,43575,44,0,1,1),-- Reinforced Junkbox
+(26413,43576,22,0,1,1),-- Chitin Polish
+(26413,33452,11,0,1,1),-- Honey-Spiced Lichen
+(26413,33447,11,0,1,1),-- Runic Healing Potion
+(26413,43577,11,0,1,1),-- Carapace Cleanser
+-- Naxxramas Necrolord
+(27289,33452,44,0,1,1),-- Honey-Spiced Lichen
+(27289,43575,44,0,1,1),-- Reinforced Junkbox
+(27289,33447,11,0,1,1),-- Runic Healing Potion
+-- Onslaught Commander Iustus
+(27334,37467,50,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(27334,43575,44,0,1,1),-- Reinforced Junkbox
+(27334,29448,13,0,1,1),-- Mag'har Mild Cheese
+(27334,38261,6,0,1,1),-- Bent House Key
+-- Blacksmith Goodman
+(27234,43575,41,0,1,1),-- Reinforced Junkbox
+(27234,0,100,0,-@NEWREF5,1),
+(27234,38261,13,0,1,1),-- Bent House Key
+(27234,33447,9,0,1,1),-- Runic Healing Potion
+(27234,33449,7,0,1,1),-- Crusty Flatbread
+-- Magnataur Youngling
+(26480,33449,19,0,1,1),-- Crusty Flatbread
+(26480,0,100,0,-@NEWREF3,1),
+(26480,1,100,0,-@NEWREF9,1),
+-- Bloodpaw Warrior
+(27342,43575,40,0,1,1),-- Reinforced Junkbox
+(27342,33454,26,0,1,1),-- Salted Venison
+(27342,0,100,0,-@NEWREF4,1),
+(27342,33447,11,0,1,1),-- Runic Healing Potion
+(27342,38266,0.6,0,1,1),-- Rotund Relic
+-- Frigid Geist
+(27533,0,100,0,-@NEWREF7,1),
+-- Snowplain Zealot
+(27278,43575,40,0,1,1),-- Reinforced Junkbox
+(27278,33454,22,0,1,1),-- Salted Venison
+(27278,0,100,0,-@NEWREF4,1),
+(27278,33447,12,0,1,1),-- Runic Healing Potion
+(27278,38266,0.3,0,1,1),-- Rotund Relic
+-- Hulking Atrocity
+(26948,43575,39,0,1,1),-- Reinforced Junkbox
+(26948,0,100,0,-@NEWREF2,1),
+(26948,33447,9,0,1,1),-- Runic Healing Potion
+(26948,29569,0.3,0,1,1),-- Strong Junkbox
+(26948,38268,0.3,0,1,1),-- Spare Hand
+-- Onslaught Executioner
+(27211,43575,39,0,1,1),-- Reinforced Junkbox
+(27211,0,100,0,-@NEWREF5,1),
+(27211,33449,12,0,1,1),-- Crusty Flatbread
+(27211,38261,11,0,1,1),-- Bent House Key
+(27211,33447,5,0,1,1),-- Runic Healing Potion
+-- Gigantaur
+(26836,0,100,0,-@NEWREF9,1),
+(26836,1,100,0,-@NEWREF3,1),
+(26836,33449,12,0,1,1),-- Crusty Flatbread
+-- Leprous Servant
+(27800,43575,38,0,1,1),-- Reinforced Junkbox
+(27800,0,100,0,-@NEWREF2,1),
+(27800,33447,7,0,1,1),-- Runic Healing Potion
+(27800,38268,2,0,1,1),-- Spare Hand
+-- Wretched Belcher
+(26624,43575,100,0,1,1),-- Reinforced Junkbox
+(26624,0,100,0,-@NEWREF2,1),
+(26624,33447,25,0,1,1),-- Runic Healing Potion
+(26624,35947,25,0,1,1),-- Sparkling Frostcap
+-- Drakkari Commander
+(27431,43575,90,0,1,1),-- Reinforced Junkbox
+(27431,0,100,0,-@NEWREF2,1),
+(27431,33447,26,0,1,1),-- Runic Healing Potion
+(27431,35947,10,0,1,1),-- Sparkling Frostcap
+-- Drakkari Guardian
+(26620,0,100,0,-@NEWREF0,1),
+(26620,33454,17,0,1,1),-- Salted Venison
+(26620,33449,9,0,1,1),-- Crusty Flatbread
+(26620,38261,9,0,1,1),-- Bent House Key
+(26620,1,100,0,-@NEWREF1,1),
+-- Risen Drakkari Soulmage
+(26636,43575,85,0,1,1),-- Reinforced Junkbox
+(26636,0,100,0,-@NEWREF2,1),
+(26636,35947,21,0,1,1),-- Sparkling Frostcap
+(26636,33447,16,0,1,1),-- Runic Healing Potion
+-- Ghoul Tormentor
+(26621,43575,81,0,1,1),-- Reinforced Junkbox
+(26621,0,100,0,-@NEWREF2,1),
+(26621,35947,24,0,1,1),-- Sparkling Frostcap
+(26621,33447,14,0,1,1),-- Runic Healing Potion
+-- Risen Drakkari Warrior
+(26635,43575,71,0,1,1),-- Reinforced Junkbox
+(26635,0,100,0,-@NEWREF2,1),
+(26635,33447,29,0,1,1),-- Runic Healing Potion
+(26635,35947,18,0,1,1),-- Sparkling Frostcap
+(26635,38268,0.8,0,1,1),-- Spare Hand
+-- Risen Drakkari Handler
+(26637,0,100,0,-@NEWREF2,1),
+(26637,43575,67,0,1,1),-- Reinforced Junkbox
+(26637,33447,30,0,1,1),-- Runic Healing Potion
+(26637,35947,18,0,1,1),-- Sparkling Frostcap
+-- Scourge Reanimator
+(26626,0,100,0,-@NEWREF2,1),
+(26626,43575,67,0,1,1),-- Reinforced Junkbox
+(26626,33447,21,0,1,1),-- Runic Healing Potion
+(26626,35947,21,0,1,1),-- Sparkling Frostcap
+-- Drakkari Shaman
+(26639,0,100,0,-@NEWREF0,1),
+(26639,33449,18,0,1,1),-- Crusty Flatbread
+(26639,1,100,0,-@NEWREF3,1),
+(26639,40202,11,0,1,1),-- Sizzling Grizzly Flank
+-- Selas
+(27580,43575,50,0,1,1),-- Reinforced Junkbox
+(27580,0,100,0,-@NEWREF3,1),
+(27580,38260,20,0,1,1),-- Empty Tobacco Pouch
+-- Forgemaster Damrath
+(26334,43575,48,0,1,1),-- Reinforced Junkbox
+(26334,0,100,0,-@NEWREF5,1),
+(26334,33447,9,0,1,1),-- Runic Healing Potion
+(26334,38261,9,0,1,1),-- Bent House Key
+-- Grumbald One-Eye
+(26681,43575,39,0,1,1),-- Reinforced Junkbox
+(26681,33454,28,0,1,1),-- Salted Venison
+(26681,0,100,0,-@NEWREF4,1),
+(26681,33447,9,0,1,1),-- Runic Healing Potion
+-- Drakkari Shaman
+(26447,0,100,0,-@NEWREF9,1),
+(26447,1,100,0,-@NEWREF3,1),
+(26447,33449,10,0,1,1),-- Crusty Flatbread
+(26447,35799,0.2,0,1,1),-- Frozen Mojo
+(26447,36862,0.2,0,1,1),-- Wrogn Troll Dice
+-- Drakkari God Hunter
+(29820,0,100,0,-@NEWREF0,1),
+(29820,1,100,0,-@NEWREF1,1),
+-- Drakkari Battle Rider
+(29836,0,100,0,-@NEWREF0,1),
+(29836,40202,18,0,1,1),-- Sizzling Grizzly Flank
+-- Ruins Dweller
+(29920,43575,71,0,1,1),-- Reinforced Junkbox
+(29920,37452,69,0,1,1),-- Fatty Bluefin
+(29920,38274,58,0,1,1),-- Large Snail Shell
+(29920,38273,35,0,1,1),-- Brain Coral
+(29920,33447,16,0,1,1),-- Runic Healing Potion
+-- Drakkari Fire Weaver
+(29822,0,100,0,-@NEWREF0,1),
+(29822,40202,24,0,1,1),-- Sizzling Grizzly Flank
+-- Drakkari Inciter
+(29874,0,100,0,-@NEWREF0,1),
+(29874,36862,16,0,1,1),-- Wrogn Troll Dice
+(29874,40202,12,0,1,1),-- Sizzling Grizzly Flank
+-- Titanium Siegebreaker
+(28961,0,100,0,-@NEWREF0,1),
+(28961,40202,35,0,1,1),-- Sizzling Grizzly Flank
+-- Stormforged Sentinel
+(28837,0,100,0,-@NEWREF0,1),
+(28837,40202,16,0,1,1),-- Sizzling Grizzly Flank
+-- Titanium Thunderer
+(28965,0,100,0,-@NEWREF0,1),
+(28965,40202,44,0,1,1),-- Sizzling Grizzly Flank
+-- Titanium Vanguard
+(28838,0,100,0,-@NEWREF0,1),
+(28838,40202,27,0,1,1),-- Sizzling Grizzly Flank
+-- Dark Rune Scholar
+(27964,0,100,0,-@NEWREF9,1),
+(27964,1,100,0,-@NEWREF1,1),
+-- Dark Rune Worker
+(27961,0,100,0,-@NEWREF0,1),
+(27961,40202,29,0,1,1),-- Sizzling Grizzly Flank
+(27961,36862,4,0,1,1),-- Wrogn Troll Dice
+-- Dark Rune Shaper
+(27965,0,100,0,-@NEWREF0,1),
+(27965,40202,28,0,1,1),-- Sizzling Grizzly Flank
+-- Steel Gate Archaeologist
+(24400,0,100,0,-@NEWREF0,1),
+(24400,1,100,0,-@NEWREF5,1),
+(24400,33449,7,0,1,1),-- Crusty Flatbread
+(24400,38261,9,0,1,1),-- Bent House Key
+-- Blacksouled Keeper
+(23875,0,100,0,-@NEWREF0,1),
+(23875,1,100,0,-@NEWREF3,1),
+(23875,33449,14,0,1,1),-- Crusty Flatbread
+-- Winterskorn Rune-Seer
+(23667,0,100,0,-@NEWREF0,1),
+(23667,33449,7,0,1,1),-- Crusty Flatbread
+(23667,33454,7,0,1,1),-- Salted Venison
+-- Sergeant Lorric
+(23963,43575,45,0,1,1),-- Reinforced Junkbox
+(23963,0,100,0,-@NEWREF5,1),
+(23963,33447,13,0,1,1),-- Runic Healing Potion
+(23963,38261,11,0,1,1),-- Bent House Key
+(23963,33449,7,0,1,1),-- Crusty Flatbread
+-- Gjalerhorn Scavenger
+(27699,0,100,0,-@NEWREF4,1),
+(27699,43575,43,0,1,1),-- Reinforced Junkbox
+(27699,33454,22,0,1,1),-- Salted Venison
+(27699,33447,7,0,1,1),-- Runic Healing Potion
+(27699,29569,0.8,0,1,1),-- Strong Junkbox
+-- Iron Rune Binder
+(23796,0,100,0,-@NEWREF5,1),
+(23796,43575,42,0,1,1),-- Reinforced Junkbox
+(23796,38261,12,0,1,1),-- Bent House Key
+(23796,33449,11,0,1,1),-- Crusty Flatbread
+(23796,33447,9,0,1,1),-- Runic Healing Potion
+(23796,29569,0.5,0,1,1),-- Strong Junkbox
+-- Forsaken Plaguebringer
+(23760,0,100,0,-@NEWREF2,1),
+(23760,43575,41,0,1,1),-- Reinforced Junkbox
+(23760,33447,10,0,1,1),-- Runic Healing Potion
+(23760,38268,0.3,0,1,1),-- Spare Hand
+-- Chillmere Tidehunter
+(24460,43575,40,0,1,1),-- Reinforced Junkbox
+(24460,38274,33,0,1,1),-- Large Snail Shell
+(24460,37452,18,0,1,1),-- Fatty Bluefin
+(24460,38273,15,0,1,1),-- Brain Coral
+(24460,33447,7,0,1,1),-- Runic Healing Potion
+-- Vrykul Soul
+(24262,0,100,0,-@NEWREF2,1),
+(24262,43575,40,0,1,1),-- Reinforced Junkbox
+(24262,33447,3,0,1,1),-- Runic Healing Potion
+-- Iron Rune Sage
+(23674,0,100,0,-@NEWREF5,1),
+(23674,43575,39,0,1,1),-- Reinforced Junkbox
+(23674,38261,13,0,1,1),-- Bent House Key
+(23674,33449,9,0,1,1),-- Crusty Flatbread
+(23674,33447,6,0,1,1),-- Runic Healing Potion
+-- Vengeance Bringer
+(23865,43575,39,0,1,1),-- Reinforced Junkbox
+(23865,0,100,0,-@NEWREF2,1),
+-- Restless Lookout
+(31554,43575,80,0,1,1),-- Reinforced Junkbox
+(31554,35947,40,0,1,1),-- Sparkling Frostcap
+-- Val'kyr Taskmistress
+(31396,43575,56,0,1,1),-- Reinforced Junkbox
+(31396,35947,38,0,1,1),-- Sparkling Frostcap
+(31396,33447,15,0,1,1),-- Runic Healing Potion
+-- Overseer Veraj
+(32263,43575,42,0,1,1),-- Reinforced Junkbox
+(32263,37467,28,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(32263,38261,15,0,1,1),-- Bent House Key
+(32263,33447,13,0,1,1),-- Runic Healing Potion
+(32263,0,100,0,-@NEWREF8,1),
+-- Steward
+(26729,0,100,0,-@NEWREF0,1),
+(26729,1,100,0,-@NEWREF3,1),
+(26729,33449,31,0,1,1),-- Crusty Flatbread
+(26729,29569,0.5,0,1,1),-- Strong Junkbox
+-- Alliance Berserker
+(26800,43575,62,0,1,1),-- Reinforced Junkbox
+(26800,33449,19,0,1,1),-- Crusty Flatbread
+(26800,38261,16,0,1,1),-- Bent House Key
+(26800,33447,10,0,1,1),-- Runic Healing Potion
+(26800,0,100,0,-@NEWREF5,1),
+-- Alliance Ranger
+(26802,0,100,0,-@NEWREF5,1),
+(26802,43575,60,0,1,1),-- Reinforced Junkbox
+(26802,38261,34,0,1,1),-- Bent House Key
+(26802,33449,24,0,1,1),-- Crusty Flatbread
+(26802,33447,12,0,1,1),-- Runic Healing Potion
+-- Mage Hunter Ascendant
+(26727,0,100,0,-@NEWREF0,1),
+(26727,1,100,0,-@NEWREF3,1),
+(26727,33449,29,0,1,1),-- Crusty Flatbread
+-- Ring-Lord Sorceress
+(27639,43575,87,0,1,1),-- Reinforced Junkbox
+(27639,37467,46,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(27639,38261,28,0,1,1),-- Bent House Key
+(27639,33447,19,0,1,1),-- Runic Healing Potion
+(27639,0,100,0,-@NEWREF8,1),
+(27639,36863,1.6,0,1,1),-- Decahedral Dwarven Dice
+-- Ring-Lord Conjurer
+(27640,37467,67,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(27640,43575,64,0,1,1),-- Reinforced Junkbox
+(27640,33447,30,0,1,1),-- Runic Healing Potion
+(27640,38261,26,0,1,1),-- Bent House Key
+(27640,0,100,0,-@NEWREF8,1),
+-- Mildred the Cruel
+(29885,0,100,0,-@NEWREF0,1),
+(29885,40202,13,0,1,1),-- Sizzling Grizzly Flank
+-- Snowblind Devotee
+(29407,43575,42,0,1,1),-- Reinforced Junkbox
+(29407,40202,29,0,1,1),-- Sizzling Grizzly Flank
+(29407,0,100,0,-@NEWREF4,1),
+(29407,33447,12,0,1,1),-- Runic Healing Potion
+-- Snowblind Devotee
+(29554,43575,43,0,1,1),-- Reinforced Junkbox
+(29554,40202,27,0,1,1),-- Sizzling Grizzly Flank
+(29554,0,100,0,-@NEWREF4,1),
+(29554,33447,12,0,1,1),-- Runic Healing Potion
+(29554,38266,0.2,0,1,1),-- Rotund Relic
+-- Frostfeather Witch
+(29793,43575,40,0,1,1),-- Reinforced Junkbox
+(29793,40202,21,0,1,1),-- Sizzling Grizzly Flank
+(29793,0,100,0,-@NEWREF4,1),
+(29793,33447,16,0,1,1),-- Runic Healing Potion
+-- Icemane Yeti
+(29875,43575,39,0,1,1),-- Reinforced Junkbox
+(29875,40202,23,0,1,1),-- Sizzling Grizzly Flank
+(29875,0,100,0,-@NEWREF4,1),
+(29875,33447,15,0,1,1),-- Runic Healing Potion
+(29875,38266,0.3,0,1,1),-- Rotund Relic
+-- Garm Watcher
+(29553,0,100,0,-@NEWREF0,1),
+(29553,1,100,0,-@NEWREF1,1),
+(29553,24231,0.3,0,2,2),-- Coarse Snuff
+-- Stormforged Taskmaster
+(29369,43575,38,0,1,1),-- Reinforced Junkbox
+(29369,37467,34,0,1,1),-- A Steamy Romance Novel: Forbidden Love
+(29369,33447,13,0,1,1),-- Runic Healing Potion
+(29369,38261,6,0,1,1),-- Bent House Key
+(29369,0,100,0,-@NEWREF8,1),
+-- Dragonflayer Bonecrusher
+(24069,0,100,0,-@NEWREF0,1),
+(24069,1,100,0,-@NEWREF1,1),
+(24069,29569,47,0,1,1),-- Strong Junkbox
+(24069,29570,34,0,1,1),-- A Gnome Effigy
+(24069,27855,22,0,1,1),-- Mag'har Grainbread
+(24069,27854,19,0,1,1),-- Smoked Talbuk Venison
+(24069,22829,10,0,1,1),-- Super Healing Potion
+(24069,23438,1.2,0,1,1),-- Star of Elune
+-- Ymirjar Berserker
+(26696,0,100,0,-@NEWREF7,1),
+(26696,29569,1.1,0,1,1),-- Strong Junkbox
+-- Kutube'sa
+(28494,0,100,0,-@NEWREF0,1),
+(28494,1,100,0,-@NEWREF1,1),
+-- Chulo the Mad
+(28496,0,100,0,-@NEWREF0,1),
+(28496,40202,6,0,1,1),-- Sizzling Grizzly Flank
+-- Drakuru's Guard
+(28803,43575,50,0,1,1),-- Reinforced Junkbox
+(28803,33447,33,0,1,1),-- Runic Healing Potion
+(28803,38269,17,0,1,1),-- Soggy Handkerchief
+-- Prophet of Har'koa
+(28848,0,100,0,-@NEWREF0,1),
+(28848,40202,3,0,1,1),-- Sizzling Grizzly Flank
+-- Decaying Ghoul
+(28565,0,100,0,-@NEWREF7,1),
+(28565,22829,0.9,0,1,1),-- Super Healing Potion
+-- Drakuru Berserker
+(29656,0,100,0,-@NEWREF0,1),
+(29656,1,100,0,-@NEWREF3,1),
+(29656,33449,11,0,1,1),-- Crusty Flatbread
+(29656,29569,0.9,0,1,1); -- Strong Junkbox
+-- Add condition to the Lovely Charm aura
+DELETE FROM conditions WHERE `SourceTypeOrReferenceId`=17 AND `SourceEntry`= 69511;
+INSERT INTO conditions (SourceTypeOrReferenceId, SourceGroup, SourceEntry, ElseGroup, ConditionTypeOrReference, ConditionValue1, ConditionValue2, ConditionValue3, ErrorTextId, ScriptName, COMMENT) VALUES
+(17,0,69511,0,12,8,0,0,0, '', 'Lovely Charm - Only during event');
+-- Remove Skinning loot from Blackwing Spellbinder
+UPDATE `creature_template` SET `skinloot`=0 WHERE `entry`=12457;
+-- update wrong area.
+UPDATE `fishing_loot_template` SET `entry`=4560 WHERE `entry`=4395 AND `item`=11026;
+-- Add loot for Hrothgar's Landing
+DELETE FROM `creature_loot_template` WHERE `entry` IN (34980,34838,34839,34965);
+INSERT INTO `creature_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- AURIAYA 10-man
+-- Drottinn Hrothgar - http://old.wowhead.com/npc=34980
+(34980,46859,-100,1,0,1,1), -- Stolen Tallstrider Leg
+-- Kvaldir Reaver
+(34838,46859,-100,1,0,1,1), -- Stolen Tallstrider Leg
+(34838,49676,5,1,0,1,1), -- Kvaldir Attack Plans
+(34838,33470,35,1,0,1,4), -- 1-4x Frostweave Cloth
+(34838,1,10,1,0,-24727,1), -- 1 of Northrend scrolls
+(34838,2,10,1,0,-26002,1), -- Northrend Grey Item Reference1
+(34838,3,2,1,0,-35080,1), -- Northrend Green Item Reference
+-- Kvaldir Mist Binder
+(34839,46859,-100,1,0,1,1), -- Stolen Tallstrider Leg
+(34839,49676,5,1,0,1,1), -- Kvaldir Attack Plans
+(34839,33470,35,1,0,1,4), -- 1-4x Frostweave Cloth
+(34839,1,10,1,0,-24727,1), -- 1 of Northrend scrolls
+(34839,2,10,1,0,-26002,1), -- Northrend Grey Item Reference1
+(34839,3, 2,1,0,-35080,1), -- Northrend Green Item Reference
+-- Mistcaller Yngvar
+(34965,46859,-100,1,0,1,1); -- Stolen Tallstrider Leg
+-- update Plague Slime & Marauding Geist to naxx25 trash lootid
+UPDATE `creature_template` SET `lootid`=100005 WHERE `entry` IN(29575,30424); 
+--  update Plague Slime & Marauding Geist to naxx10 trash lootid
+UPDATE `creature_template` SET `lootid`=100003 WHERE `entry` IN(16243,30083); 
+DELETE FROM `creature_loot_template` WHERE `entry` IN(30424,29575,16243,30083);
+-- Remove scraps for naxx10 from creature creature_loot_template
+DELETE FROM `creature_loot_template` WHERE `item` IN (22373,22374,22375,22376);
+-- Fix to add pickpocketing loot for humoniods in borean tundra
+SET @GORLOCREF := 25100;
+SET @BERYLREF := @GORLOCREF+1;
+SET @BLOODREF := @GORLOCREF+2;
+SET @CHIEFREF := @GORLOCREF+3;
+SET @CULTREF := @GORLOCREF+4;
+SET @KVALDIRREF := @GORLOCREF+5;
+SET @CLAXREF := @GORLOCREF+6;
+SET @MAGMOTHREF := @GORLOCREF+7;
+-- Create reference templates
+DELETE FROM `reference_loot_template` WHERE `entry` BETWEEN @GORLOCREF AND @GORLOCREF+7;
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES 
+(@GORLOCREF,29576,57,1,0,1,1), -- Shark Bait
+(@GORLOCREF,29569,30,1,0,1,1), -- Strong Junkbox
+(@GORLOCREF,27858,8,1,0,1,1), -- Sunspring Carp
+(@GORLOCREF,22829,3,1,0,1,1), -- Super Healing Potion
+(@GORLOCREF,23436,0.5,1,0,1,1), -- Living Ruby
+(@GORLOCREF,23437,0.5,1,0,1,1), -- Talasite
+(@GORLOCREF,23440,0.5,1,0,1,1), -- Dawnstone
+(@GORLOCREF,23438,0.5,1,0,1,1), -- Star of Elune
+(@GORLOCREF,23439,0.5,1,0,1,1), -- Noble Topaz
+-- --------------------------------------------------
+(@BERYLREF,37467,32.5,1,0,1,1), -- A Steamy Romance Novel: Forbidden Love
+(@BERYLREF,43575,31,1,0,1,1), -- Reinforced Junkbox
+(@BERYLREF,38261,10,1,0,1,1), -- Bent House Key
+(@BERYLREF,29448,7,1,0,1,1), -- Mag'har Mild Cheese
+(@BERYLREF,29450,7,1,0,1,1), -- Telaari Grapes
+(@BERYLREF,33447,6,1,0,1,1), -- Runic Healing Potion
+(@BERYLREF,33449,6,1,0,1,1), -- Crusty Flatbread
+(@BERYLREF,36863,0.5,1,0,1,1), -- Decahedral Dwarven Dice
+-- --------------------------------------------------
+(@BLOODREF,29572,37,1,0,1,1), -- Aboriginal Carvings
+(@BLOODREF,29569,33,1,0,1,1), -- Strong Junkbox
+(@BLOODREF,8952,20,1,0,1,1), -- Roasted Quail
+(@BLOODREF,22829,8,1,0,1,1), -- Super Healing Potion
+(@BLOODREF,23438,0.5,1,0,1,1), -- Star of Elune
+(@BLOODREF,23436,0.5,1,0,1,1), -- Living Ruby
+(@BLOODREF,23441,0.5,1,0,1,1), -- Nightseye
+(@BLOODREF,23437,0.5,1,0,1,1), -- Talasite
+(@BLOODREF,23440,0.5,1,0,1,1), -- Dawnstone
+-- --------------------------------------------------
+(@CHIEFREF,29569,50,1,0,1,1), -- Strong Junkbox
+(@CHIEFREF,27858,20,1,0,1,1), -- Sunspring Carp
+(@CHIEFREF,29576,20,1,0,1,1), -- Shark Bait
+(@CHIEFREF,22829,10,1,0,1,1), -- Super Healing Potion
+-- --------------------------------------------------
+(@CULTREF,29569,40,1,0,1,1), -- Strong Junkbox
+(@CULTREF,29571,37,1,0,1,1), -- A Steamy Romance Novel
+(@CULTREF,30458,8,1,0,1,1), -- Stromgarde Muenster
+(@CULTREF,27855,7,1,0,1,1), -- Mag'har Grainbread
+(@CULTREF,27856,6,1,0,1,1), -- Skethyl Berries
+(@CULTREF,22829,2,1,0,1,1), -- Super Healing Potion
+(@CULTREF,36863,0.5,1,0,1,1), -- Decahedral Dwarven Dice
+-- --------------------------------------------------
+(@KVALDIRREF,29569,39,1,0,1,1), -- Strong Junkbox
+(@KVALDIRREF,29570,28,1,0,1,1), -- A Gnome Effigy
+(@KVALDIRREF,27855,12,1,0,1,1), -- Mag'har Grainbread
+(@KVALDIRREF,27854,12,1,0,1,1), -- Smoked Talbuk Venison
+(@KVALDIRREF,22829,7,1,0,1,1), -- Super Healing Potion
+(@KVALDIRREF,23436,0.5,1,0,1,1), -- Living Ruby
+(@KVALDIRREF,23441,0.5,1,0,1,1), -- Nightseye
+(@KVALDIRREF,23440,0.5,1,0,1,1), -- Dawnstone
+(@KVALDIRREF,23439,0.5,1,0,1,1), -- Noble Topaz
+(@KVALDIRREF,23437,0.5,1,0,1,1), -- Talasite
+-- --------------------------------------------------
+(@CLAXREF,43575,28,1,0,1,1), -- Reinforced Junkbox
+(@CLAXREF,38273,26,1,0,1,1), -- Brain Coral
+(@CLAXREF,38274,23,1,0,1,1), -- Large Snail Shell
+(@CLAXREF,37452,17,1,0,1,1), -- Fatty Bluefin
+(@CLAXREF,33447,6,1,0,1,1), -- Runic Healing Potion
+-- --------------------------------------------------
+(@MAGMOTHREF,38260,33,1,0,1,1), -- Empty Tobacco Pouch
+(@MAGMOTHREF,38261,21,1,0,1,1), -- Bent House Key
+(@MAGMOTHREF,33449,16,1,0,1,1), -- Crusty Flatbread
+(@MAGMOTHREF,43575,16,1,0,1,1), -- Reinforced Junkbox
+(@MAGMOTHREF,33454,9,1,0,1,1), -- Salted Venison
+(@MAGMOTHREF,33447,5,1,0,1,1), -- Runic Healing Potion
+(@MAGMOTHREF,36862,1,1,0,1,1); -- Worn Troll Dice
+-- -------------------
+-- -- NPC Variables --
+-- -------------------
+SET @NPC := 25686;
+SET @NPC1 := 25700;
+SET @NPC2 := 25687;
+SET @NPC3 := 25685;
+SET @NPC4 := 25449;
+SET @NPC5 := 25316;
+SET @NPC6 := 25353;
+SET @NPC7 := 25719;
+SET @NPC8 := 25804;
+SET @NPC9 := 25392;
+SET @NPC10 := 25651;
+SET @NPC11 := 25836;
+SET @NPC12 := 25979;
+SET @NPC13 := 25806;
+SET @NPC14 := 25720;
+SET @NPC15 := 25803;
+SET @NPC16 := 25880;
+SET @NPC17 := 25618;
+SET @NPC18 := 25839;
+SET @NPC19 := 25470;
+SET @NPC20 := 24567;
+SET @NPC21 := 25467;
+SET @NPC22 := 25468;
+SET @NPC23 := 25501;
+SET @NPC24 := 25726;
+SET @NPC25 := 25701;
+SET @NPC26 := 25725;
+SET @NPC27 := 25699;
+SET @NPC28 := 24576;
+SET @NPC29 := 25605;
+SET @NPC30 := 25609;
+SET @NPC31 := 25378;
+SET @NPC32 := 25843;
+SET @NPC33 := 25496;
+SET @NPC34 := 25479;
+SET @NPC35 := 25760;
+SET @NPC36 := 26266;
+SET @NPC37 := 26451;
+SET @NPC38 := 25521;
+SET @NPC39 := 25613;
+SET @NPC40 := 25522;
+SET @NPC41 := 25520;
+SET @NPC42 := 25209;
+SET @NPC43 := 25210;
+SET @NPC44 := 25216;
+SET @NPC45 := 25215;
+SET @NPC46 := 25217;
+SET @NPC47 := 25789;
+SET @NPC48 := 24469;
+SET @NPC49 := 25432;
+SET @NPC50 := 25433;
+SET @NPC51 := 25615;
+SET @NPC52 := 25523;
+-- ----------------------
+-- -- Assign the loots --
+-- ----------------------
+UPDATE `creature_template` SET `pickpocketloot`=`entry` WHERE `entry` IN (@NPC,@NPC1,@NPC2,@NPC3,@NPC4,@NPC5,@NPC6,@NPC7,@NPC8,@NPC9,@NPC10,@NPC11,@NPC12,@NPC13,@NPC14,@NPC15,@NPC16,@NPC17,@NPC18,@NPC19,@NPC20,@NPC21,@NPC22,@NPC23,@NPC24,@NPC25,@NPC26,@NPC27,@NPC28,@NPC29,@NPC30,@NPC31,@NPC32,@NPC33,@NPC34,@NPC35,@NPC36,@NPC37,@NPC38,@NPC39,@NPC40,@NPC41,@NPC42,@NPC43,@NPC44,@NPC45,@NPC46,@NPC47,@NPC48,@NPC49,@NPC50,@NPC51,@NPC52);
+DELETE FROM `pickpocketing_loot_template` WHERE `entry` IN (@NPC,@NPC1,@NPC2,@NPC3,@NPC4,@NPC5,@NPC6,@NPC7,@NPC8,@NPC9,@NPC10,@NPC11,@NPC12,@NPC13,@NPC14,@NPC15,@NPC16,@NPC17,@NPC18,@NPC19,@NPC20,@NPC21,@NPC22,@NPC23,@NPC24,@NPC25,@NPC26,@NPC27,@NPC28,@NPC29,@NPC30,@NPC31,@NPC32,@NPC33,@NPC34,@NPC35,@NPC36,@NPC37,@NPC38,@NPC39,@NPC40,@NPC41,@NPC42,@NPC43,@NPC44,@NPC45,@NPC46,@NPC47,@NPC48,@NPC49,@NPC50,@NPC51,@NPC52);
+INSERT INTO `pickpocketing_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES 
+-- -----------------------------------------------------------------------------------------------
+(@NPC,1,100,1,0,-@GORLOCREF,1), -- Gorloc ref loot template on Gorloc Gibberer
+(@NPC1,1,100,1,0,-@GORLOCREF,1), -- Gorloc ref loot template on Gorloc Hunter
+(@NPC2,1,100,1,0,-@GORLOCREF,1), -- Gorloc ref loot template on Gorloc Steam Belcher
+(@NPC3,1,100,1,0,-@GORLOCREF,1), -- Gorloc ref loot template on Gorloc Waddler
+-- -----------------------------------------------------------------------------------------------
+(@NPC4,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Beryl Reclaimer
+(@NPC5,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Beryl Sorcerer
+(@NPC6,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Beryl Treasure Hunter
+(@NPC7,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Coldarra Spellbinder
+(@NPC8,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Harold Lane <The Fur Baron>
+(@NPC9,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on High Priest Andorath
+(@NPC10,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Cultist Necrolyte
+(@NPC11,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Loot Crazed Diver
+(@NPC12,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Loot Crazed Hunter
+(@NPC13,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Loot Crazed Poacher
+(@NPC14,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Inquisitor Caleras
+(@NPC15,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Karen "I Don't Caribou" the Culler
+(@NPC16,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Minion of Kaw
+(@NPC17,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Varidus the Flenser
+(@NPC18,1,100,1,0,-@BERYLREF,1), -- Beryl ref loot template on Northsea Mercenary
+-- -----------------------------------------------------------------------------------------------
+(@NPC19,1,100,1,0,-@BLOODREF,1), -- Bloodspore ref loot template on Bloodspore Firestarter
+(@NPC20,1,100,1,0,-@BLOODREF,1), -- Bloodspore ref loot template on Den Vermin
+(@NPC21,1,100,1,0,-@BLOODREF,1), -- Bloodspore ref loot template on Bloodspore Harvester
+(@NPC22,1,100,1,0,-@BLOODREF,1), -- Bloodspore ref loot template on Bloodspore Roaster
+(@NPC23,1,100,1,0,-@BLOODREF,1), -- Bloodspore ref loot template on Gammoth Tender
+-- -----------------------------------------------------------------------------------------------
+(@NPC24,1,100,1,0,-@CHIEFREF,1), -- Chieftian ref loot template on Chieftain Burblegobble
+(@NPC25,1,100,1,0,-@CHIEFREF,1), -- Chieftian ref loot template on Gorloc Dredger
+(@NPC26,1,100,1,0,-@CHIEFREF,1), -- Chieftian ref loot template on Chieftain GurgleBoggle
+(@NPC27,1,100,1,0,-@CHIEFREF,1), -- Chieftian ref loot template on Gorloc Mud Splasher
+(@NPC28,1,100,1,0,-@CHIEFREF,1), -- Chieftian ref loot template on Riplash Myrmidon
+-- -----------------------------------------------------------------------------------------------
+(@NPC29,1,100,1,0,-@CULTREF,1), -- Cultist ref loot template on Clandestine Cultist <Cult of the Damned>
+(@NPC30,1,100,1,0,-@CULTREF,1), -- Cultist ref loot template on En'kilah Necrolord <Cult of the Damned>
+(@NPC31,1,100,1,0,-@CULTREF,1), -- Cultist ref loot template on En'kilah Necromancer <Cult of the Damned>
+(@NPC32,1,100,1,0,-@CULTREF,1), -- Cultist ref loot template on Northsea Thug
+-- -----------------------------------------------------------------------------------------------
+(@NPC33,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Kvaldir Mist Lord
+(@NPC34,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Kvaldir Mistweaver
+(@NPC35,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Kvaldir Raider
+(@NPC36,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Heigarr the Horrible
+(@NPC37,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Ragnar Drakkarlund
+(@NPC37,35774,-100,1,0,1,1), -- Trident of Naz'jan on Ragnar Drakkarlund 
+(@NPC38,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Skadir Longboatsman
+(@NPC39,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Skadir Mistweaver
+(@NPC40,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Skadir Raider
+(@NPC41,1,100,1,0,-@KVALDIRREF,1), -- Kvaldir ref loot template on Skadir Runecaster
+-- -----------------------------------------------------------------------------------------------
+(@NPC42,1,100,1,0,-@CLAXREF,1), -- Clax ref loot template on Claximus
+(@NPC43,1,100,1,0,-@CLAXREF,1), -- Clax ref loot template on Keymaster Urmgrgl
+(@NPC44,1,100,1,0,-@CLAXREF,1), -- Clax ref loot template on Winterfin Oracle
+(@NPC45,1,100,1,0,-@CLAXREF,1), -- Clax ref loot template on Winterfin Shorestriker
+(@NPC46,1,100,1,0,-@CLAXREF,1), -- Clax ref loot template on Winterfin Warrior
+-- -----------------------------------------------------------------------------------------------
+(@NPC47,1,100,1,0,-@MAGMOTHREF,1), -- Magmoth2 ref loot template on Gammothra the Tormentor
+(@NPC48,1,100,1,0,-@MAGMOTHREF,1), -- Magmoth ref loot template on Magnataur Huntress <Mate of Gammothra>
+(@NPC49,1,100,1,0,-@MAGMOTHREF,1), -- Magmoth ref loot template on Mate of Magmothregar
+(@NPC50,1,100,1,0,-@MAGMOTHREF,1), -- Magmoth ref loot template on Offspring of Magmothregar
+(@NPC51,1,100,1,0,-@MAGMOTHREF,1), -- Magmoth ref loot template on Plagued Magnataur
+(@NPC52,1,100,1,0,-@MAGMOTHREF,1); -- Magmoth ref loot template on Skadir Mariner
+-- fix DB-error on startup
+DELETE FROM `creature_loot_template` WHERE `entry` IN (34965,34980); 
+DELETE FROM `script_texts` WHERE `entry` BETWEEN -1603019 AND -1603000;
+UPDATE `creature_template` SET `ScriptName`='' WHERE `ScriptName` IN ('boss_algalon','mob_collapsing_star');
+
+-- Difficulty linking
+UPDATE `creature_template` SET `difficulty_entry_1`=34296 WHERE `entry`=32953; -- Black Hole
+
+UPDATE `creature_template` SET `minlevel`=80,`maxlevel`=80,`faction_A`=35,`faction_H`=35,`unit_flags`=0x8300,`equipment_id`=2478 WHERE `entry`=34064; -- Brann Bronzebeard
+UPDATE `creature_template` SET `speed_walk`=4,`speed_run`=2.14286,`exp`=2,`minlevel`=83,`maxlevel`=83,`faction_A`=190,`faction_H`=190,`unit_flags`=0x8100,`BaseAttackTime`=1000,`equipment_id`=2479 WHERE `entry` IN (32871,33070); -- Algalon the Observer
+UPDATE `creature_template` SET `faction_A`=190,`faction_H`=190,`exp`=2,`minlevel`=83,`maxlevel`=83,`unit_flags`=0x2000000,`speed_run`=1,`InhabitType`=4 WHERE `entry`=34246; -- Azeroth
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`exp`=2,`minlevel`=74,`maxlevel`=74,`unit_flags`=0x2000000,`flags_extra`=0x80,`InhabitType`=4 WHERE `entry`=33086; -- Algalon Stalker
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`unit_flags`=0x2008000,`speed_run`=1,`equipment_id`=2480,`InhabitType`=4 WHERE `entry` IN (33052,33116); -- Living Constellation
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`speed_run`=1,`RegenHealth`=0 WHERE `entry` IN (32955,34215); -- Collapsing Star
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`exp`=2,`minlevel`=80,`maxlevel`=80,`unit_flags`=0x2000000,`speed_run`=1,`InhabitType`=4 WHERE `entry` IN (32953,34296); -- Black Hole
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`minlevel`=81,`maxlevel`=81,`unit_flags`=0x8000,`speed_walk`=4,`speed_run`=1.42857,`InhabitType`=4 WHERE `entry` IN(33089,34097,34221,34222); -- Dark Matter
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`unit_flags`=0x2000000,`flags_extra`=0x80 WHERE `entry`=34100; -- Algalon Void Zone Visual Stalker
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`unit_flags`=0x2000000,`speed_run`=1,`InhabitType`=4 WHERE `entry`=34099; -- Worm Hole
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`exp`=2,`minlevel`=74,`maxlevel`=74,`unit_flags`=0x2000000,`flags_extra`=0x80,`InhabitType`=4 WHERE `entry`=33104; -- Algalon Stalker Asteroid Target 01
+UPDATE `creature_template` SET `faction_A`=14,`faction_H`=14,`exp`=2,`minlevel`=74,`maxlevel`=74,`unit_flags`=0x2000000,`flags_extra`=0x80,`InhabitType`=4 WHERE `entry`=33105; -- Algalon Stalker Asteroid Target 02
+
+UPDATE `creature_model_info` SET `bounding_radius`=0.93,`combat_reach`=9,`gender`=0 WHERE `modelid`=28641; -- Algalon the Observer
+UPDATE `creature_model_info` SET `bounding_radius`=0.02,`combat_reach`=0.2,`gender`=2 WHERE `modelid`=29133; -- Azeroth
+UPDATE `creature_model_info` SET `bounding_radius`=0.62,`combat_reach`=0,`gender`=2 WHERE `modelid`=28741; -- Living Constellation
+UPDATE `creature_model_info` SET `bounding_radius`=1,`combat_reach`=1,`gender`=2 WHERE `modelid`=28988; -- Collapsing Star
+UPDATE `creature_model_info` SET `bounding_radius`=1,`combat_reach`=1,`gender`=2 WHERE `modelid`=28460; -- Black Hole
+
+UPDATE `gameobject_template` SET `faction`=114,`flags`=32 WHERE `entry`=194910; -- Doodad_UL_SigilDoor_03
+UPDATE `gameobject_template` SET `data0`=579 WHERE `entry`=194628; -- Celestial Planetarium Access
+
+UPDATE `creature_template` SET `ScriptName`='boss_algalon_the_observer' WHERE `entry`=32871; -- Algalon the Observer
+UPDATE `creature_template` SET `ScriptName`='npc_living_constellation' WHERE `entry`=33052; -- Living Constellation
+UPDATE `creature_template` SET `ScriptName`='npc_collapsing_star' WHERE `entry`=32955; -- Collapsing Star
+UPDATE `creature_template` SET `ScriptName`='npc_brann_bronzebeard_algalon' WHERE `entry`=34064; -- Brann Bronzebeard
+UPDATE `gameobject_template` SET `ScriptName`='go_celestial_planetarium_access' WHERE `entry` IN (194628,194752); -- Celestial Planetarium Access
+UPDATE `creature_template` SET `AIName`='NullCreatureAI' WHERE `entry` IN (32953,34099); -- Black Hole
+
+DELETE FROM `creature` WHERE `guid` IN (41781,41783,41790,41811,41812,41814,41819,41820,41821,41822,41823,41875);
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`MovementType`) VALUES
+(41781,33086,603,3,1,1627.400,-339.4133,417.4044,1.378810,7200,0,0), -- Algalon Stalker
+(41783,33086,603,3,1,1622.681,-344.2576,417.3955,1.378810,7200,0,0), -- Algalon Stalker
+(41790,33086,603,3,1,1629.984,-271.4798,417.4045,4.782202,7200,0,0), -- Algalon Stalker
+(41811,33086,603,3,1,1630.005,-345.5189,417.3955,1.378810,7200,0,0), -- Algalon Stalker
+(41812,33089,603,3,16,1622.451,-321.1563,417.6188,4.677482,7200,20,1), -- Dark Matter
+(41814,33089,603,3,16,1649.438,-319.8127,418.3941,1.082104,7200,20,1), -- Dark Matter
+(41819,33089,603,3,16,1615.060,-291.6816,417.7796,3.490659,7200,20,1), -- Dark Matter
+(41820,33089,603,3,16,1647.005,-288.6790,417.3955,3.490659,7200,20,1), -- Dark Matter
+(41821,33089,603,3,16,1622.451,-321.1563,417.6188,4.677482,7200,20,1), -- Dark Matter
+(41822,33089,603,3,16,1649.438,-319.8127,418.3941,1.082104,7200,20,1), -- Dark Matter
+(41823,33089,603,3,16,1615.060,-291.6816,417.7796,3.490659,7200,20,1), -- Dark Matter
+(41875,33089,603,3,16,1647.005,-288.6790,417.3955,3.490659,7200,20,1); -- Dark Matter
+
+SET @OGUID := 252;
+DELETE FROM `gameobject` WHERE `id` IN (194767,194910,194911,194715,194716,194148,194253,194628,194752,194821,194822);
+INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`rotation0`,`rotation1`,`rotation2`,`rotation3`,`spawntimesecs`,`animprogress`,`state`) VALUES
+(@OGUID+00,194767,603,3,17,1632.024,-182.9211,427.6681,0.000000,0,0,8.742278E-08,1, 604800,255,1), -- Doodad_UL_SigilDoor_01
+(@OGUID+04,194911,603,3,17,1632.024,-182.9211,408.4224,3.141593,0,0,8.742278E-08,1, 604800,255,1), -- Doodad_UL_SigilDoor_02
+(@OGUID+10,194910,603,3,17,1632.053,-266.1495,438.5608,0.000000,0,0,8.742278E-08,1, 604800,255,0), -- Doodad_UL_SigilDoor_03
+(@OGUID+12,194715,603,3,17,1632.053,-307.6541,417.3211,0.000000,0,0,8.742278E-08,1, 604800,255,0), -- Doodad_UL_UniverseFloor_01
+(@OGUID+19,194716,603,3,17,1632.251,-307.5483,416.2641,0.000000,0,0,8.742278E-08,1, 604800,255,1), -- Doodad_UL_UniverseFloor_02
+(@OGUID+22,194148,603,3,17,1632.053,-307.6541,417.3211,0.000000,0,0,8.742278E-08,1, 604800,255,1), -- Doodad_UL_UniverseGlobe01
+(@OGUID+24,194253,603,3,17,1631.908,-246.4970,417.3211,0.000000,0,0,8.742278E-08,1, 604800,255,1), -- Doodad_UL_Ulduar_Trapdoor_03
+(@OGUID+29,194628,603,1, 1,1646.182,-174.6881,427.2536,1.553341,0,0,0.000000E-00,1, 604800,255,1), -- Celestial Planetarium Access
+(@OGUID+33,194752,603,2, 1,1646.182,-174.6881,427.2536,1.553341,0,0,0.000000E-00,1, 604800,255,1), -- Celestial Planetarium Access
+(@OGUID+37,194821,603,1, 1,1632.099,-306.5609,417.3210,4.694937,0,0,0.000000E-00,1,-604800,255,1), -- Gift of the Observer (10 man)
+(@OGUID+46,194822,603,2, 1,1632.099,-306.5609,417.3210,4.694937,0,0,0.000000E-00,1,-604800,255,1); -- Gift of the Observer (25 man)
+
+DELETE FROM `creature_equip_template` WHERE `entry` IN (2478,2479,2480);
+INSERT INTO `creature_equip_template` (`entry`,`itemEntry1`,`itemEntry2`,`itemEntry3`) VALUES
+(2478,1903,25972,0),
+(2479,45985,45985,0),
+(2480,44952,0,0);
+
+DELETE FROM `creature_template_addon` WHERE `entry` IN (32871,33070,33052,33116,33089,34221,34097,34222,33105);
+INSERT INTO `creature_template_addon` (`entry`,`mount`,`bytes1`,`bytes2`,`auras`) VALUES
+(32871,0,0x0000000,0x0,NULL), -- Algalon the Observer
+(33070,0,0x0000000,0x0,NULL), -- Algalon the Observer
+(33052,0,0x3000000,0x1,NULL), -- Living Constellation
+(33116,0,0x3000000,0x1,NULL), -- Living Constellation
+(33089,0,0x3000000,0x1,NULL), -- Dark Matter
+(34221,0,0x3000000,0x1,NULL), -- Dark Matter
+(34097,0,0x3000000,0x1,NULL), -- Unleashed Dark Matter
+(34222,0,0x3000000,0x1,NULL), -- Unleashed Dark Matter
+(33105,0,0x3000000,0x1,NULL); -- Algalon Stalker Asteroid Target 02
+
+DELETE FROM `creature_text` WHERE `entry` IN (32871,34064);
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`sound`,`emote`,`comment`) VALUES
+(34064,0,0,'We did it, lads! We got here before Algalon''s arrival. Maybe we can rig the systems to interfere with his analysis--',14,15824,0,'Brann Bronzebeard - SAY_BRANN_ALGALON_INTRO_1'),
+(34064,1,0,'I''ll head back to the Archivum and see if I can jam his signal. I might be able to buy us some time while you take care of him.',12,15825,0,'Brann Bronzebeard - SAY_BRANN_ALGALON_INTRO_2'),
+(34064,2,0,'I know just the place. Will you be all right?',14,15823,6,'Brann Bronzebeard - SAY_BRANN_ALGALON_OUTRO'),
+(32871,0,0,'Translocation complete. Commencing planetary analysis of Azeroth.',12,15405,0,'Algalon the Observer - SAY_ALGALON_INTRO_1'),
+(32871,1,0,'Stand back, mortals. I''m not here to fight you.',12,15406,0,'Algalon the Observer - SAY_ALGALON_INTRO_2'),
+(32871,2,0,'It is in the universe''s best interest to re-originate this planet should my analysis find systemic corruption. Do not interfere.',12,15407,0,'Algalon the Observer - SAY_ALGALON_INTRO_3'),
+(32871,3,0,'Your actions are illogical. All possible results for this encounter have been calculated. The Pantheon will receive the Observer''s message regardless of outcome.',14,15386,0,'Algalon the Observer - SAY_ALGALON_START_TIMER'),
+(32871,4,0,'See your world through my eyes: A universe so vast as to be immeasurable - incomprehensible even to your greatest minds.',14,15390,1,'Algalon the Observer - SAY_ALGALON_AGGRO'),
+(32871,5,0,'The stars come to my aid!',14,15392,0,'Algalon the Observer - SAY_ALGALON_COLLAPSING_STAR'),
+(32871,6,0,'%s begins to Summon Collapsing Stars!',41,0,0,'Algalon the Observer - EMOTE_ALGALON_COLLAPSING_STAR'),
+(32871,7,0,'Witness the fury of the cosmos!',14,15396,0,'Algalon the Observer - SAY_ALGALONG_BIG_BANG'),
+(32871,8,0,'%s begins to cast Big Bang!',41,0,0,'Algalon the Observer - EMOTE_ALGALON_BIG_BANG'),
+(32871,9,0,'You are out of time.',14,15394,0,'Algalon the Observer - SAY_ALGALON_ASCEND'),
+(32871,10,0,'%s begins to cast Cosmic Smash!',41,0,0,'Algalon the Observer - EMOTE_ALGALON_COSMIC_SMASH'),
+(32871,11,0,'Behold the tools of creation!',14,15397,0,'Algalon the Observer - SAY_ALGALON_PHASE_TWO'),
+(32871,12,0,'I have seen worlds bathed in the Makers'' flames, their denizens fading without as much as a whimper. Entire planetary systems born and razed in the time that it takes your mortal hearts to beat once. Yet all throughout, my own heart devoid of emotion... of empathy. I. Have. Felt. Nothing. A million-million lives wasted. Had they all held within them your tenacity? Had they all loved life as you do?',14,15393,1,'Algalon the Observer - SAY_ALGALON_OUTRO_1'),
+(32871,13,0,'Perhaps it is your imperfections... that which grants you free will... that allows you to persevere against all cosmically calculated odds. You prevail where the Titan''s own perfect creations have failed.',14,15401,1,'Algalon the Observer - SAY_ALGALON_OUTRO_2'),
+(32871,14,0,'I''ve rearranged the reply code - your planet will be spared. I cannot be certain of my own calculations anymore.',14,15402,1,'Algalon the Observer - SAY_ALGALON_OUTRO_3'),
+(32871,15,0,'I lack the strength to transmit the signal. You must... hurry... find a place of power... close to the skies.',14,15403,1,'Algalon the Observer - SAY_ALGALON_OUTRO_4'),
+(32871,16,0,'Do not worry about my fate, Bronzen. If the signal is not transmitted in time, re-origination will proceed regardless. Save... your world...',14,15404,1,'Algalon the Observer - SAY_ALGALON_OUTRO_5'),
+(32871,17,0,'Analysis complete. There is partial corruption in the planet''s life-support systems as well as complete corruption in most of the planet''s defense mechanisms.',12,15398,0,'Algalon the Observer - SAY_ALGALON_DESPAWN_1'),
+(32871,18,0,'Begin uplink: Reply Code: ''Omega''. Planetary re-origination requested.',12,15399,0,'Algalon the Observer - SAY_ALGALON_DESPAWN_2'),
+(32871,19,0,'Farewell, mortals. Your bravery is admirable, for such flawed creatures.',12,15400,0,'Algalon the Observer - SAY_ALGALON_DESPAWN_3'),
+(32871,20,0,'Loss of life unavoidable.',14,15387,0,'Algalon the Observer - SAY_ALGALON_KILL'),
+(32871,20,1,'I do what I must.',14,15388,0,'Algalon the Observer - SAY_ALGALON_KILL');
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN (64996,62266,65509,62304,64597);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`Comment`) VALUES
+(13,1,64996,31,3,34246,'Algalon the Observer - Reorigination on Azeroth'),
+(13,1,62266,31,3,33052,'Algalon Stalker - target Living Constellation'),
+(13,1,65509,31,3,33052,'Black Hole - target Living Constellation'),
+(13,1,62304,31,3,33104,'Cosmic Smash - target trigger'),
+(13,1,64597,31,3,33104,'Cosmic Smash - target trigger');
+
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_phase_punch';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_arcane_barrage';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_trigger_3_adds';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_collapse';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_big_bang';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_remove_phase';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_cosmic_smash';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_cosmic_smash_damage';
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_algalon_supermassive_fail';
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(64412,'spell_algalon_phase_punch'),
+(64599,'spell_algalon_arcane_barrage'),
+(64607,'spell_algalon_arcane_barrage'),
+(62266,'spell_algalon_trigger_3_adds'),
+(62018,'spell_algalon_collapse'),
+(64443,'spell_algalon_big_bang'),
+(64584,'spell_algalon_big_bang'),
+(64445,'spell_algalon_remove_phase'),
+(62295,'spell_algalon_cosmic_smash'),
+(62311,'spell_algalon_cosmic_smash_damage'),
+(64596,'spell_algalon_cosmic_smash_damage'),
+(65311,'spell_algalon_supermassive_fail');
+
+SET @DIFF_ID := 3262;
+DELETE FROM `spelldifficulty_dbc` WHERE `id` BETWEEN @DIFF_ID AND @DIFF_ID+5;
+INSERT INTO `spelldifficulty_dbc` (`id`,`spellid0`,`spellid1`) VALUES
+(@DIFF_ID+0,64395,64592),
+(@DIFF_ID+1,64599,64607),
+(@DIFF_ID+2,64443,64584),
+(@DIFF_ID+3,64122,65108),
+(@DIFF_ID+4,62301,64598),
+(@DIFF_ID+5,62304,64597);
+
+UPDATE `instance_encounters` SET `creditType`=1,`creditEntry`=65184 WHERE `entry` IN (757,771); -- Algalon the Observer
+
+DELETE FROM `disables` WHERE `sourceType`=4 AND `entry` IN (10565,10566,10678,9990,9991,10567,10569,10698,10780,10781,10782,10783,10568,10570);
+DELETE FROM `achievement_criteria_data` WHERE `criteria_id` IN (10565,10566,10678,9990,9991,10567,10569,10698,10780,10781,10782,10783,10568,10570);
+INSERT INTO `achievement_criteria_data` (`criteria_id`,`type`,`value1`,`value2`,`ScriptName`) VALUES
+(10565,12,0,0,''), -- Algalon the Observer kills (Ulduar 10 player)
+(10566,12,1,0,''), -- Algalon the Observer kills (Ulduar 25 player)
+(10678,12,0,0,''), -- Herald of the Titans
+(10678,18,0,0,''), -- Herald of the Titans
+(9990,12,0,0,''), -- Lich King 10-player bosses killed
+(9991,12,1,0,''), -- Lich King 25-player bosses killed
+(10567,12,0,0,''), -- Observed (10 player)
+(10569,12,1,0,''), -- Observed (25 player)
+(10698,12,1,0,''), -- Realm First! Celestial Defender
+(10780,12,0,0,''), -- Supermassive (10 player)
+(10781,12,0,0,''), -- Supermassive (10 player)
+(10782,12,1,0,''), -- Supermassive (25 player)
+(10783,12,1,0,''), -- Supermassive (25 player)
+(10568,11,0,0,'achievement_he_feeds_on_your_tears'), -- He Feeds On Your Tears (10 player)
+(10568,12,0,0,''), -- He Feeds On Your Tears (10 player)
+(10570,11,0,0,'achievement_he_feeds_on_your_tears'), -- He Feeds On Your Tears (25 player)
+(10570,12,1,0,''); -- He Feeds On Your Tears (25 player)
+SET @Ref := 12002; 
+DELETE FROM `reference_loot_template` WHERE `entry`=@Ref;
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(@Ref,47242,100,1,0,1,1);
+DELETE FROM `gameobject_loot_template` WHERE `entry` IN (195668,195667,195666,195665,195672,195671,195670,195669) AND `item`=47242;
+DELETE FROM `gameobject_loot_template` WHERE `entry` IN (195668,195667,195666,195665,195672,195671,195670,195669) AND `mincountOrRef` = -@Ref;
+INSERT INTO gameobject_loot_template (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(195665,5,100,1,0,-@Ref,4), -- 10 man,50 attempts
+(195666,3,100,1,0,-@Ref,4), -- 10 man,45+ attempts
+(195667,3,100,1,0,-@Ref,2), -- 10 man,25+ attempts
+(195668,1,100,1,0,-@Ref,2), -- 10 man,0+ attempts
+(195669,6,100,1,0,-@Ref,4), -- 25 man,50 attempts
+(195670,4,100,1,0,-@Ref,4), -- 25 man,45+ attempts
+(195671,4,100,1,0,-@Ref,2), -- 25 man,25+ attempts
+(195672,2,100,1,0,-@Ref,2); -- 25 man,0+ attempts
+SET @Bag := 52676;
+DELETE FROM `item_loot_template` WHERE `entry`=@Bag;
+INSERT INTO `item_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(@Bag,36933,0,1,1,1,3),-- Forest Emerald
+(@Bag,36918,0,1,1,1,3),-- Scarlet Ruby
+(@Bag,36921,0,1,1,1,3),-- Autumn's Glow
+(@Bag,36930,0,1,1,1,3),-- Monarch Topaz
+(@Bag,36924,0,1,1,1,3),-- Sky Sapphire
+(@Bag,36927,0,1,1,1,3),-- Twilight Opal
+(@Bag,43953,5,1,0,1,1); -- Reins of the Blue Drake
+DELETE FROM `creature_loot_template` WHERE `entry` IN (31702,32297) AND `item`=44564;
+INSERT INTO `creature_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(31702,44564,0.5,1,0,1,1), -- Recipe: Mighty Arcane Protection Potion on Frostbrood Spawn
+(32297,44564,0.5,1,0,1,1); -- Recipe: Mighty Arcane Protection Potion on Cult Researcher
+SET @ITEM := 50406; -- Formula: Enchant Gloves - Angler
+UPDATE `creature_template` SET `lootid` = `entry` WHERE `entry` IN(26343,26344,26336);
+DELETE FROM `creature_loot_template` WHERE `item`=@ITEM;
+INSERT INTO `creature_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(26343, @ITEM, 1.1, 1, 0, 1, 1), -- Indu'Le Fisherman
+(26336, @ITEM, 0.9, 1, 0, 1, 1), -- Indu'Le Mystic
+(26344, @ITEM, 1, 1, 0, 1, 1); -- Indu'Le Warrior
+-- Make Grimscale Murlocs drop their heads faster...
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance`=-66 WHERE `item`=21757; 
+
+-- Restore horrible mistake in UP34 from myself
+UPDATE `gameobject_template` SET `data1`=27512 WHERE `entry`=195669;
+UPDATE `gameobject_template` SET `data1`=27517 WHERE `entry`=195670;
+UPDATE `gameobject_template` SET `data1`=27518 WHERE `entry`=195671;
+-- Fix loottemplates along with it
+UPDATE `gameobject_loot_template` SET `entry`=27512 WHERE `entry`=195669;
+UPDATE `gameobject_loot_template` SET `entry`=27517 WHERE `entry`=195670;
+UPDATE `gameobject_loot_template` SET `entry`=27518 WHERE `entry`=195671;
