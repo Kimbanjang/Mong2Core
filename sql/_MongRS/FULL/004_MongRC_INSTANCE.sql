@@ -195,8 +195,17 @@ INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `l
 (35360,47241,100,1,0,2,2);
 
 -- 토라본 10/25 드랍테이블 : 코랄론과 동일
-DELETE FROM `creature_loot_template` WHERE `entry`=38433;
-DELETE FROM `creature_loot_template` WHERE `entry`=38462;
+DELETE FROM `creature_loot_template` WHERE `entry` IN (38433,38462);
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
+(38433,1,100,1,0,-34212,1), -- 토라본 10
+(38433,2,100,1,0,-34204,1),
+(38433,3,1,1,0,-34203,1),
+(38433,47241,100,1,0,2,2),
+(38462,1,100,1,0,-34205,2), -- 토라본 25
+(38462,2,80,1,0,-90001,1),
+(38462,3,80,1,0,-90002,1),
+(38462,4,1,1,0,-34203,1),
+(38462,47241,100,1,0,2,2);
 
 
 ##### 울두아르 #####
