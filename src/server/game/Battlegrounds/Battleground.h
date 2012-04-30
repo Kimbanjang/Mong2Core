@@ -139,7 +139,7 @@ enum BattlegroundRandomRewards
     BG_REWARD_WINNER_ARENA_LAST     = 0,
     BG_REWARD_LOSER_HONOR_FIRST    = 12,		// Default = 5
     BG_REWARD_LOSER_ARENA_FIRST    = 5,
-    BG_REWARD_LOSER_HONOR_LAST     = 12,		// Default = 5
+    BG_REWARD_LOSER_HONOR_LAST     = 7,		// Default = 5
     BG_REWARD_LOSER_ARENA_LAST     = 0
 };
 
