@@ -887,9 +887,11 @@ void Battleground::EndBattleground(uint32 winner)
         else
         {
             if (IsRandom() || BattlegroundMgr::IsBGWeekend(GetTypeID()))
+			{
                 UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(loser_kills));
 				if (CanAwardArenaPoints())
                     player->ModifyArenaPoints(loser_arena);
+			}
         }
 
         player->ResetAllPowers();
