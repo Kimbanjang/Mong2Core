@@ -24513,3 +24513,567 @@ UPDATE `gameobject_template` SET `data1`=27518 WHERE `entry`=195671;
 UPDATE `gameobject_loot_template` SET `entry`=27512 WHERE `entry`=195669;
 UPDATE `gameobject_loot_template` SET `entry`=27517 WHERE `entry`=195670;
 UPDATE `gameobject_loot_template` SET `entry`=27518 WHERE `entry`=195671;
+
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (20625,29142,35139,42393,49882,55269,56578,38441,66316,67100,67101,67102);
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(20625,'spell_gen_default_count_pct_from_max_hp'), -- Ritual of Doom Sacrifice
+(29142,'spell_gen_default_count_pct_from_max_hp'), -- Eyesore Blaster
+(35139,'spell_gen_default_count_pct_from_max_hp'), -- Throw Boom's Doom
+(42393,'spell_gen_default_count_pct_from_max_hp'), -- Brewfest - Attack Keg
+(49882,'spell_gen_default_count_pct_from_max_hp'), -- Leviroth Self-Impale
+(55269,'spell_gen_default_count_pct_from_max_hp'), -- Deathly Stare
+(56578,'spell_gen_default_count_pct_from_max_hp'), -- Rapid-Fire Harpoon
+(38441,'spell_gen_50pct_count_pct_from_max_hp'), -- Cataclysmic Bolt
+(66316,'spell_gen_50pct_count_pct_from_max_hp'), -- Spinning Pain Spike 10m
+(67100,'spell_gen_50pct_count_pct_from_max_hp'), -- Spinning Pain Spike 25m
+(67101,'spell_gen_50pct_count_pct_from_max_hp'), -- Spinning Pain Spike 10m heroic
+(67102,'spell_gen_50pct_count_pct_from_max_hp'); -- Spinning Pain Spike 25m heroic
+
+-- SAI for Tabard Vendor Elizabeth Ross
+SET @ROSS := 28776;
+SET @GOSSIP := 9832;
+
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ROSS;
+
+DELETE FROM `gossip_menu_option` WHERE `menu_id`=@GOSSIP AND `id`>0 AND `id`<11;
+INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `box_coded`, `box_money`, `box_text`) VALUES 
+(@GOSSIP, 1, 0, 'I''ve lost my Blood Knight Tabard.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 2, 0, 'I''ve lost my Tabard of the Hand.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 3, 0, 'I''ve lost my Tabard of the Protector.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 4, 0, 'I''ve lost my Green Trophy Tabard of the Illidari.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 5, 0, 'I''ve lost my Purple Trophy Tabard of the Illidari.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 6, 0, 'I''ve lost my Tabard of Summer Skies.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 7, 0, 'I''ve lost my Tabard of Summer Flames.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 8, 0, 'I''ve lost my Loremaster''s Colors.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 9, 0, 'I''ve lost my Tabard of the Explorer.', 1, 1, 0, 0, 0, 0, ''),
+(@GOSSIP, 10, 0, 'I''ve lost my Tabard of the Achiever.', 1, 1, 0, 0, 0, 0, '');
+
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ROSS AND `source_type`=0;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(@ROSS, 0, 0, 10, 62, 0, 100, 0, @GOSSIP, 1, 0, 0, 11, 54974, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Blood Knight Tabard'),
+(@ROSS, 0, 1, 10, 62, 0, 100, 0, @GOSSIP, 2, 0, 0, 11, 54976, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Tabard of the Hand'),
+(@ROSS, 0, 2, 10, 62, 0, 100, 0, @GOSSIP, 3, 0, 0, 11, 55008, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Tabard of the Protector'),
+(@ROSS, 0, 3, 10, 62, 0, 100, 0, @GOSSIP, 4, 0, 0, 11, 54977, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Green Trophy Tabard of the Illidari'),
+(@ROSS, 0, 4, 10, 62, 0, 100, 0, @GOSSIP, 5, 0, 0, 11, 54982, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Purple Trophy Tabard of the Illidari'),
+(@ROSS, 0, 5, 10, 62, 0, 100, 0, @GOSSIP, 6, 0, 0, 11, 62768, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Tabard of Summer Skies'),
+(@ROSS, 0, 6, 10, 62, 0, 100, 0, @GOSSIP, 7, 0, 0, 11, 62769, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Tabard of Summer Flames'),
+(@ROSS, 0, 7, 10, 62, 0, 100, 0, @GOSSIP, 8, 0, 0, 11, 58194, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Loremaster''s Colors'),
+(@ROSS, 0, 8, 10, 62, 0, 100, 0, @GOSSIP, 9, 0, 0, 11, 58224, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Tabard of the Explorer'),
+(@ROSS, 0, 9, 10, 62, 0, 100, 0, @GOSSIP, 10, 0, 0, 11, 55006, 2, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Cast Spell Create Tabard of the Achiever'),
+(@ROSS, 0, 10, 0, 61, 0, 100, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Elizabeth Ross - On Gossip Select - Close Gossip');
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=@GOSSIP;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(15,@GOSSIP,1,0,2,25549,1,1,1,0,'','Only show gossip if player doesn''t have Blood Knight Tabard'),
+(15,@GOSSIP,1,0,8,9737,0,0,0,0,'','Only show gossip if player already finished quest True Masters of Light'),
+(15,@GOSSIP,2,0,2,24344,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of the Hand'),
+(15,@GOSSIP,2,0,8,9762,0,0,0,0,'','Only show gossip if player already finished quest The Unwritten Prophecy'),
+(15,@GOSSIP,3,0,2,28788,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of the protector'),
+(15,@GOSSIP,3,0,8,10259,0,0,0,0,'','Only show gossip if player already finished quest Into the Breach'),
+(15,@GOSSIP,4,0,2,31404,1,1,1,0,'','Only show gossip if player doesn''t have Green Trophy Tabard of Illidari'),
+(15,@GOSSIP,4,0,2,31405,1,1,1,0,'','Only show gossip if player doesn''t have Purple Trophy Tabard of Illidari'),
+(15,@GOSSIP,4,0,2,31408,1,1,1,0,'','Only show gossip if player doesn''t have Offering of the Sha''tar'),
+(15,@GOSSIP,4,0,8,10781,0,0,0,0,'','Only show gossip if player already finished quest Battle of the Crimson Watch'),
+(15,@GOSSIP,5,0,2,31404,1,1,1,0,'','Only show gossip if player doesn''t have Green Trophy Tabard of Illidari'),
+(15,@GOSSIP,5,0,2,31405,1,1,1,0,'','Only show gossip if player doesn''t have Purple Trophy Tabard of Illidari'),
+(15,@GOSSIP,5,0,2,31408,1,1,1,0,'','Only show gossip if player doesn''t have Offering of the Sha''tar'),
+(15,@GOSSIP,5,0,8,10781,0,0,0,0,'','Only show gossip if player already finished quest Battle of the Crimson Watch'),
+(15,@GOSSIP,6,0,2,35279,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of Summer Skies'),
+(15,@GOSSIP,6,0,2,35280,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of Summer Flames'),
+(15,@GOSSIP,6,0,8,11972,0,0,0,0,'','Only show gossip if player already finished quest Shards of Ahune'),
+(15,@GOSSIP,7,0,2,35279,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of Summer Skies'),
+(15,@GOSSIP,7,0,2,35280,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of Summer Flames'),
+(15,@GOSSIP,7,0,8,11972,0,0,0,0,'','Only show gossip if player already finished quest Shards of Ahune'),
+(15,@GOSSIP,8,0,2,43300,1,1,1,0,'','Only show gossip if player doesn''t have Loremaster''s Colors'),
+(15,@GOSSIP,8,0,17,1681,0,0,0,0,'','Only show gossip if player have achievement Loremaster (A)'),
+(15,@GOSSIP,8,1,2,43300,1,1,1,0,'','Only show gossip if player doesn''t have Loremaster''s Colors'),
+(15,@GOSSIP,8,1,17,1682,0,0,0,0,'','Only show gossip if player have achievement Loremaster (H)'),
+(15,@GOSSIP,9,0,2,43348,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of the Explorer'),
+(15,@GOSSIP,9,0,17,45,0,0,0,0,'','Only show gossip if player have achievement Explore Northrend'),
+(15,@GOSSIP,10,0,2,40643,1,1,1,0,'','Only show gossip if player doesn''t have Tabard of the Explorer'),
+(15,@GOSSIP,10,0,17,1021,0,0,0,0,'','Only show gossip if player have achievement Twenty-Five Tabards');
+
+UPDATE `creature_template` SET `flags_extra`=0x82,`ModelId1`=1126,`ModelId2`=16925 WHERE `entry` IN (38008,38641,38773,38774); -- Blood Orb Controller
+UPDATE `creature_template` SET `flags_extra`=0x80,`ModelId1`=19725,`ModelId2`=31095,`baseattacktime`=2000,`speed_walk`=0.8,`speed_run`=0.28571 WHERE `entry` IN (38454,38775,38776,38777); -- Kinetic Bomb
+UPDATE `creature_template` SET `exp`=2,`baseattacktime`=2000,`ModelId1`=19725,`ModelId2`=21342 WHERE `entry`=38458; -- Kinetic Bomb Target
+UPDATE `creature_template` SET `baseattacktime`=2000,`speed_walk`=4.4,`ModelId1`=19725,`ModelId2`=26767 WHERE `entry` IN (38332,38451); -- Ball of Flame
+UPDATE `creature_template` SET `flags_extra`=0x80 WHERE `entry`=37950; -- Valithria Dreamwalker
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `InhabitType`&4 AND `flags_extra`&0x80; -- make flying triggers fly
+UPDATE `creature_template` SET `InhabitType`=4,`HoverHeight`=12 WHERE `entry`=37126; -- Sister Svalna
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=37950; -- Valithria Dreamwalker
+UPDATE `creature_model_info` SET `bounding_radius`=1,`combat_reach`=0,`gender`=0 WHERE `modelid`=31095; -- Kinetic Bomb
+UPDATE `creature_model_info` SET `bounding_radius`=0.5,`combat_reach`=1,`gender`=0 WHERE `modelid`=21342; -- Kinetic Bomb Target
+UPDATE `creature_model_info` SET `bounding_radius`=0.5,`combat_reach`=1,`gender`=0 WHERE `modelid`=26767; -- Ball of Flame
+UPDATE `creature_template_addon` SET `bytes1`=50331648,`bytes2`=1,`mount`=0,`emote`=0,`auras`=NULL WHERE `entry`=38454; -- Kinetic Bomb
+
+-- setup alternate conditions for spell 46488
+DELETE FROM `conditions` WHERE `SourceEntry` = 46488 AND `ElseGroup` = 1;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`SourceId`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionTarget`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,46488,0,1,31,1,3,26817,0,0,0,'',''),
+(13,1,46488,0,1,36,1,0,0,0,1,0,'','');
+
+SET @TinRef := 13000; 
+SET @TBC1 := @TinRef+1;
+SET @TBC2 := @TinRef+2;
+SET @WOTLK1 := @TinRef+3;
+SET @WOTLK2 := @TinRef+4;
+SET @WOTLK3 := @TinRef+5;
+
+SET @Copper := 2770;
+SET @Tin := 2771;
+SET @Iron := 2772; 
+SET @Mithril := 3858;
+SET @Thorium := 10620;
+SET @FelIron := 23424; 
+SET @Adamantite := 23425; 
+SET @Cobalt := 36909; 
+SET @Saronite := 36912;
+SET @Titanium := 36910;
+
+-- Reference Loot Templates
+DELETE FROM `reference_loot_template` WHERE `entry` BETWEEN @TinRef AND @TinRef+5;
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES 
+-- Stupid Tin
+(@TinRef,1529,0,1,1,1,1),  -- Jade
+(@TinRef,3864,0,1,1,1,1),  -- Citrine
+(@TinRef,7909,0,1,1,1,1),  -- Aquamarine
+-- TBC Greens
+(@TBC1,21929,0,1,1,1,2), -- Flame Spessarite
+(@TBC1,23077,0,1,1,1,2), -- Blood Garnet
+(@TBC1,23079,0,1,1,1,2), -- Deep Peridot
+(@TBC1,23107,0,1,1,1,2), -- Shadow Draenite
+(@TBC1,23112,0,1,1,1,2), -- Golden Draenite
+(@TBC1,23117,0,1,1,1,2), -- Azure Moonstone
+-- TBC Blues
+(@TBC2,23436,0,1,1,1,1), -- Living Ruby
+(@TBC2,23437,0,1,1,1,1), -- Talasite
+(@TBC2,23438,0,1,1,1,1), -- Star of Elune
+(@TBC2,23439,0,1,1,1,1), -- Noble Topaz
+(@TBC2,23440,0,1,1,1,1), -- Dawnstone 
+(@TBC2,23441,0,1,1,1,1), -- Nightseye
+-- WOTLK Greens
+(@WOTLK1,36917,0,1,1,1,2), -- Bloodstone
+(@WOTLK1,36920,0,1,1,1,2), -- Sun Crystal
+(@WOTLK1,36923,0,1,1,1,2), -- Chalcedony
+(@WOTLK1,36926,0,1,1,1,2), -- Shadow Crystal
+(@WOTLK1,36929,0,1,1,1,2), -- Huge Citrine
+(@WOTLK1,36932,0,1,1,1,2), -- Dark Jade
+-- WOTLK Blues
+(@WOTLK2,36918,0,1,1,1,2), -- Scarlet Ruby
+(@WOTLK2,36921,0,1,1,1,2), -- Autumn's Glow
+(@WOTLK2,36924,0,1,1,1,2), -- Sky Sapphire
+(@WOTLK2,36927,0,1,1,1,2), -- Twilight Opal
+(@WOTLK2,36930,0,1,1,1,2), -- Monarch Topaz
+(@WOTLK2,36933,0,1,1,1,2), -- Forest Emerald
+-- WOTLK Epics
+(@WOTLK3,36919,0,1,1,1,1), -- Cardinal Ruby
+(@WOTLK3,36922,0,1,1,1,1), -- King's Amber
+(@WOTLK3,36925,0,1,1,1,1), -- Majestic Zircon
+(@WOTLK3,36928,0,1,1,1,1), -- Dreadstone
+(@WOTLK3,36931,0,1,1,1,1), -- Ametrine
+(@WOTLK3,36934,0,1,1,1,1); -- Eye of Zul
+-- --------------------------------------------------------
+-- Prospecting Loot Templates
+DELETE FROM `prospecting_loot_template` WHERE `entry` IN (@Copper,@Tin,@Iron,@Mithril,@Thorium,@FelIron,@Adamantite,@Cobalt,@Saronite,@Titanium);
+INSERT INTO `prospecting_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES 
+-- Copper Ore
+(@Copper,774,0,1,1,1,1), -- Malachite
+(@Copper,818,0,1,1,1,1), -- Tigerseye
+(@Copper,1210,10,1,0,1,1), -- Shadowgem
+-- Tin Ore
+(@Tin,1210,0,1,1,1,2),  -- Shadowgem
+(@Tin,1705,0,1,1,1,2),  -- Lesser Moonstone
+(@Tin,1206,0,1,1,1,2), -- Moss Agate
+(@Tin,1,10,1,0,-@TinRef,1), -- One Rare gem chance
+-- Iron Ore
+(@Iron,1529,30,1,1,1,2), -- Jade
+(@Iron,1705,30,1,1,1,2), -- Lesser Moonstone
+(@Iron,3864,30,1,1,1,2), -- Citrine
+(@Iron,7909,5,1,1,1,1), -- Aquamarine
+(@Iron,7910,5,1,1,1,1), -- Star Ruby
+-- Mithril Ore
+(@Mithril,3864,30,1,1,1,2), -- Citrine
+(@Mithril,7909,30,1,1,1,2), -- Aquamarine
+(@Mithril,7910,30,1,1,1,2), -- Star Ruby
+(@Mithril,12361,2.5,1,1,1,1), -- Blue Sapphire
+(@Mithril,12364,2.5,1,1,1,1), -- Huge Emerald
+(@Mithril,12799,2.5,1,1,1,1), -- Large Opal
+(@Mithril,12800,2.5,1,1,1,1), -- Azerothian Diamond
+-- Thorium Ore
+(@Thorium,7910,30,1,1,1,2), -- Star Ruby
+(@Thorium,12361,15,1,1,1,2), -- Blue Sapphire
+(@Thorium,12364,15,1,1,1,2), -- Huge Emerald
+(@Thorium,12799,15,1,1,1,2), -- Large Opal
+(@Thorium,12800,15,1,1,1,2), -- Azerothian Diamond
+(@Thorium,1,10,1,1,-@TBC1,1), -- one from TBC Greens
+-- Fel Iron Ore
+(@FelIron,1,95,1,1,-@TBC1,1), -- One from TBC Greens
+(@FelIron,2,05,1,1,-@TBC2,1), -- One from TBC Blues
+-- Adamantite Ore
+(@Adamantite,24243,100,1,0,1,1), -- Adamantite Powder
+(@Adamantite,1,100,1,1,-@TBC1,1), -- One from TBC Greens
+(@Adamantite,2, 10,1,1,-@TBC2,1), -- One from TBC Blues
+-- Cobalt Ore
+(@Cobalt,1,95,1,1,-@WOTLK1,1), -- One from WOTLK Greens
+(@Cobalt,2,05,1,1,-@WOTLK2,1), -- One from WOTLK Blues
+-- Saronite Ore
+(@Saronite,1,85,1,1,-@WOTLK1,2), -- One from WOTLK Greens
+(@Saronite,2,15,1,1,-@WOTLK2,1), -- One from WOTLK Blues
+-- Titanium Ore
+(@Titanium,46849,75,1,0,1,1), -- Titanium Powder
+(@Titanium,1,75,1,1,-@WOTLK1,2), -- Two from WOTLK Greens
+(@Titanium,2,25,1,1,-@WOTLK2,1), -- One from WOTLK Blues
+(@Titanium,3,20,1,0,-@WOTLK3,1); -- One from WOTLK Epics
+
+UPDATE `creature_template` SET `skinloot`=entry WHERE `entry` IN (30260, 32517, 27641, 28860);
+UPDATE `creature_template` SET `skinloot`=70202 WHERE `entry` IN (25774,29693);
+UPDATE `creature_template` SET `skinloot`=70203 WHERE `entry`=28257;
+UPDATE `creature_template` SET `skinloot`=70207 WHERE `entry`=34137;
+UPDATE `creature_template` SET `skinloot`=70208 WHERE `entry` IN (32572,25448,25716,25713);
+UPDATE `creature_template` SET `skinloot`=70210 WHERE `entry` IN (33528,40419,26723,31134,36891);
+UPDATE `creature_template` SET `skinloot`=70211 WHERE `entry` IN (28847,30206,29875,29931,28203,30432);
+UPDATE `creature_template` SET `skinloot`=70212 WHERE `entry` IN (27645,32377,29838,26628,26622,32490,38453,32485,26633,32400,32361,29768,29735,26641,27644,27642,26735,26730,26722,33776,35189,26716,26672,29664,29774);
+UPDATE `creature_template` SET `skinloot`=70213 WHERE `entry` IN (27483,29312);
+UPDATE `creature_template` SET `skinloot`=70214 WHERE `entry` IN (37217,34564);
+UPDATE `creature_template` SET `skinloot`=27641 WHERE `entry` IN (31385,34269,34270,27641,30905,30353);
+
+DELETE FROM `skinning_loot_template` WHERE entry IN (30260,32517,70212,70213,70214,28860,27641);
+INSERT INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`) VALUES
+-- Stoic Mammoth
+(30260,33568,100,0,1,3), -- Borean Leather
+(30260,42542,-50,0,1,1), -- Stoic Mammoth Hide
+-- Loque'nahak
+(32517,33568,0,1,1,3), -- Borean Leather
+(32517,44128,2,1,1,1), -- Arctic Fur
+(32517,44687,100,0,1,1), -- Loque'Nahak's Pelt
+-- skinloot 70212
+(70212,33568,0,1,1,3), -- Borean Leather
+(70212,44128,1,1,1,1), -- Arctic Fur
+-- skinloot 70213
+(70213,33568,0,1,5,12), -- Borean Leather
+(70213,44128,1,1,1,1), -- Arctic Fur
+-- skinloot 70214
+(70214,33568,0,1,12,16), -- Borean Leather
+(70214,44128,25,1,1,1), -- Arctic Fur
+-- Sartharion
+(28860,33568,0,1,8,12), -- Borean Leather
+(28860,38557,0,1,8,12),-- Icy Dragonscale
+(28860,44128,1,1,1,1), -- Arctic Fur
+--  Centrifuge Construct
+(27641,41337,85,0,1,3), -- Whizzed-Out Gizmo
+(27641,41338,80,0,1,3), -- Sprung Whirlygig
+(27641,39690,15,0,1,3), -- Volatile Blasting Trigger
+(27641,39684,8,0,1,1), -- Hair Trigger
+(27641,36813,8,0,1,3), -- Sprung Sprocket
+(27641,39681,8,0,2,4), -- Handful of Cobalt Bolts
+(27641,49050,2,0,1,1), -- Schematic: Jeeves
+(27641,39682,1,0,1,1), -- Overcharged Capacitor
+(27641,39685,1,0,1,1); -- Indestructible Frame
+
+-- Correct dropchance for Mote of Life, wowhead was wrong (as usual)
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance`=18.5307 WHERE `entry`=22307 AND `item`=22575;
+
+-- Update the dropchance to 100% if on quest
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance`=-100 WHERE `entry`=21477 AND `item`=31372; -- Rocknail Flayer Carcass
+UPDATE `creature_loot_template` SET `ChanceOrQuestChance`=-100 WHERE `entry`=21478 AND `item`=31373; -- Rocknail Flayer Giblets
+
+DELETE FROM `command` WHERE `name` IN ('modify tp','modify bwalk','modify swim','modify fly','modify arena','modify aspeed','modify morph');
+INSERT INTO `command` (`name`, `security`, `help`) VALUES ('modify speed all', 1, 'Syntax: .modify aspeed #rate\r\n\r\nModify all speeds -run,swim,run back,swim back- of the selected player to "normalbase speed for this move type"*rate. If no player is selected, modify your speed.\r\n\r\n #rate may range from 0.1 to 50.'),
+('modify speed backwalk', 1, 'Syntax: .modify speed backwalk #rate\r\n\r\nModify the speed of the selected player while running backwards to "normal walk back speed"*rate. If no player is selected, modify your speed.\r\n\r\n #rate may range from 0.1 to 50.'),
+('modify speed fly', 1, '.modify speed fly #rate\nModify the flying speed of the selected player to "normal flying speed"*rate. If no player is selected, modify your speed.\n #rate may range from 0.1 to 50.'),
+('modify speed swim', 1, 'Syntax: .modify speed swim #rate\r\n\r\nModify the swim speed of the selected player to "normal swim speed"*rate. If no player is selected, modify your speed.\r\n\r\n #rate may range from 0.1 to 50.'),
+('modify speed walk', 1, 'Syntax: .modify speed bwalk #rate\r\n\r\nModify the speed of the selected player while running to "normal walk speed"*rate. If no player is selected, modify your speed.\r\n\r\n #rate may range from 0.1 to 50.'),
+('modify talentpoints', 1, 'Syntax: .modify talentpoints #amount\r\n\r\nSet free talent points for selected character or character\'s pet. It will be reset to default expected at next levelup/login/quest reward.'),
+('morph', 2, 'Syntax: .morph #displayid\r\n\r\nChange your current model id to #displayid.'),
+('modify arenapoints', 1, 'Syntax: .modify arenapoints #value\r\nAdd $amount arena points to the selected player.');
+UPDATE `command` SET `help`='Syntax: .modify speed $speedtype #rate\r\n\r\nModify the running speed of the selected player to "normal base run speed"= 1. If no player is selected, modify your speed.\r\n\r\n$speedtypes may be fly, all, walk, backwalk, or swim.\r\n\r\n #rate may range from 0.1 to 50.' WHERE `name`='modify speed' LIMIT 1;
+
+-- Honor Among Thieves proc chance
+UPDATE `spell_proc_event` SET `CustomChance`=33 WHERE `entry`=51698; -- Rank 1
+UPDATE `spell_proc_event` SET `CustomChance`=66 WHERE `entry`=51700; -- Rank 2
+UPDATE `spell_proc_event` SET `CustomChance`=100 WHERE `entry`=51701; -- Rank 3
+
+UPDATE `warden_checks` SET `comment`='Swimming_FallCalc - movement state' WHERE `id`=15;
+UPDATE `warden_checks` SET `comment`='CreateMovementStatus' WHERE `id`=72;
+UPDATE `warden_checks` SET `comment`='OnStartSwim  OnSplineStartSwim - movement state' WHERE `id`=170;
+UPDATE `warden_checks` SET `comment`='DefaultServerLogin - account name' WHERE `id`=198;
+UPDATE `warden_checks` SET `comment`='Login Checksum - authentication process' WHERE `id`=320;
+UPDATE `warden_checks` SET `comment`='CalcFallStartElevation - (some kind of wall climb)' WHERE `id`=329;
+UPDATE `warden_checks` SET `comment`='Code injection at 0x40100A' WHERE `id`=381;
+UPDATE `warden_checks` SET `comment`='Login State - (May be false positive)' WHERE `id`=437;
+
+-- Earthen Power
+DELETE FROM `spell_script_names` WHERE `spell_id`=59566;
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(59566,'spell_sha_earthen_power');
+
+ -- Rogue T9 2P - Should proc only from Rupture ticks.
+DELETE FROM `spell_proc_event` WHERE `entry` IN(67209);
+INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `procFlags`) VALUES 
+(67209, 0x01, 8, 0x100000, 0x50000);
+
+-- Apply same loot template to below mentioned Bloodsail NPCs as that of Bloodsail Raider 1561
+-- (Mage 1562, Swashbuckler 1563, Warlock 1564, Sea Dog 1565)
+UPDATE `creature_template` SET `lootid`=1561 WHERE `entry` IN (1562,1563,1564,1565);
+-- Remove Loot from `creature_loot_template` for above mentioned NPCs because it contains only 2 items.
+-- Those 2 items, along with complete loot template for these mobs is applied in query above.
+DELETE FROM `creature_loot_template` WHERE `entry` IN (1562,1563,1564,1565);
+-- Remove loot and gold drop from Bloodsail Warlock's Minions
+UPDATE `creature_template` SET `lootid`=0, `mingold`=0 AND `maxgold`=0 WHERE `entry` IN (10928,12922);
+DELETE FROM `creature_loot_template` WHERE `entry` IN (10928,12922);
+
+DELETE FROM `spell_script_names` WHERE `spell_id` = 46485;
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(46485,'spell_item_greatmothers_soulcatcher');
+
+DELETE FROM `conditions` WHERE `SourceEntry` IN (46485,46488);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`SourceId`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionTarget`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,46485,0,1,31,1,3,26817,0,0,0,'',''),
+(13,1,46485,0,1,36,1,0,0,0,1,0,'',''),
+(13,1,46488,0,1,31,1,3,26817,0,0,0,'',''),
+(13,1,46488,0,1,36,1,0,0,0,1,0,'','');
+
+-- Gnome Soul SAI
+SET @ENTRY := 26096;
+SET @SPELL_ARCANE_EXPLOSION := 35426;
+UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=0;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES 
+(@ENTRY,0,0,1,54,0,100,0,0,0,0,0,33,@ENTRY,0,0,0,0,0,7,0,0,0,0,0,0,0,"Gnome Soul - On Just Summoned - Quest Credit"),
+(@ENTRY,0,1,2,61,0,100,0,0,0,0,0,45,1,1,0,0,0,0,19,25814,10,1,0,0,0,0,"Gnome Soul - On Just Summoned - Set Data Fizzcrank Mechagnome"),
+(@ENTRY,0,2,0,61,0,100,0,0,0,0,0,69,1,0,0,0,0,0,7,0,0,0,0,0,0,0,"Gnome Soul - On Just Summoned - Move to Summoner"),
+
+(@ENTRY,0,3,4,34,0,100,0,1,0,0,0,11,@SPELL_ARCANE_EXPLOSION,0,0,0,0,0,1,0,0,0,0,0,0,0,"Gnome Soul - Reached Summoner - Cast Arcane Explosion Visual"),
+(@ENTRY,0,4,0,61,0,100,0,0,0,0,0,41,1000,0,0,0,0,0,1,0,0,0,0,0,0,0,"Gnome Soul - Reached Summoner - Forced Despawn");
+
+-- Fizzcrank Mechagnome SAI
+SET @ENTRY := 25814;
+UPDATE creature_template SET AIName="SmartAI" WHERE entry=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=0;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES 
+(@ENTRY,0,0,0,4,0,100,0,0,0,0,0,1,1,10000,0,0,0,0,0,0,0,0,0,0,0,0,"Fizzcrank Mechagnome - Chance Say on Aggro"),
+(@ENTRY,1,0,0,38,0,100,0,1,1,0,0,41,0,0,0,0,0,0,1,0,0,0,0,0,0,0,"Fizzcrank Mechagnome - On Data Set - Forced Despawn");
+
+UPDATE `smart_scripts` SET `source_type`=0,`id`=1 WHERE `entryorguid`=24814 AND `source_type`=1 AND `event_type`=38;
+UPDATE `conditions` SET `SourceTypeOrReferenceId`=17 WHERE `SourceEntry` IN (46485,46488);
+UPDATE `conditions` SET `ElseGroup`=0 WHERE `SourceEntry` IN (46485,46488) AND `ConditionValue1`=26817;
+
+DELETE FROM `spell_script_names` WHERE `spell_id` = 33110;
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(33110,'spell_pri_prayer_of_mending_heal');
+
+DELETE FROM `spell_scripts` WHERE `id` IN (15998,25952,29435,45980,51592,51910,52267,54420);
+DELETE FROM `spell_script_names` WHERE `spell_id` IN (15998,25952,29435,45980,51592,51910,52267,54420);
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(15998, 'spell_gen_despawn_self'),
+(25952, 'spell_gen_despawn_self'),
+(29435, 'spell_gen_despawn_self'),
+(45980, 'spell_gen_despawn_self'),
+(51592, 'spell_gen_despawn_self'),
+(51910, 'spell_gen_despawn_self'),
+(52267, 'spell_gen_despawn_self'),
+(54420, 'spell_gen_despawn_self');
+
+DELETE FROM `spell_group` WHERE `id` IN (1117,1118);
+INSERT INTO `spell_group` (`id`,`spell_id`) VALUES
+(1117,25898),
+(1117,25899),
+(1118,20911),
+(1118,20217);
+
+DELETE FROM `spell_group_stack_rules` WHERE `group_id` in (1117,1118);
+INSERT INTO `spell_group_stack_rules` (`group_id`,`stack_rule`) VALUES
+(1117,3),
+(1118,3);
+
+UPDATE `conditions` SET `ElseGroup` = 0, `SourceGroup` = 0 WHERE `SourceEntry` IN (46485,46488);
+
+UPDATE `smart_scripts` SET `source_type` = 0, `id` = 1 WHERE `entryorguid` = 25814 AND `source_type` = 1 AND `id` = 0;
+
+DELETE FROM `creature_text` WHERE `entry`=37813 AND `groupid`=14;
+INSERT INTO `creature_text` (`entry`,`groupid`,`text`,`type`,`comment`) VALUES (37813,14,'%s''s Blood Beasts gain the scent of blood!',41,'Deathbringer Saurfang - EMOTE_SCENT_OF_BLOOD');
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=72771;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`Comment`) VALUES
+(13,3,72771,31,3,38508,'Deathbringer Saurfang - Scent of Blood on Blood Beast');
+
+-- The Descent into Madness
+-- References
+-- -------------------------------
+-- -- Variables and definitions --
+-- -------------------------------
+-- Set References
+SET @Vezax10Ref := 34373;
+SET @Vezax25Ref := @Vezax10Ref+1;
+SET @Yogg10Ref := @Vezax10Ref+2;
+SET @Yogg25Ref := @Vezax10Ref+3;
+SET @Chest := 12034;
+SET @Shoulder := 12035;
+SET @EmblemRef := 34349; 
+SET @Recipe := 34154;
+SET @Vezax10 := 33271;
+SET @Vezax25 := 33449;
+SET @Yogg10 := 33288;
+SET @Yogg25 := 33955;
+
+-- -------------------------
+-- -- Reference Templates --
+-- -------------------------
+-- Delete previous templates if existing
+DELETE FROM `reference_loot_template` WHERE `entry` IN (34131,34132,34133,34164,34165);
+DELETE FROM `reference_loot_template` WHERE `entry` IN (@Vezax10Ref,@Vezax25Ref,@Yogg10Ref,@Yogg25Ref,@Chest,@Shoulder);
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- Vezax 10 man
+(@Vezax10Ref,46014,0,1,1,1,1), -- Saronite Animus Cloak
+(@Vezax10Ref,46008,0,1,1,1,1), -- Choker of the Abyss
+(@Vezax10Ref,46010,0,1,1,1,1), -- Darkstone Ring
+(@Vezax10Ref,45996,0,1,1,1,1), -- Hoperender
+(@Vezax10Ref,46015,0,1,1,1,1), -- Pendant of Endless Despair
+(@Vezax10Ref,46013,0,1,1,1,1), -- Underworld Mantle
+(@Vezax10Ref,46012,0,1,1,1,1), -- Vestments of the Piercing Light
+(@Vezax10Ref,46009,0,1,1,1,1), -- Bindings of the Depths
+(@Vezax10Ref,45997,0,1,1,1,1), -- Gauntlets of the Wretched
+(@Vezax10Ref,46011,0,1,1,1,1), -- Shadowbite
+-- Vezax 25 man
+(@Vezax25Ref,45513,0,1,1,1,1), -- Boots of the Forgotten Dephts
+(@Vezax25Ref,45509,0,1,1,1,1), -- Idol of the Corruptor
+(@Vezax25Ref,45501,0,1,1,1,1), -- Boots of the Underdweller
+(@Vezax25Ref,45512,0,1,1,1,1), -- Grips of the Unbroken
+(@Vezax25Ref,45503,0,1,1,1,1), -- Metallic Loop of the Sufferer
+(@Vezax25Ref,45505,0,1,1,1,1), -- Belt of Clinging Hope
+(@Vezax25Ref,45502,0,1,1,1,1), -- Helm of the Faceless
+(@Vezax25Ref,45145,0,1,1,1,1), -- Libram of the Sacred Shield
+(@Vezax25Ref,45508,0,1,1,1,1), -- Belt of the Darkspeaker
+(@Vezax25Ref,45504,0,1,1,1,1), -- Darkcore Leggings
+(@Vezax25Ref,45514,0,1,1,1,1), -- Mantle of the Unknowing
+(@Vezax25Ref,45515,0,1,1,1,1), -- Ring of the Vacant Eye
+(@Vezax25Ref,45507,0,1,1,1,1), -- The General's Heart
+-- Yogg 10 man
+(@Yogg10Ref,46016,0,1,1,1,1), -- Abaddon
+(@Yogg10Ref,46018,0,1,1,1,1), -- Deliverance
+(@Yogg10Ref,46019,0,1,1,1,1), -- Leggings of the Insatiable
+(@Yogg10Ref,46021,0,1,1,1,1), -- Royal Seal of King Llane
+(@Yogg10Ref,46022,0,1,1,1,1), -- Pendant of a Thousand Maws
+(@Yogg10Ref,46024,0,1,1,1,1), -- Kingsbane
+(@Yogg10Ref,46025,0,1,1,1,1), -- Devotion
+(@Yogg10Ref,46028,0,1,1,1,1), -- Faceguard of the Eyeless Horror
+(@Yogg10Ref,46030,0,1,1,1,1), -- Threads of the Dragon Council
+(@Yogg10Ref,46031,0,1,1,1,1), -- Touch of Madness
+-- Yogg 25 man
+(@Yogg25Ref,45521,0,1,1,1,1), -- Earthshaper
+(@Yogg25Ref,45522,0,1,1,1,1), -- Blood of the Old God
+(@Yogg25Ref,45523,0,1,1,1,1), -- Garona's Guise
+(@Yogg25Ref,45524,0,1,1,1,1), -- Chestguard of Insidious Intent
+(@Yogg25Ref,45525,0,1,1,1,1), -- Godbane Signet
+(@Yogg25Ref,45527,0,1,1,1,1), -- Soulscribe
+(@Yogg25Ref,45529,0,1,1,1,1), -- Shawl of Haunted Memories
+(@Yogg25Ref,45530,0,1,1,1,1), -- Sanity's Bond
+(@Yogg25Ref,45531,0,1,1,1,1), -- Chestguard of the Fallen God
+(@Yogg25Ref,45532,0,1,1,1,1), -- Cowl of Dark Whispers
+-- Chest for Yogg
+(@Chest,45635,0,1,1,1,1), -- Chestguard of the Wayward Conqueror
+(@Chest,45636,0,1,1,1,1), -- Chestguard of the Wayward Protector
+(@Chest,45637,0,1,1,1,1), -- Chestguard of the Wayward Vanquisher
+(@Shoulder,45656,0,1,1,1,1), -- Mantle of the Wayward Conqueror
+(@Shoulder,45657,0,1,1,1,1), -- Mantle of the Wayward Protector
+(@Shoulder,45658,0,1,1,1,1); -- Mantle of the Wayward Vanquisher
+
+DELETE FROM `creature_loot_template` WHERE `entry` IN(@Vezax10,@Vezax25,@Yogg10,@Yogg25);
+INSERT INTO `creature_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- ----------------------------------------------------------
+-- General Vezax
+-- ----------------------------------------------------------
+-- 10 man mode
+(@Vezax10,1,100,3,0,-@Vezax10Ref,2), -- 2x Normal Loot Item
+(@Vezax10,47241,100,3,0,1,1), -- 1x Emblem of Triumph
+-- hardmode loot 10
+(@Vezax10,46032,0,2,1,1,1), -- Drape of the Faceless General
+(@Vezax10,46034,0,2,1,1,1), -- Leggings of Profound Darkness
+(@Vezax10,46033,0,2,1,1,1), -- Tortured Earth
+(@Vezax10,46035,0,2,1,1,1), -- Aesuga, Hand of the Ardent Champion
+(@Vezax10,46036,0,2,1,1,1), -- Void Sabre
+-- 25 man mode
+(@Vezax25,1,100,3,0,-@Vezax25Ref,3), -- 3x Normal Loot Item
+(@Vezax25,47241,100,3,0,1,1), -- 1x Emblem of Triumph
+(@Vezax25,2,10,1,0,-@Recipe,1), -- Chance on Recipe
+(@Vezax25,3,10,1,0,-34350,1), -- Chance on Runed Orb
+-- hardmode loot 25
+(@Vezax25,45498,0,2,1,1,1), -- Lotrafen, Spear of the Damned
+(@Vezax25,45511,0,2,1,1,1), -- Scepter of Lost Souls
+(@Vezax25,45516,0,2,1,1,1), -- Voldrethar, Dark Blade of Oblivion
+(@Vezax25,45517,0,2,1,1,1), -- Pendulum of Infinity
+(@Vezax25,45519,0,2,1,1,1), -- Vestments of the Blind Denizen
+(@Vezax25,45518,0,2,1,1,1), -- Flare of the Heavens
+(@Vezax25,45520,0,2,1,1,1), -- Handwraps of the Vigilant
+-- ----------------------------------------------------------
+-- Yogg Saron
+-- ----------------------------------------------------------
+-- 10 man 
+-- All modes
+(@Yogg10,1,100,31,0,-@Yogg10Ref,1), -- 1x Normal Loot item for modes 0&1&2&3&4
+(@Yogg10,2,100,31,0,-@Chest,1), -- 1x Tier token for modes 0&1&2&3&4
+(@Yogg10,47241,100,31,0,1,1), -- 1x Emblem of Triumph for modes 0&1&2&3&4
+-- Extra for <3 watchers
+(@Yogg10,3,100,30,0,-@EmblemRef,1), -- additional Emblem for modes2&3 
+-- Extra for <2 watchers
+(@Yogg10,4,100,28,0,-34350,1), -- Runed Orb for 0&1&2
+(@Yogg10,5,10,28,0,-@Recipe,1), -- Chance on Recipe for 0&1&2
+-- Extra for <1 watchers
+(@Yogg10,6,100,24,0,-@EmblemRef,1), -- additional Emblem for 0&1 
+(@Yogg10,7,100,24,0,-@Recipe,1), -- Garanteed Recipe for 0&1
+-- Hardmode 10 loot
+(@Yogg10,46067,0,24,1,1,1), -- Hammer of Crushing Whispers
+(@Yogg10,46068,0,24,1,1,1), -- Amice of Inconceivable Horror
+(@Yogg10,46095,0,24,1,1,1), -- Soul-Devouring Cinch
+(@Yogg10,46096,0,24,1,1,1), -- Signet of Soft Lament
+(@Yogg10,46097,0,24,1,1,1), -- Caress of Insanity
+-- Extra for 0 watchers
+(@Yogg10,46312,100,16,0,1,1), -- Vanquished Clutches of Yogg-Saron
+-- 25 man mode
+-- All modes
+(@Yogg25,1,100,31,0,-@Yogg25Ref,2), -- 2x Normal Loot item for modes 0&1&2&3&4
+(@Yogg25,2,100,31,0,-@Shoulder,2), -- 2x Tier token for modes 0&1&2&3&4
+(@Yogg25,47241,100,31,0,1,1), -- 1x Emblem of Triumph for modes 0&1&2&3&4
+(@Yogg25,3,10,31,0,-34350,1), -- Chance on Runed Orb for modes 0&1&2&3&4
+(@Yogg25,4,10,31,0,-@Recipe,1), -- Chance on Recipe for 0&1&2&3&4
+(@Yogg25,45897,100,31,0,1,1), -- Fragment of Val'anyr
+-- Extra for <3 watchers
+(@Yogg25,5,100,30,0,-@EmblemRef,1), -- additional Emblem for modes2&3
+-- Extra for <2 watchers
+(@Yogg25,6,100,28,0,-34350,1), -- Runed Orb for 0&1&2
+-- Extra for <1 watchers
+(@Yogg25,7,100,24,0,-@EmblemRef,1), -- additional Emblem for 0&1 
+(@Yogg25,8,100,24,0,-@Recipe,1), -- Garanteed Recipe for 0&1
+-- Hardmode 25 loot
+(@Yogg25,45533,0,24,1,1,1), -- Dark Edge of Depravity
+(@Yogg25,45534,0,24,1,1,1), -- Seal of the Betrayed King
+(@Yogg25,45535,0,24,1,1,1), -- Show of Faith
+(@Yogg25,45536,0,24,1,1,1), -- Legguards of Cunning Deception
+(@Yogg25,45537,0,24,1,1,1), -- Threads of the False Oracle
+-- Extra for 0 watchers
+(@Yogg25,45693,100,16,0,1,1); -- Mimiron's Head
+
+-- Cleanups
+DELETE FROM `conditions` WHERE `SourceEntry`=45897 AND `SourceGroup`=33955;
+
+SET @Triumph :=47241;
+-- Cleanup some unneeded references
+DELETE FROM `reference_loot_template` WHERE `entry` IN (34167,34168,34169);
+UPDATE `creature_loot_template` SET `mincountOrRef`=-34349 WHERE `mincountOrRef` IN (-34167,-34168,-34169);
+-- Fix this weird defined reference for ulduar
+UPDATE `reference_loot_template` SET `ChanceOrQuestChance`=100,`groupid`=0 WHERE `entry`=34349;
+-- Remove Emblem of Triumph from reference_loot
+DELETE FROM `reference_loot_template` WHERE `item`=@Triumph AND `entry`IN (12025,35034,35040,35049);
+-- Actual Emblem on creature as it should be
+DELETE FROM `creature_loot_template` WHERE `entry` IN (30397,30398,31365,31367,31656,31679) AND `item`=@Triumph;
+INSERT INTO `creature_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(30397,@Triumph,100,1,0,1,1), -- Commander Kolurg (1)
+(30398,@Triumph,100,1,0,1,1), -- Commander Stoutbeard (1)
+(31365,@Triumph,100,1,0,1,1), -- Drakkari Colossus (1)
+(31367,@Triumph,100,1,0,1,1), -- Drakkari Elemental (1)
+(31656,@Triumph,100,1,0,1,1), -- Dalronn the Controller (1)
+(31679,@Triumph,100,1,0,1,1); -- Skarvald the Constructor (1)
+-- Similar action for gameobjects
+DELETE FROM `gameobject_loot_template` WHERE `entry` IN (27416,27417) AND `item`=@Triumph;
+INSERT INTO `gameobject_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(27417,@Triumph,100,1,0,1,1), -- Confessor's Cache
+(27416,@Triumph,100,1,0,1,1); -- Eadric's Cache
