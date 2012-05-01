@@ -1,3 +1,7 @@
+-- 고유가방 드랍X
+DELETE FROM `creature_loot_template` WHERE `entry` IN (50317,50316,49295);
+DELETE FROM `reference_loot_template` WHERE `entry` IN (50317,50316,49295);
+
 -- 쿨다운 없는 장신구 내부 쿨다운 구현
 UPDATE `spell_proc_event` SET `Cooldown`='55' WHERE `entry`='33648'; -- 진실의 거울
 DELETE FROM `spell_proc_event` WHERE `entry` IN (33953,60063,63251,67712); -- 필멸의 정수 알, 추방자의 해시계, 창기사의 격노, 생통 상/하급

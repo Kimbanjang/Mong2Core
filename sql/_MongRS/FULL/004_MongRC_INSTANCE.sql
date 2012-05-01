@@ -260,6 +260,14 @@ UPDATE `creature_loot_template` SET `maxcount`=3 WHERE `entry`=35352 AND `item`=
 UPDATE `creature_loot_template` SET `maxcount`=3 WHERE `entry`=35616 AND `item`=1;
 UPDATE `creature_loot_template` SET `maxcount`=3 WHERE `entry`=35616 AND `item`=2;
 
+-- 아눕아락 서리문장 드랍
+DELETE FROM `reference_loot_template` WHERE `entry`=34564 AND `item`=47241;
+DELETE FROM `reference_loot_template` WHERE `entry`=34566 AND `item`=47241; 
+DELETE FROM `reference_loot_template` WHERE `entry`=35615 AND `item`=47241; 
+DELETE FROM `reference_loot_template` WHERE `entry`=35616 AND `item`=47241;
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
+(34564,49426,30,1,0,5,10),(34566,49426,60,1,0,5,10),(35615,49426,60,1,0,5,10),(35616,49426,90,1,0,5,10);
+
 
 ##### 얼왕성채 #####
 -- 얼왕성채 버프 삭제
