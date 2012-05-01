@@ -1019,9 +1019,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 	std::string m_name;  
     
 	if(pCurrChar->GetTeamId() == TEAM_ALLIANCE)
-        m_name = "ALLIANCE";
+        m_name = "MONG2";
     else
-        m_name = "HORDE";
+        m_name = "MONG2";
         
     WorldPacket CHANNEL_NOTIFY_DATA;
     CHANNEL_NOTIFY_DATA.Initialize(SMSG_CHANNEL_NOTIFY, 1+m_name.size()+1);
