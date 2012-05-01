@@ -44,6 +44,175 @@ UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` 
 -- The Forge of Souls (36497 - Bronjahm, 36498 - Bronjahm (1), 36502 - Devourer of Souls, 37677 - Devourer of Souls (1))
 36497,36498,36502,37677);
 
+/* Boss - Lord Marrowgar */
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='36612');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='37957');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='37958');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='37959');
+ 
+/* Boss - Lady Deathwhisper */
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='36855');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='38106');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='38296');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='38297');
+ 
+/* Boss - Deathbringer Saurfang */
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38583');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='37813');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38402');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38582');
+ 
+/* Boss - Festergut */
+/* ALL IS OK */
+ 
+/* Boss - Rotface */
+/* ALL IS OK */
+ 
+/* Boss - Professor Putricide */
+/* ALL IS OK */
+ 
+/* Boss - Prince Valanar */
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='37970');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38401');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38784');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38785');
+ 
+/* Boss - Prince Keleseth */
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='37972');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38399');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38769');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38770');
+ 
+/* Boss - Prince Taldaram */
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='37973');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38400');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38771');
+UPDATE `creature_template` SET `mechanic_immune_mask`='650854399' WHERE (`entry`='38772');
+ 
+/* Boss - Blood-Queen Lana'thel */
+UPDATE `creature_template` SET `mechanic_immune_mask`='801849343' WHERE (`entry`='37955');
+UPDATE `creature_template` SET `mechanic_immune_mask`='801849343' WHERE (`entry`='38434');
+UPDATE `creature_template` SET `mechanic_immune_mask`='801849343' WHERE (`entry`='38435');
+UPDATE `creature_template` SET `mechanic_immune_mask`='801849343' WHERE (`entry`='38436');
+ 
+/* Boss - Sindragosa */
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='36853');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='38265');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='38266');
+UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='38267');
+
+-- Volatile Ooze and Gas Cloud
+UPDATE creature_template SET mechanic_immune_mask='650854399' WHERE entry IN (37697, 38758, 38759, 38604, 37562, 38760, 38761, 38602);
+-- Little and Big Ooze
+UPDATE creature_template SET mechanic_immune_mask='650853375' WHERE entry IN (36899, 38123, 36897, 38138);
+-- Little Ooze taunt
+UPDATE creature_template SET flags_extra='256' WHERE entry IN (36897, 38138);
+
+
+-- Fixing the immunity masks in Dungeons and Heroics.
+UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask`|4|8|16|64|128|256|512|1024|4096|65536|131072|524288|67108864|536870912 WHERE `entry` IN (
+-- Halls of stone:
+27975,-- Maiden of Grief
+31384,-- Maiden of Grief (1)
+27977,-- Krystallus
+31381,-- Krysyallus (1)
+27978,-- Sjonnir the Ironshaper
+31386,-- Sjonnir the Ironshaper (1)
+-- Halls of Lightning:
+28586,-- General Bjarngrim
+31533,-- General Bjarngrim (1)
+28587,-- Volkhan
+31536,-- Volkhan (1)
+28546,-- Ionar
+31537,-- Ionar (1)
+28923,-- Loken
+31538,-- Loken (1)
+-- The Nexus:
+26731,-- Grand Magus Telestra
+26930,-- Grand Magus Telestra (Blue - Frost)
+26929,-- Grand Magus Telestra (Purple)
+26928,-- Grand Magus Telestra (Red - Fire)
+30510,-- Grand Magus Telestra (1)
+30513,-- Grand Magus Telestra (Blue - Frost (1))
+30512,-- Grand Magus Telestra (Purple (1))
+30511,-- Grand Magus Telestra (Red - Fire (1))
+26763,-- Anomalus
+30529,-- Anomalus (1)
+26974,-- Ormorok the Tree-Shaper
+26723,-- Keristrasza
+30540,-- Keristrasza (1)
+26796,-- Commander Stoutbeard
+30398,-- Commander Stoutbeard (1)
+26798,-- Commander Kolurg
+30397,-- Commander Kolurg (1)
+-- The Oculus:
+27654,-- Drakos the Interrogator
+31558,-- Drakos the Interrogator (1)
+27447,-- Varos Cloudstrider
+31559,-- Varos Cloudstrider (1)
+27655,-- Mage-Lord Urom
+31560,-- Mage-Lord Urom (1)
+27656,-- Ley-Guardian Eregos
+31561,-- Ley-Guardian Eregos (1)
+-- Azjol-Nerub:
+28684,-- Krik'thir the Gatewatcher
+31612,-- Krik'thir the Gatewatcher (1)
+28921,-- Hadronox
+31611,-- Hadronox (1)
+29120,-- Anub'arak
+31610,-- Anub'arak (1)
+-- Ahn'kahet: The Old Kingdom:
+29309,-- Elder Nadox
+31456,-- Elder Nadox (1)
+29308,-- Prince Taldaram
+31469,-- Prince Taldaram (1)
+29310,-- Jedoga Shadowseeker
+31465,-- Jedoga Shadowseeker (1)
+29311,-- Herald Volazj
+31464,-- Herald Volazj (1)
+30258,-- Amanitar
+31463,-- Amanitar (1)
+-- Utgarde Pinnacle:
+26668,-- Svala Sorrowgrave
+31810,-- Svala Sorrowgrave (1)
+26687,-- Gortok Palehoof
+30774,-- Gortok Palehoof (1)
+26693,-- Skadi the Ruthless
+30807,-- Skadi the Ruthless (1)
+26861,-- King Ymiron
+30788,-- King Ymiron (1)
+-- Gundrak:
+29304,-- Slad'ran
+31370,-- Slad'ran (1)
+29305,-- Moorabi
+30530,-- Moorabi (1)
+29307,-- Drakkari Colossus
+31365,-- Drakkari Colossus (1)
+29537,-- Drakkari Elemental
+29306,-- Gal'darah
+31368,-- Gal'darah (1)
+29932,-- Eck the Ferocious
+-- Halls of Reflection:
+38112,-- Falric
+38599,-- Falric (1)
+38113,-- Marwyn
+38603,-- Marwyn (1)
+37226,-- Wrath of the Lich King
+-- Pit of Saron:
+36494,-- Forgemaster Garfrost
+37613,-- Forgemaster Garfrost (1) 
+36476,-- Ick
+37627,-- Ick (1)
+36477,-- Krick
+37629,-- Krick (1)
+36658,-- Scourgelord Tyrannus
+36938,-- Scourgelord Tyrannus (1)
+-- The Forge of Souls:
+36497,-- Bronjahm
+36498,-- Bronjahm (1)
+36502,-- Devourer of Souls
+37677);-- Devourer of Souls (1)
+
 
 ################################
 ########## [비레이드] ##########
