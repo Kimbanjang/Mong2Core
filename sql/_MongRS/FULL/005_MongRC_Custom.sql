@@ -77,17 +77,23 @@ DELETE FROM `reference_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302
 DELETE FROM `creature_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
 */
 
--- 토라본 10/25 드랍테이블 : 코랄론과 동일
-DELETE FROM `creature_loot_template` WHERE `entry`=38433;
+-- 코랄론25 드랍테이블 변경 (냉혹X - 신규 드랍테이블 추가)
+DELETE FROM `creature_loot_template` WHERE `entry`=35360;
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
-(38433, 1, 100, 1, 0, -34212, 1),
-(38433, 2, 100, 1, 0, -34204, 1),
-(38433, 3, 1, 1, 0, -34203, 1),
-(38433, 47241, 100, 1, 0, 2, 2);
+(35360,1,100,1,0,-34205,2),
+(35360,2,80,1,0,-90001,1),
+(35360,3,80,1,0,-90002,1),
+(35360,4,1,1,0,-34203,1),
+(35360,47241,100,1,0,2,2);
 
-DELETE FROM `creature_loot_template` WHERE `entry`=38462;
+-- 토라본 10/25 드랍테이블 : 코랄론과 동일
+DELETE FROM `creature_loot_template` WHERE `entry` IN (38433,38462);
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
-(38462,1,100,1,0,-34205,2),
+(38433,1,100,1,0,-34212,1), -- 토라본 10
+(38433,2,100,1,0,-34204,1),
+(38433,3,1,1,0,-34203,1),
+(38433,47241,100,1,0,2,2),
+(38462,1,100,1,0,-34205,2), -- 토라본 25
 (38462,2,80,1,0,-90001,1),
 (38462,3,80,1,0,-90002,1),
 (38462,4,1,1,0,-34203,1),
@@ -105,6 +111,7 @@ INSERT INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 INSERT INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES
 (90005,11026,0,1,1,1,1),(90005,11027,0,1,1,1,1),(90005,48126,0,1,1,1,1),(90005,48118,0,1,1,1,1),(90005,48112,0,1,1,1,1),(90005,48124,0,1,1,1,1),(90005,48122,0,1,1,1,1),(90005,48114,0,1,1,1,1),(90005,48116,0,1,1,1,1),(90005,33993,0,1,1,1,1),(90005,31760,0,1,1,1,1),(90005,11110,0,1,1,1,1),(90005,12264,0,1,1,1,1),(90005,12529,0,1,1,1,1),(90005,27445,0,1,1,1,1),(90005,43698,0,1,1,1,1),(90005,44983,0,1,1,1,1),(90005,33816,0,1,1,1,1),(90005,35350,0,1,1,1,1),(90005,35349,0,1,1,1,1),(90005,33818,0,1,1,1,1),(90005,33976,0,1,1,1,1),(90005,21218,0,1,1,1,1),(90005,21323,0,1,1,1,1),(90005,21324,0,1,1,1,1),(90005,43962,0,1,1,1,1),(90005,43951,0,1,1,1,1),(90005,33977,0,1,1,1,1),(90005,33809,0,1,1,1,1),(90005,21321,0,1,1,1,1),(90005,37012,0,1,1,1,1),(90005,46109,0,1,1,1,1),(90005,49283,0,1,1,1,1),(90005,49285,0,1,1,1,1);
 
+/*
 -- 냉혹무기들 추가드랍
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 -- 3넴 흑기사 일반 (+격노 룻테이블)
@@ -116,10 +123,23 @@ INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 (27985,2,4,1,0,-90003,2),(27985,3,3,1,0,-90004,1),
 -- 투영 상자 하드
 (27993,2,6,1,0,-90004,1);
+*/
 
 -- 팻/탈것 추가드랍
+/*
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (35451,5,2.5,1,0,-90005,1);
 INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 -- 투영 상자 일반
 (27985,4,2.5,1,0,-90005,1);
+*/
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
+(36658,2,2,1,0,-90005,1),(36938,2,2,1,0,-90005,1),(36502,2,4,1,0,-90005,1),(37677,2,4,1,0,-90005,1);
+
+-- 영제/샤론/투영 토큰 (23961,23964,23967)
+INSERT INTO `item_template` (`entry`, `class`, `subclass`, `unk0`, `name`, `displayid`, `Quality`, `Flags`, `FlagsExtra`, `BuyCount`, `BuyPrice`, `SellPrice`, `InventoryType`, `AllowableClass`, `AllowableRace`, `ItemLevel`, `RequiredLevel`, `RequiredSkill`, `RequiredSkillRank`, `requiredspell`, `requiredhonorrank`, `RequiredCityRank`, `RequiredReputationFaction`, `RequiredReputationRank`, `maxcount`, `stackable`, `ContainerSlots`, `StatsCount`, `stat_type1`, `stat_value1`, `stat_type2`, `stat_value2`, `stat_type3`, `stat_value3`, `stat_type4`, `stat_value4`, `stat_type5`, `stat_value5`, `stat_type6`, `stat_value6`, `stat_type7`, `stat_value7`, `stat_type8`, `stat_value8`, `stat_type9`, `stat_value9`, `stat_type10`, `stat_value10`, `ScalingStatDistribution`, `ScalingStatValue`, `dmg_min1`, `dmg_max1`, `dmg_type1`, `dmg_min2`, `dmg_max2`, `dmg_type2`, `armor`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `delay`, `ammo_type`, `RangedModRange`, `spellid_1`, `spelltrigger_1`, `spellcharges_1`, `spellppmRate_1`, `spellcooldown_1`, `spellcategory_1`, `spellcategorycooldown_1`, `spellid_2`, `spelltrigger_2`, `spellcharges_2`, `spellppmRate_2`, `spellcooldown_2`, `spellcategory_2`, `spellcategorycooldown_2`, `spellid_3`, `spelltrigger_3`, `spellcharges_3`, `spellppmRate_3`, `spellcooldown_3`, `spellcategory_3`, `spellcategorycooldown_3`, `spellid_4`, `spelltrigger_4`, `spellcharges_4`, `spellppmRate_4`, `spellcooldown_4`, `spellcategory_4`, `spellcategorycooldown_4`, `spellid_5`, `spelltrigger_5`, `spellcharges_5`, `spellppmRate_5`, `spellcooldown_5`, `spellcategory_5`, `spellcategorycooldown_5`, `bonding`, `description`, `PageText`, `LanguageID`, `PageMaterial`, `startquest`, `lockid`, `Material`, `sheath`, `RandomProperty`, `RandomSuffix`, `block`, `itemset`, `MaxDurability`, `area`, `Map`, `BagFamily`, `TotemCategory`, `socketColor_1`, `socketContent_1`, `socketColor_2`, `socketContent_2`, `socketColor_3`, `socketContent_3`, `socketBonus`, `GemProperties`, `RequiredDisenchantSkill`, `ArmorDamageModifier`, `Duration`, `ItemLimitCategory`, `HolidayId`, `ScriptName`, `DisenchantID`, `FoodType`, `minMoneyLoot`, `maxMoneyLoot`, `WDBVerified`) VALUES
+('23961', '0', '0', '-1', '우상:영혼의 제련소', '7088', '5', '0', '0', '1', '0', '0', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1000', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '영혼의 제련소에서 드물게 발견되는 우상', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '', '0', '0', '0', '0', '0'),
+('23964', '0', '0', '-1', '우상:샤론의 구덩이', '7088', '5', '0', '0', '1', '0', '0', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1000', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '샤론의 구덩이에서 드물게 발견되는 우상', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '', '0', '0', '0', '0', '0'),
+('23967', '0', '0', '-1', '우상:투영의 전당', '7088', '5', '0', '0', '1', '0', '0', '0', '-1', '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1000', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '1', '투영의 전당에서 드물게 발견되는 우상', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '0', '0', '0', '', '0', '0', '0', '0', '0');
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
+(36658,23961,5,1,0,1,1),(36938,23961,5,1,0,1,1),(36502,23964,50,1,0,1,1),(37677,23964,50,1,0,1,1);

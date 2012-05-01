@@ -11,39 +11,8 @@ UPDATE `creature_template` SET `mechanic_immune_mask`='617299967' WHERE `entry` 
 UPDATE `creature_template` SET `mechanic_immune_mask`='617299967' WHERE `entry` IN (34497,35350,35351,35352); -- 십자군 라이트베인
 UPDATE `creature_template` SET `mechanic_immune_mask`='617299967' WHERE `entry` IN (34780,35216,35268,35269); -- 십자군 자락서스
 -- 매즈가 가능한 보스
--- TBC 보스
-UPDATE `creature_template` SET `flags_extra` = 0 WHERE `entry` IN (19893,19895,19894,20267,20268,20266,18436,18433,18434,20690,20706,23035,20738,20568,20597,21551,21558,21581,21559,25562,25573,25560,24857,18621,18601,18607,20169,20168,20183,20184,20636,20637,20653,20657,20629,20630,20633,21533,21536,21537,21626,21590,21624,21601,20318,20306);
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967, `flags_extra` = 0 WHERE `entry` IN (20738, 20737,20993,21582);
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967, `flags_extra` = 256 WHERE `entry` IN (20745,20596);
--- The Nexus
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (30510, 30529, 30532, 30540, 30398, 30397);
--- Utgarde Keep
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (30748, 31679, 31656, 31673, 31674);
--- Utgarde Pinnacle
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (30810, 30774, 30807, 30788);
--- Stratholme Past
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31211, 31212, 31215, 31217);
--- Halls of Stone
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31384, 31381, 31386);
--- Halls of Lightning
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31533, 31536, 31537, 31538);
--- Drak'Tharon Keep
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31362, 31350, 31349, 31360);
--- Gundrak
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31370, 31365, 30530, 31368, 29932);
--- Azjol-Nerub
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31612, 31611, 31610);
--- The Violet Hold
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (31507, 31510, 31508, 31511, 31509, 31512, 31506);
--- Update Frozen Halls Immunities
-UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967 WHERE `entry` IN (
--- Halls of Reflection (38112 - Falric, 38599 - Falric (1), 38113 - Marwyn, 38603 - Marwyn (1), 37226 - Wrath of the Lich King)
-38112,38599,38113,38603,37226,
--- Pit of Saron (36494 - Forgemaster Garfrost, 37613 - Forgemaster Garfrost (1) ,36476 - Ick ,37627 - Ick (1) ,36477 - Krick ,37629 - Krick (1) ,36658 - Scourgelord Tyrannus ,36938 - Scourgelord Tyrannus (1))
-36494,37613,36476,37627,36477,37629,36658,36938,
--- The Forge of Souls (36497 - Bronjahm, 36498 - Bronjahm (1), 36502 - Devourer of Souls, 37677 - Devourer of Souls (1))
-36497,36498,36502,37677);
 
+-- 얼왕 보스
 /* Boss - Lord Marrowgar */
 UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='36612');
 UPDATE `creature_template` SET `mechanic_immune_mask`='667893759' WHERE (`entry`='37957');
@@ -108,7 +77,7 @@ UPDATE creature_template SET mechanic_immune_mask='650853375' WHERE entry IN (36
 -- Little Ooze taunt
 UPDATE creature_template SET flags_extra='256' WHERE entry IN (36897, 38138);
 
-
+-- 리분 5인 던젼
 -- Fixing the immunity masks in Dungeons and Heroics.
 UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask`|4|8|16|64|128|256|512|1024|4096|65536|131072|524288|67108864|536870912 WHERE `entry` IN (
 -- Halls of stone:
@@ -212,6 +181,11 @@ UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask`|4|8
 36498,-- Bronjahm (1)
 36502,-- Devourer of Souls
 37677);-- Devourer of Souls (1)
+
+-- TBC 보스
+UPDATE `creature_template` SET `flags_extra` = 0 WHERE `entry` IN (19893,19895,19894,20267,20268,20266,18436,18433,18434,20690,20706,23035,20738,20568,20597,21551,21558,21581,21559,25562,25573,25560,24857,18621,18601,18607,20169,20168,20183,20184,20636,20637,20653,20657,20629,20630,20633,21533,21536,21537,21626,21590,21624,21601,20318,20306);
+UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967, `flags_extra` = 0 WHERE `entry` IN (20738, 20737,20993,21582);
+UPDATE `creature_template` SET `mechanic_immune_mask` = 617299967, `flags_extra` = 256 WHERE `entry` IN (20745,20596);
 
 
 ################################
