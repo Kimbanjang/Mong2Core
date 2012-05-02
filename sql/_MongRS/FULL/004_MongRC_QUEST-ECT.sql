@@ -103,6 +103,58 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (19,0,25248,0,0,2,52570,1,0,0,0,0,'A Change of Heart'),
 (19,0,25249,0,0,2,52571,1,0,0,0,0,'A Change of Heart');
 
+/*
+-- 아웃랜드 첫 와이본/그리폰 작동안함 수정
+-- Vlagga Freyfeather NPC(18930)
+SET @NPC=18930;
+SET @GOSSIP=7938;
+DELETE FROM  `gossip_menu_option` WHERE  `menu_id` =@GOSSIP;
+INSERT INTO `gossip_menu_option` (`menu_id`,`id`,`option_icon`,`option_text`,`option_id`,`npc_option_npcflag`,`action_menu_id`,`action_poi_id`,`box_coded`,`box_money`,`box_text`) VALUES
+(@GOSSIP,0,2,'Show me where I can fly.',4,8192,0,0,0,0,''),
+(@GOSSIP,1,2,'Send me to Thrallmar!',4,8192,0,0,0,0,'');
+
+DELETE FROM `creature_ai_scripts` WHERE `creature_id` =@NPC;
+UPDATE `creature_template` SET `AIName`= 'SmartAI' WHERE  `entry` =@NPC;
+DELETE FROM  `smart_scripts` WHERE  `entryorguid` =@NPC;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@NPC,0,0,0,62,0,100,0,@GOSSIP,1,0,0,11,34924,2,0,0,0,0,7,0,0,0,0,0,0,0,'Vlagga Freyfeather - On gossip option 1 select - Cast Stair of Destiny to Thrallmar'),
+(@NPC,0,1,0,4,0,100,0,0,0,0,0,12,9297,4,30000,0,0,0,1,0,0,0,0,0,0,0,'Vlagga Freyfeather - Summon Enraged Wyverns on Aggro'),
+(@NPC,0,2,0,4,0,100,0,0,0,0,0,12,9297,4,30000,0,0,0,1,0,0,0,0,0,0,0,'Vlagga Freyfeather - Summon Enraged Wyverns on Aggro'),
+(@NPC,0,3,0,4,0,100,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Vlagga Freyfeather - Say text on Aggro');
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=@GOSSIP;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(15,@GOSSIP,0,0,0, 8,0,10289,0,0,0,0,'','Show gossip option 0 if player has rewarded quest 10289 "Journey to Thrallmar"'),
+(15,@GOSSIP,1,0,0,28,0,10289,0,0,0,0,'','Show gossip option 1 if player has complete quest 10289 "Journey to Thrallmar"');
+
+-- Amish Wildhammer NPC(18931)
+SET @NPC=18931;
+SET @GOSSIP=7939;
+DELETE FROM  `gossip_menu` WHERE  `entry` =@GOSSIP;
+DELETE FROM  `npc_text` WHERE  `ID` IN (9935,9991);
+INSERT INTO `gossip_menu` (`entry`,`text_id`) VALUES
+(@GOSSIP,10052);
+
+DELETE FROM  `gossip_menu_option` WHERE  `menu_id` =@GOSSIP;
+INSERT INTO `gossip_menu_option` (`menu_id`,`id`,`option_icon`,`option_text`,`option_id`,`npc_option_npcflag`,`action_menu_id`,`action_poi_id`,`box_coded`,`box_money`,`box_text`) VALUES
+(@GOSSIP,0,2,'Show me where I can fly.',4,8192,0,0,0,0,''),
+(@GOSSIP,1,2,'Send me to Honor Hold!',4,8192,0,0,0,0,'');
+
+DELETE FROM `creature_ai_scripts` WHERE `creature_id` =@NPC;
+UPDATE `creature_template` SET `AIName`= 'SmartAI' WHERE  `entry` =@NPC;
+DELETE FROM  `smart_scripts` WHERE  `entryorguid` =@NPC;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@NPC,0,0,0,62,0,100,0,@GOSSIP,1,0,0,11,34907,2,0,0,0,0,7,0,0,0,0,0,0,0,'Amish Wildhammer - On gossip option 1 select - Cast Stair of Destiny to Honor Hold'),
+(@NPC,0,1,0,4,0,100,0,0,0,0,0,12,9526,4,30000,0,0,0,1,0,0,0,0,0,0,0,'Amish Wildhammer - Summon Enraged Gryphon on Aggro'),
+(@NPC,0,2,0,4,0,100,0,0,0,0,0,12,9526,4,30000,0,0,0,1,0,0,0,0,0,0,0,'Amish Wildhammer - Summon Enraged Gryphon on Aggro'),
+(@NPC,0,3,0,4,0,100,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Amish Wildhammer - Say text on Aggro');
+
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=@GOSSIP;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(15,@GOSSIP,0,0,0, 8,0,10140,0,0,0,0,'','Show gossip option 0 if player has rewarded quest 10140 "Journey to Honor Hold"'),
+(15,@GOSSIP,1,0,0,28,0,10140,0,0,0,0,'','Show gossip option 1 if player has complete quest 10140 "Journey to Honor Hold"');
+*/
+
 
 ##### 기타 #####
 
