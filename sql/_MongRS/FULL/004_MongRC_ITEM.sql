@@ -63,3 +63,18 @@ INSERT INTO `spell_proc_event` VALUES(67752, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 0), 
 -- 투기 투척무기 수정
 UPDATE `item_template` SET `Flags`=4231168,`RangedModRange`=100,`MaxDurability`=0 WHERE `entry` IN (42449,42444);
 
+/*
+-- 포장지 템삭제
+DELETE FROM `item_template` WHERE `entry` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
+DELETE FROM `npc_vendor` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
+DELETE FROM `item_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
+DELETE FROM `reference_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
+DELETE FROM `creature_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
+*/
+
+-- 어둠서리 조각 삭제
+DELETE FROM `item_template` WHERE `entry`=50274;
+DELETE FROM `item_loot_template` WHERE `item`=50274;
+DELETE FROM `creature_loot_template` WHERE `item`=50274;
+DELETE FROM `gameobject_loot_template` WHERE `item`=50274;
+DELETE FROM `reference_loot_template` WHERE `item`=50274;

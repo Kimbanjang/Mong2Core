@@ -103,7 +103,6 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (19,0,25248,0,0,2,52570,1,0,0,0,0,'A Change of Heart'),
 (19,0,25249,0,0,2,52571,1,0,0,0,0,'A Change of Heart');
 
-/*
 -- 아웃랜드 첫 와이본/그리폰 작동안함 수정
 -- Vlagga Freyfeather NPC(18930)
 SET @NPC=18930;
@@ -123,7 +122,7 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (@NPC,0,3,0,4,0,100,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Vlagga Freyfeather - Say text on Aggro');
 
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=@GOSSIP;
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`SourceId`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionTarget`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
 (15,@GOSSIP,0,0,0, 8,0,10289,0,0,0,0,'','Show gossip option 0 if player has rewarded quest 10289 "Journey to Thrallmar"'),
 (15,@GOSSIP,1,0,0,28,0,10289,0,0,0,0,'','Show gossip option 1 if player has complete quest 10289 "Journey to Thrallmar"');
 
@@ -150,10 +149,9 @@ INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type
 (@NPC,0,3,0,4,0,100,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Amish Wildhammer - Say text on Aggro');
 
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=@GOSSIP;
-INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`SourceId`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionTarget`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
 (15,@GOSSIP,0,0,0, 8,0,10140,0,0,0,0,'','Show gossip option 0 if player has rewarded quest 10140 "Journey to Honor Hold"'),
 (15,@GOSSIP,1,0,0,28,0,10140,0,0,0,0,'','Show gossip option 1 if player has complete quest 10140 "Journey to Honor Hold"');
-*/
 
 
 ##### 기타 #####
