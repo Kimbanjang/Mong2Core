@@ -162,5 +162,9 @@ UPDATE `creature_template` SET `faction_a`=29, `faction_h`=29 WHERE `entry`=3621
 -- 힐다나 데스스틸러 펙션 수정
 UPDATE `creature_template` SET `faction_H`=22, `faction_A`=22 WHERE `entry`=32495;
 
+-- 노스랜드 팩션 안맞는 크리쳐 수정
+UPDATE `creature_template` SET `faction_A`=14, `faction_H`=14 WHERE `entry` IN 
+(32357,32361, 32358,32481,32471,32501,32398,32377,32438,32475,32386,32400);
+
 -- 호드 무용문장상인 누락건 선리버성소 배치
 INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, `MovementType`, `npcflag`, `unit_flags`, `dynamicflags`) VALUES ('11956420', '31582', '571', '1', '1', '0', '917', '5941.03', '511.184', '650.178', '2.77698', '300', '0', '0', '10080', '8814', '0', '0', '0', '0');
