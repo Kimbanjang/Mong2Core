@@ -153,6 +153,9 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 (15,@GOSSIP,0,0,0, 8,0,10140,0,0,0,0,'','Show gossip option 0 if player has rewarded quest 10140 "Journey to Honor Hold"'),
 (15,@GOSSIP,1,0,0,28,0,10140,0,0,0,0,'','Show gossip option 1 if player has complete quest 10140 "Journey to Honor Hold"');
 
+-- 흑마 보이드워커퀘 수정
+UPDATE `creature_template` SET `faction_a`=29, `faction_h`=29 WHERE `entry`=36213;
+
 
 ##### 기타 #####
 

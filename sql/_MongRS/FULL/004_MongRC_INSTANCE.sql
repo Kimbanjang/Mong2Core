@@ -78,7 +78,6 @@ UPDATE creature_template SET mechanic_immune_mask='650853375' WHERE entry IN (36
 UPDATE creature_template SET flags_extra='256' WHERE entry IN (36897, 38138);
 
 -- 리분 5인 던젼
--- Fixing the immunity masks in Dungeons and Heroics.
 UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask`|4|8|16|64|128|256|512|1024|4096|65536|131072|524288|67108864|536870912 WHERE `entry` IN (
 -- Halls of stone:
 27975,-- Maiden of Grief
@@ -198,8 +197,9 @@ DELETE FROM `gameobject` WHERE `guid` IN (87839,87842,87841,87845,87844);
 -- 백업
 -- INSERT INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`) VALUES ('87839', '175244', '229', '1', '1', '216.443', '-286.135', '76.9406', '3.14159', '0', '0', '0', '0', '120', '0', '1'),('87842', '175705', '229', '1', '1', '175.127', '-258.945', '91.5603', '0', '0', '0', '0', '0', '120', '0', '1'),('87841', '175153', '229', '1', '1', '113.751', '-258.945', '91.5603', '0', '0', '0', '0', '0', '120', '0', '1'),('87845', '164726', '229', '1', '1', '108.036', '-420.331', '110.954', '3.14159', '0', '0', '0', '0', '120', '0', '1'),('87844', '175186', '229', '1', '1', '92.9595', '-435.59', '110.954', '-1.5708', '0', '0', '0', '0', '120', '0', '1');
 
-/*
+
 ##### 용사의 시험장(TOC5) #####
+/*
 -- 용사의 시합장 승전문장 드랍
 DELETE FROM `gameobject_loot_template` WHERE `entry`=27321 and `item`=47241;
 DELETE FROM `gameobject_loot_template` WHERE `entry`=27325 and `item`=47241;
@@ -217,96 +217,10 @@ INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 DELETE FROM `creature_loot_template` WHERE `entry`=35451 and `item`=47241;
 DELETE FROM `creature_loot_template` WHERE `entry`=35490 and `item`=47241;
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
--- 3넴 흑기사 일반
-(35451,47241,100,1,0,4,8),(35451,36919,20,1,0,1,3),(35451,36931,20,1,0,1,3),(35451,36922,20,1,0,1,3),(35451,36925,20,1,0,1,3),(35451,36928,20,1,0,1,3),(35451,36934,20,1,0,1,3),
--- 3넴 흑기사 하드
-(35490,47241,100,1,0,6,6),(35490,2,30,1,0,-34212,2);
-
--- 용사의 시합장 네임드 10% 버프 (73818)
-DELETE FROM `creature_template_addon` WHERE `entry` IN (35307,35309,35451,34657);
-INSERT INTO `creature_template_addon` VALUES
--- 일반
-(34657,0,0,0,0,0,73818), -- 1넴 시작
-(34701,0,0,0,0,0,73818),
-(34702,0,0,0,0,0,73818),
-(34703,0,0,0,0,0,73818),
-(34705,0,0,0,0,0,73818),
-(35569,0,0,0,0,0,73818),
-(35570,0,0,0,0,0,73818),
-(35571,0,0,0,0,0,73818),
-(35572,0,0,0,0,0,73818),
-(35617,0,0,0,0,0,73818), -- 1넴 끝
-(35305,0,0,0,0,0,73818), -- 2넴 졸 시작
-(35307,0,0,0,1,0,73818),
-(35309,0,0,0,1,0,73818), -- 2넴 졸 끝
-(35119,0,0,0,0,0,73818), -- 2넴 에드릭
-(34928,0,0,0,0,0,73818), -- 2넴 파레트레스
-(35564,0,0,0,0,0,73818), -- 3넴 졸 시작
-(35590,0,0,0,0,0,73818),
-(35545,0,0,0,0,0,73818), -- 3넴 졸 끝
-(35451,0,0,0,1,0,73818), -- 3넴 흑기사1
--- 하드
-(36086,0,0,0,0,0,73818), -- 1넴 시작
-(36083,0,0,0,0,0,73818),
-(36082,0,0,0,0,0,73818),
-(36087,0,0,0,0,0,73818),
-(36088,0,0,0,0,0,73818),
-(36085,0,0,0,0,0,73818),
-(36091,0,0,0,0,0,73818),
-(36090,0,0,0,0,0,73818),
-(36089,0,0,0,0,0,73818),
-(36084,0,0,0,0,0,73818), -- 1넴 끝
-(35306,0,0,0,0,0,73818), -- 2넴 졸 시작
-(35308,0,0,0,0,0,73818),
-(35310,0,0,0,0,0,73818), -- 2넴 졸 끝
-(35518,0,0,0,0,0,73818), -- 2넴 에드릭
-(35517,0,0,0,0,0,73818), -- 2넴 파레트레스
-(35717,0,0,0,0,0,73818), -- 3넴 졸 시작
-(35546,0,0,0,0,0,73818),
-(35568,0,0,0,0,0,73818), -- 3넴 졸 끝 
-(35490,0,0,0,0,0,73818); -- 3넴 흑기사1
-
-##### 얼왕 5인던젼 #####
--- 인던 연결
-DELETE FROM `areatrigger_teleport` WHERE `id` IN (5635,5642,5688,5636,5646,5637,5643,5683);
-INSERT INTO `areatrigger_teleport` (`id`, `name`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation`) VALUES
-(5635, 'Forge of Souls (Entrance)', 632, 4922.86, 2175.63, 638.734, 2.00355),
-(5642, 'Forge of Souls (Exit)', 571, 5667.72, 2007.19, 798.042, 2.31535),
-(5688, 'Forge of Souls (Exit)', 658, 435.743, 212.413, 528.709, 6.25646),
-(5637, 'Pit of Saron (Entrance)', 632, 4922.86, 2175.63, 638.734, 2.00355),
-(5643, 'Pit of Saron (Exit)', 571, 5595.92, 2013.02, 798.041, 0.648728),
-(5683, 'Pit of Saron (Exit)', 668, 5239.01, 1932.64, 707.695, 0.800565),
-(5636, 'Halls of Reflection (Entrance)', 632, 4922.86, 2175.63, 638.734, 2.00355),
-(5646, 'Halls of Reflection (Exit)', 571, 5630.59, 1997.55, 798.049, 1.44042);
-
--- 마지막 추가 보상
-DELETE FROM `gameobject_loot_template` WHERE `entry`=27985 and `item`=47241;
-DELETE FROM `gameobject_loot_template` WHERE `entry`=27993 and `item`=47241;
-INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
--- 투영 상자 일반
-(27985,47241,100,1,0,15,20),(27985,1,20,1,0,-34212,1),(27985,36919,40,1,0,1,2),(27985,36931,40,1,0,1,2),(27985,36922,40,1,0,1,2),(27985,36925,40,1,0,1,2),(27985,36928,40,1,0,1,2),(27985,36934,40,1,0,1,2),
--- 투영 상자 하드
-(27993,47241,100,1,0,20,20),(27993,1,20,1,0,-34213,2);
-
--- 팻드랍
-INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
-(35451,5,2.5,1,0,-90005,1);
-INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
--- 투영 상자 일반
-(27985,4,2.5,1,0,-90005,1);
-
--- 냉혹무기들 추가드랍
-INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
--- 3넴 흑기사 일반 (+격노 룻테이블)
-(35451,2,5,1,0,-34212,1),(35451,3,4,1,0,-90003,1),(35451,4,2,1,0,-90004,1),
--- 3넴 흑기사 하드
-(35490,3,6,1,0,-90003,2),(35490,4,4,1,0,-90004,1);
-INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
--- 투영 상자 일반
-(27985,2,4,1,0,-90003,2),(27985,3,3,1,0,-90004,1),
--- 투영 상자 하드
-(27993,2,6,1,0,-90004,1);
+(35451,47241,100,1,0,4,8), -- 3넴 흑기사 일반
+(35490,47241,100,1,0,6,6); -- 3넴 흑기사 하드
 */
+
 
 ##### 영혼의 제련소 #####
 -- 장비세팅
@@ -314,6 +228,7 @@ UPDATE `creature_template` SET `equipment_id`=2367 WHERE `entry`=37569; -- Soulg
 UPDATE `creature_template` SET `equipment_id`=2331 WHERE `entry`=37568; -- Soulguard Reaper
 UPDATE `creature_template` SET `equipment_id`=2335 WHERE `entry`=37566; -- Soulguard Adept
 UPDATE `creature_template` SET `equipment_id`=2326 WHERE `entry`=36498; -- Bronjahm
+
 
 ##### 샤론의 구덩이 #####
 -- 팩션조정
@@ -341,6 +256,10 @@ UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37652;
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (36658,2,2,1,0,-90005,1),(36938,2,2,1,0,-90005,1),(36502,2,4,1,0,-90005,1),(37677,2,4,1,0,-90005,1), -- 팻/탈것
 (36658,23961,5,1,0,1,1),(36938,23961,5,1,0,1,1),(36502,23964,50,1,0,1,1),(37677,23964,50,1,0,1,1);   -- 토큰
+
+-- 보석 드랍 샘플
+-- INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
+-- (27985,36919,40,1,0,1,2),(27985,36931,40,1,0,1,2),(27985,36922,40,1,0,1,2),(27985,36925,40,1,0,1,2),(27985,36928,40,1,0,1,2),(27985,36934,40,1,0,1,2);
 
 
 ##############################
@@ -379,7 +298,7 @@ UPDATE `gameobject_template` SET `faction`=0 WHERE `entry`=190763;
 -- 토라본 10/25 드랍테이블 : 코랄론과 동일
 DELETE FROM `creature_loot_template` WHERE `entry` IN (38433,38462);
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
-(38433, 1, 100, 1, 0, -34212, 1),(38433, 2, 100, 1, 0, -34204, 1),(38433, 3, 1, 1, 0, -34203, 1),(38433, 47241, 100, 1, 0, 2, 2),(38462, 1, 100, 1, 0, -34213, 2),(38462, 2, 100, 1, 0, -34205, 2),(38462, 3, 1, 1, 0, -34203, 1),(38462, 47241, 100, 1, 0, 2, 2);
+(38433, 1, 100, 1, 0, -34212, 1),(38433, 2, 100, 1, 0, -34204, 1),(38433, 3, 1, 1, 0, -34203, 1),(38433, 4, 20, 1, 0, -90003, 1),(38433, 47241, 100, 1, 0, 2, 2),(38462, 1, 100, 1, 0, -34213, 2),(38462, 2, 100, 1, 0, -34205, 2),(38462, 3, 1, 1, 0, -34203, 1),(38462, 4, 20, 1, 0, -90004, 1),(38462, 47241, 100, 1, 0, 2, 2);
 
 
 ##### 울두아르 #####
@@ -499,7 +418,7 @@ INSERT INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 -- 교수 비행선 아이템 추가드랍
 DELETE FROM `creature_loot_template` WHERE `mincountOrRef` IN (-91002,-91003,-91004,-91005);
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
-(36678,2,40,1,0,-91002,2),(38431,2,40,1,0,-91003,3),(38585,3,40,1,0,-91004,2),(38586,2,40,1,0,-91005,3);
+(36678,2,40,1,0,-91002,1),(38431,2,40,1,0,-91003,2),(38585,3,40,1,0,-91004,1),(38586,2,40,1,0,-91005,2);
 
 -- 신드라고사 / 리치왕 종족 타입변경
 UPDATE `creature_template` SET `type` ='7' WHERE `entry` IN (36597,39166,39167,39168);
