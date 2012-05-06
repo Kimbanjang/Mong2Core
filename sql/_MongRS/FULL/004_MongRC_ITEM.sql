@@ -51,7 +51,8 @@ INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `Exte
 (33927, 0, 42561, 0, 0, 2701),(33927, 0, 42566, 0, 0, 2701),(33927, 0, 42572, 0, 0, 2701);
 
 -- 버그퀘템 삭제
-DELETE FROM `item_template` WHERE `entry`=50709;
+DELETE FROM `item_template` WHERE `entry`=50709; -- 토비 어쩌고 연설문
+DELETE FROM `item_template` WHERE `entry`=30259; -- 보렌살의 헌신
 
 -- 자유의지의 물약 쿨타임 30분으로 너프
 UPDATE `item_template` SET `spellcategorycooldown_1`=1800000 WHERE `entry`=5634;
