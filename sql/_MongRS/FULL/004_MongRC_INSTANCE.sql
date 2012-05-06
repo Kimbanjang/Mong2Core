@@ -229,7 +229,6 @@ UPDATE `creature_template` SET `equipment_id`=2331 WHERE `entry`=37568; -- Soulg
 UPDATE `creature_template` SET `equipment_id`=2335 WHERE `entry`=37566; -- Soulguard Adept
 UPDATE `creature_template` SET `equipment_id`=2326 WHERE `entry`=36498; -- Bronjahm
 
-
 ##### 샤론의 구덩이 #####
 -- 팩션조정
 UPDATE `creature_template` SET `faction_A`=1885, `faction_H`=1885, `unit_flags`=32832 WHERE `entry`=37643; -- Ymirjar Skycaller
@@ -243,14 +242,6 @@ UPDATE `creature_template` SET `equipment_id`=2443 WHERE `entry`=37612; -- Falle
 UPDATE `creature_template` SET `equipment_id`=2325 WHERE `entry`=37613; -- Forgemaster Garfrost
 UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=37609; -- Deathwhisper Necrolyte
 UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=38025; -- Deathwhisper Shadowcaster
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37645;  -- Alliance slaves
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37646;
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37647;
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37648;
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37649;  -- horde slaves
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37650;
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37651;
-UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37652;
 
 -- 영제/샤론/투영 토큰 드랍(23961,23964,23967)
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
