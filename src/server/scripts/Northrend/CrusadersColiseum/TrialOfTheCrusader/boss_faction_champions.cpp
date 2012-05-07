@@ -522,16 +522,28 @@ public:
                 switch (urand(0, 4))
                 {
                     case 0:
-                        DoCast(me, SPELL_LIFEBLOOM);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_LIFEBLOOM);
+                        else
+                            DoCast(me, SPELL_LIFEBLOOM);
                         break;
                     case 1:
-                        DoCast(me, SPELL_NOURISH);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_NOURISH);
+                        else
+                            DoCast(me, SPELL_NOURISH);
                         break;
                     case 2:
-                        DoCast(me, SPELL_REGROWTH);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_REGROWTH);
+                        else
+                            DoCast(me, SPELL_REGROWTH);
                         break;
                     case 3:
-                        DoCast(me, SPELL_REJUVENATION);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_REJUVENATION);
+                        else
+                            DoCast(me, SPELL_REJUVENATION);
                         break;
                     case 4:
                         if (Creature* target = SelectRandomFriendlyMissingBuff(SPELL_THORNS))
@@ -618,13 +630,20 @@ public:
                 switch (urand(0, 5))
                 {
                     case 0: case 1:
-                        DoCast(me, SPELL_HEALING_WAVE);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_HEALING_WAVE);
+                        else
+                            DoCast(me, SPELL_HEALING_WAVE);
                         break;
                     case 2:
-                        DoCast(me, SPELL_RIPTIDE);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_RIPTIDE);
+                        else
+                            DoCast(me, SPELL_RIPTIDE);
                         break;
                     case 3:
-                        DoCast(me, SPELL_EARTH_SHOCK);
+                        if (Unit* target = SelectEnemyCaster(false))
+                            DoCast(target, SPELL_EARTH_SHOCK);
                         break;
                     case 4:
                         DoCast(me, SPELL_SPIRIT_CLEANSE);
@@ -735,10 +754,16 @@ public:
                 switch (urand(0, 4))
                 {
                     case 0: case 1:
-                        DoCast(me, SPELL_FLASH_OF_LIGHT);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_FLASH_OF_LIGHT);
+                        else
+                            DoCast(me, SPELL_FLASH_OF_LIGHT);
                         break;
                     case 2: case 3:
-                        DoCast(me, SPELL_HOLY_LIGHT);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_HOLY_LIGHT);
+                        else
+                            DoCast(me, SPELL_HOLY_LIGHT);
                         break;
                     case 4:
                         DoCast(me, SPELL_CLEANSE);
@@ -761,6 +786,7 @@ enum ePriestSpells
     SPELL_DISPEL            = 65546,
     SPELL_PSYCHIC_SCREAM    = 65543,
     SPELL_MANA_BURN         = 66100,
+    SPELL_PENANCE           = 66098,
 };
 
 class mob_toc_priest : public CreatureScript
@@ -802,24 +828,41 @@ public:
 
             if (m_uiCommonTimer <= uiDiff)
             {
-                switch (urand(0, 5))
+                switch (urand(0, 6))
                 {
                     case 0:
-                        DoCast(me, SPELL_RENEW);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_RENEW);
+                        else
+                            DoCast(me, SPELL_RENEW);
                         break;
                     case 1:
-                        DoCast(me, SPELL_SHIELD);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_SHIELD);
+                        else
+                            DoCast(me, SPELL_SHIELD);
                         break;
                     case 2: case 3:
-                        DoCast(me, SPELL_FLASH_HEAL);
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_FLASH_HEAL);
+                        else
+                            DoCast(me, SPELL_FLASH_HEAL);
                         break;
                     case 4:
                         if (Unit* target = urand(0, 1) ? SelectTarget(SELECT_TARGET_RANDOM, 0) : DoSelectLowestHpFriendly(40.0f))
                             DoCast(target, SPELL_DISPEL);
+                        else
+                            DoCast(me, SPELL_DISPEL);
                         break;
                     case 5:
-                        DoCast(me, SPELL_MANA_BURN);
+                        if (Unit* target = SelectEnemyCaster(false))
+                            DoCast(target, SPELL_MANA_BURN);
                         break;
+                    case 6:
+                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
+                            DoCast(target, SPELL_PENANCE);
+                        else
+                            DoCast(me, SPELL_PENANCE);
                 }
                 m_uiCommonTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             } else m_uiCommonTimer -= uiDiff;
@@ -934,6 +977,8 @@ public:
                    case 4:
                         if (Unit* target = urand(0, 1) ? SelectTarget(SELECT_TARGET_RANDOM, 0) : DoSelectLowestHpFriendly(40.0f))
                             DoCast(target, SPELL_DISPEL);
+                        else
+                            DoCast(me, SPELL_DISPEL);
                         break;
                 }
                 m_uiCommonTimer = urand(15*IN_MILLISECONDS, 30*IN_MILLISECONDS);
@@ -1440,7 +1485,7 @@ public:
             if (m_uiBladestormTimer <= uiDiff)
             {
                 DoCastVictim(SPELL_BLADESTORM);
-                m_uiBladestormTimer = urand(20*IN_MILLISECONDS, 30*IN_MILLISECONDS);
+                m_uiBladestormTimer = urand(40*IN_MILLISECONDS, 60*IN_MILLISECONDS);
             } else m_uiBladestormTimer -= uiDiff;
 
             if (m_uiIntimidatingShoutTimer <= uiDiff)
@@ -1463,7 +1508,8 @@ public:
 
             if (m_uiChargeTimer <= uiDiff)
             {
-                DoCastVictim(SPELL_CHARGE);
+				if (me->IsInRange(me->getVictim(), 8.0f, 25.0f, false))
+                	DoCastVictim(SPELL_CHARGE);
                 m_uiChargeTimer = urand(3*IN_MILLISECONDS, 25*IN_MILLISECONDS);
             } else m_uiChargeTimer -= uiDiff;
 
