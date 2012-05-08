@@ -25077,3 +25077,1000 @@ DELETE FROM `gameobject_loot_template` WHERE `entry` IN (27416,27417) AND `item`
 INSERT INTO `gameobject_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
 (27417,@Triumph,100,1,0,1,1), -- Confessor's Cache
 (27416,@Triumph,100,1,0,1,1); -- Eadric's Cache
+
+-- Add missing Challe & Orphan Matron Aria Spawns
+SET @GUID := 41876;
+DELETE FROM `creature` WHERE `guid` BETWEEN @GUID AND @GUID+1;
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`) VALUES 
+(@GUID,23101,530,1,1,0,0,-480.4989,7499.029,181.2889,3.560472,120,0,0,1,0,0), 
+(@GUID+1,34365,571,1,1,0,0,5716.604,642.8611,646.2927,5.88176,120,0,0,1,0,0);
+-- Add to game event creature
+DELETE FROM `game_event_creature` WHERE `guid`=@GUID+1;
+INSERT INTO `game_event_creature` (`eventEntry`,`guid`) VALUES (10,@GUID+1);
+
+DELETE FROM `creature_loot_template` WHERE `entry` IN(38064,38103);
+INSERT INTO `creature_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- Precious 25 man
+(38103,1,100,1,0,-35069,2), -- Two From ICC Trashgenerated on Precious
+(38103,52019,30,1,0,1,1), -- Precious Ribbon on Precious
+(38064,1,100,1,0,-35069,2); -- Two From ICC Trashgenerated on Stinky
+-- add skinning loot for Stinky & Precious
+UPDATE `creature_template` SET `skinloot`=70214 WHERE `entry` IN (37025,38064,37217,38103);
+
+SET @GUID1 := 42158;
+SET @GUID2 := 42159;
+-- add creature
+DELETE FROM creature WHERE guid IN (@GUID1,@GUID2);
+INSERT INTO `creature`
+(`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`)
+VALUES
+(@GUID1 ,38453,571,1,1,3561.821,-2736.367,136.0317,0), -- Arcturis in Grizzly Hills
+(@GUID2,35189,571,1,1,7101.845,-1443.734,924.2609,0.178631); -- Skoll in The Storm Peaks
+-- Update template
+UPDATE `creature_template` SET `faction_A` = 190, `faction_H`=190 WHERE `entry` IN (38453,35189);
+SET @NPC= @GUID1*10;
+-- Add pathing for Arcturis
+DELETE FROM `creature_addon` WHERE `guid` = @GUID1;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`mount`,`bytes1`,`bytes2`,`emote`,`auras`) VALUES
+(@GUID1,@NPC,0,0,0,0,''); -- Add path for Acturis
+-- Add waypoint data for the path:
+DELETE FROM `waypoint_data` WHERE `id`=@NPC;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`) VALUES
+(@NPC,1,3563.499,-2737.698,137.1898),
+(@NPC,2,3565.249,-2738.698,138.4398),
+(@NPC,3,3566.749,-2739.948,139.9398),
+(@NPC,4,3568.249,-2740.698,140.6898),
+(@NPC,5,3567.839,-2741.380,141.9256),
+(@NPC,6,3569.999,-2741.948,142.1898),
+(@NPC,7,3570.749,-2742.448,143.1898),
+(@NPC,8,3572.676,-2743.528,144.8479);
+-- Spawntimefix
+UPDATE `creature` SET `spawntimesecs`=39600 WHERE `guid` IN (@GUID1,@GUID2); -- Set the spawntime to 11 hours for Arcturis & Skoll
+
+UPDATE `script_texts` SET `emote` = 432 WHERE `entry` IN (-1595111);
+UPDATE `script_texts` SET `emote` = 396 WHERE `entry` IN (-1595070,-1595075,-1595078,-1595079,-1595088,-1595103,-1595106,-1595107,-1595108,-1595109,-1595113,-1595114,-1595115,-1595116);
+UPDATE `script_texts` SET `emote` = 397 WHERE `entry` IN (-1595071,-1595084,-1595093);
+UPDATE `script_texts` SET `emote` = 274 WHERE `entry` IN (-1595091);
+UPDATE `script_texts` SET `emote` = 5 WHERE `entry` IN (-1595073,-1595118);
+UPDATE `script_texts` SET `emote` = 6 WHERE `entry` IN (-1595076);
+UPDATE `script_texts` SET `emote` = 1 WHERE `entry` IN (-1595083,-1595100,-1595104,-1595120);
+UPDATE `script_texts` SET `emote` = 0 WHERE `entry` IN (-1595009,-1595010,-1595081,-1595082,-1595085,-1595119);
+
+UPDATE `script_texts` SET `type` = 1 WHERE `entry` IN (-1595009,-1595010,-1595087,-1595094,-1595095,-1595093);
+UPDATE `script_texts` SET `type` = 0 WHERE `entry` IN (-1595077,-1595078,-1595119);
+
+UPDATE `script_texts` SET `content_default` = "Champions, meet me at the Town Hall at once. We must take the fight to Mal'Ganis." WHERE `entry` = -1595095;
+UPDATE `script_texts` SET `content_default` = "Follow me, I know the way through." WHERE `entry` = -1595096;
+UPDATE `script_texts` SET `content_default` = "Take position here, and I will lead a small force inside Stratholme to begin the culling. We must contain and purge the infected for the sake of all of Lordaeron!" WHERE entry = -1595087;
+UPDATE `script_texts` SET `content_default` = "Ah, you've finally arrived Prince Arthas. You're here just in the nick of time." WHERE `entry` = -1595097;
+UPDATE `script_texts` SET `content_default` = "Yes, I'm glad I could get to you before the plague." WHERE `entry` = -1595098;
+UPDATE `script_texts` SET `content_default` = "As if I could forget. Listen, Uther, there's something about the plague you should know..." WHERE `entry` = -1595072;
+UPDATE `script_texts` SET `content_default` = "There's no need for you to understand, Arthas. All you need to do is die." WHERE `entry` = -1595100;
+UPDATE `script_texts` SET `content_default` = "More vile sorcery! Be ready for anything!" WHERE `entry` = -1595102;
+UPDATE `script_texts` SET `content_default` = "Watch your backs: they have us surrounded in this hall." WHERE `entry` = -1595104;
+UPDATE `script_texts` SET `content_default` = "Mal'Ganis is not making this easy." WHERE `entry` = -1595106;
+UPDATE `script_texts` SET `content_default` = "What else can he put in my way?" WHERE `entry` = -1595108;
+UPDATE `script_texts` SET `content_default` = "I do what I must for Lordaeron, and neither your words nor your actions will stop me." WHERE `entry` = -1595109;
+UPDATE `script_texts` SET `content_default` = "The quickest path to Mal'Ganis lies behind that bookshelf ahead." WHERE `entry` = -1595110;
+UPDATE `script_texts` SET `content_default` = "I'm relieved this secret passage still works." WHERE `entry` = -1595112;
+UPDATE `script_texts` SET `content_default` = "Let's move through here as quickly as possible. If the undead don't kill us, the fires might." WHERE `entry` = -1595113;
+UPDATE `script_texts` SET `content_default` = "Rest a moment and clear your lungs, but we must move again soon." WHERE `entry` = -1595114;
+UPDATE `script_texts` SET `content_default` = "That's enough; we must move again. Mal'Ganis awaits." WHERE `entry` = -1595115;
+UPDATE `script_texts` SET `content_default` = "At last some good luck. Market Row has not caught fire yet. Mal'Ganis is supposed to be in Crusaders' Square, which is just ahead. Tell me when you're ready to move forward." WHERE `entry` = -1595116;
+UPDATE `script_texts` SET `content_default` = "Justice will be done." WHERE `entry` = -1595117;
+UPDATE `script_texts` SET `content_default` = "We're going to finish this right now, Mal'Ganis. Just you... and me." WHERE `entry` = -1595118;
+
+UPDATE `script_texts` SET `comment` = concat(`comment`,". NEEDS VERIFICATION") WHERE `entry` IN (-1595101,-1595105);
+
+SET @GUID := 88474;
+INSERT INTO `creature` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecs`, `spawndist`, `currentwaypoint`, `curhealth`, `curmana`, 
+`MovementType`, `npcflag`, `unit_flags`, `dynamicflags`)
+VALUES
+(@GUID+00,27737,595,3,1,25543,0,2319.89,1285.78,131.407,1.72169,60,10,0,630,0,1,0,0,0),
+(@GUID+01,27737,595,3,1,10979,0,2308.12,1304.21,127.601,4.39662,60,10,0,630,0,1,0,0,0),
+(@GUID+02,27737,595,3,1,25542,0,2335.47,1262.04,132.921,1.42079,60,10,0,630,0,1,0,0,0),
+(@GUID+03,27737,595,3,1,25543,0,2297.73,1338.75,124.622,2.5574,60,10,0,630,0,1,0,0,0),
+(@GUID+04,27737,595,3,1,10979,0,2322.65,1265.39,133.033,5.6524,60,10,0,630,0,1,0,0,0),
+(@GUID+05,27737,595,3,1,10973,0,2277.83,1331.92,124.19,3.48045,60,10,0,630,0,1,0,0,0),
+(@GUID+06,27737,595,3,1,25543,0,2294.18,1316.93,125.672,6.05649,60,10,0,630,0,1,0,0,0),
+(@GUID+07,27737,595,3,1,10973,0,2310.56,1369,128.372,5.03364,60,10,0,630,0,1,0,0,0),
+(@GUID+08,27737,595,3,1,10979,0,2306.15,1322.85,125.708,4.99133,60,10,0,630,0,1,0,0,0),
+(@GUID+09,27737,595,3,1,10973,0,2320.14,1297.48,129.694,1.35248,60,10,0,630,0,1,0,0,0),
+(@GUID+10,27737,595,3,1,25542,0,2291.57,1327.27,124.545,5.32358,60,10,0,630,0,1,0,0,0),
+(@GUID+11,27737,595,3,1,25542,0,2308.04,1352.65,126.907,5.83741,60,10,0,630,0,1,0,0,0),
+(@GUID+12,27737,595,3,1,10979,0,2329.44,1281.11,132.636,2.25207,60,10,0,630,0,1,0,0,0),
+(@GUID+13,27737,595,3,1,0,0,2407.32,1423.8,131.522,6.24743,60,10,0,706,0,1,0,0,0),
+(@GUID+14,27737,595,3,1,0,0,2417.26,1428.41,131.652,6.20423,60,10,0,730,0,1,0,0,0),
+(@GUID+15,27737,595,3,1,0,0,2420.48,1419.99,130.716,0.0977616,60,10,0,706,0,1,0,0,0),
+(@GUID+16,27737,595,3,1,0,0,2426.63,1413.41,130.464,0.404064,60,10,0,730,0,1,0,0,0),
+(@GUID+17,27737,595,3,1,0,0,2430.46,1417.6,130.557,0.125247,60,10,0,730,0,1,0,0,0),
+(@GUID+18,27737,595,3,1,0,0,2433.94,1427.03,131.18,0.0584885,60,10,0,706,0,1,0,0,0),
+(@GUID+19,27737,595,3,1,0,0,2446.5,1428.37,131.013,6.10606,60,10,0,756,0,1,0,0,0),
+(@GUID+20,27737,595,3,1,0,0,2449.49,1423.35,130.588,5.77619,60,10,0,706,0,1,0,0,0),
+(@GUID+21,27737,595,3,1,0,0,2441.92,1424.41,130.606,6.07857,60,10,0,706,0,1,0,0,0),
+(@GUID+22,27737,595,3,1,0,0,2450.6,1438.61,132.213,4.74889,60,10,0,730,0,1,0,0,0),
+(@GUID+23,27737,595,3,1,0,0,2460.17,1436.46,131.501,4.73711,60,10,0,756,0,1,0,0,0),
+(@GUID+24,27737,595,3,1,0,0,2444.68,1421.68,130.324,6.01338,60,10,0,756,0,1,0,0,0),
+(@GUID+25,27737,595,3,1,0,0,2456.87,1419.07,130.488,5.39763,60,10,0,706,0,1,0,0,0),
+(@GUID+26,27737,595,3,1,0,0,2464.27,1422.15,130.976,5.22092,60,10,0,756,0,1,0,0,0),
+(@GUID+27,27737,595,3,1,0,0,2468.21,1403.06,130.39,5.6364,60,10,0,756,0,1,0,0,0),
+(@GUID+28,27737,595,3,1,0,0,2460.88,1406.8,130.508,5.96234,60,10,0,756,0,1,0,0,0),
+(@GUID+29,27737,595,3,1,0,0,2485.77,1398.35,130.795,4.71591,60,10,0,756,0,1,0,0,0),
+(@GUID+30,27737,595,3,1,0,0,2485.79,1380.46,130.15,5.02928,60,10,0,730,0,1,0,0,0),
+(@GUID+31,27737,595,3,1,0,0,2475.77,1396.31,130.124,4.84079,60,10,0,730,0,1,0,0,0),
+(@GUID+32,27737,595,3,1,0,0,2476.92,1387.21,129.401,5.05128,60,10,0,730,0,1,0,0,0),
+(@GUID+33,27737,595,3,1,0,0,2483.24,1389.37,130.123,4.74104,60,10,0,730,0,1,0,0,0),
+(@GUID+34,27737,595,3,1,0,0,2480.2,1370.15,129.533,5.79583,60,10,0,706,0,1,0,0,0),
+(@GUID+35,27737,595,3,1,0,0,2481.54,1375.11,129.642,5.4644,60,10,0,730,0,1,0,0,0),
+(@GUID+36,27737,595,3,1,0,0,2489.44,1359.42,131.233,5.378,60,10,0,730,0,1,0,0,0),
+(@GUID+37,27737,595,3,1,0,0,2486.59,1356.19,131.876,5.7275,60,10,0,756,0,1,0,0,0),
+(@GUID+38,27737,595,3,1,0,0,2495.53,1348.61,133.072,5.52722,60,10,0,730,0,1,0,0,0),
+(@GUID+39,27737,595,3,1,0,0,2504.48,1349.65,132.856,5.11881,60,10,0,730,0,1,0,0,0),
+(@GUID+40,27737,595,3,1,0,0,2493.11,1380.29,130.24,4.93189,60,10,0,706,0,1,0,0,0),
+(@GUID+41,27737,595,3,1,0,0,2487.18,1392.64,130.512,4.93818,60,10,0,706,0,1,0,0,0),
+(@GUID+42,27737,595,3,1,0,0,2506.49,1336.89,132.794,5.19343,60,10,0,756,0,1,0,0,0),
+(@GUID+43,27737,595,3,1,0,0,2518.2,1306.39,130.623,4.81723,60,10,0,756,0,1,0,0,0),
+(@GUID+44,27737,595,3,1,0,0,2513.4,1299.67,130.868,4.4206,60,10,0,756,0,1,0,0,0),
+(@GUID+45,27737,595,3,1,0,0,2511.45,1291.47,130.808,5.00729,60,10,0,756,0,1,0,0,0),
+(@GUID+46,27737,595,3,1,0,0,2518.56,1292.32,130.528,5.16438,60,10,0,756,0,1,0,0,0),
+(@GUID+47,27737,595,3,1,0,0,2515.49,1279.85,129.214,5.28847,60,10,0,730,0,1,0,0,0),
+(@GUID+48,27737,595,3,1,0,0,2514.37,1285.92,129.934,5.70473,60,10,0,706,0,1,0,0,0),
+(@GUID+49,27737,595,3,1,0,0,2522.65,1274.29,128.576,5.44634,60,10,0,706,0,1,0,0,0),
+(@GUID+50,27737,595,3,1,0,0,2535.38,1275.77,127.42,5.49817,60,10,0,756,0,1,0,0,0),
+(@GUID+51,27737,595,3,1,0,0,2537.59,1273.1,127.05,5.02693,60,10,0,730,0,1,0,0,0),
+(@GUID+52,27737,595,3,1,0,0,2547.49,1261.7,126.44,4.78425,60,10,0,730,0,1,0,0,0),
+(@GUID+53,27737,595,3,1,0,0,2534.36,1261.06,127.125,4.3994,60,10,0,756,0,1,0,0,0),
+(@GUID+54,27737,595,3,1,0,0,2532.69,1251.44,127.452,5.4479,60,10,0,730,0,1,0,0,0),
+(@GUID+55,27737,595,3,1,0,0,2551.84,1252.35,125.455,5.04342,60,10,0,706,0,1,0,0,0),
+(@GUID+56,27737,595,3,1,0,0,2536.1,1244,126.928,5.16515,60,10,0,756,0,1,0,0,0),
+(@GUID+57,27737,595,3,1,0,0,2543.63,1247.23,126.131,5.19735,60,10,0,706,0,1,0,0,0),
+(@GUID+58,27737,595,3,1,0,0,2554.21,1238.95,125.475,4.64836,60,10,0,730,0,1,0,0,0),
+(@GUID+59,27737,595,3,1,0,0,2548.89,1227.37,126.375,5.31517,60,10,0,756,0,1,0,0,0),
+(@GUID+60,27737,595,3,1,0,0,2560.46,1225.4,125.496,4.85335,60,10,0,706,0,1,0,0,0),
+(@GUID+61,27737,595,3,1,0,0,2555.11,1218.55,125.944,5.11646,60,10,0,730,0,1,0,0,0),
+(@GUID+62,27737,595,3,1,0,0,2561.91,1211.56,125.38,5.5877,60,10,0,730,0,1,0,0,0),
+(@GUID+63,27737,595,3,1,0,0,2568.67,1202.96,125.509,4.96095,60,10,0,756,0,1,0,0,0),
+(@GUID+64,27737,595,3,1,0,0,2571.93,1193.48,125.619,5.07641,60,10,0,756,0,1,0,0,0),
+(@GUID+65,27737,595,3,1,0,0,2577.77,1180.88,125.562,4.64522,60,10,0,756,0,1,0,0,0),
+(@GUID+66,27737,595,3,1,0,0,2574.2,1166.63,126.089,4.44966,60,10,0,706,0,1,0,0,0),
+(@GUID+67,27737,595,3,1,0,0,2564.78,1166.82,127.092,4.2266,60,10,0,756,0,1,0,0,0),
+(@GUID+68,27737,595,3,1,0,0,2577.56,1158.41,126.385,4.07738,60,10,0,756,0,1,0,0,0),
+(@GUID+69,27737,595,3,1,0,0,2567.93,1176.56,126.2,4.7489,60,10,0,706,0,1,0,0,0),
+(@GUID+70,27737,595,3,1,0,0,2559.28,1189.46,126.642,4.73319,60,10,0,756,0,1,0,0,0),
+(@GUID+71,27737,595,3,1,0,0,2554.14,1213.37,126.599,5.13845,60,10,0,706,0,1,0,0,0),
+(@GUID+72,27737,595,3,1,0,0,2560.58,1218.48,125.281,4.97351,60,10,0,730,0,1,0,0,0),
+(@GUID+73,27737,595,3,1,0,0,2570.2,1170.58,126.311,4.64365,60,10,0,756,0,1,0,0,0),
+(@GUID+74,27729,595,3,1,0,0,2496.57,1354.66,132.217,5.13691,120,5,0,63000,0,1,0,0,0),
+(@GUID+75,27729,595,3,1,0,0,2494.22,1365.17,130.812,5.15654,120,5,0,63000,0,1,0,0,0),
+(@GUID+76,27729,595,3,1,0,0,2440.41,1434.46,131.456,5.69372,120,5,0,63000,0,1,0,0,0),
+(@GUID+77,27729,595,3,1,0,0,2433.18,1421.13,130.644,0.046706,120,5,0,63000,0,1,0,0,0),
+(@GUID+78,27734,595,3,1,0,0,2546.07,1239.17,125.945,5.07801,120,5,0,63000,0,1,0,0,0),
+(@GUID+79,27734,595,3,1,0,0,2458.58,1426.22,131.056,5.42984,120,5,0,63000,0,1,0,0,0),
+(@GUID+80,27736,595,3,1,0,0,2488.11,1364.91,130.402,5.35524,120,5,0,130330,0,1,0,0,0),
+(@GUID+81,28199,595,3,1,0,0,2527.63,1267.59,128.168,5.12906,120,5,0,63000,0,1,0,0,0),
+(@GUID+82,28199,595,3,1,0,0,2528.06,1284.34,128.877,5.14869,120,5,0,63000,0,1,0,0,0),
+(@GUID+83,28199,595,3,1,0,0,2466.27,1414.57,130.977,5.18637,120,5,0,63000,0,1,0,0,0),
+(@GUID+84,28200,595,3,1,0,0,2570.51,1181.4,125.809,4.61855,120,5,0,50400,44070,1,0,0,0),
+(@GUID+85,28200,595,3,1,0,0,2560.45,1202.05,126.031,4.85417,120,5,0,50400,44070,1,0,0,0),
+(@GUID+86,28200,595,3,1,0,0,2487.85,1373.29,130.236,5.078,120,5,0,50400,44070,1,0,0,0),
+(@GUID+87,28200,595,3,1,0,0,2416.7,1416.52,130.379,0.191224,120,5,0,50400,44070,1,0,0,0),
+(@GUID+88,28200,595,3,1,0,0,2424.42,1422.68,130.868,0.25327,120,5,0,50400,44070,1,0,0,0),
+(@GUID+89,28201,595,3,1,0,0,2540.67,1254.82,126.274,4.97198,120,5,0,130330,0,1,0,0,0),
+(@GUID+90,28201,595,3,1,0,0,2410.03,1417.19,130.577,0.191229,120,5,0,130330,0,1,0,0,0),
+(@GUID+91,28249,595,3,1,0,0,2562.66,1177.9,126.716,4.77171,120,5,0,63000,0,1,0,0,0),
+(@GUID+92,28249,595,3,1,0,0,2566.72,1190.41,125.837,4.7992,120,5,0,63000,0,1,0,0,0),
+(@GUID+93,28249,595,3,1,0,0,2472.34,1404.76,130.752,5.20601,120,5,0,63000,0,1,0,0,0),
+(@GUID+94,28249,595,3,1,0,0,2460.59,1413.26,130.46,5.4377,120,5,0,63000,0,1,0,0,0),
+(@GUID+95,28249,595,3,1,0,0,2415.04,1423.52,131.111,0.214785,120,5,0,63000,0,1,0,0,0);
+
+DELETE FROM `script_texts` WHERE entry BETWEEN -1595052 AND -1595048;
+INSERT INTO `script_texts` (npc_entry,entry, content_default, comment) VALUES
+(27913,-1595048, "Scourge forces have been spotted near the Elder's Square Gate!","Spawns near elder's square gate."),
+(27913,-1595059, "Scourge forces have been spotted near the Town Hall!","Spawns near town hall."),
+(27913,-1595050, "Scourge forces have been spotted near the King's Square fountain!","Spawns near king's square."),
+(27913,-1595051, "Scourge forces have been spotted near the Market Row Gate!", "Spawns near market row gate."),
+(27913,-1595052, "Scourge forces have been spotted near the Festival Lane Gate!", "Spawns near festval lane gate.");
+
+UPDATE `creature_template` SET `dynamicflags` = 0 WHERE `entry` IN (32273,32313);
+UPDATE `areatrigger_teleport` SET id = 5181 WHERE id = 5148;
+UPDATE `creature_template` SET `flags_extra` = 128 WHERE `entry` = 20562;
+UPDATE `script_waypoint` SET location_x = 2449.32, location_y = 1191.09 WHERE entry = 26499 AND pointid = 26;
+
+UPDATE `creature_template` SET `lootid` = 32273 WHERE `entry` IN (32273, 32313);
+
+-- thx warpten (fix for credit spell)
+UPDATE `spell_dbc` SET `Attributes` = '8388992', `AttributesEx2` = '5', `AttributesEx3` = '269484288' WHERE `Id` = 58630;
+
+-- Wolvar Orphan quest order
+UPDATE `quest_template` SET `prevquestid`=13927,`exclusivegroup`=-13930 WHERE `id` IN (13930,13934,13951);
+UPDATE `quest_template` SET `prevquestid`=13930,`exclusivegroup`=-13955 WHERE `id` IN (13955,13957);
+UPDATE `quest_template` SET `prevquestid`=13955,`exclusivegroup`=0 WHERE `id`=13938;
+UPDATE `quest_template` SET `prevquestid`=13938,`exclusivegroup`=0 WHERE `id`=13960;
+-- Oracle Orphan quest order
+UPDATE `quest_template` SET `prevquestid`=13926,`exclusivegroup`=-13929 WHERE `id` IN (13929,13933,13950);
+UPDATE `quest_template` SET `prevquestid`=13929,`exclusivegroup`=-13954 WHERE `id` IN (13954,13956);
+UPDATE `quest_template` SET `prevquestid`=13954,`exclusivegroup`=0 WHERE `id`=13937;
+UPDATE `quest_template` SET `prevquestid`=13937,`exclusivegroup`=0 WHERE `id`=13959;
+-- Human Orphan quest order
+UPDATE `quest_template` SET `prevquestid`=1468,`exclusivegroup`=-1479 WHERE `id` IN (1479,1558,1687);
+UPDATE `quest_template` SET `prevquestid`=1479,`exclusivegroup`=-558 WHERE `id` IN (558,4822);
+UPDATE `quest_template` SET `prevquestid`=558,`exclusivegroup`=0 WHERE `id`=171;
+-- Orcish Orphan quest order
+UPDATE `quest_template` SET `prevquestid`=172,`exclusivegroup`=-910 WHERE `id` IN (910,911,1800);
+UPDATE `quest_template` SET `prevquestid`=910,`exclusivegroup`=-915 WHERE `id` IN (915,925);
+UPDATE `quest_template` SET `prevquestid`=915,`exclusivegroup`=0 WHERE `id`=5502;
+-- Draenei Orphan quest order
+UPDATE `quest_template` SET `prevquestid`=10943,`exclusivegroup`=-10950 WHERE `id` IN (10950,10952,10954);
+UPDATE `quest_template` SET `prevquestid`=10950,`exclusivegroup`=-10956 WHERE `id` IN (10956,10962);
+UPDATE `quest_template` SET `NextQuestIdChain`=10968 WHERE `id`=10956;
+UPDATE `quest_template` SET `prevquestid`=10968,`exclusivegroup`=0 WHERE `id`=10966;
+-- Blood Elf Orphan quest order
+UPDATE `quest_template` SET `prevquestid`=10942,`exclusivegroup`=-10945 WHERE `id` IN (10945,10951,10953);
+UPDATE `quest_template` SET `prevquestid`=10945,`exclusivegroup`=-10960 WHERE `id` IN (10960,10963);
+UPDATE `quest_template` SET `prevquestid`=10960,`exclusivegroup`=0 WHERE `id`=11975;
+UPDATE `quest_template` SET `prevquestid`=11975,`exclusivegroup`=0 WHERE `id`=10967;
+
+-- Set correct NPC for A Warden of the Alliance
+UPDATE `creature_questrelation` SET `id`=14305 WHERE `quest`=171;
+
+DELETE FROM `creature_questrelation` WHERE `id` IN (14305,14444,22817,22818,33532,33533,34365); 
+DELETE FROM `game_event_creature_quest` WHERE `eventEntry`=10;
+INSERT INTO `game_event_creature_quest` (`eventEntry`,`id`,`quest`) VALUES
+-- Alliance
+(10,14450,1468), -- Orphan Matron Nightingale - Children's Week
+(10,14305,1479), -- Human Orphan - The Bough of the Eternals
+(10,14305,1558), -- Human Orphan - The Stonewrought Dam
+(10,14305,1687), -- Human Orphan - Spooky Lighthouse
+(10,14305,558), -- Human Orphan - Jaina's Autograph
+(10,14305,4822), -- Human Orphan - You Scream, I Scream...
+-- Horde 
+(10,14451,172), -- Orphan Matron Battlewail - Children's Week
+(10,14444,910), -- Orcish Orphan - Down at the Docks
+(10,14444,911), -- Orcish Orphan - Gateway to the Frontier
+(10,14444,1800), -- Orcish Orphan - Lordaeron Throne Room
+(10,14444,915), -- Orcish Orphan - You Scream, I Scream...
+(10,14444,925), -- Orcish Orphan - Cairne's Hoofprint
+(10,14444,5502), -- Orcish Orphan - A Warden of the Horde
+-- Outlands: Blood Elfs
+(10,22819,10942), -- Orphan Matron Mercy - Children's Week
+(10,22817,10945), -- Blood Elf Orphan - Hch'uu and the Mushroom People
+(10,22817,10951), -- Blood Elf Orphan - A Trip to the Dark Portal
+(10,22817,10953), -- Blood Elf Orphan - Visit the Throne of the Elements
+(10,22817,11975), -- Blood Elf Orphan - Now, When I Grow Up...
+(10,22817,10963), -- Blood Elf Orphan - Time to Visit the Caverns
+(10,22817,10967), -- Blood Elf Orphan - Back to the Orphanage
+-- Outlands: Draenei
+(10,22819,10943), -- Orphan Matron Mercy - Children's Week
+(10,22818,10950), -- Draenei Orphan - Auchindoun and the Ring of Observance
+(10,22818,10952), -- Draenei Orphan - A Trip to the Dark Portal
+(10,22818,10954), -- Draenei Orphan - Jheel is at Aeris Landing!
+(10,22818,10956), -- Draenei Orphan - The Seat of the Naaru
+(10,22818,10962), -- Draenei Orphan - Time to Visit the Caverns
+(10,22818,10966), -- Draenei Orphan - Back to the Orphanage
+-- Northrend: Wolvar
+(10,34365,13927), -- Orphan Matron Aria - Little Orphan Kekek Of The Wolvar
+(10,33532,13930), -- Wolvar Orphan - Home Of The Bear-Men
+(10,33532,13934), -- Wolvar Orphan - The Bronze Dragonshrine
+(10,33532,13951), -- Wolvar Orphan - Playmates!
+(10,33532,13955), -- Wolvar Orphan - The Dragon Queen
+(10,33532,13957), -- Wolvar Orphan - The Mighty Hemet Nesingwary
+(10,33532,13960), -- Wolvar Orphan - Back To The Orphanage
+-- Northrend: Oracles
+(10,34365,13926), -- Orphan Matron Aria - Little Orphan Roo Of The Oracles
+(10,33533,13929), -- Oracle Orphan - The Biggest Tree Ever!
+(10,33533,13933), -- Oracle Orphan - The Bronze Dragonshrine
+(10,33533,13937), -- Oracle Orphan - A Trip To The Wonderworks
+(10,33533,13950), -- Oracle Orphan - Playmates!
+(10,33533,13954), -- Oracle Orphan - The Dragon Queen
+(10,33533,13956), -- Oracle Orphan - Meeting a Great One
+(10,33533,13959); -- Oracle Orphan - Back To The Orphanage
+
+-- Removed "When I Grow Up..." and replace it with "Now, When I Grow Up..." 
+UPDATE `quest_template` SET `prevquestid`=10945,`exclusivegroup`=-11975 WHERE `id` IN (11975,10963);
+DELETE FROM `disables` WHERE `sourceType`=1 AND `entry`=10960;
+INSERT INTO `disables` (`sourceType`,`entry`,`flags`,`params_0`,`params_1`,`comment`) VALUES
+(1,10960,0,'','','Deprecated quest: When I grow up...');
+
+-- Thrallmar Grunt pathing
+SET @NPC := 57505;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=168.3949,`position_y`=2641.357,`position_z`=86.32077 WHERE `guid`=@NPC;
+UPDATE `creature_addon` SET `path_id`=@PATH WHERE `guid`=@NPC;
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,168.3949,2641.357,86.32077,0,0,0,100,0),
+(@PATH,2,186.5067,2615.882,87.28357,0,0,0,100,0),
+(@PATH,3,188.9113,2601.655,87.28357,0,0,0,100,0),
+(@PATH,4,198.3909,2602.661,87.28357,0,0,0,100,0),
+(@PATH,5,201.5686,2609.845,87.28357,0,0,0,100,0),
+(@PATH,6,187.2484,2616.44,87.28357,0,0,0,100,0),
+(@PATH,7,168.7871,2641.268,86.32077,0,0,0,100,0),
+(@PATH,8,155.2003,2681.998,84.82113,0,0,0,100,0),
+(@PATH,9,194.6133,2692.07,90.61374,0,0,0,100,0),
+(@PATH,10,215.4427,2693.589,90.69872,0,0,0,100,0),
+(@PATH,11,219.0203,2692.25,90.69665,0,0,0,100,0),
+(@PATH,12,225.5117,2680.063,90.68996,0,0,0,100,0),
+(@PATH,13,235.309,2679.308,90.69373,0,0,0,100,0),
+(@PATH,14,246.9184,2682.646,90.70419,0,0,0,100,0),
+(@PATH,15,252.4411,2688.479,90.70386,0,0,0,100,0),
+(@PATH,16,255.0155,2699.197,90.70283,0,0,0,100,0),
+(@PATH,17,251.5234,2707.998,90.70486,0,0,0,100,0),
+(@PATH,18,243.2346,2712.791,90.70392,0,0,0,100,0),
+(@PATH,19,231.9871,2713.626,90.70399,0,0,0,100,0),
+(@PATH,20,221.1457,2709.591,90.69753,0,0,0,100,0),
+(@PATH,21,218.8803,2695.845,90.69318,0,0,0,100,0),
+(@PATH,22,215.4517,2693.612,90.69869,0,0,0,100,0),
+(@PATH,23,194.7944,2692.039,90.65273,0,0,0,100,0),
+(@PATH,24,175.8115,2687.591,86.68189,0,0,0,100,0),
+(@PATH,25,155.2143,2682.375,84.82113,0,0,0,100,0),
+(@PATH,26,131.8727,2679.832,84.56969,0,0,0,100,0),
+(@PATH,27,130.0859,2666.262,84.1262,0,0,0,100,0),
+(@PATH,28,153.1291,2650.22,86.15128,0,0,0,100,0);
+
+-- Remove dup Thrallmar Grunt spawn
+DELETE FROM `creature` WHERE `guid`=57532;
+DELETE FROM `creature_addon` WHERE `guid`=57532;
+
+-- Bat Rider Guard pathing
+SET @NPC := 54840;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=156.9029,`position_y`=2554.784,`position_z`=170.8949 WHERE `guid`=@NPC;
+UPDATE `creature_addon` SET `path_id`=@PATH WHERE `guid`=@NPC;
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,156.9029,2554.784,170.8949,0,0,0,100,0),
+(@PATH,2,52.51677,2602.816,139.7838,0,0,0,100,0),
+(@PATH,3,42.10146,2627.056,139.7838,0,0,0,100,0),
+(@PATH,4,37.17329,2663.729,139.7838,0,0,0,100,0),
+(@PATH,5,62.91933,2687.96,139.7838,0,0,0,100,0),
+(@PATH,6,96.1871,2688.141,148.4226,0,0,0,100,0),
+(@PATH,7,129.818,2690.786,151.256,0,0,0,100,0),
+(@PATH,8,165.6888,2715.398,170.8949,0,0,0,100,0),
+(@PATH,9,199.7751,2744.93,170.8949,0,0,0,100,0),
+(@PATH,10,246.0857,2761.154,170.8949,0,0,0,100,0),
+(@PATH,11,295.0904,2757.991,170.8949,0,0,0,100,0),
+(@PATH,12,309.3468,2726.089,170.8949,0,0,0,100,0),
+(@PATH,13,303.8448,2682.588,170.8949,0,0,0,100,0),
+(@PATH,14,289.3104,2650.866,170.8949,0,0,0,100,0),
+(@PATH,15,261.2743,2618.831,170.8949,0,0,0,100,0),
+(@PATH,16,233.6436,2578.997,170.8949,0,0,0,100,0),
+(@PATH,17,199.3375,2546.226,170.8949,0,0,0,100,0);
+
+-- Bat Rider Guard pathing
+SET @NPC := 54841;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=65.97776,`position_y`=2661.205,`position_z`=163.6752 WHERE `guid`=@NPC;
+UPDATE `creature_addon` SET `path_id`=@PATH WHERE `guid`=@NPC;
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,65.97776,2661.205,163.6752,0,0,0,100,0),
+(@PATH,2,85.52612,2668.312,163.6752,0,0,0,100,0),
+(@PATH,3,119.9537,2689.26,163.6752,0,0,0,100,0),
+(@PATH,4,121.8238,2721.88,163.6752,0,0,0,100,0),
+(@PATH,5,142.6907,2750.891,163.6752,0,0,0,100,0),
+(@PATH,6,149.9812,2788.504,163.6752,0,0,0,100,0),
+(@PATH,7,142.9353,2830.464,163.6752,0,0,0,100,0),
+(@PATH,8,115.1711,2822.444,163.6752,0,0,0,100,0),
+(@PATH,9,57.16672,2791.644,163.6752,0,0,0,100,0),
+(@PATH,10,38.80463,2758.823,163.6752,0,0,0,100,0),
+(@PATH,11,19.69282,2714.784,163.6752,0,0,0,100,0),
+(@PATH,12,23.22027,2677.714,163.6752,0,0,0,100,0);
+
+-- Bat Rider Guard pathing
+SET @NPC := 54842;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=263.5968,`position_y`=2694.818,`position_z`=169.7312 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,4097);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,263.5968,2694.818,169.7312,0,0,0,100,0),
+(@PATH,2,184.0861,2784.899,154.4534,0,0,0,100,0),
+(@PATH,3,154.2815,2754.787,154.3701,0,0,0,100,0),
+(@PATH,4,127.0308,2740.488,154.3701,0,0,0,100,0),
+(@PATH,5,118.0444,2706.509,154.3701,0,0,0,100,0),
+(@PATH,6,115.7577,2669.386,158.6756,0,0,0,100,0),
+(@PATH,7,131.4314,2622.531,162.1478,0,0,0,100,0),
+(@PATH,8,154.8241,2607.207,164.4812,0,0,0,100,0),
+(@PATH,9,176.3283,2571.343,168.5645,0,0,0,100,0),
+(@PATH,10,221.6267,2559.683,172.1201,0,0,0,100,0),
+(@PATH,11,245.392,2593.423,169.8978,0,0,0,100,0),
+(@PATH,12,251.0069,2617.749,169.7312,0,0,0,100,0),
+(@PATH,13,263.0581,2644.614,169.7312,0,0,0,100,0);
+
+-- Bat Rider Guard pathing
+SET @NPC := 54843;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=62.42025,`position_y`=2785.719,`position_z`=192.1124 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,4097);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,62.42025,2785.719,192.1124,0,0,0,100,0),
+(@PATH,2,159.9371,2842.977,208.279,0,0,0,100,0),
+(@PATH,3,183.0578,2845.035,208.279,0,0,0,100,0),
+(@PATH,4,211.2432,2864.757,214.2235,0,0,0,100,0),
+(@PATH,5,238.1182,2871.979,220.9457,0,0,0,100,0),
+(@PATH,6,252.9173,2853.913,220.9457,0,0,0,100,0),
+(@PATH,7,255.0203,2812.634,220.9457,0,0,0,100,0),
+(@PATH,8,240.4993,2780.929,220.9457,0,0,0,100,0),
+(@PATH,9,195.4901,2773.965,209.3901,0,0,0,100,0),
+(@PATH,10,162.1341,2742.294,212.9179,0,0,0,100,0),
+(@PATH,11,125.4935,2720.611,197.9457,0,0,0,100,0),
+(@PATH,12,93.49241,2699.757,192.1124,0,0,0,100,0),
+(@PATH,13,58.35324,2681.49,192.1124,0,0,0,100,0),
+(@PATH,14,22.8833,2715.123,192.1124,0,0,0,100,0),
+(@PATH,15,30.10514,2764.5,192.1124,0,0,0,100,0);
+
+-- Fix Bat Rider Guard InhabitType
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=15242;
+
+-- Remove dup Bat Rider Guard spawns
+DELETE FROM `creature` WHERE `guid` IN (54839,54844,54845);
+DELETE FROM `creature_addon` WHERE `guid` IN (54839,54844,54845);
+
+-- Speech by Martik Tor'seldoi, Thrallmar
+SET @ENTRY := 16577;
+UPDATE `creature_template` SET `AIName`= 'SmartAI' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=9 AND `entryorguid`=@ENTRY*100;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,1,0,100,0,30000,50000,360000,360000,80,@ENTRY*100,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Martik Tor''seldoi - OOC - Load script every 6 min ooc'),
+(@ENTRY,0,1,0,25,0,100,0,0,0,0,0,11,18100,32,0,0,0,0,1,0,0,0,0,0,0,0, 'Martik Tor''seldoi - Reset - Cast Frost Armor'),
+(@ENTRY*100,9,0,0,0,0,100,0,1000,1000,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi Say text 0'),
+(@ENTRY*100,9,1,0,0,0,100,0,3000,3000,0,0,5,1,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi emote'),
+(@ENTRY*100,9,2,0,0,0,100,0,3000,3000,0,0,5,6,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi emote'),
+(@ENTRY*100,9,3,0,0,0,100,0,3000,3000,0,0,1,0,0,0,0,0,0,10,57487,16578,0,0,0,0,0,'Blood Elf Pilgrim Say text 0'),
+(@ENTRY*100,9,4,0,0,0,100,0,3000,3000,0,0,5,6,0,0,0,0,0,10,57487,16578,0,0,0,0,0,'Blood Elf Pilgrim emote'),
+(@ENTRY*100,9,5,0,0,0,100,0,3000,3000,0,0,66,0,0,0,0,0,0,10,57487,16578,0,0,0,0,0,'Martik Tor''seldoi turn to'),
+(@ENTRY*100,9,6,0,0,0,100,0,1000,1000,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi Say text 1'),
+(@ENTRY*100,9,7,0,0,0,100,0,4000,4000,0,0,1,1,0,0,0,0,0,10,57487,16578,0,0,0,0,0,'Blood Elf Pilgrim Say text 1'),
+(@ENTRY*100,9,8,0,0,0,100,0,3000,3000,0,0,1,2,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi Say text 2'),
+(@ENTRY*100,9,9,0,0,0,100,0,3000,3000,0,0,5,1,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi emote'),
+(@ENTRY*100,9,10,0,0,0,100,0,3000,3000,0,0,5,273,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi emote'),
+(@ENTRY*100,9,11,0,0,0,100,0,3000,3000,0,0,1,2,0,0,0,0,0,10,57487,16578,0,0,0,0,0,'Blood Elf Pilgrim Say text 2'),
+(@ENTRY*100,9,12,0,0,0,100,0,1000,1000,0,0,5,15,0,0,0,0,0,9,16578,0,20,0,0,0,0,'Blood Elf Pilgrim emote'),
+(@ENTRY*100,9,13,0,0,0,100,0,3000,3000,0,0,66,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Martik Tor''seldoi turn to');
+-- NPC talk text insert from sniff
+DELETE FROM `creature_text` WHERE `entry` IN (16577,16578);
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+(16577,0,0, 'Brothers and sisters, I have been to the promised land. I have tasted in the sublim energy. I have felt bliss - bliss so engrossing and all encompassing that I was left wondering if I had stumbled upon the dreams of gods.!',12,0,100,5,0,0, 'Martik Tor''seldoi'),
+(16577,1,0, 'In paradise, you merely reach out and take from the Nether.',12,0,100,1,0,0, 'Martik Tor''seldoi'),
+(16577,2,0, 'From the very air! Tendrils of arcane energy light up the obsidian sky as plumes of raw magic rise up from fissures in the land. Kneel and drink from the fissure as you do from a stream or well. Pluck a tendril from the heavens as if it were an apple hanging from a branch.',12,0,100,5,0,0, 'Martik Tor''seldoi'),
+(16578,0,0, 'Tell us more, Martik. What is it? What does it feel like?',12,0,100,1,0,0, 'Blood Elf Pilgrim'),
+(16578,1,0, 'But how?',12,0,100,6,0,0, 'Blood Elf Pilgrim'),
+(16578,2,0, '%s smiles/gasps.',16,0,100,0,0,0, 'Blood Elf Pilgrim');
+
+-- Forge of Souls Trash update
+
+-- Npc Updates
+
+-- Spiteful Apparition
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=36551;
+UPDATE `creature` SET `spawndist`=20,`MovementType`=1,`curhealth`=1,`curmana`=0 WHERE `id`=36551;
+DELETE FROM `creature_template_addon` WHERE `entry`=36551;
+INSERT INTO `creature_template_addon` (`entry`,`bytes2`,`auras`) VALUES (36551,1, '69105 69136');
+-- Spiteful Apparition (Ambient)
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=36967;
+UPDATE `creature` SET  `spawndist`=20,`MovementType`=1,`curhealth`=1,`curmana`=0 WHERE `id`=36967;
+DELETE FROM `creature_template_addon` WHERE `entry`=36967;
+INSERT INTO `creature_template_addon` (`entry`,`bytes2`,`auras`) VALUES (36967,1, '69663 69658');
+-- Spectral Warden
+UPDATE `creature_addon` SET `auras`='69144' WHERE `guid` IN (SELECT `guid` FROM `creature` WHERE `id`=36666);
+
+-- SAI Updates
+
+-- Spiteful Apparition SAI
+SET @ENTRY   := 36551; -- NPC entry
+SET @SPELL1  := 41253; -- Greater Invisibility
+SET @SPELL2  := 68895; -- Spite (Normal)
+SET @SPELL3  := 70212; -- Spite (Heroic)
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,25,0,100,6,0,0,0,0,11,@SPELL1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Spiteful Apparition - On Reset - Cast Greater Invisibility'),
+(@ENTRY,0,1,0,10,0,100,6,0,10,3000,4000,28,@SPELL1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Spiteful Apparition - OOC range - Remove Greater Invisibility'),
+(@ENTRY,0,2,0,0,0,100,2,7000,9000,7000,9000,11,@SPELL2,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Spiteful Apparition - Combat - Cast Spite "Normal"'),
+(@ENTRY,0,3,0,0,0,100,4,7000,9000,7000,9000,11,@SPELL3,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Spiteful Apparition - Combat - Cast Spite "Heroic"');
+
+-- Soulguard Reaper SAI
+SET @ENTRY   := 36499; -- NPC entry
+SET @SPELL1  := 68797; -- Soulguard Channel
+SET @SPELL2  := 69058; -- Shadow Lance
+SET @SPELL3  := 69060; -- Frost Nova (Normal)
+SET @SPELL4  := 70209; -- Frost Nova (Heroic)
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,1,0,100,7,0,0,0,0,11,@SPELL1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Reaper - OOC - Cast Soulguard Channel'),
+(@ENTRY,0,1,0,0,0,100,6,5000,6000,7000,9000,11,@SPELL2,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Reaper - Combat - Cast Shadow Lance'),
+(@ENTRY,0,2,0,0,0,100,2,7000,9000,8000,10000,11,@SPELL3,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Soulguard Reaper - Combat - Cast Frost Nova "Normal"'),
+(@ENTRY,0,3,0,0,0,100,4,7000,9000,8000,10000,11,@SPELL4,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Soulguard Reaper - Combat - Cast Frost Nova "Heroic"'),
+(@ENTRY,0,4,0,4,0,100,6,0,0,0,0,39,30,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Reaper - Aggro - Call for help');
+
+-- Soulguard Beam Focus Target
+SET @ENTRY   := 36508; -- NPC entry
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid` IN (-201770,-201785,-201741);
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(-201770,0,0,0,1,0,100,6,1000,1000,5000,5000,45,0,1,0,0,0,0,19,36620,60,0,0,0,0,0, 'Soulguard Beam Focus Target - OOC - Set data on Soulguard Adept'),
+(-201785,0,0,0,1,0,100,6,1000,1000,5000,5000,45,0,1,0,0,0,0,19,36620,60,0,0,0,0,0, 'Soulguard Beam Focus Target - OOC - Set data on Soulguard Adept'),
+(-201741,0,0,0,1,0,100,6,1000,1000,5000,5000,45,0,1,0,0,0,0,19,36620,60,0,0,0,0,0, 'Soulguard Beam Focus Target - OOC - Set data on Soulguard Adept'),
+(-201741,0,1,0,1,0,100,6,1000,1000,5000,5000,45,0,1,0,0,0,0,19,36564,60,0,0,0,0,0, 'Soulguard Beam Focus Target - OOC - Set data on Soulguard Bonecaster');
+
+-- Spectral Warden SAI
+SET @ENTRY   := 36666; -- NPC entry
+SET @SPELL1  := 69633; -- Veil of Shadow
+SET @SPELL2  := 69148; -- Wail of Souls (Normal)
+SET @SPELL3  := 70210; -- Wail of Souls (Heroic)
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,6,5000,6000,9000,10000,11,@SPELL1,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Spectral Warden - Combat - Cast Veil of Shadow'),
+(@ENTRY,0,1,0,0,0,100,2,9000,11000,5000,6000,11,@SPELL1,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Spectral Warden - Combat - Cast Wail of Souls'),
+(@ENTRY,0,2,0,0,0,100,4,9000,11000,5000,6000,11,@SPELL2,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Spectral Warden - Combat - Cast Wail of Souls');
+
+-- Soulguard Watchman SAI
+SET @ENTRY   := 36478; -- NPC entry
+SET @SPELL1  := 69056; -- Shroud of Runes
+SET @SPELL2  := 69053; -- Unholy Rage
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,50,6,0,10000,16000,20000,11,@SPELL1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Watchman - Combat - Cast Shroud of Runes'),
+(@ENTRY,0,1,2,0,0,100,6,8000,16000,32000,40000,11,@SPELL2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Watchman - Combat - Cast Unholy Rage'),
+(@ENTRY,0,2,0,61,0,100,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Watchman - Combat - Say 0'),
+(@ENTRY,0,3,0,4,0,100,6,0,0,0,0,39,20,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Watchman - Aggro - Call for help');
+-- NPC talk text insert
+DELETE FROM `creature_text` WHERE `entry`=@ENTRY;
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+(@ENTRY,0,0, '%s goes into a frenzy!',16,0,100,0,0,0, 'Soulguard Watchman');
+
+-- Soul Horror SAI
+SET @ENTRY   := 36522; -- NPC entry
+SET @SPELL1  := 69088; -- Soul Strike (Normal)
+SET @SPELL2  := 70211; -- Soul Strike (Heroic)
+SET @SPELL3  := 69107; -- Killing Spree Invis Aura
+SET @SPELL4  := 69106; -- Killing Spree Aura
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,2,5000,6000,5000,6000,11,@SPELL1,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soul Horror - Combat - Cast Soul Strike'),
+(@ENTRY,0,1,0,0,0,100,4,5000,6000,5000,6000,11,@SPELL2,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soul Horror - Combat - Cast Soul Strike'),
+(@ENTRY,0,4,0,4,0,100,6,0,0,0,0,39,35,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soul Horror - Aggro - Call for help');
+
+-- Soulguard Animator SAI
+SET @ENTRY   := 36516; -- NPC entry
+SET @SPELL1  := 68834; -- Soulguard Channel Beam02
+SET @SPELL2  := 69562; -- Raise Dead
+SET @SPELL3  := 69131; -- Soul Sickness
+SET @SPELL4  := 69128; -- Soul Siphon
+SET @SPELL5  := 69068; -- Shadow Bolt (Normal)
+SET @SPELL6  := 70208; -- Shadow Bolt (Heroic)
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,1,0,100,7,1000,1000,1000,1000,11,@SPELL1,0,0,0,0,0,9,36522,1,15,0,0,0,0, 'Soulguard Animator - OOC - Cast Soulguard Channel Beam02'),
+(@ENTRY,0,1,0,0,1,100,6,20000,25000,20000,25000,11,@SPELL2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Combat - Cast Raise Dead'),
+(@ENTRY,0,2,0,0,0,100,6,7000,9000,9000,11000,11,@SPELL3,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Soulguard Animator - Combat - Cast Soul Sickness'),
+(@ENTRY,0,3,0,0,0,100,6,9000,11000,7000,9000,11,@SPELL4,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Soulguard Animator - Combat - Cast Soul Siphon'),
+(@ENTRY,0,4,0,0,0,100,2,4000,5000,3500,4500,11,@SPELL5,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Animator - Combat - Cast Shadow Bolt "Normal"'),
+(@ENTRY,0,5,0,0,0,100,4,4000,5000,3500,4500,11,@SPELL6,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Animator - Combat - Cast Shadow Bolt "Heroic"'),
+(@ENTRY,0,6,7,4,0,100,6,0,0,0,0,39,35,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Aggro - Call for help'),
+(@ENTRY,0,7,0,61,0,100,6,0,0,0,0,22,1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Aggro - Set phase 1'),
+(@ENTRY,0,8,9,38,0,100,7,0,2,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Data set 2 - Set data'),
+(@ENTRY,0,9,0,61,0,100,6,0,0,0,0,22,2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Data set 2 - Set phase 2'),
+(@ENTRY,0,10,11,38,0,100,7,0,3,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Data set 3 - Set data'),
+(@ENTRY,0,11,0,61,0,100,6,0,0,0,0,22,1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Animator - Data set 3 - Set phase 1');
+
+-- Soulguard Adept SAI
+SET @ENTRY   := 36620; -- NPC entry
+SET @SPELL1  := 68834; -- Soulguard Channel Beam02
+SET @SPELL2  := 69562; -- Raise Dead
+SET @SPELL3  := 69068; -- Shadow Bolt (Normal)
+SET @SPELL4  := 70208; -- Shadow Bolt (Heroic)
+SET @SPELL5  := 69066; -- Drain Life (Normal)
+SET @SPELL6  := 70213; -- Drain Life (Heroic)
+SET @SPELL7  := 69564; -- Shadow Mend (Normal)
+SET @SPELL8  := 70205; -- Shadow Mend (Heroic)
+SET @SPELL9  := 68797; -- Soulguard Channel
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,1,0,100,7,1000,1000,1000,1000,11,@SPELL1,0,0,0,0,0,9,36522,1,15,0,0,0,0, 'Soulguard Adept - OOC - Cast Soulguard Channel Beam02'),
+(@ENTRY,0,1,0,0,4,100,6,20000,25000,20000,25000,11,@SPELL2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Raise Dead'),
+(@ENTRY,0,2,0,0,0,100,2,7000,8000,3500,4500,11,@SPELL3,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Shadow Bolt "Normal"'),
+(@ENTRY,0,3,0,0,0,100,4,7000,8000,3500,4500,11,@SPELL4,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Shadow Bolt "Heroic"'),
+(@ENTRY,0,4,0,0,0,100,2,6000,7000,8000,10000,11,@SPELL5,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Drain Life "Normal"'),
+(@ENTRY,0,5,0,0,0,100,4,6000,7000,8000,10000,11,@SPELL6,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Drain Life "Heroic"'),
+(@ENTRY,0,6,0,0,0,100,2,30000,35000,18000,22000,11,@SPELL7,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Shadow Mend "Normal"'),
+(@ENTRY,0,7,0,0,0,100,4,30000,35000,18000,22000,11,@SPELL8,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Adept - Combat - Cast Shadow Mend "Heroic"'),
+(@ENTRY,0,8,0,25,0,100,6,0,0,0,0,22,1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - On Reset - Set phase 1'),
+(@ENTRY,0,9,0,38,1,100,6,0,1,0,0,22,2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - On dataset 0 1 - Set phase 2'),
+(@ENTRY,0,10,0,1,2,100,7,0,0,0,0,11,@SPELL9,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - OOC - Cast Soulguard Channel'),
+(@ENTRY,0,11,12,4,0,100,6,0,0,0,0,39,35,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Aggro - Call for help'),
+(@ENTRY,0,12,0,61,0,100,6,0,0,0,0,22,3,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Aggro - Set phase 3'),
+(@ENTRY,0,13,14,38,0,100,7,0,2,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Data set 2 - Set data'),
+(@ENTRY,0,14,0,61,0,100,6,0,0,0,0,22,4,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Data set 2 - Set phase 4'),
+(@ENTRY,0,15,16,38,0,100,7,0,3,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Data set 3 - Set data'),
+(@ENTRY,0,16,0,61,0,100,6,0,0,0,0,22,3,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Adept - Data set 3 - Set phase 3');
+
+-- Soulguard Bonecaster SAI
+SET @ENTRY   := 36564; -- NPC entry
+SET @SPELL1  := 68834; -- Soulguard Channel Beam02
+SET @SPELL2  := 69562; -- Raise Dead
+SET @SPELL3  := 69080; -- Bone Volley (Normal)
+SET @SPELL4  := 70206; -- Bone Volley (Heroic)
+SET @SPELL5  := 69069; -- Shield of Bones (Normal)
+SET @SPELL6  := 70207; -- Shield of Bones (Heroic)
+SET @SPELL7  := 68797; -- Soulguard Channel
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,1,0,100,7,1000,1000,1000,1000,11,@SPELL1,0,0,0,0,0,9,36522,1,15,0,0,0,0, 'Soulguard Bonecaster - OOC - Cast Soulguard Channel Beam02'),
+(@ENTRY,0,1,0,0,4,100,6,20000,25000,20000,25000,11,@SPELL2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Combat - Cast Raise Dead'),
+(@ENTRY,0,2,0,0,0,100,2,5000,7000,6000,8000,11,@SPELL3,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Combat - Cast Bone Volley "Normal"'),
+(@ENTRY,0,3,0,0,0,100,4,5000,7000,6000,8000,11,@SPELL4,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Combat - Cast Bone Volley "Heroic"'),
+(@ENTRY,0,4,0,0,0,100,2,5000,7000,7000,9000,11,@SPELL5,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Combat - Cast Shield of Bones "Normal"'),
+(@ENTRY,0,5,0,0,0,100,4,5000,7000,7000,9000,11,@SPELL6,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Combat - Cast Shield of Bones "Heroic"'),
+(@ENTRY,0,6,0,25,0,100,6,0,0,0,0,22,1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - On Reset - Set phase 1'),
+(@ENTRY,0,7,0,38,1,100,6,0,1,0,0,22,2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - On dataset 0 1 - Set phase 2'),
+(@ENTRY,0,8,0,1,2,100,7,0,0,0,0,11,@SPELL7,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - OOC - Cast Soulguard Channel'),
+(@ENTRY,0,9,10,4,0,100,6,0,0,0,0,39,35,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Aggro - Call for help'),
+(@ENTRY,0,10,0,61,0,100,6,0,0,0,0,22,3,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Aggro - Set phase 3'),
+(@ENTRY,0,11,12,38,0,100,7,0,2,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Data set 2 - Set data'),
+(@ENTRY,0,12,0,61,0,100,6,0,0,0,0,22,4,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Data set 2 - Set phase 4'),
+(@ENTRY,0,13,14,38,0,100,7,0,3,0,0,45,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Data set 3 - Set data'),
+(@ENTRY,0,14,0,61,0,100,6,0,0,0,0,22,2,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Soulguard Bonecaster - Data set 3 - Set phase 3');
+
+-- Ghoul Minion SAI
+SET @ENTRY   := 36916; -- NPC entry
+SET @SPELL1  := 69088; -- Soul Strike (Normal)
+SET @SPELL2  := 70211; -- Soul Strike (Heroic)
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,1,54,0,100,6,0,0,0,0,45,0,2,0,0,0,0,23,0,0,0,0,0,0,0, 'Ghoul Minion - Just Summoned - Set Data Summoner'),
+(@ENTRY,0,1,0,61,0,100,6,0,0,0,0,89,5,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Ghoul Minion - Just Summoned - Set Random Movement'),
+(@ENTRY,0,2,0,0,0,100,6,115000,115000,115000,115000,37,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Ghoul Minion - combat - die after 2 min'),
+(@ENTRY,0,3,0,1,0,100,6,15000,15000,15000,15000,37,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Ghoul Minion - OOC - die after 15 sec'),
+(@ENTRY,0,4,5,6,0,100,6,15000,15000,15000,15000,45,0,3,0,0,0,0,23,0,0,0,0,0,0,0, 'Ghoul Minion - on Death - Set data summoner'),
+(@ENTRY,0,5,0,61,0,100,6,15000,15000,15000,15000,41,3000,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Ghoul Minion - on Death - despawn after 3 sec');
+
+-- Set proper faction for Ymirjar Skycaller (Heroic)
+UPDATE `creature_template` SET `faction_A`=1885,`faction_H`=1885 WHERE `entry`=37643;
+
+-- Add some missing Blood of Heroes spawns
+SET @GUID := 5276;
+DELETE FROM `gameobject` WHERE `guid` BETWEEN @GUID AND @GUID+5;
+INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`rotation0`,`rotation1`,`rotation2`,`rotation3`,`spawntimesecs`,`animprogress`,`state`) VALUES 
+(@GUID,176213,0,1,1,1529.10242,-1427.06946,65.49049,-3.001947,0,0,-0.9975634,0.06976615,7200,100,1),
+(@GUID+1,176213,0,1,1,1705.87439,-4690.138,48.9742165,-3.08918333,0,0,-0.9996567,0.02620165,7200,100,1),
+(@GUID+2,176213,0,1,1,1846.79382,-3825.265,135.5159,1.83259487,0,0,0.7933531,0.6087617,7200,100,1),
+(@GUID+3,176213,0,1,1,1748.16333,-4453.13525,74.26272,-2.0594883,0,0,0,0,7200,100,1),
+(@GUID+4,176213,0,1,1,2159.835,-2442.754,62.0804,-0.4886912,0,0,-0.2419214,0.9702958,7200,100,1),
+(@GUID+5,176213,0,1,1,1342.557,-1382.568,46.89193,2.775069,0,0,0.9832544,0.182238,7200,100,1);
+
+-- Wrathbone Laborer SAI
+SET @ENTRY   := 36830; -- NPC entry
+SET @SPELL1  := 70302; -- Blinding Dirt
+SET @SPELL2  := 70278; -- Puncture Wound (Normal)
+SET @SPELL3  := 70279; -- Puncture Wound (Heroic)
+SET @SPELL4  := 69572; -- Shovelled! (Normal)
+SET @SPELL5  := 70280; -- Shovelled! (Heroic)
+UPDATE `creature_template` SET `unit_flags`=`unit_flags`&~256,`AIName`='SmartAI',`ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,6,7000,8000,10000,11000,11,@SPELL1,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Blinding Dirt'),
+(@ENTRY,0,1,0,0,0,100,2,8000,9000,9000,10000,11,@SPELL2,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Puncture Wound (Normal)'),
+(@ENTRY,0,2,0,0,0,100,4,8000,9000,9000,10000,11,@SPELL3,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Puncture Wound (Heroic)'),
+(@ENTRY,0,3,0,0,0,100,2,5000,6000,7000,8000,11,@SPELL4,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Shovelled! (Normal)'),
+(@ENTRY,0,4,0,0,0,100,4,5000,6000,7000,8000,11,@SPELL5,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Shovelled! (Heroic)'),
+(@ENTRY,0,5,0,1,0,100,6,1000,3000,3000,3000,5,38,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Wrathbone Laborer - OOC - emote');
+
+-- Fix InhabitType for Eye of the Lich King
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=36913;
+-- Updates From CDawg
+-- Wrathbone Laborer (heroic) - fix hostility and adds equipment
+UPDATE `creature_template` SET `unit_flags`=`unit_flags`&~256,`equipment_id`=104 WHERE `entry`=37638;
+-- Wrathbone Siegesmith (Heroic) add equipment
+UPDATE `creature_template` SET `equipment_id`=122 WHERE `entry`=37639;
+-- Fallen Warrior add equipment
+UPDATE `creature_template` SET `equipment_id`=2328 WHERE `entry`=37612;
+-- Forgemaster Garfrost add equipment
+UPDATE `creature_template` SET `equipment_id`=2325 WHERE `entry`=37613;
+-- Deathwhisper Necrolyte add equipment
+UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=37609;
+-- Deathwhisper Shadowcaster - add equipment
+UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=38025;
+-- Alliance slaves add equipments
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37645;
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37646;
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37647;
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37648;
+-- horde slaves add equipments
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37649;
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37650;
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37651;
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=37652;
+-- Ymirjar Skycaller (heroic) - Fix unit flags and add equipment
+UPDATE `creature_template` SET `unit_flags`=`unit_flags`|32832,`equipment_id`=2438 WHERE `entry`=37643;
+
+-- Fix skillup on some target dummys
+UPDATE `creature_template` SET `flags_extra`=`flags_extra`|262144 WHERE `entry` IN (31144,2674,2673);
+
+-- Wrathbone Laborer SAI
+SET @ENTRY   := 36830; -- NPC entry
+SET @SPELL1  := 70302; -- Blinding Dirt
+SET @SPELL2  := 70278; -- Puncture Wound
+SET @SPELL3  := 69572; -- Shovelled!
+UPDATE `creature_template` SET `unit_flags`=`unit_flags`&~256,`AIName`='SmartAI',`ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `creature_ai_scripts` WHERE `creature_id`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,6,7000,8000,10000,11000,11,@SPELL1,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Blinding Dirt'),
+(@ENTRY,0,1,0,0,0,100,6,8000,9000,9000,10000,11,@SPELL2,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Puncture Wound (Normal)'),
+(@ENTRY,0,2,0,0,0,100,6,5000,6000,7000,8000,11,@SPELL3,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Shovelled! (Normal)'),
+(@ENTRY,0,3,0,1,0,100,6,1000,3000,3000,3000,5,38,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Wrathbone Laborer - OOC - emote');
+
+-- Gold for Toc based on old.wowhead
+UPDATE `creature_template` SET `mingold`=850000,`maxgold`=950000 WHERE `entry` IN(34797,35447,35448,35449); -- Icehowl
+UPDATE `creature_template` SET `mingold`=550000,`maxgold`=650000 WHERE `entry` IN(34780,35216,35268,35269); -- Lord Jaraxxus
+UPDATE `creature_template` SET `mingold`=650000,`maxgold`=700000 WHERE `entry` IN(34497,35350,35351,35352,34496,35347,35348,35359); -- Fjola Lightbane & Eydis Darkbane
+UPDATE `creature_template` SET `mingold`=500000,`maxgold`=600000 WHERE `entry` IN(34564,34566,35615,35616); -- Anub'arak
+
+-- Based on old.wowhead.com
+UPDATE `creature_template` SET `mingold`=1600000,`maxgold`=1800000 WHERE `entry` IN (33113,34003); -- Flame Levithian
+UPDATE `creature_template` SET `mingold`=1100000,`maxgold`=1300000 WHERE `entry` IN (33118,33190); -- Ignis the Furnace Master
+UPDATE `creature_template` SET `mingold`=280000,`maxgold`=360000 WHERE `entry` IN (33186,33724); -- Razorscale
+UPDATE `creature_template` SET `mingold`=670000,`maxgold`=750000 WHERE `entry` IN (33293,33885); -- XT-002 Deconstructor
+UPDATE `creature_template` SET `mingold`=1680000,`maxgold`=1900000 WHERE `entry` IN (32857,33694); -- Stormcaller Brundir
+UPDATE `creature_template` SET `mingold`=1680000,`maxgold`=1900000 WHERE `entry` IN (32927,33692); -- Runemaster Molgeim
+UPDATE `creature_template` SET `mingold`=1680000,`maxgold`=1900000 WHERE `entry` IN (32867,33693); -- Steelbreaker
+UPDATE `creature_template` SET `mingold`=1220000,`maxgold`=1500000 WHERE `entry` IN (33515,34175); -- Auriaya
+UPDATE `creature_template` SET `mingold`=1650000,`maxgold`=1950000 WHERE `entry` IN (33271,33449); -- General Vezax
+UPDATE `creature_template` SET `mingold`=2020000,`maxgold`=2220000 WHERE `entry` IN (33288,33955); -- Yogg-Saron
+
+-- Wrathbone Siegesmith pathing
+SET @NPC := 202159;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=646.5851,`position_y`=-191.1892,`position_z`=526.8476 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,1);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,646.5851,-191.1892,526.8476,0,0,0,100,0),
+(@PATH,2,648.8837,-181.967,526.7226,0,0,0,100,0),
+(@PATH,3,649.4167,-179.4531,526.7226,14000,0,0,100,0),
+(@PATH,4,652.1736,-183.3594,526.7226,0,0,0,100,0),
+(@PATH,5,648.5643,-188.309,526.8476,0,0,0,100,0),
+(@PATH,6,642.5313,-193.4826,527.3874,0,0,0,100,0),
+(@PATH,7,633.688,-200.741,528.941,12000,0,0,100,0),
+(@PATH,8,641.9254,-196.5747,528.9726,0,0,0,100,0);
+
+-- Wrathbone Siegesmith pathing
+SET @NPC := 201855;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=723.5469,`position_y`=-170.9497,`position_z`=527.5121 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,1);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,723.5469,-170.9497,527.5121,13000,0,0,100,0),
+(@PATH,2,726.6484,-173.3438,527.1627,0,0,0,100,0),
+(@PATH,3,726.6484,-174.3438,527.1627,0,0,0,100,0),
+(@PATH,4,725.25,-175.2379,526.8134,0,0,0,100,0),
+(@PATH,5,722.0521,-181.5122,526.8134,0,0,0,100,0),
+(@PATH,6,721.2031,-187.8142,526.8134,0,0,0,100,0),
+(@PATH,7,717.7917,-194.4358,526.8134,0,0,0,100,0),
+(@PATH,8,719.3073,-202.2691,527.1509,0,0,0,100,0),
+(@PATH,9,720.3403,-206.1198,527.7932,12000,0,0,100,0),
+(@PATH,10,717.6111,-199.5035,526.9384,0,0,0,100,0),
+(@PATH,11,717.566,-189.0642,526.8134,0,0,0,100,0),
+(@PATH,12,718.5764,-182.3958,526.8134,0,0,0,100,0),
+(@PATH,13,719.9531,-176.0729,526.8134,0,0,0,100,0);
+
+-- Forgemaster Garfrost pathing
+SET @NPC := 201992;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=712.1371,`position_y`=-215.7014,`position_z`=527.066 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`,`auras`) VALUES (@NPC,@PATH,1,'68792');
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,712.1371,-215.7014,527.066,0,0,0,100,0),
+(@PATH,2,719.507,-227.8559,527.066,3000,0,0,100,0),
+(@PATH,3,712.1371,-215.7014,527.066,0,0,0,100,0),
+(@PATH,4,685.1805,-207.349,526.8424,0,0,0,100,0),
+(@PATH,5,664.5191,-203.3472,526.816,0,0,0,100,0),
+(@PATH,6,645.033,-208.5295,528.941,0,0,0,100,0),
+(@PATH,7,653.0729,-194.3681,526.7226,0,0,0,100,0),
+(@PATH,8,664.8646,-195.2135,526.7226,0,0,0,100,0),
+(@PATH,9,686.0816,-213.8264,526.8424,0,0,0,100,0),
+(@PATH,10,697.9757,-221.6215,526.8424,0,0,0,100,0),
+(@PATH,11,708.0903,-211.908,527.066,0,0,0,100,0),
+(@PATH,12,717.8924,-204.6979,527.191,0,0,0,100,0),
+(@PATH,13,699.0504,-201.3438,526.8424,0,0,0,100,0),
+(@PATH,14,672.066,-201.1493,526.8424,0,0,0,100,0),
+(@PATH,15,655.9496,-203.4931,526.816,0,0,0,100,0),
+(@PATH,16,672.066,-201.1493,526.8424,0,0,0,100,0),
+(@PATH,17,699.0504,-201.3438,526.8424,0,0,0,100,0),
+(@PATH,18,717.8924,-204.6979,527.191,0,0,0,100,0),
+(@PATH,19,708.0903,-211.908,527.066,0,0,0,100,0),
+(@PATH,20,697.9757,-221.6215,526.8424,0,0,0,100,0),
+(@PATH,21,686.0816,-213.8264,526.8424,0,0,0,100,0),
+(@PATH,22,664.8646,-195.2135,526.7226,0,0,0,100,0),
+(@PATH,23,653.0729,-194.3681,526.7226,0,0,0,100,0),
+(@PATH,24,645.033,-208.5295,528.941,0,0,0,100,0),
+(@PATH,25,664.5191,-203.3472,526.816,0,0,0,100,0),
+(@PATH,26,685.1805,-207.349,526.8424,0,0,0,100,0);
+
+-- Ymirjar Skycaller SAI addition
+SET @ENTRY   := 31260; -- NPC entry
+UPDATE `creature_template` SET `AIName`='SmartAI',`ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY AND `id`=2;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,2,0,25,0,100,6,0,0,0,0,11,46598,0,0,0,0,0,19,36891,20,0,0,0,0,0, 'Ymirjar Skycaller - Reset - Cast Ride Vehicle Hardcoded');
+
+-- Wrathbone Laborer SAI
+SET @ENTRY   := -201800; -- NPC entry
+SET @SPELL1  := 70302; -- Blinding Dirt
+SET @SPELL2  := 70278; -- Puncture Wound
+SET @SPELL3  := 69572; -- Shovelled!
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,6,7000,8000,10000,11000,11,@SPELL1,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Blinding Dirt'),
+(@ENTRY,0,1,0,0,0,100,6,8000,9000,9000,10000,11,@SPELL2,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Puncture Wound (Normal)'),
+(@ENTRY,0,2,0,0,0,100,6,5000,6000,7000,8000,11,@SPELL3,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Wrathbone Laborer - Combat - Cast Shovelled! (Normal)');
+
+-- Wrathbone Laborer pathing
+SET @NPC := 201800;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=584.4202,`position_y`=188.9149,`position_z`=509.6726 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,1);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,584.4202,188.9149,509.6726,0,0,0,100,0),
+(@PATH,2,583.6736,193.9653,509.7404,3000,0,48,100,0),
+(@PATH,3,583.6736,193.9653,509.7404,3000,0,48,100,0),
+(@PATH,4,583.6736,193.9653,509.7404,3000,0,48,100,0),
+(@PATH,5,583.6736,193.9653,509.7404,3000,0,48,100,0),
+(@PATH,6,594.0781,190.2622,508.8613,0,0,0,100,0),
+(@PATH,7,604.9809,191.5451,507.6583,0,0,0,100,0),
+(@PATH,8,617.8438,191.3455,507.5206,0,0,0,100,0),
+(@PATH,9,633.1597,186.8281,508.6275,3000,0,48,100,0),
+(@PATH,10,633.1597,186.8281,508.6275,3000,0,48,100,0),
+(@PATH,11,624.3472,190.9705,507.7706,0,0,0,100,0),
+(@PATH,12,613.3229,189.9236,507.3956,0,0,0,100,0),
+(@PATH,13,604.5156,189.651,507.3956,0,0,0,100,0),
+(@PATH,14,593.9844,187.4479,508.9778,0,0,0,100,0),
+(@PATH,15,584.4202,188.9149,509.6726,0,0,0,100,0);
+DELETE FROM `waypoint_scripts` WHERE `id`=48;
+INSERT INTO `waypoint_scripts` (`id`,`delay`,`command`,`datalong`,`guid`) VALUES
+(48,0,1,38,67);
+
+-- Add Overlord Drakuru riders to Stonespine Gargoyle
+UPDATE creature_template SET InhabitType=4,`flags_extra`=`flags_extra`|128 WHERE entry=28717;
+DELETE FROM `creature` WHERE `id`=28717 AND `map`=658;
+DELETE FROM `vehicle_template_accessory` WHERE `entry`=36896;
+INSERT INTO `vehicle_template_accessory` (`entry`,`accessory_entry`,`seat_id`,`minion`,`description`,`summontype`,`summontimer`) VALUES
+(36896,28717,1,0, 'Overlord Drakuru on Stonespine Gargoyle',6,30000);
+
+-- [Q] Arelion's Mistress
+-- Viera Sunwhisper SAI
+-- Twinkle SAI
+SET @ENTRY_VIERA := 17226;
+SET @ENTRY_TWINKLE := 17230;
+SET @QUEST_PLEASURES := 9483;
+SET @SPELL_RETRIBUTION := 30077;
+UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry` IN (@ENTRY_VIERA,@ENTRY_TWINKLE);
+DELETE FROM `smart_scripts` WHERE `entryorguid` IN (@ENTRY_VIERA,@ENTRY_TWINKLE,@ENTRY_VIERA*100,@ENTRY_VIERA*100+1);
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES 
+(@ENTRY_VIERA,0,0,0,20,0,100,0,@QUEST_PLEASURES,0,0,0,80,@ENTRY_VIERA*100,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Quest Finish - Run Script'),
+(@ENTRY_VIERA*100,9,0,0,0,0,100,0,0,0,0,0,81,0,0,0,0,0,0,1,0,0,0,0,0,0,0,"Viera Sunwhisper - On Script - Remove Quest Flag"),
+(@ENTRY_VIERA*100,9,1,0,0,0,100,0,2000,2000,0,0,53,0,@ENTRY_VIERA,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Start WP 1'),
+(@ENTRY_VIERA*100,9,2,0,0,0,100,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Say Line 0'),
+(@ENTRY_VIERA*100,9,3,0,0,0,100,0,0,0,0,0,91,1,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Stand Up'),
+(@ENTRY_VIERA*100,9,4,0,0,0,100,0,6500,6500,0,0,45,0,1,0,0,0,0,10,61963,@ENTRY_TWINKLE,0,0,0,0,0,'Viera Sunwhisper - On Script - Set Data 0 1 Twinkle'),
+(@ENTRY_VIERA,0,1,2,40,0,100,0,10,@ENTRY_VIERA,0,0,66,0,0,0,0,0,0,11,@ENTRY_TWINKLE,15,0,0,0,0,0,'Viera Sunwhisper - On WP 10 - Face Twinkle'),
+(@ENTRY_VIERA,0,2,0,61,0,100,0,0,0,0,0,54,1000000,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On WP 10 - Pause WP'),
+
+(@ENTRY_TWINKLE,0,0,0,38,0,100,0,0,1,0,0,53,1,@ENTRY_TWINKLE,0,0,0,0,1,0,0,0,0,0,0,0,'Twinkle - On Data 0 1 Set - Start WP 1 (run)'),
+(@ENTRY_TWINKLE,0,1,0,40,0,100,0,13,@ENTRY_TWINKLE,0,0,54,1000000,0,0,0,0,0,1,0,0,0,0,0,0,0,'Twinkle - On WP 13 - Pause WP'),
+(@ENTRY_TWINKLE,0,2,0,38,0,100,0,1,2,0,0,53,1,@ENTRY_TWINKLE*10,0,0,0,0,1,0,0,0,0,0,0,0,'Twinkle - On Data Set 1 2 - Start WP 2 (run)'),
+(@ENTRY_TWINKLE,0,3,0,40,0,100,0,4,@ENTRY_TWINKLE*10,0,0,41,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On WP 4 (2) - Force Despawn'),
+
+(@ENTRY_VIERA,0,3,0,8,0,100,0,@SPELL_RETRIBUTION,0,0,0,80,@ENTRY_VIERA*100+1,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Spellhit - Run Second Script'),
+(@ENTRY_VIERA*100+1,9,0,0,0,0,100,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Say Line 1'),
+(@ENTRY_VIERA*100+1,9,1,0,0,0,100,0,0,0,0,0,33,@ENTRY_VIERA,0,0,0,0,0,7,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Quest Credit'),
+(@ENTRY_VIERA*100+1,9,2,0,0,0,100,0,3000,3000,0,0,1,2,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Say Line 2'),
+(@ENTRY_VIERA*100+1,9,3,0,0,0,100,0,5000,5000,0,0,1,0,0,0,0,0,0,9,@ENTRY_TWINKLE,0,25,0,0,0,0,'Twinkle - On Script - Say Line 0'),
+(@ENTRY_VIERA*100+1,9,4,0,0,0,100,0,2000,2000,0,0,1,3,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Say Line 3'),
+(@ENTRY_VIERA*100+1,9,5,0,0,0,100,0,0,0,0,0,45,1,2,0,0,0,0,10,61963,@ENTRY_TWINKLE,0,0,0,0,0,'Viera Sunwhisper - On Script - Set Data 1 2 Twinkle'),
+(@ENTRY_VIERA*100+1,9,6,0,0,0,100,0,0,0,0,0,53,1,@ENTRY_VIERA*10,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On Script - Start WP 2 (run)'),
+(@ENTRY_VIERA,0,4,0,40,0,100,0,4,@ENTRY_VIERA*10,0,0,41,0,0,0,0,0,0,1,0,0,0,0,0,0,0,'Viera Sunwhisper - On WP 4 (2) - Force Despawn');
+
+-- Waypoints for Viera Sunwhisper
+DELETE FROM `waypoints` WHERE `entry` IN (@ENTRY_VIERA,@ENTRY_VIERA*10);
+INSERT INTO `waypoints` (`entry`,`pointid`,`position_x`,`position_y`,`position_z`,`point_comment`) VALUES
+(@ENTRY_VIERA,1,-653.739197,4145.138184,64.200729,'Viera Sunwhisper'),
+(@ENTRY_VIERA,2,-658.875732,4147.715332,64.168304,'Viera Sunwhisper'),
+(@ENTRY_VIERA,3,-681.465088,4147.636230,64.118073,'Viera Sunwhisper'),
+(@ENTRY_VIERA,4,-686.400696,4161.865234,59.707859,'Viera Sunwhisper'),
+(@ENTRY_VIERA,5,-695.956909,4179.237305,57.618931,'Viera Sunwhisper'),
+(@ENTRY_VIERA,6,-699.832153,4189.959473,57.503750,'Viera Sunwhisper'),
+(@ENTRY_VIERA,7,-708.518616,4184.436035,55.275894,'Viera Sunwhisper'),
+(@ENTRY_VIERA,8,-716.137268,4178.130371,52.637508,'Viera Sunwhisper'),
+(@ENTRY_VIERA,9,-719.865295,4174.992676,51.554867,'Viera Sunwhisper'),
+(@ENTRY_VIERA,10,-720.839417,4162.232422,50.805923,'Viera Sunwhisper'),
+
+(@ENTRY_VIERA*10,1,-722.323486,4147.936523,50.337898,'Viera Sunwhisper'),
+(@ENTRY_VIERA*10,2,-726.639343,4125.156250,48.479683,'Viera Sunwhisper'),
+(@ENTRY_VIERA*10,3,-727.648315,4109.684082,47.528461,'Viera Sunwhisper'),
+(@ENTRY_VIERA*10,4,-727.874329,4093.438721,46.446579,'Viera Sunwhisper');
+
+-- Waypoints for Twinkle
+DELETE FROM `waypoints` WHERE `entry` IN (@ENTRY_TWINKLE,@ENTRY_TWINKLE*10);
+INSERT INTO `waypoints` (`entry`,`pointid`,`position_x`,`position_y`,`position_z`,`point_comment`) VALUES
+(@ENTRY_TWINKLE,1,-605.445190,4165.205078,64.081802,'Twinkle'),
+(@ENTRY_TWINKLE,2,-619.293335,4161.776855,63.217815,'Twinkle'),
+(@ENTRY_TWINKLE,3,-629.536560,4153.708984,64.067123,'Twinkle'),
+(@ENTRY_TWINKLE,4,-644.773438,4151.062988,64.174675,'Twinkle'),
+(@ENTRY_TWINKLE,5,-658.875732,4147.715332,64.168304,'Twinkle'),
+(@ENTRY_TWINKLE,6,-681.465088,4147.636230,64.118073,'Twinkle'),
+(@ENTRY_TWINKLE,7,-686.400696,4161.865234,59.707859,'Twinkle'),
+(@ENTRY_TWINKLE,8,-695.956909,4179.237305,57.618931,'Twinkle'),
+(@ENTRY_TWINKLE,9,-699.832153,4189.959473,57.503750,'Twinkle'),
+(@ENTRY_TWINKLE,10,-708.518616,4184.436035,55.275894,'Twinkle'),
+(@ENTRY_TWINKLE,11,-716.137268,4178.130371,52.637508,'Twinkle'),
+(@ENTRY_TWINKLE,12,-719.865295,4174.992676,51.554867,'Twinkle'),
+(@ENTRY_TWINKLE,13,-720.636292,4166.637695,50.815567,'Twinkle'),
+
+(@ENTRY_TWINKLE*10,1,-722.323486,4147.936523,50.337898,'Twinkle'),
+(@ENTRY_TWINKLE*10,2,-726.639343,4125.156250,48.479683,'Twinkle'),
+(@ENTRY_TWINKLE*10,3,-727.648315,4109.684082,47.528461,'Twinkle'),
+(@ENTRY_TWINKLE*10,4,-727.874329,4093.438721,46.446579,'Twinkle');
+
+-- Spawn spell focus object on correct position
+DELETE FROM `gameobject` WHERE `id`=300071 AND `guid`=303;
+INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`rotation0`,`rotation1`,`rotation2`,`rotation3`,`spawntimesecs`,`animprogress`,`state`) VALUES
+(303,300071,530,1,1,-720.803,4162.77,50.7916,4.61029,0,0,0.742267,-0.670104,300,0,1);
+
+-- Texts
+DELETE FROM `creature_text` WHERE `entry` IN (@ENTRY_VIERA,@ENTRY_TWINKLE);
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+(@ENTRY_VIERA,0,0,"Ok, let's go. I know just the perfect spot!",12,0,100,0,0,0,'Viera Sunwhisper'),
+(@ENTRY_VIERA,1,0,"I can't wait to try this wine!",12,0,100,0,0,0,'Viera Sunwhisper'),
+(@ENTRY_VIERA,2,0,"What... is happening... to me? Get this cat away from me!",12,0,100,0,0,0,'Viera Sunwhisper'),
+(@ENTRY_VIERA,3,0,"%s scurries away, attempting to flee from Twinkle",16,0,100,0,0,0,'Viera Sunwhisper'),
+
+(@ENTRY_TWINKLE,0,0,"%s looks at Viera Sunwhisper with very hungry eyes",16,0,100,0,0,0,'Twinkle');
+
+-- Add Missing Ice Wall, Pit of Saron
+SET @GUID := 305;
+DELETE FROM `gameobject` WHERE `guid`=@GUID;
+INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`rotation0`,`rotation1`,`rotation2`,`rotation3`,`spawntimesecs`,`animprogress`,`state`) VALUES 
+(@GUID,201885,658,3,1,932.2674,-80.6684,591.6761,2.286379,0,0,0,0,300,100,1);
+
+-- Spell area spells for entering POS
+DELETE FROM `spell_area` WHERE `spell` IN (70056,70057);
+INSERT INTO `spell_area` (`spell`,`area`,`quest_start`,`quest_start_active`,`quest_end`,`aura_spell`,`racemask`,`gender`,`autocast`) VALUES
+(70056,4904,0,0,0,0,690,2,1), -- Send Script Event (22717)
+(70057,4904,0,0,0,0,1101,2,1); -- Send Script Event (22718)
+
+-- Fix flags and equipment for Ymirjar Deathbringer
+UPDATE `creature_template` SET `unit_flags`=`unit_flags`&~256 WHERE `entry` IN (36892,37641);
+UPDATE `creature_template` SET `equipment_id`=2444 WHERE `entry`=37641;
