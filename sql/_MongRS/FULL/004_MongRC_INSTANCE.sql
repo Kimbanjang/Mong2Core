@@ -243,6 +243,9 @@ UPDATE `creature_template` SET `equipment_id`=2325 WHERE `entry`=37613; -- Forge
 UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=37609; -- Deathwhisper Necrolyte
 UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=38025; -- Deathwhisper Shadowcaster
 
+##### 투영의 전당 #####
+
+##### 얼왕5인 추가 세팅 #####
 -- 영제/샤론/투영 토큰 드랍(23961,23964,23967)
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (36658,2,2,1,0,-90005,1),(36938,2,2,1,0,-90005,1),(36502,2,4,1,0,-90005,1),(37677,2,4,1,0,-90005,1), -- 팻/탈것
