@@ -63,7 +63,7 @@ INSERT INTO `spell_proc_event` VALUES(67752, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30),
 
 -- 정신충격 발동효과 수정
 DELETE FROM `spell_proc_event` WHERE `entry` IN (71865,71868);
-INSERT INTO `spell_proc_event` VALUES(71865, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30), (71865, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30);
+INSERT INTO `spell_proc_event` VALUES(71865, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30), (71868, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30);
 
 -- 알소르의 연산장치 발동효과 수정
 DELETE FROM `spell_proc_event` WHERE `entry` IN (71611,71642);
