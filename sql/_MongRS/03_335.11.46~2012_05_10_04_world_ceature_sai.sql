@@ -26265,3 +26265,232 @@ INSERT INTO `creature_formations` (`leaderGUID`,`memberGUID`,`dist`,`angle`,`gro
 -- Remove a dupe spawn
 DELETE FROM `creature` WHERE `guid`=201998;
 DELETE FROM `creature_addon` WHERE `guid`=201998;
+
+-- [Q] See You on the Other Side
+
+-- Gan'jo SAI
+SET @ENTRY := 26924;
+SET @QUEST := 12121;
+SET @GOSSIP := 10220;
+SET @SPELL_RESURRECT := 61613;
+UPDATE `creature_template` SET `npcflag`=3,`AIName`='SmartAI' WHERE `entry`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=0;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,1,62,0,100,0,@GOSSIP,0,0,0,11,@SPELL_RESURRECT,1,0,0,0,0,7,0,0,0,0,0,0,0,"Gan'jo - On Gossip Select - Cast Ganjo Resurrection"),
+(@ENTRY,0,1,0,61,0,100,0,0,0,0,0,72,0,0,0,0,0,0,7,0,0,0,0,0,0,0,"Gan'jo - On Gossip Select - Close Gossip");
+
+-- Essence of Warlord Jin'arrak SAI
+SET @ENTRY := 26902;
+SET @SPELL_DIE_EFFECT := 61611;
+SET @SPELL_CAMERA_SHAKE := 47533;
+UPDATE `creature_template` SET `AIName`='SmartAI',`flags_extra`=128 WHERE `entry`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `entryorguid` IN (@ENTRY,@ENTRY*100) AND `source_type` IN (0,9);
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,54,0,100,0,0,0,0,0,80,@ENTRY*100,0,0,0,0,0,1,0,0,0,0,0,0,0,"Essence of Warlord Jin'arrak - On Just Summoned - Run Script"),
+(@ENTRY*100,9,0,0,0,0,100,0,0,0,0,0,85,@SPELL_CAMERA_SHAKE,0,0,0,0,0,7,0,0,0,0,0,0,0,"Essence of Warlord Jin'arrak - On Script - Invoker Cast Camera Shake - Small"),
+(@ENTRY*100,9,1,0,0,0,100,0,4000,4000,0,0,33,@ENTRY,0,0,0,0,0,7,0,0,0,0,0,0,0,"Essence of Warlord Jin'arrak - On Script - Killed Monster Credit"),
+(@ENTRY*100,9,2,0,0,0,100,0,0,0,0,0,1,0,0,0,0,0,0,7,0,0,0,0,0,0,0,"Essence of Warlord Jin'arrak - On Script - Monster Whisper Line 0"),
+(@ENTRY*100,9,3,0,0,0,100,0,0,0,0,0,85,@SPELL_CAMERA_SHAKE,0,0,0,0,0,7,0,0,0,0,0,0,0,"Essence of Warlord Jin'arrak - On Script - Invoker Cast Camera Shake - Small"),
+(@ENTRY*100,9,4,0,0,0,100,0,3000,3000,0,0,85,@SPELL_DIE_EFFECT,0,0,0,0,0,7,0,0,0,0,0,0,0,"Essence of Warlord Jin'arrak - On Script - Invoker Cast On The Other Side");
+
+-- Essence of Warlord Jin'arrak text
+DELETE FROM `creature_text` WHERE `entry`=@ENTRY;
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES 
+(@ENTRY,0,0,"How dare you summon me without an offering!",42,0,0,0,0,0,"Essence of Warlord Jin'arrak");
+
+-- Ganjo's Resurrection removes On The Other Side
+DELETE FROM `spell_linked_spell` WHERE `spell_trigger`=@SPELL_RESURRECT;
+INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment`) VALUES
+(@SPELL_RESURRECT,-@SPELL_DIE_EFFECT,1,"Ganjo's Resurrection removes On The Other Side");
+
+-- Conditions for Gan'jo's gossip option
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=15 AND `SourceGroup`=@GOSSIP;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ConditionTarget`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`comment`) VALUES
+(15,@GOSSIP,0,0,0,1,@SPELL_DIE_EFFECT,0,"Ganjo's Gossip - requires aura See You On The Other Side"),
+(15,@GOSSIP,0,0,1,9,@QUEST,0,"Ganjo's Gossip - requires quest See You On The Other Side to be rewarded");
+
+-- [Q] Leave Nothing to Chance
+
+-- Lower Wintergarde Mine Shaft and Upper Wintergarde Mine Shaft
+UPDATE `creature_template` SET `MovementType`=0,`flags_extra`=`flags_extra`|128 WHERE `entry`IN (27437,27436);
+UPDATE `creature` SET `MovementType`=0,`spawndist`=0 WHERE `id` IN (27437,27436);
+
+-- Wintergarde Mine Bomb SAI
+SET @ENTRY := 27435;
+SET @SPELL_EXPLOSION := 48742;
+UPDATE `creature_template` SET `AIName`='SmartAI' WHERE `entry`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,1,1,0,100,1,14000,14000,0,0,11,@SPELL_EXPLOSION,2,0,0,0,0,1,0,0,0,0,0,0,0,"Wintergarde Mine Bomb - Out of Combat - Cast Wintergarde Mine Explosion"),
+(@ENTRY,0,1,0,61,0,100,0,0,0,0,0,41,3000,0,0,0,0,0,1,0,0,0,0,0,0,0,"Wintergarde Mine Bomb - On Wintergarde Mine Explosion Cast - Forced Despawn");
+
+-- Spawn missing spell focus object for upper mine
+DELETE FROM `gameobject` WHERE `id`=188711 AND `guid`=370;
+INSERT INTO `gameobject` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`rotation0`,`rotation1`,`rotation2`,`rotation3`,`spawntimesecs`,`animprogress`,`state`) VALUES
+(370,188711,571,1,1,3898.18,-881.748,119.533,0.421023,0,0,0.20896,0.977924,300,0,1);
+
+-- Spawn missing Upper Wintergarde Mine Shaft
+DELETE FROM `creature` WHERE `id`=27436 AND `guid`=42576;
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`,`npcflag`,`unit_flags`,`dynamicflags`) VALUES
+(42576,27436,571,1,1,0,0,3899.86,-883.613,119.536,0.0636665,300,0,0,42,0,0,0,0,0);
+
+-- Spellscriptname
+DELETE FROM `spell_script_names` WHERE `spell_id`=@SPELL_EXPLOSION;
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES
+(@SPELL_EXPLOSION,'spell_q12277_wintergarde_mine_explosion');
+
+-- The conditions will make it works exactly like it should. Thanks a lot Josh.
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=@SPELL_EXPLOSION;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,@SPELL_EXPLOSION,0,31,3,27437,0,0,'',"Wintergarde Mine Explosion - Lower Wintergarde Mine Shaft"), -- Effect 0 - SPELL_EFFECT_DUMMY
+(13,1,@SPELL_EXPLOSION,1,31,3,27436,0,0,'',"Wintergarde Mine Explosion - Upper Wintergarde Mine Shaft"), -- Effect 0 - SPELL_EFFECT_DUMMY
+(13,2,@SPELL_EXPLOSION,0,31,4,0,0,0,'',"Wintergarde Mine Explosion - Targets Players"),                          -- Effect 1 - SPELL_EFFECT_KNOCK_BACK
+(13,4,@SPELL_EXPLOSION,0,31,5,188712,0,0,'',"Wintergarde Mine Explosion - Wintergarde Mine Cave In (2)");    -- Effect 2 - SPELL_EFFECT_ACTIVATE_OBJECT
+
+-- fix creauture_template loot id for infinite corruptor. could have sworn this was already in the db.
+UPDATE `creature_template` SET `lootid` = 0 WHERE `entry` IN (32313,32273);
+
+ -- Remove obsolete requirement 'cooking profession' from quest 'Beer Basted Boar Ribs' (thx tifkat) closes #5198
+UPDATE `quest_template` SET `RequiredSkillId`=0, `RequiredSkillPoints`=0 WHERE `Id`=384;
+
+-- Fix proc for Death's Verdict/Choice (author: kandera) closes #6041
+UPDATE `spell_proc_event` SET `procFlags` = 0, `procEx` = `procEx`|262144 WHERE `entry` in (67702, 67771);
+
+-- Disables quest "Desperate Research" for all factions author trista closes #5285
+DELETE FROM `disables` WHERE `sourceType` = 1 AND `entry` in (12782,12783,12811,12784,12752,12775,12777,12753,12808,12772);
+INSERT INTO `disables` (`sourceType`,`entry`,`flags`,`params_0`,`params_1`,`comment`) VALUES
+(1,12782,0,0,0,'Disable quest from Scourge Invasion for Blood Elves'),
+(1,12783,0,0,0,'Disable quest from Scourge Invasion for Orcs'),
+(1,12811,0,0,0,'Disable quest from Scourge Invasion for Trolls'),
+(1,12784,0,0,0,'Disable quest from Scourge Invasion for Tauren'),
+(1,12752,0,0,0,'Disable quest from Scourge Invasion for undead'),
+(1,12775,0,0,0,'Disable quest from Scourge Invasion for Human'),
+(1,12777,0,0,0,'Disable quest from Scourge Invasion for Draenei'),
+(1,12753,0,0,0,'Disable quest from Scourge Invasion for Dwarves'),
+(1,12808,0,0,0,'Disable quest from Scourge Invasion for Gnomes'),
+(1,12772,0,0,0,'Disable quest from Scourge Invasion for Night Elves');
+-- Disables scourge invasion connected quests listed below
+DELETE FROM `disables` WHERE `sourceType` = 1 AND `entry` in (12788,12812,12785,12786,12787,12774,12776,12771,12809,12773);
+INSERT INTO `disables` (`sourceType`,`entry`,`flags`,`params_0`,`params_1`,`comment`) VALUES
+(1,12788,0,0,0,'Disable quest from Scourge Invasion for Blood Elves'),
+(1,12812,0,0,0,'Disable quest from Scourge Invasion for Orcs'),
+(1,12785,0,0,0,'Disable quest from Scourge Invasion for Trolls'),
+(1,12786,0,0,0,'Disable quest from Scourge Invasion for Tauren'),
+(1,12787,0,0,0,'Disable quest from Scourge Invasion for undead'),
+(1,12774,0,0,0,'Disable quest from Scourge Invasion for Human'),
+(1,12776,0,0,0,'Disable quest from Scourge Invasion for Draenei'),
+(1,12771,0,0,0,'Disable quest from Scourge Invasion for Dwarves'),
+(1,12809,0,0,0,'Disable quest from Scourge Invasion for Gnomes'),
+(1,12773,0,0,0,'Disable quest from Scourge Invasion for Night Elves');
+
+-- Limit Bloodgem Shard use to Netherstorm Cristal Target author: nelegalno closes #4165
+DELETE FROM `conditions` WHERE (`SourceEntry`=34367 AND `SourceTypeOrReferenceId`=17 AND `ConditionTypeOrReference`=29);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(17,0,34367,0,29,19421,15,0,64,'','Limit Bloodgem Shard use to Netherstorm Cristal Target');
+
+-- Path of xx and A Change of Heart (Ashen Band rings) author: studioworks closes #2544
+UPDATE `quest_template` SET `PrevQuestId`=0 WHERE `id` IN
+(24827,24834,24835,24823,24828,24829,25239,25240,25242,24826,24832,24833,24825,24830,24831,24819,24820,24821,24822,24836,24837,24838,24839,24840,24841,24842,24843,24844,24845,24846,24847,25246,25247,25248,25249);
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=19 AND `SourceEntry` IN
+-- Paths
+(24827,24834,24835,24823,24828,24829,25239,25240,25242,24826,24832,24833,24825,24830,24831,
+-- A Change of Heart
+24819,24820,24821,24822,24836,24837,24838,24839,24840,24841,24842,24843,24844,24845,24846,24847,25246,25247,25248,25249);
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`Comment`) VALUES
+-- Path of Courage
+(19,0,24827,0,2,50375,1,0,'Path of Courage 1'),
+(19,0,24834,0,2,50388,1,0,'Path of Courage 2'),
+(19,0,24835,0,2,50403,1,0,'Path of Courage 3'),
+-- Path of Destruction
+(19,0,24823,0,2,50384,1,0,'Path of Destruction 1'),
+(19,0,24828,0,2,50377,1,0,'Path of Destruction 2'),
+(19,0,24829,0,2,50397,1,0,'Path of Destruction 3'),
+-- Path of Might
+(19,0,25239,0,2,52569,1,0,'Path of Might 1'),
+(19,0,25240,0,2,52570,1,0,'Path of Might 2'),
+(19,0,25242,0,2,52571,1,0,'Path of Might 3'),
+-- Path of Vengeance
+(19,0,24826,0,2,50376,1,0,'Path of Vengeance 1'),
+(19,0,24832,0,2,50387,1,0,'Path of Vengeance 2'),
+(19,0,24833,0,2,50401,1,0,'Path of Vengeance 3'),
+-- Path of Wisdom
+(19,0,24825,0,2,50378,1,0,'Path of Wisdom 1'),
+(19,0,24830,0,2,50386,1,0,'Path of Wisdom 2'),
+(19,0,24831,0,2,50399,1,0,'Path of Wisdom 3'),
+-- A Change of Heart
+(19,0,24819,0,2,50377,1,0,'A Change of Heart'),
+(19,0,24820,0,2,50376,1,0,'A Change of Heart'),
+(19,0,24821,0,2,50375,1,0,'A Change of Heart'),
+(19,0,24822,0,2,50378,1,0,'A Change of Heart'),
+(19,0,24836,0,2,50384,1,0,'A Change of Heart'),
+(19,0,24837,0,2,50386,1,0,'A Change of Heart'),
+(19,0,24838,0,2,50387,1,0,'A Change of Heart'),
+(19,0,24839,0,2,50388,1,0,'A Change of Heart'),
+(19,0,24840,0,2,50397,1,0,'A Change of Heart'),
+(19,0,24841,0,2,50399,1,0,'A Change of Heart'),
+(19,0,24842,0,2,50401,1,0,'A Change of Heart'),
+(19,0,24843,0,2,50403,1,0,'A Change of Heart'),
+(19,0,24844,0,2,50398,1,0,'A Change of Heart'),
+(19,0,24845,0,2,50400,1,0,'A Change of Heart'),
+(19,0,24846,0,2,50402,1,0,'A Change of Heart'),
+(19,0,24847,0,2,50404,1,0,'A Change of Heart'),
+(19,0,25246,0,2,52572,1,0,'A Change of Heart'),
+(19,0,25247,0,2,52569,1,0,'A Change of Heart'),
+(19,0,25248,0,2,52570,1,0,'A Change of Heart'),
+(19,0,25249,0,2,52571,1,0,'A Change of Heart');
+
+-- spawn farmer torp author: zxbiohazardzx closes #6256
+SET @guid := 42652; 
+DELETE FROM `creature` WHERE `guid`=@guid;
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`)
+VALUES
+(@guid,25607,571,1,1,2886.325,6385.55,92.96985,1.4512,120); -- Farmer Torp
+
+-- Disgusting Oozeling aura author: gecko32 closes #6197
+UPDATE `creature_template_addon` SET `auras`='25163' WHERE `entry`=15429;
+-- Mr. Chilly
+-- Add aura chilly for Periodic slide
+DELETE FROM `creature_template_addon` WHERE `entry`=29726;
+INSERT INTO `creature_template_addon` (`entry`, `path_id`, `mount`, `bytes1`, `bytes2`, `emote`, `auras`) VALUES 
+(29726, 0, 0, 0, 0, 0, '61811');
+
+-- Update to Change <name> to $n in page text author: gecko32 closes #5930
+UPDATE `page_text` SET `text`='This proof of deed is to verify that $n slew Margol the Rager, scourge of the searing gorge.$B$BThe Ironforge museum recognizes this achievement and thanks the bearer for their generous contribution.$B$B-Head Curator Thorius Stonetender' WHERE `entry`=1231;
+
+-- Update frost shock and you to only be for shamans. author: whit33r closes #4727
+UPDATE `quest_template` SET `RequiredClasses`=64 WHERE `id` = 7505;
+
+-- fixes ashen band of destruction proc author: kandera
+DELETE FROM `spell_proc_event` WHERE `entry` = 72417;
+INSERT INTO `spell_proc_event` (`entry`,`SchoolMask`,`SpellFamilyName`,`SpellFamilyMask0`,`SpellFamilyMask1`,`SpellFamilyMask2`,`procFlags`,`procEx`,`ppmRate`,`CustomChance`,`Cooldown`) VALUES
+(72417,0,0,0,0,0,327680,0,0,0,60);
+
+-- fixes quest credit from Fel reaver no thanks! author: tREAk & shlomi1515 closes #3715
+UPDATE `spell_dbc` SET `Effect1`=16,`EffectMiscValue1`=10855 WHERE `id`=38758;
+DELETE FROM `creature_ai_scripts` WHERE creature_id=22293;
+
+-- fix areatrigger for wickerman camp author: boomper closes #3549
+DELETE FROM `areatrigger_involvedrelation` WHERE `id` =3991;
+INSERT INTO `areatrigger_involvedrelation` (`id`, `quest`) 
+VALUES (3991,1658);
+
+-- yous have da darkrune should be daily author: kaelima closes #3457
+UPDATE `quest_template` SET `SpecialFlags` = `SpecialFlags` | 1 WHERE `id` = 11027;
+
+-- fix infinite corruptor loot id author: vincent-michael
+UPDATE `creature_template` SET `lootid` = 32313 WHERE `entry` =32313;
+
+-- Spawn Disturbed Glacial Revenant
+DELETE FROM `creature` WHERE `guid`=201998;
+INSERT INTO `creature` (`guid`,`id`,`map`,`spawnMask`,`phaseMask`,`modelid`,`equipment_id`, `position_x`,`position_y`,`position_z`,`orientation`,`spawntimesecs`,`spawndist`,`currentwaypoint`,`curhealth`,`curmana`,`MovementType`,`npcflag`,`unit_flags`,`dynamicflags`) VALUES
+(201998,36874,658,2,1,0,0,1053.894,-93.05556,632.8575,4.223697,86400,0,0,1,0,0,0,0,0);
+DELETE FROM `creature_addon` WHERE `guid`=201998;
+INSERT INTO `creature_addon` (`guid`,`bytes2`) VALUES
+(201998,1);
+
+-- Disturbed Glacial Revenant SAI
+SET @ENTRY := 36874; -- NPC entry
+UPDATE `creature_template` SET `AIName`='SmartAI',`ScriptName`='' WHERE `entry`=@ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,4,0,0,12000,15000,11,55216,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Disturbed Glacial Revenant - Combat - Cast Avalanche');
