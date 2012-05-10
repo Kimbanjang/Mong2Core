@@ -61,6 +61,14 @@ UPDATE `item_template` SET `spellcategorycooldown_1`=1800000 WHERE `entry`=5634;
 DELETE FROM `spell_proc_event` WHERE `entry` IN (67752,67698);
 INSERT INTO `spell_proc_event` VALUES(67752, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 0), (67698, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 0);
 
+-- 정신충격 발동효과 수정
+--DELETE FROM `spell_proc_event` WHERE `entry` IN (67752,67698);
+--INSERT INTO `spell_proc_event` VALUES(67752, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 0), (67698, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 0);
+
+-- 알소르의 연산장치 발동효과 수정
+--DELETE FROM `spell_proc_event` WHERE `entry` IN (67752,67698);
+--INSERT INTO `spell_proc_event` VALUES(67752, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 45), (67698, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 45);
+
 -- 투기 투척무기 수정
 UPDATE `item_template` SET `Flags`=4231168,`RangedModRange`=100,`MaxDurability`=0 WHERE `entry` IN (42449,42444);
 
