@@ -249,10 +249,10 @@ UPDATE `creature_template` SET `equipment_id`=2365 WHERE `entry`=38025; -- Death
 -- 영제/샤론/투영 토큰 드랍(23961,23964,23967)
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (36658,2,2,1,0,-90005,1),(36938,2,2,1,0,-90005,1),(36502,2,4,1,0,-90005,1),(37677,2,4,1,0,-90005,1), -- 팻/탈것
-(36658,23961,10,1,0,1,1),(36938,23961,10,1,0,1,1),(36502,23964,100,1,0,1,1),(37677,23964,100,1,0,1,1);   -- 토큰
+(36658,23961,10,1,0,5,5),(36938,23961,10,1,0,5,5),(36502,23964,100,1,0,5,5),(37677,23964,100,1,0,5,5);   -- 토큰
 INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (27993,1,4,1,0,-90005,1),(27985,1,8,1,0,-90005,1),  -- 팻/탈것
-(27993,23967,20,1,0,1,1),(27985,23967,100,1,0,1,1); -- 토큰
+(27993,23967,20,1,0,5,5),(27985,23967,100,1,0,5,5); -- 토큰
 
 -- 보석 드랍 샘플
 -- INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
