@@ -2483,7 +2483,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
         if (m_spellInfo->Id == 63675 && damageInfo.damage && caster->isAlive())
         {
             uint32 healthGain = damageInfo.damage * 15 / 100;
-            healthGain = caster->SpellHealingBonus(caster, m_spellInfo, healthGain, HEAL);
+            healthGain = caster->SpellDamageBonusDone(caster, m_spellInfo, healthGain, HEAL);
             caster->HealBySpell(caster, m_spellInfo, healthGain);
         } 
 

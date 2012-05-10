@@ -231,7 +231,7 @@ class boss_halion : public CreatureScript
 
             void Reset()
             {
-                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                 _Reset();
             }
 
@@ -239,7 +239,7 @@ class boss_halion : public CreatureScript
             {
                 _EnterCombat();
                 Talk(SAY_AGGRO);
-                instance->SendEncounterUnit(ENCOUNTER_FRAME_ADD, me, 1);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me, 1);
 
                 events.Reset();
                 events.SetPhase(PHASE_ONE);
@@ -261,7 +261,7 @@ class boss_halion : public CreatureScript
             {
                 _JustDied();
                 Talk(SAY_DEATH);
-                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
 
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->AI()->Reset();
@@ -274,7 +274,7 @@ class boss_halion : public CreatureScript
 
             void JustReachedHome()
             {
-                instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+                instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
 
                 me->RemoveAurasDueToSpell(SPELL_TWILIGHT_PHASING);
 
@@ -443,7 +443,7 @@ class boss_twilight_halion : public CreatureScript
                     if (whoCreature->GetEntry() == NPC_COMBAT_STALKER)
                         return;
 
-                _instance->SendEncounterUnit(ENCOUNTER_FRAME_ADD, me, 2);
+                _instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me, 2);
                 events.Reset();
                 events.SetPhase(PHASE_TWO);
                 //! All of Twilight Halion's abilities are not phase dependant as he is never on Phase One.
@@ -478,12 +478,12 @@ class boss_twilight_halion : public CreatureScript
 
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->CastSpell(controller, SPELL_CLEAR_DEBUFFS);
-                _instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+                _instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
 
             void JustReachedHome()
             {
-                _instance->SendEncounterUnit(ENCOUNTER_FRAME_REMOVE, me);
+                _instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, _instance->GetData64(DATA_HALION_CONTROLLER)))
                     controller->CastSpell(controller, SPELL_CLEAR_DEBUFFS);
                 ScriptedAI::JustReachedHome();

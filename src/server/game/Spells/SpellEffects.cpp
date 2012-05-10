@@ -1621,7 +1621,7 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
         }
         // Death Pact - return pct of max health to caster
         else if (m_spellInfo->SpellFamilyName == SPELLFAMILY_DEATHKNIGHT && m_spellInfo->SpellFamilyFlags[0] & 0x00080000)
-            addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, int32(caster->CountPctFromMaxHealth(damage)), HEAL);
+            addhealth = caster->SpellHealingBonusDone(unitTarget, m_spellInfo, int32(caster->CountPctFromMaxHealth(damage)), HEAL);
         // Life Burst
         else if (m_spellInfo->Id == 57143)
         {
@@ -1635,19 +1635,10 @@ void Spell::EffectHeal(SpellEffIndex /*effIndex*/)
                     addhealth = int32(addhealth * 1.5);
             }
         }
-		else
-            addhealth = caster->SpellHealingBonus(unitTarget, m_spellInfo, addhealth, HEAL);
-            addhealth = caster->SpellHealingBonusDone(unitTarget, m_spellInfo, int32(caster->CountPctFromMaxHealth(damage)), HEAL);
         else
             addhealth = caster->SpellHealingBonusDone(unitTarget, m_spellInfo, addhealth, HEAL);
 
         addhealth = unitTarget->SpellHealingBonusTaken(m_spellInfo, addhealth, HEAL);
-
-        if (unitTarget->HasAura(56224) && m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->SpellIconID == 284)
-        {
-            AuraEffect* aurEff = unitTarget->GetAuraEffectOfRankedSpell(56224, EFFECT_0);
-            AddPctN(addhealth, aurEff->GetBaseAmount());
-        }
 
         // Remove Grievious bite if fully healed
         if (unitTarget->HasAura(48920) && (unitTarget->GetHealth() + addhealth >= unitTarget->GetMaxHealth()))
