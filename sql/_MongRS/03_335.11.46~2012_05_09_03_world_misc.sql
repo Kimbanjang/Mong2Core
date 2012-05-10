@@ -26074,3 +26074,194 @@ INSERT INTO `spell_area` (`spell`,`area`,`quest_start`,`quest_start_active`,`que
 -- Fix flags and equipment for Ymirjar Deathbringer
 UPDATE `creature_template` SET `unit_flags`=`unit_flags`&~256 WHERE `entry` IN (36892,37641);
 UPDATE `creature_template` SET `equipment_id`=2444 WHERE `entry`=37641;
+
+DELETE FROM `spell_target_position` WHERE `id` IN (67834, 68081);
+INSERT INTO `spell_target_position` (`id`,`target_map`,`target_position_x`,`target_position_y`,`target_position_z`,`target_orientation`) VALUES
+(67834, 571, 3167.01, 5586.04, 880.067, 0),
+(68081, 571, 5857.252, 516.8015, 599.82, 2.987);
+
+UPDATE `spell_target_position` SET `target_position_x`=6136.89,`target_position_y`=4785.55,`target_position_z`=100.673 WHERE `id`=67835;
+UPDATE `spell_target_position` SET `target_position_x`=8301.39,`target_position_y`=1501.34,`target_position_z`=870.555 WHERE `id`=67836;
+
+DELETE FROM `trinity_string` WHERE `entry` = 555;
+INSERT INTO `trinity_string` (`entry`,`content_default`) VALUES
+(555,"SetData performed on [GUID: %u, entry: %u, name: %s] Field: %u, Data: %u, with %s");
+
+DELETE FROM `command` WHERE `name` = "npc set data";
+INSERT INTO `command` (`name`,`security`,`help`) VALUES
+("npc set data", 3, "Syntax: .npc set data $field $data
+Sets data for the selected creature. Used for testing Scripting");
+
+-- Fixup for Quest Quest:The Path to the Citadel "Alliance and Horde"
+
+-- Alliance slave add missing equipments
+UPDATE `creature_template` SET `equipment_id`=254 WHERE `entry`=36767;
+
+-- Horde Slave SAI
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry` IN (36770,36771,36772,36773);
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid` IN (36770,36771,36772,36773);
+DELETE FROM `smart_scripts` WHERE `source_type`=9 AND `entryorguid` IN (3677000);
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(36770,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Reset - Emotestate'),
+(36771,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Reset - Emotestate'),
+(36772,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Reset - Emotestate'),
+(36773,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Reset - Emotestate'),
+(36770,0,1,0,8,0,100,7,71281,0,0,0,80,3677000,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Spellhit - Run Script'),
+(36771,0,1,0,8,0,100,7,71281,0,0,0,80,3677000,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Spellhit - Run Script'),
+(36772,0,1,0,8,0,100,7,71281,0,0,0,80,3677000,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Spellhit - Run Script'),
+(36773,0,1,0,8,0,100,7,71281,0,0,0,80,3677000,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - On Spellhit - Run Script'),
+-- Script
+(3677000,9,0,0,0,0,100,0,500,500,500,500,66,0,0,0,0,0,0,7,0,0,0,0,0,0,0, 'Horde Slave - Script - Turnto envoker'),
+(3677000,9,1,0,0,0,100,0,500,500,500,500,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - Script - say text'),
+(3677000,9,2,0,0,0,100,0,100,100,100,100,18,512,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - Script - set unitflag'),
+(3677000,9,3,0,0,0,100,0,100,100,100,100,2,250,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - Script - set faction'),
+(3677000,9,4,0,0,0,100,0,100,100,100,100,17,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - Script - set Emotestate'),
+(3677000,9,5,0,0,0,100,0,100,100,100,100,33,36770,0,0,0,0,0,7,0,0,0,0,0,0,0, 'Horde Slave - Script - give quest credit'),
+(3677000,9,6,0,0,0,100,0,100,100,100,100,59,1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - Script - set run on'),
+(3677000,9,7,0,0,0,100,0,500,500,500,500,69,1,0,0,0,0,0,19,23837,70,0,0,0,0,0, 'Horde Slave - Script - move to closest trigger'),
+(3677000,9,8,0,0,0,100,0,8000,8000,8000,8000,41,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Horde Slave - Script - despawn');
+
+-- Alliance Slave SAI
+UPDATE `creature_template` SET `AIName`='SmartAI', `ScriptName`='' WHERE `entry` IN (36764,36765,36766,36767);
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid` IN (36764,36765,36766,36767);
+DELETE FROM `smart_scripts` WHERE `source_type`=9 AND `entryorguid` IN (3676400);
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(36764,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Reset - Emotestate'),
+(36765,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Reset - Emotestate'),
+(36766,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Reset - Emotestate'),
+(36767,0,0,0,11,0,100,6,0,0,0,0,17,233,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Reset - Emotestate'),
+(36764,0,1,0,8,0,100,7,71281,0,0,0,80,3676400,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Spellhit - Run Script'),
+(36765,0,1,0,8,0,100,7,71281,0,0,0,80,3676400,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Spellhit - Run Script'),
+(36766,0,1,0,8,0,100,7,71281,0,0,0,80,3676400,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Spellhit - Run Script'),
+(36767,0,1,0,8,0,100,7,71281,0,0,0,80,3676400,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - On Spellhit - Run Script'),
+-- Script
+(3676400,9,0,0,0,0,100,0,500,500,500,500,66,0,0,0,0,0,0,7,0,0,0,0,0,0,0, 'Alliance Slave - Script - Turnto envoker'),
+(3676400,9,1,0,0,0,100,0,500,500,500,500,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - Script - say text'),
+(3676400,9,2,0,0,0,100,0,100,100,100,100,18,512,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - Script - set unitflag'),
+(3676400,9,3,0,0,0,100,0,100,100,100,100,2,250,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - Script - set faction'),
+(3676400,9,4,0,0,0,100,0,100,100,100,100,17,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - Script - set Emotestate'),
+(3676400,9,5,0,0,0,100,0,100,100,100,100,33,36764,0,0,0,0,0,7,0,0,0,0,0,0,0, 'Alliance Slave - Script - give quest credit'),
+(3676400,9,6,0,0,0,100,0,100,100,100,100,59,1,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - Script - set run on'),
+(3676400,9,7,0,0,0,100,0,500,500,500,500,69,1,0,0,0,0,0,19,23837,70,0,0,0,0,0, 'Alliance Slave - Script - move to closest trigger'),
+(3676400,9,8,0,0,0,100,0,8000,8000,8000,8000,41,0,0,0,0,0,0,1,0,0,0,0,0,0,0, 'Alliance Slave - Script - despawn');
+
+-- Ball and chain SAI
+UPDATE `gameobject_template` SET `AIName`='SmartGameObjectAI' WHERE `entry` IN (201969);
+DELETE FROM `smart_scripts` WHERE `source_type`=1 AND `entryorguid` IN (201969);
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(201969,1,0,0,64,0,100,6,0,0,0,0,85,71281,0,0,0,0,0,7,0,0,0,0,0,0,0, 'Ball and chain - On Gossip Hello - Envoker cast on self');
+
+-- Spell Conditions
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=71281;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,71281,0,31,3,36770,0,0,'','Spell 71281 targets entry 36770'),
+(13,1,71281,1,31,3,36771,0,0,'','Spell 71281 targets entry 36771'),
+(13,1,71281,2,31,3,36772,0,0,'','Spell 71281 targets entry 36772'),
+(13,1,71281,3,31,3,36773,0,0,'','Spell 71281 targets entry 36773'),
+(13,1,71281,4,31,3,36764,0,0,'','Spell 71281 targets entry 36764'),
+(13,1,71281,5,31,3,36765,0,0,'','Spell 71281 targets entry 36765'),
+(13,1,71281,6,31,3,36766,0,0,'','Spell 71281 targets entry 36766'),
+(13,1,71281,7,31,3,36767,0,0,'','Spell 71281 targets entry 36767');
+
+-- Creature text from sniff
+DELETE FROM `creature_text` WHERE `entry` IN (36770,36771,36772,36773,36764,36765,36766,36767);
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+-- Alliance Slaves
+(36764,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Alliance Slave'),
+(36764,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Alliance Slave'),
+(36764,0,2, 'Have my babies.',12,0,100,0,0,0, 'Alliance Slave'),
+(36764,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Alliance Slave'),
+(36764,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Alliance Slave'),
+(36765,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Alliance Slave'),
+(36765,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Alliance Slave'),
+(36765,0,2, 'Have my babies.',12,0,100,0,0,0, 'Alliance Slave'),
+(36765,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Alliance Slave'),
+(36765,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Alliance Slave'),
+(36766,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Alliance Slave'),
+(36766,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Alliance Slave'),
+(36766,0,2, 'Have my babies.',12,0,100,0,0,0, 'Alliance Slave'),
+(36766,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Alliance Slave'),
+(36766,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Alliance Slave'),
+(36767,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Alliance Slave'),
+(36767,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Alliance Slave'),
+(36767,0,2, 'Have my babies.',12,0,100,0,0,0, 'Alliance Slave'),
+(36767,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Alliance Slave'),
+(36767,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Alliance Slave'),
+-- Horde Slaves
+(36770,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Horde Slave'),
+(36770,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Horde Slave'),
+(36770,0,2, 'Have my babies.',12,0,100,0,0,0, 'Horde Slave'),
+(36770,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Horde Slave'),
+(36770,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Horde Slave'),
+(36771,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Horde Slave'),
+(36771,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Horde Slave'),
+(36771,0,2, 'Have my babies.',12,0,100,0,0,0, 'Horde Slave'),
+(36771,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Horde Slave'),
+(36771,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Horde Slave'),
+(36772,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Horde Slave'),
+(36772,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Horde Slave'),
+(36772,0,2, 'Have my babies.',12,0,100,0,0,0, 'Horde Slave'),
+(36772,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Horde Slave'),
+(36772,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Horde Slave'),
+(36773,0,0, 'You''re a beautiful sight... you have no idea.',12,0,100,0,0,0, 'Horde Slave'),
+(36773,0,1, '%s lets his mining pick drag on the ground as she approaches, clearly exhausted.',16,0,100,0,0,0, 'Horde Slave'),
+(36773,0,2, 'Have my babies.',12,0,100,0,0,0, 'Horde Slave'),
+(36773,0,3, 'If by life or death I can repay you, I will.',12,0,100,0,0,0, 'Horde Slave'),
+(36773,0,4, 'I''m going to return to the front of the quarry. Kill a few extra for me.',12,0,100,0,0,0, 'Horde Slave');
+
+-- Update Scourgelord Tyrannus "Make him fly"
+UPDATE `creature_template_addon` SET `bytes1`=50331648 WHERE `entry`=36794;
+
+-- Put Rimefang in the air and make him fly
+UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=36661;
+UPDATE `creature_template_addon` SET `bytes1`=50331648 WHERE `entry`=36661;
+
+-- Deathwhisper Necrolyte SAI
+SET @ENTRY   := 36788; -- NPC entry
+SET @SPELL1  := 69577; -- Shadow Bolt
+SET @SPELL2  := 69578; -- Conversion Beam
+SET @SPELL3  := 45104; -- Shadow Channelling
+DELETE FROM `smart_scripts` WHERE `source_type`=0 AND `entryorguid`=@ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`,`source_type`,`id`,`link`,`event_type`,`event_phase_mask`,`event_chance`,`event_flags`,`event_param1`,`event_param2`,`event_param3`,`event_param4`,`action_type`,`action_param1`,`action_param2`,`action_param3`,`action_param4`,`action_param5`,`action_param6`,`target_type`,`target_param1`,`target_param2`,`target_param3`,`target_x`,`target_y`,`target_z`,`target_o`,`comment`) VALUES
+(@ENTRY,0,0,0,0,0,100,6,100,100,3000,3000,11,@SPELL1,0,0,0,0,0,2,0,0,0,0,0,0,0, 'Deathwhisper Necrolyte - Combat - Cast Shadow Bolt'),
+(@ENTRY,0,1,0,0,0,100,6,9000,9000,24000,24000,11,@SPELL2,0,0,0,0,0,5,0,0,0,0,0,0,0, 'Deathwhisper Necrolyte - Combat - Cast Conversion Beam'),
+
+-- Deathwhisper Necrolyte pathing
+SET @NPC := 202231;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2,`position_x`=592.975,`position_y`=176.104,`position_z`=508.746 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,1);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,596.0208,175.5243,508.3654,0,0,0,100,0),
+(@PATH,2,605.2656,157.7101,507.2126,0,0,0,100,0),
+(@PATH,3,604.4063,146.283,507.3376,0,0,0,100,0),
+(@PATH,4,592.2899,131.4271,507.8163,0,0,0,100,0),
+(@PATH,5,577.4531,118.224,508.3163,0,0,0,100,0),
+(@PATH,6,563.0695,103.7309,514.1504,0,0,0,100,0),
+(@PATH,7,557.7743,89.41319,523.1727,0,0,0,100,0),
+(@PATH,8,560.9583,77.65278,525.4227,0,0,0,100,0),
+(@PATH,9,560.9583,77.65278,525.4227,0,0,0,100,0),
+(@PATH,10,571.0139,69.43403,525.2753,0,0,0,100,0),
+(@PATH,11,560.9583,77.65278,525.4227,0,0,0,100,0),
+(@PATH,12,557.7743,89.41319,523.1727,0,0,0,100,0),
+(@PATH,13,563.0695,103.7309,514.1504,0,0,0,100,0),
+(@PATH,14,577.4531,118.224,508.3163,0,0,0,100,0),
+(@PATH,15,592.2899,131.4271,507.8163,0,0,0,100,0),
+(@PATH,16,604.4063,146.283,507.3376,0,0,0,100,0),
+(@PATH,17,605.2656,157.7101,507.2126,0,0,0,100,0),
+(@PATH,18,596.0208,175.5243,508.3654,0,0,0,100,0);
+
+DELETE FROM `creature_formations` WHERE `leaderGUID`=202231;
+INSERT INTO `creature_formations` (`leaderGUID`,`memberGUID`,`dist`,`angle`,`groupAI`) VALUES
+(202231,202231,0,0,2),
+(202231,202099,7,288,2),
+(202231,202282,7,324,2),
+(202231,202125,7,360,2),
+(202231,202203,7,36,2),
+(202231,201960,7,72,2);
+
+-- Remove a dupe spawn
+DELETE FROM `creature` WHERE `guid`=201998;
+DELETE FROM `creature_addon` WHERE `guid`=201998;
