@@ -203,7 +203,10 @@ class spell_saviana_conflagration_init : public SpellScriptLoader
 
             void FilterTargets(std::list<Unit*>& unitList)
             {
-                unitList.remove_if (ConflagrationTargetSelector());
+                if (unitList.empty())
+                    return;
+
+                unitList.remove_if(ConflagrationTargetSelector());
                 uint8 maxSize = uint8(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 6 : 3);
                 if (unitList.size() > maxSize)
                     Trinity::Containers::RandomResizeList(unitList, maxSize);
