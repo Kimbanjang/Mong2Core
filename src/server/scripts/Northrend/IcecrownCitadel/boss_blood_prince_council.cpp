@@ -103,6 +103,7 @@ enum Spells
     SPELL_UNSTABLE                      = 72059,
     SPELL_KINETIC_BOMB_VISUAL           = 72054,
     SPELL_KINETIC_BOMB_EXPLOSION        = 72052,
+    SPELL_KINETIC_BOMB_KNOCKBACK        = 72087,
 
     // Shock Vortex
     SPELL_SHOCK_VORTEX_PERIODIC         = 71945,
@@ -456,20 +457,12 @@ class boss_prince_keleseth_icc : public CreatureScript
             {
                 summons.Summon(summon);
                 Position pos;
-                pos.Relocate(summon);
+                me->GetPosition(&pos);
                 float maxRange = me->GetDistance2d(summon);
                 float angle = me->GetAngle(summon);
-                // prevent spawning outside of room
-                while (!me->IsWithinLOS(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ()))
-                {
-                    maxRange -= 5.0f;
-                    if (maxRange < 5.0f)
-                        break;
-
-                    summon->MovePosition(pos, float(rand_norm() * maxRange), angle);
-                }
-
+                me->MovePositionToFirstCollision(pos, maxRange, angle);
                 summon->NearTeleportTo(pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation());
+                summon->ToTempSummon()->SetTempSummonType(TEMPSUMMON_CORPSE_DESPAWN);
             }
 
             void DamageDealt(Unit* /*target*/, uint32& damage, DamageEffectType damageType)
@@ -907,6 +900,7 @@ class boss_prince_valanar_icc : public CreatureScript
                         summon->GetPosition(x, y, z);
                         float ground_Z = summon->GetMap()->GetHeight(summon->GetPhaseMask(), x, y, z, true, 500.0f);
                         summon->GetMotionMaster()->MovePoint(POINT_KINETIC_BOMB_IMPACT, x, y, ground_Z);
+                        summon->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         break;
                     }
                     case NPC_SHOCK_VORTEX:
@@ -1245,12 +1239,12 @@ class npc_kinetic_bomb : public CreatureScript
             void Reset()
             {
                 _events.Reset();
-                me->SetDisplayId(DISPLAY_KINETIC_BOMB);
+                me->SetWalk(true);
                 me->CastSpell(me, SPELL_UNSTABLE, true);
                 me->CastSpell(me, SPELL_KINETIC_BOMB_VISUAL, true);
                 me->SetReactState(REACT_PASSIVE);
-                me->SetSpeed(MOVE_FLIGHT, IsHeroic() ? 0.3f : 0.15f, true);
                 me->GetPosition(_x, _y, _groundZ);
+                me->DespawnOrUnsummon(60000);
                 _groundZ = me->GetMap()->GetHeight(me->GetPhaseMask(), _x, _y, _groundZ, true, 500.0f);
             }
 
@@ -1260,9 +1254,9 @@ class npc_kinetic_bomb : public CreatureScript
                     _events.ScheduleEvent(EVENT_BOMB_DESPAWN, 1000);
                 else if (action == ACTION_KINETIC_BOMB_JUMP)
                 {
-                    me->GetMotionMaster()->Clear();
-                    me->GetMotionMaster()->MoveJump(_x, _y, me->GetPositionZ() + 7.0f, 1.0f, 7.0f);
-                    _events.ScheduleEvent(EVENT_CONTINUE_FALLING, 700);
+                    if (!me->HasAura(SPELL_KINETIC_BOMB_KNOCKBACK))
+                        me->GetMotionMaster()->MoveCharge(_x, _y, me->GetPositionZ() + 100.0f, me->GetSpeed(MOVE_RUN), 0);
+                    _events.RescheduleEvent(EVENT_CONTINUE_FALLING, 3000);
                 }
             }
 
@@ -1276,10 +1270,10 @@ class npc_kinetic_bomb : public CreatureScript
                     {
                         case EVENT_BOMB_DESPAWN:
                             me->SetVisible(false);
+                            me->DespawnOrUnsummon(5000);
                             break;
                         case EVENT_CONTINUE_FALLING:
-                            me->GetMotionMaster()->Clear();
-                            me->GetMotionMaster()->MovePoint(POINT_KINETIC_BOMB_IMPACT, _x, _y, _groundZ);
+                            me->GetMotionMaster()->MoveCharge(_x, _y, _groundZ, me->GetSpeed(MOVE_WALK), POINT_KINETIC_BOMB_IMPACT);
                             break;
                         default:
                             break;
@@ -1342,7 +1336,7 @@ class npc_dark_nucleus : public CreatureScript
 
             void DamageTaken(Unit* attacker, uint32& /*damage*/)
             {
-                if (attacker == me)
+                if (attacker == me || attacker == me->getVictim())
                     return;
 
                 if (!_lockedTarget)
@@ -1350,9 +1344,9 @@ class npc_dark_nucleus : public CreatureScript
                         _lockedTarget = true;
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 const diff)
             {
-                if (!me->isInCombat())
+                if (!UpdateVictim())
                     return;
 
                 if (_targetAuraCheck <= diff)
@@ -1538,6 +1532,7 @@ class spell_valanar_kinetic_bomb : public SpellScriptLoader
                 Position offset = {0.0f, 0.0f, 20.0f, 0.0f};
                 summonPos.RelocateOffset(offset);
                 SetExplTargetDest(summonPos);
+                GetHitDest()->RelocateOffset(offset);
             }
 
             void Register()
@@ -1599,7 +1594,7 @@ class spell_valanar_kinetic_bomb_knockback : public SpellScriptLoader
 
             void Register()
             {
-                AfterHit += SpellHitFn(spell_valanar_kinetic_bomb_knockback_SpellScript::KnockIntoAir);
+                BeforeHit += SpellHitFn(spell_valanar_kinetic_bomb_knockback_SpellScript::KnockIntoAir);
             }
         };
 
@@ -1676,7 +1671,7 @@ class spell_blood_council_shadow_prison_damage : public SpellScriptLoader
             void AddExtraDamage()
             {
                 if (Aura* aur = GetHitUnit()->GetAura(GetSpellInfo()->Id))
-                    if (AuraEffect const* eff = aur->GetEffect(1))
+                    if (AuraEffect const* eff = aur->GetEffect(EFFECT_1))
                         SetHitDamage(GetHitDamage() + eff->GetAmount());
             }
 
