@@ -5606,15 +5606,6 @@ void Player::RepopAtGraveyard()
     // note: this can be called also when the player is alive
     // for example from WorldSession::HandleMovementOpcodes
 
-    AreaTableEntry const* zone = GetAreaEntryByAreaID(GetAreaId());
-
-    // Such zones are considered unreachable as a ghost and the player must be automatically revived
-    if ((!isAlive() && zone && zone->flags & AREA_FLAG_NEED_FLY) || GetTransport() || GetPositionZ() < -500.0f)
-    {
-        ResurrectPlayer(0.5f);
-        SpawnCorpseBones();
-    }
-
     WorldSafeLocsEntry const* ClosestGrave = NULL;
 
     // Special handle for battleground maps
@@ -5643,6 +5634,23 @@ void Player::RepopAtGraveyard()
     }
     else if (GetPositionZ() < -500.0f)
         TeleportTo(m_homebindMapId, m_homebindX, m_homebindY, m_homebindZ, GetOrientation());
+
+    AreaTableEntry const *zone = GetAreaEntryByAreaID(GetAreaId());
+
+    // Such zones are considered unreachable as a ghost and the player must be automatically revived
+    if ((!isAlive() && zone && zone->flags & AREA_FLAG_NEED_FLY) || GetTransport() || GetPositionZ() < -500.0f)
+    {
+        if (IsBeingTeleported())
+        {
+            m_resurrectHealth = uint32(GetMaxHealth() * 0.5f);
+            m_resurrectMana = uint32(GetMaxPower(POWER_MANA) * 0.5f);
+            ScheduleDelayedOperation(DELAYED_RESURRECT_PLAYER);
+            return;
+        }
+
+        ResurrectPlayer(0.5f);
+        SpawnCorpseBones();
+    }
 }
 
 bool Player::CanJoinConstantChannelInZone(ChatChannelsEntry const* channel, AreaTableEntry const* zone)
