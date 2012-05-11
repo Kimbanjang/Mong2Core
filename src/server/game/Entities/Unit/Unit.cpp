@@ -12419,14 +12419,14 @@ void Unit::ClearInCombat()
 
 bool Unit::isTargetableForAttack(bool checkFakeDeath) const
 {
-    if (!isAlive())
-        return false;
-
     if (HasFlag(UNIT_FIELD_FLAGS,
         UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PC))
         return false;
 
     if (GetTypeId() == TYPEID_PLAYER && ToPlayer()->isGameMaster())
+        return false;
+
+    if (!isAlive())
         return false;
 
     return !HasUnitState(UNIT_STATE_UNATTACKABLE) && (!checkFakeDeath || !HasUnitState(UNIT_STATE_DIED));
