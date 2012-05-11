@@ -31,7 +31,7 @@ UPDATE `quest_template` SET `ZoneOrSort`='-1' WHERE (`Id`='8249');
 UPDATE `creature_template` SET `faction_A`='1885', `faction_H`='1885' WHERE (`entry`='33519');
 
 -- 진은광물 채광시 퀘템으로 잘못 설정된 부분 진은광물 드랍으로 변경
-UPDATE `gameobject_loot_template` SET `item`='7911' WHERE (`entry`='5045') AND (`item`='12906');
+--UPDATE `gameobject_loot_template` SET `item`='7911' WHERE (`entry`='5045') AND (`item`='12906');
 
 -- 죽기 퀘스트 [하늘로부터의 죽음] 버그 임시 픽스
 UPDATE `quest_template` SET `RequiredNpcOrGo1`='0', `RequiredNpcOrGo2`='0', `RequiredNpcOrGo3`='0', `RequiredNpcOrGo4`='0' WHERE (`Id`='12641');
