@@ -33,11 +33,14 @@ UPDATE `creature_template` SET `faction_A`='1885', `faction_H`='1885' WHERE (`en
 -- 진은광물 채광시 퀘템으로 잘못 설정된 부분 진은광물 드랍으로 변경
 --UPDATE `gameobject_loot_template` SET `item`='7911' WHERE (`entry`='5045') AND (`item`='12906');
 
+-- 죽기 퀘스트 [하늘로부터의 죽음] 버그 픽스
+UPDATE `creature_template` SET `ScriptName` = 'npc_eye_of_acherus' WHERE `entry` = '28511';
+/*
 -- 죽기 퀘스트 [하늘로부터의 죽음] 버그 임시 픽스
 UPDATE `quest_template` SET `RequiredNpcOrGo1`='0', `RequiredNpcOrGo2`='0', `RequiredNpcOrGo3`='0', `RequiredNpcOrGo4`='0' WHERE (`Id`='12641');
 UPDATE `quest_template` SET `RequiredNpcOrGoCount1`='0', `RequiredNpcOrGoCount2`='0', `RequiredNpcOrGoCount3`='0', `RequiredNpcOrGoCount4`='0' WHERE (`Id`='12641');
 UPDATE `quest_template` SET `RequiredSpellCast1`='0', `RequiredSpellCast2`='0', `RequiredSpellCast3`='0', `RequiredSpellCast4`='0' WHERE (`Id`='12641');
-/* 복구용
+-- 복구용
 UPDATE `quest_template` SET `RequiredNpcOrGo1`='28525', `RequiredNpcOrGo2`='28543', `RequiredNpcOrGo3`='28542', `RequiredNpcOrGo4`='28544' WHERE (`Id`='12641');
 UPDATE `quest_template` SET `RequiredNpcOrGoCount1`='1', `RequiredNpcOrGoCount2`='1', `RequiredNpcOrGoCount3`='1', `RequiredNpcOrGoCount4`='1' WHERE (`Id`='12641');
 UPDATE `quest_template` SET `RequiredSpellCast1`='51858', `RequiredSpellCast2`='51858', `RequiredSpellCast3`='51858', `RequiredSpellCast4`='51858' WHERE (`Id`='12641');
