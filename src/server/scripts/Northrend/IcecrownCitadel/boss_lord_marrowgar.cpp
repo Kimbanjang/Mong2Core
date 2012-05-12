@@ -363,6 +363,8 @@ class npc_bone_spike : public CreatureScript
             npc_bone_spikeAI(Creature* creature) : Scripted_NoMovementAI(creature), _hasTrappedUnit(false)
             {
                 ASSERT(creature->GetVehicleKit());
+                me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_KNOCK_BACK, true);
+                me->ApplySpellImmune(0, IMMUNITY_MECHANIC, MECHANIC_GRIP, true);
             }
 
             void JustDied(Unit* /*killer*/)
@@ -383,7 +385,7 @@ class npc_bone_spike : public CreatureScript
             void IsSummonedBy(Unit* summoner)
             {
                 DoCast(summoner, SPELL_IMPALED);
-                summoner->CastSpell(me, SPELL_RIDE_VEHICLE, true);
+                // summoner->CastSpell(me, SPELL_RIDE_VEHICLE, true);
                 _events.ScheduleEvent(EVENT_FAIL_BONED, 8000);
                 _hasTrappedUnit = true;
             }
