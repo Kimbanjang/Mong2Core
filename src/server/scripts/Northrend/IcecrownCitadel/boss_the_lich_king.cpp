@@ -816,7 +816,8 @@ class boss_the_lich_king : public CreatureScript
                         events.ScheduleEvent(EVENT_INFEST, 70000, 0, PHASE_TWO);
                         events.ScheduleEvent(EVENT_DEFILE, 97000, 0, PHASE_TWO);
                         events.ScheduleEvent(EVENT_SOUL_REAPER, 94000, 0, PHASE_TWO);
-						me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
+                        me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
+                        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
                         break;
                     case POINT_CENTER_2:
                         me->SetFacingTo(0.0f);
@@ -835,7 +836,8 @@ class boss_the_lich_king : public CreatureScript
                         events.ScheduleEvent(EVENT_SOUL_REAPER, 99500, 0, PHASE_THREE);
                         events.ScheduleEvent(EVENT_VILE_SPIRITS, 79500, EVENT_GROUP_VILE_SPIRITS, PHASE_THREE);
                         events.ScheduleEvent(IsHeroic() ? EVENT_HARVEST_SOULS : EVENT_HARVEST_SOUL, 73500, 0, PHASE_THREE);
-						me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
+                        me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
+                        me->ApplySpellImmune(0, IMMUNITY_EFFECT, SPELL_EFFECT_ATTACK_ME, false);
                         break;
                     case POINT_LK_OUTRO_1:
                         events.ScheduleEvent(EVENT_OUTRO_TALK_4, 1, 0, PHASE_OUTRO);
@@ -1509,6 +1511,7 @@ class npc_valkyr_shadowguard : public CreatureScript
                 DoZoneInCombat();
                 _events.Reset();
                 _events.ScheduleEvent(EVENT_LIFE_SIPHON, 2000);
+                me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
             void AttackStart(Unit* /*target*/)
@@ -1523,6 +1526,12 @@ class npc_valkyr_shadowguard : public CreatureScript
                 switch (id)
                 {
                     case POINT_DROP_PLAYER:
+                        me->GetPosition(&_current);
+                        if (_current.GetExactDist(&_dropPoint) != 0)
+                        {
+                            _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 0);
+                            break;
+                        }
                         DoCastAOE(SPELL_EJECT_ALL_PASSENGERS);
                         me->DespawnOrUnsummon(1000);
                         break;
@@ -1542,7 +1551,6 @@ class npc_valkyr_shadowguard : public CreatureScript
                                 DoCast(target, SPELL_VALKYR_CARRY);
                                 _dropPoint.Relocate(triggers.front());
                                 _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 1500);
-
                             }
                         }
                         else
@@ -1565,7 +1573,7 @@ class npc_valkyr_shadowguard : public CreatureScript
 
                 _events.Update(diff);
 
-                if (me->HasUnitState(UNIT_STATE_CASTING))
+                if (me->HasUnitState(UNIT_STAT_CASTING))
                     return;
 
                 while (uint32 eventId = _events.ExecuteEvent())
@@ -1598,6 +1606,7 @@ class npc_valkyr_shadowguard : public CreatureScript
         private:
             EventMap _events;
             Position _dropPoint;
+            Position _current;
             uint64 _grabbedPlayer;
             InstanceScript* _instance;
         };
@@ -1623,7 +1632,7 @@ class npc_strangulate_vehicle : public CreatureScript
             void IsSummonedBy(Unit* summoner)
             {
                 me->SetFacingToObject(summoner);
-                DoCast(summoner, SPELL_HARVEST_SOUL_VEHICLE);
+                // DoCast(summoner, SPELL_HARVEST_SOUL_VEHICLE);
                 _events.Reset();
                 _events.ScheduleEvent(EVENT_MOVE_TO_LICH_KING, 2000);
                 _events.ScheduleEvent(EVENT_TELEPORT, 6000);
