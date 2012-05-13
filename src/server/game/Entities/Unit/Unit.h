@@ -465,13 +465,9 @@ enum DeathState
     JUST_DIED   = 1,
     CORPSE      = 2,
     DEAD        = 3,
-<<<<<<< HEAD
-    JUST_ALIVED = 4,
-    DEAD_FALLING= 5,
-	GHOULED     = 6
-=======
     JUST_RESPAWNED = 4,
->>>>>>> KBJ/master
+    // DEAD_FALLING= 5,
+	GHOULED     = 6
 };
 
 enum UnitState
