@@ -66,7 +66,6 @@ public:
             CurseTimer = 30000;
             RandomYellTimer = urand(30000, 60000);              //Occasionally yell
             ChargeTimer = 20000;
-            ResetTimer = 0;
         }
 
         uint64 Midnight;
@@ -79,6 +78,12 @@ public:
 
         void Reset()
         {
+            ResetTimer = 0;
+        }
+
+        void EnterEvadeMode()
+        {
+            ScriptedAI::EnterEvadeMode();
             ResetTimer = 2000;
         }
 
