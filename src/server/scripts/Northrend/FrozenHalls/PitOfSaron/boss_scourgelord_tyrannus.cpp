@@ -61,6 +61,11 @@ enum Spells
 
     SPELL_EJECT_ALL_PASSENGERS      = 50630,
     SPELL_FULL_HEAL                 = 43979,
+
+    //cave
+    SPELL_ICICLE_FALL               = 69428,
+    SPELL_FALL_DAMAGE               = 62236,
+    SPELL_ICICLE                    = 62234,
 };
 
 enum Events
@@ -507,6 +512,54 @@ class at_tyrannus_event_starter : public AreaTriggerScript
         }
 };
 
+class npc_tyrannus_icicle : public CreatureScript
+{
+   public:
+       npc_tyrannus_icicle() : CreatureScript("npc_tyrannus_icicle") { }
+
+       CreatureAI* GetAI(Creature* pCreature) const
+       {
+           return new npc_tyrannus_icicleAI(pCreature);
+       }
+
+       struct npc_tyrannus_icicleAI : public ScriptedAI
+       {
+           npc_tyrannus_icicleAI(Creature *c) : ScriptedAI(c)
+           {
+               pInstance = c->GetInstanceScript();
+               me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
+               me->SetReactState(REACT_PASSIVE);
+           }
+
+           void Reset()
+           {
+               IcicleTimer = urand(8000, 14000);
+               me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
+               me->SetReactState(REACT_PASSIVE);
+           }
+
+           void UpdateAI(const uint32 diff)
+           {
+               if(pInstance->GetData(DATA_TYRANNUS_EVENT) == NOT_STARTED)
+               {
+                   if (IcicleTimer <= uint32(diff))
+                   {
+                       DoCast(me, SPELL_ICICLE);
+                       IcicleTimer = urand(8000, 14000);
+                   } else IcicleTimer -= diff;
+               }
+
+               //Return since we have no target
+               if (!UpdateVictim())
+                   return;
+           }
+       private:
+           InstanceScript* pInstance;
+           uint32 IcicleTimer;
+    };
+
+};
+
 void AddSC_boss_tyrannus()
 {
     new boss_tyrannus();
@@ -514,4 +567,5 @@ void AddSC_boss_tyrannus()
     new spell_tyrannus_overlord_brand();
     new spell_tyrannus_mark_of_rimefang();
     new at_tyrannus_event_starter();
+	new npc_tyrannus_icicle();
 }
