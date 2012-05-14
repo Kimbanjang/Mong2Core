@@ -263,6 +263,10 @@ INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 ########## [레이드] ##########
 ##############################
 
+##### 아제로스 레이드 보스 젠시간 #####
+UPDATE `creature` SET `spawntimesecs`='604800' WHERE `id` IN (12118,11982,12259,12057,12264,12056,11988,12098,12435,13020,12017,11983,14601,11981,14020,11583,15263,15516,15510,15509,15276,15275,15727,15543,15544,15511,15299,15517);
+UPDATE `creature` SET `spawntimesecs`='259200' WHERE `id` IN (15348,15341,15340,15370,15369,15339,14517,14507,14510,14509,14515,14834,11382,11380);
+
 ##### 줄구룹 #####
 -- 혈군주 만도키르 이벤트발생X 공격가능
 UPDATE `creature_template` SET `unit_flags`=32832 WHERE `entry`=11382;
@@ -420,3 +424,8 @@ INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `l
 -- 신드라고사 / 리치왕 종족 타입변경
 UPDATE `creature_template` SET `type` ='7' WHERE `entry` IN (36597,39166,39167,39168);
 UPDATE `creature_template` SET `type` ='2' WHERE `entry` IN (36853,38265,38266,38267);
+
+
+##### 루비 성소 #####
+-- 보스 젠시간 조정
+-- UPDATE `creature` SET `spawntimesecs`='604800' WHERE `id` IN (15348,15341,15340,15370,15369,15339,14517,14507,14510,14509,14515,14834,11382,11380);
