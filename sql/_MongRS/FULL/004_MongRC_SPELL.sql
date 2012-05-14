@@ -60,9 +60,6 @@ INSERT INTO `spell_linked_spell` (`spell_trigger`,`spell_effect`,`type`,`comment
 -- 격노의 토템 크리버프 구현
 DELETE FROM `spell_linked_spell` WHERE `spell_trigger` IN (57658,57660,57662,57663);
 INSERT INTO `spell_linked_spell` VALUES ('57658', '30708', '0', 'Totem of Wrath crit (rank1)'),('57660', '30708', '0', 'Totem of Wrath crit (rank2)'),('57662', '30708', '0', 'Totem of Wrath crit (rank3)'),('57663', '30708', '0', 'Totem of Wrath crit (rank4)');
--- 격노의 토템 문양 구현 수정
-DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_sha_totem_of_wrath'; 
-INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES (-30706, 'spell_sha_totem_of_wrath'); 
 -- 힐토템 수정
 DELETE FROM `spell_bonus_data` WHERE `entry` IN (52042,5672);
 INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`,`ap_bonus`, `ap_dot_bonus`, `comments`) VALUES ('5672','0.0827','-1','-1','-1','Shaman - Healing Stream Totem Rank 1');
