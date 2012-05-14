@@ -425,6 +425,18 @@ INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `l
 UPDATE `creature_template` SET `type` ='7' WHERE `entry` IN (36597,39166,39167,39168);
 UPDATE `creature_template` SET `type` ='2' WHERE `entry` IN (36853,38265,38266,38267);
 
+-- 구린속/썩은얼굴 바닥구현
+DELETE FROM `spell_linked_spell` WHERE `spell_effect` IN (72144,72145);
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES 
+(69291, 72144, 1, 'Festergut: Apply Orange Blight Residue'),
+(72101, 72144, 1, 'Festergut: Apply Orange Blight Residue'),
+(72102, 72144, 1, 'Festergut: Apply Orange Blight Residue'),
+(72103, 72144, 1, 'Festergut: Apply Orange Blight Residue'),
+(69507, 72145, 1, 'Rotface: Apply Green Blight Residue'),
+(71213, 72145, 1, 'Rotface: Apply Green Blight Residue'),
+(73189, 72145, 1, 'Rotface: Apply Green Blight Residue'),
+(73190, 72145, 1, 'Rotface: Apply Green Blight Residue');
+
 -- 보스 잘못된 데미지 계산표 수정
 -- Lord Marrowgar
 UPDATE `creature_template` SET `dmg_multiplier`=55 WHERE `entry`=36612;
