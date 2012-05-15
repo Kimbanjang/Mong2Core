@@ -65,6 +65,9 @@ DELETE FROM `spell_bonus_data` WHERE `entry` IN (52042,5672);
 INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`,`ap_bonus`, `ap_dot_bonus`, `comments`) VALUES ('5672','0.0827','-1','-1','-1','Shaman - Healing Stream Totem Rank 1');
 
 # 죽음의 기사
+-- 춤추는 룬의무기
+DELETE FROM `spell_proc_event` WHERE `entry`='49028';
+INSERT INTO `spell_proc_event` (entry, procFlags) VALUES('49028','69652');
 -- 피 묻은 칼날 수정(무한발동 -> 본섭구현)
 DELETE FROM `spell_proc_event` WHERE `entry`='49219';
 INSERT INTO `spell_proc_event` VALUES (49219,0,15,0,0,0,4,0,0,10,0);

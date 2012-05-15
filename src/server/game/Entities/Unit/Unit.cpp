@@ -7724,31 +7724,47 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 target = this;
                 break;
             }
-            // Dancing Rune Weapon
-            if (dummySpell->Id == 49028)
-            {
-                // 1 dummy aura for dismiss rune blade
-                if (effIndex != 1)
-                    return false;
+			// Dancing Rune Weapon
+			if (dummySpell->Id == 49028)
+	        {
+		        // 1 dummy aura for dismiss rune blade
+			    if (effIndex != 1)
+				    return false;
 
-                Unit* pPet = NULL;
-                for (ControlList::const_iterator itr = m_Controlled.begin(); itr != m_Controlled.end(); ++itr) // Find Rune Weapon
-                    if ((*itr)->GetEntry() == 27893)
-                    {
-                        pPet = *itr;
-                        break;
-                    }
-
-                if (pPet && pPet->getVictim() && damage && procSpell)
-                {
-                    uint32 procDmg = damage / 2;
-                    pPet->SendSpellNonMeleeDamageLog(pPet->getVictim(), procSpell->Id, procDmg, procSpell->GetSchoolMask(), 0, 0, false, 0, false);
-                    pPet->DealDamage(pPet->getVictim(), procDmg, NULL, SPELL_DIRECT_DAMAGE, procSpell->GetSchoolMask(), procSpell, true);
-                    break;
-                }
-                else
-                    return false;
-            }
+	            Unit* pPet = NULL;
+		        for (ControlList::const_iterator itr = m_Controlled.begin(); itr != m_Controlled.end(); ++itr) // Find Rune Weapon
+			        if ((*itr)->GetEntry() == 27893)
+				    {
+					    pPet = *itr;
+						break;
+	                }
+	
+		        // special abilities damage
+			    if (pPet && pPet->getVictim() && damage && procSpell)
+				{
+	                pPet->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+		            pPet->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+			        uint32 procDmg = damage / 2;
+				    pPet->SendSpellNonMeleeDamageLog(pPet->getVictim(), procSpell->Id, procDmg, GetSpellSchoolMask(procSpell), 0, 0, false, 0, false);
+					pPet->DealDamage(pPet->getVictim(), procDmg, NULL, SPELL_DIRECT_DAMAGE, GetSpellSchoolMask(procSpell), procSpell, true);
+	                break;
+		        }
+			    else // copy 50% melee damage
+				if (pPet && pPet->getVictim() && damage && !procSpell)
+	            {
+		                CalcDamageInfo damageInfo;
+			            CalculateMeleeDamage(pPet->getVictim(), 0, &damageInfo, BASE_ATTACK);
+				        damageInfo.attacker = pPet;
+					    damageInfo.damage = damageInfo.damage / 2;
+						// Send log damage message to client
+	                    pPet->DealDamageMods(pPet->getVictim(),damageInfo.damage,&damageInfo.absorb);
+		                pPet->SendAttackStateUpdate(&damageInfo);
+			            pPet->ProcDamageAndSpell(damageInfo.target, damageInfo.procAttacker, damageInfo.procVictim, damageInfo.procEx, damageInfo.damage, damageInfo.attackType);
+				        pPet->DealMeleeDamage(&damageInfo,true);
+	            }
+		        else
+			        return false;
+	        }
             // Mark of Blood
             if (dummySpell->Id == 49005)
             {
