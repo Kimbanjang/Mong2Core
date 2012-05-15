@@ -26583,3 +26583,268 @@ INSERT INTO `creature_formations` (`leaderGUID`,`memberGUID`,`dist`,`angle`,`gro
 
 -- Update Scourgelord Tyrannus "Make him fly"
 UPDATE `creature_template` SET `InhabitType`=4 WHERE `entry`=36794;
+
+-- Deathwhisper Necrolyte pathing
+SET @NPC := 202063;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `spawndist`=0,`MovementType`=2 WHERE `guid`=@NPC;
+UPDATE `creature` SET `position_x`=631.8229,`position_y`=229.7292,`position_z`=508.0604 WHERE `guid` IN (202028,202000,201957,201820,202122,202199);
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes2`) VALUES (@NPC,@PATH,1);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUES
+(@PATH,1,631.8229,229.7292,508.0604,0,0,0,100,0),
+(@PATH,2,643.8733,215.2674,508.2268,0,0,0,100,0),
+(@PATH,3,659.0139,215.9635,507.8518,0,0,0,100,0),
+(@PATH,4,674.184,213.5833,508.8467,0,0,0,100,0),
+(@PATH,5,678.8004,201.066,508.4717,0,0,0,100,0),
+(@PATH,6,662.4636,183.0694,507.9585,0,0,0,100,0),
+(@PATH,7,650.8941,171.5642,507.7085,0,0,0,100,0),
+(@PATH,8,637.7292,155.2569,507.9196,0,0,0,100,0),
+(@PATH,9,644.6389,130.2639,510.4212,0,0,0,100,0),
+(@PATH,10,654.9896,121.3038,511.9212,0,0,0,100,0),
+(@PATH,11,677.7448,136.6528,512.7715,0,0,0,100,0),
+(@PATH,12,678.2847,149.1233,507.8965,0,0,0,100,0),
+(@PATH,13,677.7448,136.6528,512.7715,0,0,0,100,0),
+(@PATH,14,654.9896,121.3038,511.9212,0,0,0,100,0),
+(@PATH,15,644.6389,130.2639,510.4212,0,0,0,100,0),
+(@PATH,16,637.7292,155.2569,507.9196,0,0,0,100,0),
+(@PATH,17,650.8941,171.5642,507.7085,0,0,0,100,0),
+(@PATH,18,662.4636,183.0694,507.9585,0,0,0,100,0),
+(@PATH,19,678.8004,201.066,508.4717,0,0,0,100,0),
+(@PATH,20,674.184,213.5833,508.8467,0,0,0,100,0),
+(@PATH,21,659.0139,215.9635,507.8518,0,0,0,100,0),
+(@PATH,22,643.8733,215.2674,508.2268,0,0,0,100,0);
+DELETE FROM `creature_formations` WHERE `leaderGUID`=@NPC;
+INSERT INTO `creature_formations` (`leaderGUID`,`memberGUID`,`dist`,`angle`,`groupAI`) VALUES
+(@NPC,@NPC,0,0,2),
+(@NPC,202028,7,270,2),
+(@NPC,202000,7,306,2),
+(@NPC,201957,7,342,2),
+(@NPC,201820,7,18,2),
+(@NPC,202122,7,54,2),
+(@NPC,202199,7,90,2);
+
+-- Scourgelord Tyrannus pathing
+SET @NPC := 201951;
+SET @PATH := @NPC*10;
+UPDATE `creature` SET `position_x`=873.783,`position_y`=136.9774,`position_z`=623.6115,`spawndist`=0,`MovementType`=2 WHERE `guid`=@NPC;
+DELETE FROM `creature_addon` WHERE `guid`=@NPC;
+INSERT INTO `creature_addon` (`guid`,`path_id`,`bytes1`,`bytes2`) VALUES (@NPC,@PATH,50331648,1);
+DELETE FROM `waypoint_data` WHERE `id`=@PATH;
+INSERT INTO `waypoint_data` (`id`,`point`,`position_x`,`position_y`,`position_z`,`delay`,`move_flag`,`action`,`action_chance`,`wpguid`) VALUE
+(@PATH,1,873.783,136.9774,623.6115,0,0,0,100,0),
+(@PATH,2,872.9045,139.2743,622.4446,0,0,0,100,0),
+(@PATH,3,888.7917,171.3403,591.3615,0,0,0,100,0),
+(@PATH,4,861.3073,209.8455,591.3615,0,0,0,100,0),
+(@PATH,5,830.4913,254.5556,591.3615,0,0,0,100,0),
+(@PATH,6,780.4844,277.6406,591.3615,0,0,0,100,0),
+(@PATH,7,732.6771,272.4635,591.3615,0,0,0,100,0),
+(@PATH,8,683.9028,265.276,591.3615,0,0,0,100,0),
+(@PATH,9,612.3368,284.7934,553.4998,0,0,0,100,0),
+(@PATH,10,554.816,303.1858,553.4998,0,0,0,100,0),
+(@PATH,11,498.1024,309.0625,553.4998,0,0,0,100,0),
+(@PATH,12,470.4167,230.0174,553.4998,0,0,0,100,0),
+(@PATH,13,454.0087,175.2135,553.4998,0,0,0,100,0),
+(@PATH,14,492.4288,127.1806,583.1108,0,0,0,100,0),
+(@PATH,15,551.2604,121.6354,583.1108,0,0,0,100,0),
+(@PATH,16,647.5573,126.3542,583.1108,0,0,0,100,0),
+(@PATH,17,766.2222,130.9254,583.1108,0,0,0,100,0),
+(@PATH,18,829.408,42.33854,583.1108,0,0,0,100,0),
+(@PATH,19,746.7101,-53.03299,583.1108,0,0,0,100,0),
+(@PATH,20,663.2379,-77.32291,583.1108,0,0,0,100,0),
+(@PATH,21,618.6389,3.369792,583.1108,0,0,0,100,0),
+(@PATH,22,641.8559,89.27604,583.1108,0,0,0,100,0),
+(@PATH,23,794.1667,115.6858,583.1108,0,0,0,100,0);
+
+-- Lock Ice Wall and make untargetable
+UPDATE `gameobject_template` SET `flags`=18 WHERE `entry`=201885;
+-- Saronite Rock Should be untargetable
+UPDATE `gameobject_template` SET `flags`=18 WHERE `entry`=196485;
+
+-- Spell Conditions for spell Necromantic Power 69347
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=69347;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,69347,0,31,3,37496,0,0,'','Spell 69347 targets entry 37496'),
+(13,1,69347,1,31,3,37497,0,0,'','Spell 69347 targets entry 37497'),
+(13,1,69347,2,31,3,37498,0,0,'','Spell 69347 targets entry 37498'),
+(13,1,69347,3,31,3,37584,0,0,'','Spell 69347 targets entry 37584'),
+(13,1,69347,4,31,3,37587,0,0,'','Spell 69347 targets entry 37587'),
+(13,1,69347,5,31,3,37588,0,0,'','Spell 69347 targets entry 37588');
+
+-- Spell Conditions for spell Shriek of the Highborne 70512
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=70512;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,70512,3,31,3,37584,0,0,'','Spell 70512 targets entry 37584'),
+(13,1,70512,4,31,3,37587,0,0,'','Spell 70512 targets entry 37587'),
+(13,1,70512,5,31,3,37588,0,0,'','Spell 70512 targets entry 37588');
+
+-- Spell Conditions for spell Empowered Blizzard 70130
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry`=70130;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+(13,1,70130,0,31,3,37496,0,0,'','Spell 70130 targets entry 37496'),
+(13,1,70130,1,31,3,37497,0,0,'','Spell 70130 targets entry 37497'),
+(13,1,70130,2,31,3,37498,0,0,'','Spell 70130 targets entry 37498');
+
+-- Lock Halls of Reflection Portcullis
+UPDATE `gameobject_template` SET `flags`=18 WHERE `entry`=201848;
+
+DELETE FROM `item_loot_template` WHERE `entry` BETWEEN 51999 AND 52005;
+INSERT INTO `item_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- Satchel of Helpfull Goods (level 0-25)
+(51999,51964,0,1,1,1,1), -- Vigorous Belt
+(51999,51968,0,1,1,1,1), -- Enumerated Wrap
+(51999,51978,0,1,1,1,1), -- Earthbound Girdle
+(51999,51994,25,1,1,1,1), -- Tumultuous Cloak
+-- Satchel of Helpfull Goods (level 26-35)
+(52000,51965,0,1,1,1,1), -- Vigorous Handguards
+(52000,51973,0,1,1,1,1), -- Enumerated Handwraps
+(52000,51980,0,1,1,1,1), -- Earthbound Handgrips
+(52000,51996,25,1,1,1,1), -- Tumultuous Necklace
+-- Satchel of Helpfull Goods (level 36-45)
+(52001,51966,0,1,1,1,1), -- Vigorous Spaulders
+(52001,51974,0,1,1,1,1), -- Enumerated Shoulderpads
+(52001,51976,0,1,1,1,1), -- Earthbound Shoulderguards
+(52001,51984,0,1,1,1,1), -- Stalwart Shoulderpads
+(52001,51992,25,1,1,1,1), -- Tumultuous Ring
+-- Satchel of Helpfull Goods (level 46-55)
+(52002,51962,0,1,1,1,1), -- Vigorous Bracers
+(52002,51963,0,1,1,1,1), -- Vigorous Stompers
+(52002,51967,0,1,1,1,1), -- Enumerated Sandals
+(52002,51972,0,1,1,1,1), -- Enumerated Bracers
+(52002,51981,0,1,1,1,1), -- Earthbound Wristguards
+(52002,51982,0,1,1,1,1), -- Earthbound Boots
+(52002,51989,0,1,1,1,1), -- Stalwart Bands
+(52002,51990,0,1,1,1,1), -- Stalwart Treads
+-- Satchel of Helpfull Goods (level 56-60)
+(52003,51959,0,1,1,1,1), -- Vigorous Belt
+(52003,51971,0,1,1,1,1), -- Enumerated Belt
+(52003,51977,0,1,1,1,1), -- Earthbound Girdle
+(52003,51985,0,1,1,1,1), -- Stalwart Belt
+(52003,51993,25,1,1,1,1), -- Turbulent Cloak
+-- Satchel of Helpfull Goods (level 61-64)
+(52004,51960,0,1,1,1,1), -- Vigorous Gloves
+(52004,51970,0,1,1,1,1), -- Enumerated Gloves
+(52004,51979,0,1,1,1,1), -- Earthbound Grips
+(52004,51987,0,1,1,1,1), -- Stalwart Grips
+(52004,51995,25,1,1,1,1), -- Turbulent Necklace
+-- Satchel of Helpfull Goods (level 65-70)
+(52005,51961,0,1,1,1,1), -- Vigorous Shoulderguards
+(52005,51969,0,1,1,1,1), -- Enumerated Shoulders
+(52005,51975,0,1,1,1,1), -- Earthbound Shoulders
+(52005,51983,0,1,1,1,1), -- Stalwart Shoulderguards
+(52005,51991,25,1,0,1,1); -- Turbulent Signet
+-- -------------------------------------------------------------------
+-- Set some Parameters
+-- -------------------------------------------------------------------
+SET @Cloth := 400; -- Class Bitmask: 16 (Priest) +128 (Mage) +256 (Warlock)
+SET @Leather1 := 1100; -- Class Bitmask: 4 (Hunter) +8 (Rogue) +64 (Shaman) +1024 (Druid)
+SET @Leather2 := 1032; -- Class Bitmask: 8 (Rogue) +1024 (Druid)
+SET @Mail1 := 3; -- Class Bitmask: 1 (Warrior) +2 (Paladin)
+SET @Mail2 := 68; -- Class Bitmask: 4 (Hunter) +8 (Shaman)
+SET @Plate := 35; -- Class Bitmask: 1 (Warrior) +2 (Paladin) +32 (DeathKnight)
+-- Add conditions to make sure everyone gets beneficial loot for their class
+-- -------------------------------------------------------------------
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=5 AND `SourceGroup` BETWEEN 51999 AND 52005 ;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,`SourceId`,`ElseGroup`,`ConditionTypeOrReference`,`ConditionTarget`,`ConditionValue1`,`ConditionValue2`,`ConditionValue3`,`NegativeCondition`,`ErrorTextId`,`ScriptName`,`Comment`) VALUES
+-- Cloth Items
+(5,51999,51968,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Wrap only for clothusers'),
+(5,52000,51973,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Handwraps only for clothusers'),
+(5,52001,51974,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Shoulderpads only for clothusers'),
+(5,52002,51967,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Sandals only for clothusers'),
+(5,52002,51972,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Bracers only for clothusers'),
+(5,52003,51971,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Belt only for clothusers'),
+(5,52004,51970,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Gloves only for clothusers'),
+(5,52005,51969,0,0,15,0,@Cloth,0,0,0,0,'','SOHG: Enumerated Shoulders only for clothusers'),
+-- Leather Items
+(5,51999,51964,0,0,15,0,@Leather1,0,0,0,0,'','SOHG: Vigorous Belt only for leatherusers'),
+(5,52000,51965,0,0,15,0,@Leather1,0,0,0,0,'','SOHG: Vigorous Handguards only for leatherusers'),
+(5,52001,51966,0,0,15,0,@Leather2,0,0,0,0,'','SOHG: Vigorous Spaulders only for leatherusers'),
+(5,52002,51962,0,0,15,0,@Leather2,0,0,0,0,'','SOHG: Vigorous Bracers only for leatherusers'),
+(5,52002,51963,0,0,15,0,@Leather2,0,0,0,0,'','SOHG: Vigorous Stompers only for leatherusers'),
+(5,52003,51959,0,0,15,0,@Leather2,0,0,0,0,'','SOHG: Vigorous Belt only for leatherusers'),
+(5,52004,51960,0,0,15,0,@Leather2,0,0,0,0,'','SOHG: Vigorous Gloves only for leatherusers'),
+(5,52005,51961,0,0,15,0,@Leather2,0,0,0,0,'','SOHG: Vigorous Shoulderguards only for leatherusers'),
+-- Mail Items
+(5,51999,51978,0,0,15,0,@Mail1,0,0,0,0,'','SOHG: Earthbound Girdle only for mail users'),
+(5,52000,51980,0,0,15,0,@Mail1,0,0,0,0,'','SOHG: Earthbound Handgrips only for mail users'),
+(5,52001,51976,0,0,15,0,@Mail2,0,0,0,0,'','SOHG: Earthbound Shoulderguards only for mail users'),
+(5,52002,51982,0,0,15,0,@Mail2,0,0,0,0,'','SOHG: Earthbound Boots only for mail users'),
+(5,52002,51981,0,0,15,0,@Mail2,0,0,0,0,'','SOHG: Earthbound Wristguards only for mail users'),
+(5,52003,51977,0,0,15,0,@Mail2,0,0,0,0,'','SOHG: Earthbound Girdle only for mail users'),
+(5,52004,51979,0,0,15,0,@Mail2,0,0,0,0,'','SOHG: Earthbound Grips only for mail users'),
+(5,52005,51975,0,0,15,0,@Mail2,0,0,0,0,'','SOHG: Earthbound Shoulders only for mail users'),
+-- Plate Items
+(5,52001,51984,0,0,15,0,@Plate,0,0,0,0,'','SOHG: Stalwart Shoulderpads only for plate users'),
+(5,52002,51989,0,0,15,0,@Plate,0,0,0,0,'','SOHG: Stalwart Bands only for plate users'),
+(5,52002,51990,0,0,15,0,@Plate,0,0,0,0,'','SOHG: Stalwart Treads only for plate users'),
+(5,52003,51985,0,0,15,0,@Plate,0,0,0,0,'','SOHG: Stalwart Belt only for plate users'),
+(5,52004,51987,0,0,15,0,@Plate,0,0,0,0,'','SOHG: Stalwart Grips only for plate users'),
+(5,52005,51983,0,0,15,0,@Plate,0,0,0,0,'','SOHG: Stalwart Shoulderguards only for plate users');
+
+-- Add Reference Loots
+SET @RefNormal := 35091;
+SET @RefHeroic := 35092;
+DELETE FROM `reference_loot_template` WHERE `entry` IN (@RefNormal,@RefHeroic);
+INSERT INTO `reference_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+-- Normal Loot
+(@RefNormal,49839,0,1,1,1,1), -- Mourning Malice
+(@RefNormal,49840,0,1,1,1,1), -- Hate-Forged Cleaver
+(@RefNormal,49841,0,1,1,1,1), -- Blackened Geist Ribs
+(@RefNormal,49842,0,1,1,1,1), -- Tapestry of the Frozen Throne
+(@RefNormal,49843,0,1,1,1,1), -- Crystalline Citadel Gauntlets
+(@RefNormal,49844,0,1,1,1,1), -- Crypt Fiend Slayer
+(@RefNormal,49845,0,1,1,1,1), -- Bone Golem Scapula
+(@RefNormal,49846,0,1,1,1,1), -- Chilled Heart of the Glacier
+(@RefNormal,49847,0,1,1,1,1), -- Legguards of Untimely Demise
+(@RefNormal,49848,0,1,1,1,1), -- Grim Lasher Shoulderguards
+(@RefNormal,49849,0,1,1,1,1), -- Tattered Glacial-Woven Hood
+(@RefNormal,49851,0,1,1,1,1), -- Greathelm of the Silver Hand
+-- Heroic Loot
+(@RefHeroic,50303,0,1,1,1,1), -- Black Icicle
+(@RefHeroic,50302,0,1,1,1,1), -- Liar's Tongue
+(@RefHeroic,50311,0,1,1,1,1), -- Second Helm of the Executioner
+(@RefHeroic,50312,0,1,1,1,1), -- Chestguard of Broken Branches
+(@RefHeroic,50310,0,1,1,1,1), -- Fossilized Ammonite Choker
+(@RefHeroic,50313,0,1,1,1,1), -- Oath of Empress Zoe
+(@RefHeroic,50309,0,1,1,1,1), -- Shriveled Heart
+(@RefHeroic,50314,0,1,1,1,1), -- Strip of Remorse
+(@RefHeroic,50308,0,1,1,1,1), -- Blighted Leather Footpads
+(@RefHeroic,50305,0,1,1,1,1), -- Grinning Skull Boots
+(@RefHeroic,50306,0,1,1,1,1), -- The Lady's Promise
+(@RefHeroic,50304,0,1,1,1,1); -- Hoarfrost Gauntlets
+-- Assign to the chest
+DELETE FROM `gameobject_loot_template` WHERE `entry` IN (27985,27993);
+INSERT INTO `gameobject_loot_template` (`entry`,`item`,`ChanceOrQuestChance`,`lootmode`,`groupid`,`mincountOrRef`,`maxcount`) VALUES
+(27985,1,100,1,0,-@RefNormal,2), -- Two from Normal Reference Loot 
+(27993,1,100,1,0,-@RefHeroic,2), -- Two from Heroic Reference Loot
+(27993,43102,85,1,0,1,1); -- Frozen Orb
+
+-- NPC talk text insert from sniff
+DELETE FROM `creature_text` WHERE `entry`=36494;
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+(36494,0,0, 'Tiny creatures under feet, you bring Garfrost something good to eat!',14,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,1,0, 'Axe too weak. Garfrost make better and CRUSH YOU.',14,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,2,0, 'Garfrost tired of puny mortals. Now your bones will freeze!',14,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,3,0, 'Garfrost hope giant underpants clean. Save boss great shame. For later.',14,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,4,0, 'Will save for snack. For later.',12,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,4,1, 'That one maybe not so good to eat now. Stupid Garfrost! BAD! BAD!',12,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,5,0, '%s hurls a massive saronite boulder at you!',16,0,100,0,0,0, 'Forgemaster Garfrost'),
+(36494,6,0, '%s casts |cFF00AACCDeep Freeze|r at $n.',41,0,100,0,0,0, 'Forgemaster Garfrost');
+-- Remove old script text
+DELETE FROM `script_texts` WHERE `entry` BETWEEN -1658006 AND -1658001;
+
+-- NPC talk text insert for Sara
+DELETE FROM `creature_text` WHERE `entry`=33134;
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES
+(33134,0,0, 'Help me! Please get them off me!',14,0,100,0,0,15771, 'Sara YELL_PREFIGHT'),
+(33134,0,1, 'What do you want from me? Leave me alone!',14,0,100,0,0,15772, 'Sara YELL_PREFIGHT'),
+(33134,1,0, 'Yes! YES! Show them no mercy! Give no pause to your attacks!',14,0,100,0,0,15773, 'Sara YELL_COMBAT_PHASE_1'),
+(33134,1,1, 'Let hatred and rage guide your blows!',14,0,100,0,0,15774, 'Sara YELL_COMBAT_PHASE_1'),
+(33134,1,2, 'The time to strike at the head of the beast will soon be upon us! Focus your anger and hatred on his minions!',14,0,100,457,0,15775, 'Sara YELL_COMBAT_PHASE_1'),
+(33134,2,0, 'Suffocate upon your own hate!',14,0,100,0,0,15776, 'Sara YELL_COMBAT_PHASE_2'),
+(33134,2,1, 'Tremble, mortals, before the coming of the end!',14,0,100,0,0,15777, 'Sara YELL_COMBAT_PHASE_2'),
+(33134,3,0, 'Powerless to act...',14,0,100,0,0,15778, 'Sara YELL_SLAY'),
+(33134,3,1, 'Could they have been saved?',14,0,100,0,0,15779, 'YELL SAY_SLAY');
+-- remove script text
+DELETE FROM script_texts WHERE entry BETWEEN -1603319 AND -1603310;
