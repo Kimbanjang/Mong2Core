@@ -2477,7 +2477,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
                 caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
-<<<<<<< HEAD
         caster->DealSpellDamage(&damageInfo, true);
 
         // Improved Devouring Plague
@@ -2488,8 +2487,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
             caster->HealBySpell(caster, m_spellInfo, healthGain);
         } 
 
-=======
->>>>>>> KBJ/master
         // Haunt
         if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARLOCK && m_spellInfo->SpellFamilyFlags[1] & 0x40000 && m_spellAura && m_spellAura->GetEffect(1))
         {
