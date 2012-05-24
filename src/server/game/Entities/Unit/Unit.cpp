@@ -7491,7 +7491,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     if (procSpell->SpellIconID != 2019)
                         return false;
 
-<<<<<<< HEAD
                     if (Creature* totem = GetMap()->GetCreature(m_SummonSlot[1]))   // Fire totem summon slot 
                     {
 						if (SpellInfo const* totemSpell = sSpellMgr->GetSpellInfo(totem->m_spells[0]))
@@ -7500,16 +7499,6 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                             int32 bp1 = CalculatePctN(totemSpell->Effects[EFFECT_1].CalcValue(), triggerAmount); 
                             CastCustomSpell(this, 63283, &bp0, &bp1, NULL, true); 
                             return true; 
-=======
-                    if (Creature* totem = GetMap()->GetCreature(m_SummonSlot[1]))   // Fire totem summon slot
-                    {
-                        if (SpellInfo const* totemSpell = sSpellMgr->GetSpellInfo(totem->m_spells[0]))
-                        {
-                            int32 bp0 = CalculatePctN(totemSpell->Effects[EFFECT_0].CalcValue(), triggerAmount);
-                            int32 bp1 = CalculatePctN(totemSpell->Effects[EFFECT_1].CalcValue(), triggerAmount);
-                            CastCustomSpell(this, 63283, &bp0, &bp1, NULL, true);
-                            return true;
->>>>>>> KBJ/master
                         }
                     }
                     return false;
@@ -8932,13 +8921,8 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     if (GetTypeId() != TYPEID_PLAYER || getClass() != CLASS_DEATH_KNIGHT)
                         return false;
 
-<<<<<<< HEAD
-                    for (uint32 i = 0; i < MAX_RUNES; ++i)
-                        if (((Player*)this)->GetRuneCooldown(i) == 0)
-=======
                     for (uint8 i = 0; i < MAX_RUNES; ++i)
                         if (ToPlayer()->GetRuneCooldown(i) == 0)
->>>>>>> KBJ/master
                             return false;
                 }
                 break;
