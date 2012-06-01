@@ -190,7 +190,7 @@ public:
                                 pAttumen->GetMotionMaster()->MoveChase(pAttumen->getVictim());
                                 pAttumen->SetTarget(pAttumen->getVictim()->GetGUID());
                             }
-                            pAttumen->SetFloatValue(OBJECT_FIELD_SCALE_X, 1);
+                            pAttumen->SetObjectScale(1);
                         }
                     } else Mount_Timer -= diff;
                 }

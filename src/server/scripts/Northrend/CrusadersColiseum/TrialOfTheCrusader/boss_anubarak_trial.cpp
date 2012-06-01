@@ -615,7 +615,7 @@ class mob_frost_sphere : public CreatureScript
                         me->SetDisplayId(me->GetCreatureTemplate()->Modelid1);
                         DoCast(SPELL_PERMAFROST_VISUAL);
                         DoCast(SPELL_PERMAFROST);
-                        me->SetFloatValue(OBJECT_FIELD_SCALE_X, 2.0f);
+                        me->SetObjectScale(2.0f);
                         break;
                 }
             }
@@ -663,9 +663,15 @@ public:
             m_uiTargetGUID = 0;
         }
 
+<<<<<<< HEAD
         void MoveInLineOfSight(Unit* who)
         {
             who = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0F, true, 0);
+=======
+        bool CanAIAttack(Unit const* victim) const
+        {
+            return victim->GetTypeId() == TYPEID_PLAYER;
+>>>>>>> KBJ/master
         }
 
         void EnterCombat(Unit* who)

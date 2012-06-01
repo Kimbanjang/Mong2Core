@@ -868,15 +868,15 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
 void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
 {
-    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET
-        && effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
+    if (effectHandleMode != SPELL_EFFECT_HANDLE_LAUNCH_TARGET
+        && effectHandleMode != SPELL_EFFECT_HANDLE_LAUNCH)
         return;
 
     uint32 triggered_spell_id = m_spellInfo->Effects[effIndex].TriggerSpell;
 
     // todo: move those to spell scripts
     if (m_spellInfo->Effects[effIndex].Effect == SPELL_EFFECT_TRIGGER_SPELL
-        && effectHandleMode == SPELL_EFFECT_HANDLE_HIT_TARGET)
+        && effectHandleMode == SPELL_EFFECT_HANDLE_LAUNCH_TARGET)
     {
         // special cases
         switch (triggered_spell_id)
@@ -989,13 +989,13 @@ void Spell::EffectTriggerSpell(SpellEffIndex effIndex)
     }
 
     SpellCastTargets targets;
-    if (effectHandleMode == SPELL_EFFECT_HANDLE_HIT_TARGET)
+    if (effectHandleMode == SPELL_EFFECT_HANDLE_LAUNCH_TARGET)
     {
         if (!spellInfo->NeedsToBeTriggeredByCaster())
             return;
         targets.SetUnitTarget(unitTarget);
     }
-    else //if (effectHandleMode == SPELL_EFFECT_HANDLE_HIT)
+    else //if (effectHandleMode == SPELL_EFFECT_HANDLE_LAUNCH)
     {
         if (spellInfo->NeedsToBeTriggeredByCaster() && (m_spellInfo->Effects[effIndex].GetProvidedTargetMask() & TARGET_FLAG_UNIT_MASK))
             return;
@@ -3634,7 +3634,7 @@ void Spell::EffectHealMaxHealth(SpellEffIndex /*effIndex*/)
     if (!unitTarget || !unitTarget->isAlive())
         return;
 
-    int32 addhealth;
+    int32 addhealth = 0;
     if (m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN) // Lay on Hands
     {
         if (m_caster->GetGUID() == unitTarget->GetGUID())
@@ -3651,11 +3651,7 @@ void Spell::EffectHealMaxHealth(SpellEffIndex /*effIndex*/)
     else
         addhealth = unitTarget->GetMaxHealth() - unitTarget->GetHealth();
 
-    if (m_originalCaster)
-    {
-        uint32 heal = m_originalCaster->SpellHealingBonusDone(unitTarget, m_spellInfo, addhealth, HEAL);
-        m_healing +=  unitTarget->SpellHealingBonusTaken(m_originalCaster, m_spellInfo, heal, HEAL);
-    }
+    m_healing += addhealth;
 }
 
 void Spell::EffectInterruptCast(SpellEffIndex effIndex)
