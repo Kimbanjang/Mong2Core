@@ -170,11 +170,8 @@ class boss_blood_queen_lana_thel : public CreatureScript
                 DoZoneInCombat();
                 Talk(SAY_AGGRO);
                 instance->SetBossState(DATA_BLOOD_QUEEN_LANA_THEL, IN_PROGRESS);
-<<<<<<< HEAD
                 instance->SetData(DATA_BLOOD_QUEEN_LANA_THEL, IN_PROGRESS);
-=======
                 CleanAuras();
->>>>>>> KBJ/master
 
                 DoCast(me, SPELL_SHROUD_OF_SORROW, true);
                 DoCast(me, SPELL_FRENZIED_BLOODTHIRST_VISUAL, true);

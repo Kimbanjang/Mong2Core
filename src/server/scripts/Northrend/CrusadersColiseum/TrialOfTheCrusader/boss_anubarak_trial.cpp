@@ -663,15 +663,9 @@ public:
             m_uiTargetGUID = 0;
         }
 
-<<<<<<< HEAD
-        void MoveInLineOfSight(Unit* who)
-        {
-            who = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0F, true, 0);
-=======
         bool CanAIAttack(Unit const* victim) const
         {
             return victim->GetTypeId() == TYPEID_PLAYER;
->>>>>>> KBJ/master
         }
 
         void EnterCombat(Unit* who)
