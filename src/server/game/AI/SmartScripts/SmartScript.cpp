@@ -789,7 +789,11 @@ void SmartScript::ProcessAction(SmartScriptHolder& e, Unit* unit, uint32 var0, u
                 if (!IsUnit((*itr)))
                     continue;
 
-                (*itr)->ToUnit()->RemoveAurasDueToSpell(e.action.removeAura.spell);
+                if (e.action.removeAura.spell == 0)
+                    (*itr)->ToUnit()->RemoveAllAuras();
+                else
+                    (*itr)->ToUnit()->RemoveAurasDueToSpell(e.action.removeAura.spell);
+
                 sLog->outDebug(LOG_FILTER_DATABASE_AI, "SmartScript::ProcessAction: SMART_ACTION_REMOVEAURASFROMSPELL: Unit %u, spell %u",
                     (*itr)->GetGUIDLow(), e.action.removeAura.spell);
             }
@@ -2119,12 +2123,20 @@ ObjectList* SmartScript::GetTargets(SmartScriptHolder const& e, Unit* invoker /*
         case SMART_TARGET_INVOKER_PARTY:
             if (trigger)
             {
-                l->push_back(trigger);
                 if (Player* player = trigger->ToPlayer())
+                {
                     if (Group* group = player->GetGroup())
+                    {
                         for (GroupReference* groupRef = group->GetFirstMember(); groupRef != NULL; groupRef = groupRef->next())
                             if (Player* member = groupRef->getSource())
                                 l->push_back(member);
+                    }
+                    // We still add the player to the list if there is no group. If we do
+                    // this even if there is a group (thus the else-check), it will add the
+                    // same player to the list twice. We don't want that to happen.
+                    else
+                        l->push_back(trigger);
+                }
             }
             break;
         case SMART_TARGET_CREATURE_RANGE:
