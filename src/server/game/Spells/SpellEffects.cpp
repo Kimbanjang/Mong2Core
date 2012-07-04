@@ -4083,6 +4083,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                         }
                     }
                     break;
+<<<<<<< HEAD
                 case 32314:
                 {
                     Player* p_caster = m_caster->ToPlayer();
@@ -4201,6 +4202,8 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     }
                     return;
                 }
+=======
+>>>>>>> KBJ/master
                 // Mug Transformation
                 case 41931:
                 {

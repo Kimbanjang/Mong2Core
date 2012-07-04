@@ -2502,6 +2502,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
                 caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
+<<<<<<< HEAD
         caster->DealSpellDamage(&damageInfo, true);
 
         // Improved Devouring Plague
@@ -2518,6 +2519,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
             AuraEffect* aurEff = m_spellAura->GetEffect(1);
             aurEff->SetAmount(CalculatePctU(aurEff->GetAmount(), damageInfo.damage));
         }
+=======
+>>>>>>> KBJ/master
+
         m_damage = damageInfo.damage;
 
         caster->DealSpellDamage(&damageInfo, true);
