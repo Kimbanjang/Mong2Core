@@ -111,9 +111,6 @@ DELETE FROM `spell_linked_spell` WHERE `spell_effect` IN (-63510,63510);
 INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `type`, `comment`) VALUES ('465', '63510', '2', 'Improved Concentration Aura linked spell'),('643', '63510', '2', 'Improved Concentration Aura linked spell'),('1032', '63510', '2', 'Improved Concentration Aura linked spell'),('7294', '63510', '2', 'Improved Concentration Aura linked spell'),('10290', '63510', '2', 'Improved Concentration Aura linked spell'),('10291', '63510', '2', 'Improved Concentration Aura linked spell'),('10292', '63510', '2', 'Improved Concentration Aura linked spell'),('10293', '63510', '2', 'Improved Concentration Aura linked spell'),('10298', '63510', '2', 'Improved Concentration Aura linked spell'),('10299', '63510', '2', 'Improved Concentration Aura linked spell'),('10300', '63510', '2', 'Improved Concentration Aura linked spell'),('10301', '63510', '2', 'Improved Concentration Aura linked spell'),('19746', '63510', '2', 'Improved Concentration Aura linked spell'),('19876', '63510', '2', 'Improved Concentration Aura linked spell'),('19888', '63510', '2', 'Improved Concentration Aura linked spell'),('19891', '63510', '2', 'Improved Concentration Aura linked spell'),('19895', '63510', '2', 'Improved Concentration Aura linked spell'),('19896', '63510', '2', 'Improved Concentration Aura linked spell'),('19897', '63510', '2', 'Improved Concentration Aura linked spell'),('19898', '63510', '2', 'Improved Concentration Aura linked spell'),('19899', '63510', '2', 'Improved Concentration Aura linked spell'),('19900', '63510', '2', 'Improved Concentration Aura linked spell'),('27149', '63510', '2', 'Improved Concentration Aura linked spell'),('27150', '63510', '2', 'Improved Concentration Aura linked spell'),('27151', '63510', '2', 'Improved Concentration Aura linked spell'),('27152', '63510', '2', 'Improved Concentration Aura linked spell'),('27153', '63510', '2', 'Improved Concentration Aura linked spell'),('32223', '63510', '2', 'Improved Concentration Aura linked spell'),('48941', '63510', '2', 'Improved Concentration Aura linked spell'),('48942', '63510', '2', 'Improved Concentration Aura linked spell'),('48943', '63510', '2', 'Improved Concentration Aura linked spell'),('48945', '63510', '2', 'Improved Concentration Aura linked spell'),('48947', '63510', '2', 'Improved Concentration Aura linked spell'),('54043', '63510', '2', 'Improved Concentration Aura linked spell');
 -- 빛의 문장 발동 너프 (20PPM 에서 15Chance 로 수정)
 UPDATE `spell_proc_event` SET `ppmRate`='0',`CustomChance`='15' WHERE `entry`='20165';
--- 정방 수정
-DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_pal_righteous_defense';
-INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES (31789,'spell_pal_righteous_defense');
 -- 성축 수정
 DELETE FROM `spell_dbc` WHERE `id`='20912';
 INSERT INTO `spell_dbc` (`Id`,`CastingTimeIndex`,`DurationIndex`,`RangeIndex`,`Effect1`,`EffectBasePoints1`,`EffectImplicitTargetA1`,`EffectApplyAuraName1`,`EffectMiscValue1`,`SpellFamilyName`,`Comment`) VALUES (20912,1,21,1,6,-3,1,87,127,10,'Blessing of Sanctuary Helper (SERVERSIDE)');
@@ -123,6 +120,9 @@ UPDATE `spell_group` SET `spell_id`='20912' WHERE `id`='1092' and `spell_id`='20
 -- 성전사의 심장 구현
 UPDATE `spell_proc_event` SET `procFlags`='272', `CustomChance`='100' WHERE `entry` IN (53695,53696,20335,20336,20337);
 /*
+-- 정방 수정
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_pal_righteous_defense';
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES (31789,'spell_pal_righteous_defense');
 -- T8 신성 2셋 보너스 효과 구현
 DELETE FROM `spell_bonus_data` WHERE `entry`='64891';
 INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`, `ap_dot_bonus`, `comments`) VALUES ('64891','0','0','0','0','Paladin T8 Holy 2P Bonus');
