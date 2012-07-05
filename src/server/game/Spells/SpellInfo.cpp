@@ -980,6 +980,11 @@ bool SpellInfo::IsAutocastable() const
     return true;
 }
 
+bool SpellInfo::CanStackEffectValues() const
+{
+    return !(AttributesEx6 & SPELL_ATTR6_UNK30) && !(AttributesEx7 & SPELL_ATTR7_UNK28);
+}
+
 bool SpellInfo::IsStackableWithRanks() const
 {
     if (IsPassive())
@@ -1117,7 +1122,7 @@ bool SpellInfo::CanPierceImmuneAura(SpellInfo const* aura) const
         return true;
 
     // these spells (Cyclone for example) can pierce all...
-    if ((AttributesEx & SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE)
+    if ((AttributesEx & SPELL_ATTR1_UNAFFECTED_BY_SCHOOL_IMMUNE && SpellIconID != 109)
         // ...but not these (Divine shield for example)
         && !(aura && (aura->Mechanic == MECHANIC_IMMUNE_SHIELD || aura->Mechanic == MECHANIC_INVULNERABILITY)))
         return true;
@@ -1735,8 +1740,8 @@ AuraStateType SpellInfo::GetAuraState() const
 
     switch (Id)
     {
-        case 71465: // Divine Surge
         case 50241: // Evasive Charges
+        case 71465: // Divine Surge
             return AURA_STATE_UNKNOWN22;
         default:
             break;

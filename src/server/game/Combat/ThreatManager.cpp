@@ -328,7 +328,9 @@ HostileReference* ThreatContainer::selectNextVictim(Creature* attacker, HostileR
         ASSERT(target);                                     // if the ref has status online the target must be there !
 
         // some units are prefered in comparison to others
-        if (!noPriorityTargetFound && (target->IsImmunedToDamage(attacker->GetMeleeDamageSchoolMask()) || target->HasNegativeAuraWithInterruptFlag(AURA_INTERRUPT_FLAG_TAKE_DAMAGE)))
+        if (!noPriorityTargetFound && (target->IsImmunedToDamage(attacker->GetMeleeDamageSchoolMask())
+                                       || target->HasNegativeAuraWithInterruptFlag(AURA_INTERRUPT_FLAG_TAKE_DAMAGE)
+                                       || target->HasAuraType(SPELL_AURA_SPIRIT_OF_REDEMPTION)))
         {
             if (iter != lastRef)
             {

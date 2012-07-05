@@ -1015,6 +1015,21 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     m_playerLoading = false;
 
     sScriptMgr->OnPlayerLogin(pCurrChar);
+
+	std::string m_name;  
+    
+	if(pCurrChar->GetTeamId() == TEAM_ALLIANCE)
+        m_name = "MONG2";
+    else
+        m_name = "MONG2";
+        
+    WorldPacket CHANNEL_NOTIFY_DATA;
+    CHANNEL_NOTIFY_DATA.Initialize(SMSG_CHANNEL_NOTIFY, 1+m_name.size()+1);
+    CHANNEL_NOTIFY_DATA << uint8(0x18);   //CHAT_INVITE_NOTICE
+    CHANNEL_NOTIFY_DATA << m_name.c_str();
+    CHANNEL_NOTIFY_DATA << uint64(pCurrChar->GetGUID());
+    SendPacket(&CHANNEL_NOTIFY_DATA); 
+
     delete holder;
 }
 

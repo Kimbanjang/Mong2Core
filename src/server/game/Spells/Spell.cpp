@@ -52,6 +52,7 @@
 #include "DisableMgr.h"
 #include "SpellScript.h"
 #include "InstanceScript.h"
+#include <InstanceSaveMgr.h>
 #include "SpellInfo.h"
 
 extern pEffect SpellEffects[TOTAL_SPELL_EFFECTS];
@@ -559,6 +560,7 @@ m_caster((info->AttributesEx6 & SPELL_ATTR6_CAST_BY_CHARMER && caster->GetCharme
     itemTarget = NULL;
     gameObjTarget = NULL;
     focusObject = NULL;
+    focusCreature = NULL;
     m_cast_count = 0;
     m_glyphIndex = 0;
     m_preCastSpell = 0;
@@ -2500,6 +2502,15 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
                 caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
+        caster->DealSpellDamage(&damageInfo, true);
+
+        // Improved Devouring Plague
+        if (m_spellInfo->Id == 63675 && damageInfo.damage && caster->isAlive())
+        {
+            uint32 healthGain = damageInfo.damage * 15 / 100;
+            healthGain = caster->SpellDamageBonusDone(caster, m_spellInfo, healthGain, HEAL);
+            caster->HealBySpell(caster, m_spellInfo, healthGain);
+        } 
 
         m_damage = damageInfo.damage;
 
@@ -2548,8 +2559,16 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
                     p->CastedCreatureOrGO(spellHitTarget->GetEntry(), spellHitTarget->GetGUID(), m_spellInfo->Id);
         }
 
-        if (m_caster->GetTypeId() == TYPEID_UNIT && m_caster->ToCreature()->IsAIEnabled)
-            m_caster->ToCreature()->AI()->SpellHitTarget(spellHitTarget, m_spellInfo);
+        if (m_originalCaster)
+        {
+            if (m_originalCaster->GetTypeId() == TYPEID_UNIT && m_originalCaster->ToCreature()->IsAIEnabled)
+                m_originalCaster->ToCreature()->AI()->SpellHitTarget(spellHitTarget, m_spellInfo);
+        }
+        else
+        {
+            if (m_caster->GetTypeId() == TYPEID_UNIT && m_caster->ToCreature()->IsAIEnabled)
+                m_caster->ToCreature()->AI()->SpellHitTarget(spellHitTarget, m_spellInfo);
+        }
 
         // Needs to be called after dealing damage/healing to not remove breaking on damage auras
         DoTriggersOnSpellHit(spellHitTarget, mask);
@@ -3279,7 +3298,7 @@ void Spell::cast(bool skipCheck)
     SendSpellGo();
 
     // Okay, everything is prepared. Now we need to distinguish between immediate and evented delayed spells
-    if ((m_spellInfo->Speed > 0.0f && !m_spellInfo->IsChanneled()) || m_spellInfo->Id == 14157)
+    if ((m_spellInfo->Speed > 0.0f && !m_spellInfo->IsChanneled()) || m_spellInfo->Id == 14157 || m_spellInfo->Id == 70802)
     {
         // Remove used for cast item if need (it can be already NULL after TakeReagents call
         // in case delayed spell remove item at cast delay start
@@ -5461,6 +5480,13 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                 break;
             }
+            case SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN:
+            {
+                // Pain Suppression
+                if (m_spellInfo->Id == 33206)
+                    if (!m_caster->HasAura(63248) && m_caster->HasAuraType(SPELL_AURA_MOD_STUN))
+                        return SPELL_FAILED_STUNNED; 
+			}
             default:
                 break;
         }
@@ -5895,18 +5921,31 @@ SpellCastResult Spell::CheckItems()
         CellCoord p(Trinity::ComputeCellCoord(m_caster->GetPositionX(), m_caster->GetPositionY()));
         Cell cell(p);
 
-        GameObject* ok = NULL;
+        // Gameobject Spell Focus Id
+        GameObject* go = NULL;
         Trinity::GameObjectFocusCheck go_check(m_caster, m_spellInfo->RequiresSpellFocus);
-        Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck> checker(m_caster, ok, go_check);
+        Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck> checker(m_caster, go, go_check);
 
         TypeContainerVisitor<Trinity::GameObjectSearcher<Trinity::GameObjectFocusCheck>, GridTypeMapContainer > object_checker(checker);
         Map& map = *m_caster->GetMap();
         cell.Visit(p, object_checker, map, *m_caster, m_caster->GetVisibilityRange());
 
-        if (!ok)
+        // Creature Spell Focus Id
+        Creature* cr = NULL;
+        Unit* target = m_targets.GetUnitTarget();
+        float range = m_caster->GetSpellMaxRangeForTarget(target, m_spellInfo);
+
+        Trinity::CreatureFocusCheck cr_check(m_caster, m_spellInfo->RequiresSpellFocus, range);
+        Trinity::CreatureSearcher<Trinity::CreatureFocusCheck> checker2(m_caster, cr, cr_check);
+
+        TypeContainerVisitor<Trinity::CreatureSearcher<Trinity::CreatureFocusCheck>, GridTypeMapContainer > object_checker2(checker2);
+        cell.Visit(p, object_checker2, map, *m_caster, m_caster->GetVisibilityRange());
+
+        if (!go && !cr)
             return SPELL_FAILED_REQUIRES_SPELL_FOCUS;
 
-        focusObject = ok;                                   // game object found in range
+        focusObject = go;                                   // game object found in range
+        focusCreature = cr;                                 // creature found in range
     }
 
     // do not take reagents for these item casts
@@ -6262,6 +6301,17 @@ SpellCastResult Spell::CheckItems()
                  }
                  break;
             }
+            case SPELL_EFFECT_RESURRECT:
+            {
+                // gnomish army knife
+                if (m_spellInfo->Id == 54732)
+                    if (p_caster->GetSkillValue(SKILL_ENGINEERING) < 350)
+                    {
+                        m_customError = SPELL_CUSTOM_ERROR_REQUIRES_350_ENGINEERING;
+                        return SPELL_FAILED_CUSTOM_ERROR;
+                    }
+                break;
+            }
             default:
                 break;
         }
@@ -6466,6 +6516,7 @@ bool Spell::CheckEffectTarget(Unit const* target, uint32 eff) const
     //Check targets for LOS visibility (except spells without range limitations)
     switch (m_spellInfo->Effects[eff].Effect)
     {
+        case SPELL_EFFECT_RESURRECT:
         case SPELL_EFFECT_RESURRECT_NEW:
             // player far away, maybe his corpse near?
             if (target != m_caster && !target->IsWithinLOSInMap(m_caster))
@@ -6493,7 +6544,7 @@ bool Spell::CheckEffectTarget(Unit const* target, uint32 eff) const
                 caster = m_caster->GetMap()->GetGameObject(m_originalCasterGUID);
             if (!caster)
                 caster = m_caster;
-            if (target != m_caster && !target->IsWithinLOSInMap(caster))
+            if (target != m_caster && !(m_spellInfo->AttributesEx2 & SPELL_ATTR2_CAN_TARGET_NOT_IN_LOS) && !target->IsWithinLOSInMap(caster))
                 return false;
             break;
     }

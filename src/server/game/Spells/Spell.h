@@ -545,6 +545,7 @@ class Spell
 
         // -------------------------------------------
         GameObject* focusObject;
+        Creature* focusCreature;
 
         // Damage and healing in effects need just calculate
         int32 m_damage;           // Damge   in effects count here

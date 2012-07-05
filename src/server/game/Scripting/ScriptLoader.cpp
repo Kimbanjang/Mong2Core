@@ -474,6 +474,7 @@ void AddSC_instance_halls_of_reflection();   // Halls of Reflection
 void AddSC_halls_of_reflection();
 void AddSC_boss_falric();
 void AddSC_boss_marwyn();
+void AddSC_boss_lich_king_hr();
 void AddSC_boss_lord_marrowgar();       // Icecrown Citadel
 void AddSC_boss_lady_deathwhisper();
 void AddSC_boss_deathbringer_saurfang();
@@ -485,12 +486,14 @@ void AddSC_boss_blood_queen_lana_thel();
 void AddSC_boss_valithria_dreamwalker();
 void AddSC_boss_sindragosa();
 void AddSC_boss_the_lich_king();
+void AddSC_icc_trashmobs();
 void AddSC_icecrown_citadel_teleport();
 void AddSC_instance_icecrown_citadel();
 void AddSC_icecrown_citadel();
 void AddSC_instance_ruby_sanctum();      // Ruby Sanctum
 void AddSC_ruby_sanctum();
 void AddSC_boss_baltharus_the_warborn();
+void AddSC_boss_halion();
 void AddSC_boss_saviana_ragefire();
 void AddSC_boss_general_zarithrian();
 
@@ -1184,6 +1187,7 @@ void AddNorthrendScripts()
     AddSC_halls_of_reflection();
     AddSC_boss_falric();
     AddSC_boss_marwyn();
+    AddSC_boss_lich_king_hr();
     AddSC_boss_lord_marrowgar();        // Icecrown Citadel
     AddSC_boss_lady_deathwhisper();
     AddSC_boss_deathbringer_saurfang();
@@ -1195,12 +1199,15 @@ void AddNorthrendScripts()
     AddSC_boss_valithria_dreamwalker();
     AddSC_boss_sindragosa();
     AddSC_boss_the_lich_king();
+	
+	AddSC_icc_trashmobs();
     AddSC_icecrown_citadel_teleport();
     AddSC_instance_icecrown_citadel();
     AddSC_icecrown_citadel();
     AddSC_instance_ruby_sanctum();      // Ruby Sanctum
     AddSC_ruby_sanctum();
     AddSC_boss_baltharus_the_warborn();
+	AddSC_boss_halion();
     AddSC_boss_saviana_ragefire();
     AddSC_boss_general_zarithrian();
 

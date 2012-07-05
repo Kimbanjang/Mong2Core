@@ -867,6 +867,7 @@ void Battleground::EndBattleground(uint32 winner)
         uint32 winner_kills = player->GetRandomWinner() ? BG_REWARD_WINNER_HONOR_LAST : BG_REWARD_WINNER_HONOR_FIRST;
         uint32 loser_kills = player->GetRandomWinner() ? BG_REWARD_LOSER_HONOR_LAST : BG_REWARD_LOSER_HONOR_FIRST;
         uint32 winner_arena = player->GetRandomWinner() ? BG_REWARD_WINNER_ARENA_LAST : BG_REWARD_WINNER_ARENA_FIRST;
+		uint32 loser_arena = player->GetRandomWinner() ? BG_REWARD_LOSER_ARENA_LAST : BG_REWARD_LOSER_ARENA_FIRST;
 
         // Reward winner team
         if (team == winner)
@@ -885,7 +886,11 @@ void Battleground::EndBattleground(uint32 winner)
         else
         {
             if (IsRandom() || BattlegroundMgr::IsBGWeekend(GetTypeID()))
+			{
                 UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(loser_kills));
+				if (CanAwardArenaPoints())
+                    player->ModifyArenaPoints(loser_arena);
+			}
         }
 
         player->ResetAllPowers();

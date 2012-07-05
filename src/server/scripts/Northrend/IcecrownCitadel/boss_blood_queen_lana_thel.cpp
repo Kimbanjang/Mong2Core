@@ -170,6 +170,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
                 DoZoneInCombat();
                 Talk(SAY_AGGRO);
                 instance->SetBossState(DATA_BLOOD_QUEEN_LANA_THEL, IN_PROGRESS);
+                instance->SetData(DATA_BLOOD_QUEEN_LANA_THEL, IN_PROGRESS);
                 CleanAuras();
 
                 DoCast(me, SPELL_SHROUD_OF_SORROW, true);
@@ -179,6 +180,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
 
             void JustDied(Unit* killer)
             {
+                instance->SetData(DATA_BLOOD_QUEEN_LANA_THEL, DONE);
                 _JustDied();
                 Talk(SAY_DEATH);
                 CleanAuras();
@@ -258,6 +260,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
                 _JustReachedHome();
                 Talk(SAY_WIPE);
                 instance->SetBossState(DATA_BLOOD_QUEEN_LANA_THEL, FAIL);
+                instance->SetData(DATA_BLOOD_QUEEN_LANA_THEL, FAIL);
             }
 
             void KilledUnit(Unit* victim)

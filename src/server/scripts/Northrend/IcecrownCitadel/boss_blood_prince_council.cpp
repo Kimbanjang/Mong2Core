@@ -415,6 +415,19 @@ class boss_prince_keleseth_icc : public CreatureScript
                 Talk(SAY_KELESETH_DEATH);
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
             }
+			
+            void AttackStart(Unit* who)
+            {
+                if (!who)
+                    return;
+                if (me->Attack(who, true))                    
+                {
+                    me->SetInCombatWith(who);
+                    who->SetInCombatWith(me);
+                    DoStartMovement(who, 20.0f);
+                    SetCombatMovement(true);
+                }
+            }			
 
             void JustReachedHome()
             {
@@ -1326,8 +1339,9 @@ class npc_dark_nucleus : public CreatureScript
                 if (attacker == me || attacker == me->getVictim())
                     return;
 
-                me->DeleteThreatList();
-                me->AddThreat(attacker, 500000000.0f);
+                if (!_lockedTarget)
+                    if (me->getVictim() == attacker)
+                        _lockedTarget = true;
             }
 
             void UpdateAI(uint32 const diff)
@@ -1348,6 +1362,23 @@ class npc_dark_nucleus : public CreatureScript
                 }
                 else
                     _targetAuraCheck -= diff;
+
+                if (!_lockedTarget)
+                {
+                    if (Unit* victim = me->SelectVictim())
+                    {
+                        if (me->getVictim() && me->getVictim() != victim)
+                        {
+                            me->getVictim()->RemoveAurasDueToSpell(SPELL_SHADOW_RESONANCE_RESIST, me->GetGUID());
+                            _lockedTarget = true;
+                        }
+
+                        _lockedTarget = true;
+                        AttackStart(victim);
+                        DoCast(victim, SPELL_SHADOW_RESONANCE_RESIST);
+                        me->ClearUnitState(UNIT_STATE_CASTING);
+                    }
+                }
             }
 
         private:

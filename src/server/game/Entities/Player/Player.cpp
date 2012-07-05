@@ -1664,6 +1664,12 @@ void Player::Update(uint32 p_time)
         }
     }
 
+    // Remueve montura cuando usas dispersion en ella.
+    if (HasAura(47585) && HasAuraType(SPELL_AURA_MOUNTED))
+    {
+        ToPlayer()->RemoveAurasByType(SPELL_AURA_MOUNTED);
+    }
+
     if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
     {
         if (roll_chance_i(3) && GetTimeInnEnter() > 0)      // freeze update
@@ -5224,6 +5230,12 @@ void Player::ResurrectPlayer(float restore_percent, bool applySickness)
     if (GetSession()->IsARecruiter() || (GetSession()->GetRecruiterId() != 0))
         SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_REFER_A_FRIEND);
 
+    if (getDeathState() == GHOULED)
+    {
+        RemoveAurasDueToSpell(46619);
+        RemoveAllControlled();
+    }
+
     setDeathState(ALIVE);
 
     SetMovement(MOVE_LAND_WALK);
@@ -5594,15 +5606,6 @@ void Player::RepopAtGraveyard()
     // note: this can be called also when the player is alive
     // for example from WorldSession::HandleMovementOpcodes
 
-    AreaTableEntry const* zone = GetAreaEntryByAreaID(GetAreaId());
-
-    // Such zones are considered unreachable as a ghost and the player must be automatically revived
-    if ((!isAlive() && zone && zone->flags & AREA_FLAG_NEED_FLY) || GetTransport() || GetPositionZ() < -500.0f)
-    {
-        ResurrectPlayer(0.5f);
-        SpawnCorpseBones();
-    }
-
     WorldSafeLocsEntry const* ClosestGrave = NULL;
 
     // Special handle for battleground maps
@@ -5631,6 +5634,23 @@ void Player::RepopAtGraveyard()
     }
     else if (GetPositionZ() < -500.0f)
         TeleportTo(m_homebindMapId, m_homebindX, m_homebindY, m_homebindZ, GetOrientation());
+
+    AreaTableEntry const *zone = GetAreaEntryByAreaID(GetAreaId());
+
+    // Such zones are considered unreachable as a ghost and the player must be automatically revived
+    if ((!isAlive() && zone && zone->flags & AREA_FLAG_NEED_FLY) || GetTransport() || GetPositionZ() < -500.0f)
+    {
+        if (IsBeingTeleported())
+        {
+            m_resurrectHealth = uint32(GetMaxHealth() * 0.5f);
+            m_resurrectMana = uint32(GetMaxPower(POWER_MANA) * 0.5f);
+            ScheduleDelayedOperation(DELAYED_RESURRECT_PLAYER);
+            return;
+        }
+
+        ResurrectPlayer(0.5f);
+        SpawnCorpseBones();
+    }
 }
 
 bool Player::CanJoinConstantChannelInZone(ChatChannelsEntry const* channel, AreaTableEntry const* zone)
@@ -6964,6 +6984,8 @@ void Player::CheckAreaExploreAndOutdoor()
                     XP = uint32(sObjectMgr->GetBaseXP(areaEntry->area_level)*sWorld->getRate(RATE_XP_EXPLORE));
                 }
 
+				if(GetSession()->IsPremium())
+                XP *= sWorld->getRate(RATE_XP_EXPLORE_PREMIUM);
                 GiveXP(XP, NULL);
                 SendExplorationExperience(area, XP);
             }
@@ -9762,6 +9784,17 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
                 data << uint32(3931) << uint32(25);             // 12 WORLDSTATE_TIME_GUARDIAN
                 data << uint32(3932) << uint32(0);              // 13 WORLDSTATE_TIME_GUARDIAN_SHOW
             }
+            break;			
+        // The Ruby Sanctum
+        case 4987:
+            if (instance && mapid == 724)
+                instance->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(5049) << uint32(0);              // 9  WORLDSTATE_CORPOREALITY_MATERIAL
+                data << uint32(5050) << uint32(50);             // 10 WORLDSTATE_CORPOREALITY_TWILIGHT
+                data << uint32(5051) << uint32(50);             // 11 WORLDSTATE_CORPOREALITY_TOGGLE
+            }
             break;
         // Ulduar
         case 4273:
@@ -11573,6 +11606,10 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item* pItem, bool
             // check this only in game
             if (not_loading)
             {
+                //don't allow warrior and rogue class 100% ARP 100% crit chance exploit 
+                if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED) && (pProto->Class == ITEM_CLASS_WEAPON || pProto->Class == ITEM_CLASS_ARMOR)) 
+                    return EQUIP_ERR_CANT_DO_RIGHT_NOW; 
+
                 // May be here should be more stronger checks; STUNNED checked
                 // ROOT, CONFUSED, DISTRACTED, FLEEING this needs to be checked.
                 if (HasUnitState(UNIT_STATE_STUNNED))
@@ -13210,7 +13247,13 @@ void Player::SwapItem(uint16 src, uint16 dst)
         }
         else if (IsEquipmentPos(dst))
         {
-            uint16 dest;
+	        if (GetTradeData())
+		    {
+			    SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pSrcItem, pDstItem);
+				return;
+	        }
+
+			uint16 dest;
             InventoryResult msg = CanEquipItem(dstslot, dest, pSrcItem, false);
             if (msg != EQUIP_ERR_OK)
             {
@@ -13321,6 +13364,12 @@ void Player::SwapItem(uint16 src, uint16 dst)
     // Check bag swap with item exchange (one from empty in not bag possition (equipped (not possible in fact) or store)
     if (Bag* srcBag = pSrcItem->ToBag())
     {
+        if (GetTradeData())
+        {
+            SendEquipError(EQUIP_ERR_CANT_DO_RIGHT_NOW, pSrcItem, pDstItem);
+            return;
+        }
+
         if (Bag* dstBag = pDstItem->ToBag())
         {
             Bag* emptyBag = NULL;
@@ -15211,6 +15260,9 @@ void Player::RewardQuest(Quest const* quest, uint32 reward, Object* questGiver, 
     Unit::AuraEffectList const& ModXPPctAuras = GetAuraEffectsByType(SPELL_AURA_MOD_XP_QUEST_PCT);
     for (Unit::AuraEffectList::const_iterator i = ModXPPctAuras.begin(); i != ModXPPctAuras.end(); ++i)
         AddPctN(XP, (*i)->GetAmount());
+
+    if (GetSession()->IsPremium())
+        XP *= sWorld->getRate(RATE_XP_QUEST_PREMIUM);
 
     int32 moneyRew = 0;
     if (getLevel() < sWorld->getIntConfig(CONFIG_MAX_PLAYER_LEVEL))
@@ -25168,6 +25220,11 @@ void Player::ActivateSpec(uint8 spec)
     /*RemoveAllAurasOnDeath();
     if (GetPet())
         GetPet()->RemoveAllAurasOnDeath();*/
+
+	// Fix Exploit DK Improved Presences
+    RemoveAurasDueToSpell(48263);
+    RemoveAurasDueToSpell(48265);
+    RemoveAurasDueToSpell(48266);
 
     //RemoveAllAuras(GetGUID(), NULL, false, true); // removes too many auras
     //ExitVehicle(); // should be impossible to switch specs from inside a vehicle..

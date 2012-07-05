@@ -75,6 +75,9 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
             // Gnaw
             else if (spellproto->Id == 47481)
                 return DIMINISHING_CONTROLLED_STUN;
+            // Screams of the Dead
+            else if (spellproto->Id == 51750)
+                return DIMINISHING_NONE;
             break;
         }
         // Event spells
@@ -2893,6 +2896,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 72444: // Mark of the Fallen Champion (Deathbringer Saurfang)
             case 72445: // Mark of the Fallen Champion (Deathbringer Saurfang)
             case 72446: // Mark of the Fallen Champion (Deathbringer Saurfang)
+            case 64442: // Blade Warding (Damage)
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_IGNORE_ARMOR;
                 break;
             case 64422: // Sonic Screech (Auriaya)
@@ -3036,6 +3040,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 39365: // Thundering Storm
             case 41071: // Raise Dead (HACK)
             case 52124: // Sky Darkener Assault
+            case 41172: // Rapid Shot
             case 42442: // Vengeance Landing Cannonfire
             case 45863: // Cosmetic - Incinerate to Random Target
             case 25425: // Shoot
@@ -3044,6 +3049,8 @@ void SpellMgr::LoadDbcDataCorrections()
             case 61588: // Blazing Harpoon
             case 52479: // Gift of the Harvester
             case 48246: // Ball of Flame
+            case 64623: // Frost Bomb
+            case 66545: // Summon Memory
                 spellInfo->MaxAffectedTargets = 1;
                 break;
             case 36384: // Skartax Purple Beam
@@ -3135,6 +3142,9 @@ void SpellMgr::LoadDbcDataCorrections()
             case 29809: // Desecration Arm - 36 instead of 37 - typo? :/
                 spellInfo->EffectRadiusIndex[0] = EFFECT_RADIUS_7_YARDS;
                 break;
+            case 68766: // Desecration
+                spellInfo->rangeIndex = 2;
+                break;
             // Master Shapeshifter: missing stance data for forms other than bear - bear version has correct data
             // To prevent aura staying on target after talent unlearned
             case 48420:
@@ -3145,6 +3155,12 @@ void SpellMgr::LoadDbcDataCorrections()
                 break;
             case 48422:
                 spellInfo->Stances = 1 << (FORM_TREE - 1);
+                break;
+            case 55689: // Glyph of Shadow (to prevent glyph aura loss)
+                spellInfo->Stances = 0;
+                break;
+            case 61607: // Mark of Blood
+                spellInfo->AttributesEx |= SPELL_ATTR1_NO_THREAT;
                 break;
             case 51466: // Elemental Oath (Rank 1)
             case 51470: // Elemental Oath (Rank 2)
@@ -3219,6 +3235,19 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->EffectImplicitTargetB[0] = 0;
                 spellInfo->EffectImplicitTargetB[1] = 0;
                 break;
+            case 61367: // Windfury, TODO: remove this when spell 32910 works as supposed
+                spellInfo->EffectTriggerSpell[0] = 65976;
+                break;
+			case 8076: // Strength of Earth (Rank 1)
+			case 8162: // Strength of Earth (Rank 2)
+			case 8163: // Strength of Earth (Rank 3)
+			case 10441: // Strength of Earth (Rank 4)
+			case 25362: // Strength of Earth (Rank 5)
+			case 25527: // Strength of Earth (Rank 6)
+			case 57621: // Strength of Earth (Rank 7)
+			case 58646: // Strength of Earth (Rank 8)
+				spellInfo->Effect[2] = 0;
+				break;
             case 53241: // Marked for Death (Rank 1)
             case 53243: // Marked for Death (Rank 2)
             case 53244: // Marked for Death (Rank 3)
@@ -3348,6 +3377,7 @@ void SpellMgr::LoadDbcDataCorrections()
             case 70860: // Frozen Throne Teleport
             case 70861: // Sindragosa's Lair Teleport
                 spellInfo->EffectImplicitTargetA[0] = TARGET_DEST_DB;
+                spellInfo->speed = 0;
                 break;
             case 69055: // Saber Lash (Lord Marrowgar)
             case 70814: // Saber Lash (Lord Marrowgar)

@@ -324,7 +324,6 @@ public:
 
         return false;
     }
-
 };
 
 /*######
@@ -856,7 +855,6 @@ public:
             }
         }
     };
-
 };
 
 /*####
@@ -880,6 +878,7 @@ public:
     {
         npc_scarlet_miner_cartAI(Creature* creature) : PassiveAI(creature), minerGUID(0)
         {
+            me->setFaction(35);
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
             me->SetDisplayId(me->GetCreatureTemplate()->Modelid1); // Modelid2 is a horse.
         }
@@ -912,7 +911,6 @@ public:
                     miner->DisappearAndDie();
         }
     };
-
 };
 
 /*####
@@ -948,6 +946,7 @@ public:
             carGUID = 0;
             IntroTimer = 0;
             IntroPhase = 0;
+            me->RestoreFaction();
         }
 
         void InitWaypoint()
@@ -1046,7 +1045,6 @@ public:
             npc_escortAI::UpdateAI(diff);
         }
     };
-
 };
 
 /*######
