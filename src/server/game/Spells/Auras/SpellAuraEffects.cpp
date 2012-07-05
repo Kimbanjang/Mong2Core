@@ -1119,7 +1119,6 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
 {
     switch (GetAuraType())
     {
-<<<<<<< HEAD
         case SPELL_AURA_PERIODIC_DAMAGE:
             switch (GetId())
             {
@@ -1132,16 +1131,6 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
                     break;
             }
             break;
-        case SPELL_AURA_DUMMY:
-            // Haunting Spirits
-            if (GetId() == 7057)
-            {
-                m_amplitude = irand (0, 60) + 30;
-                m_amplitude *= IN_MILLISECONDS;
-            }
-            break;
-=======
->>>>>>> KBJ/master
         case SPELL_AURA_PERIODIC_DUMMY:
             switch (GetSpellInfo()->SpellFamilyName)
             {
@@ -1351,13 +1340,9 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
         case SPELL_AURA_POWER_BURN:
             HandlePeriodicPowerBurnAuraTick(target, caster);
             break;
-<<<<<<< HEAD
         case SPELL_AURA_DUMMY:
 			switch (GetId())
             {
-      		    case 7057: // Haunting Spirits
-            		target->CastSpell((Unit*)NULL, GetAmount(), true);
-            		break;
                 case 68614: // Concentrated Irresistible Cologne Spill
                     caster->CastSpell(target, 68934, false);
                     break;
@@ -1367,8 +1352,6 @@ void AuraEffect::PeriodicTick(AuraApplication * aurApp, Unit* caster) const
 				default:
             		break;
 			}
-=======
->>>>>>> KBJ/master
         default:
             break;
     }
@@ -3628,7 +3611,6 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
             break;
     }
 
-<<<<<<< HEAD
 /* Blade Storm Test
     // Patch 3.0.3 Bladestorm now breaks all snares and roots on the warrior when activated.
     if (GetId() == 46924)
@@ -3649,10 +3631,7 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
     if (apply && aurApp->GetRemoveMode())
         return;
 */
-    if (aura_immunity_list.size() == 0)
-=======
     if (aura_immunity_list.empty())
->>>>>>> KBJ/master
     {
             if (miscVal & (1<<10))
                 aura_immunity_list.push_back(SPELL_AURA_MOD_STUN);
@@ -5134,41 +5113,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                             target->CastSpell(spellTarget, 51699, true);
                     }
                    break;
-<<<<<<< HEAD
-                case 28832: // Mark of Korth'azz
-                case 28833: // Mark of Blaumeux
-                case 28834: // Mark of Rivendare
-                case 28835: // Mark of Zeliek
-                    if (caster) // actually we can also use cast(this, originalcasterguid)
-                    {
-                        int32 damage;
-                        switch (GetBase()->GetStackAmount())
-                        {
-                            case 1: damage = 0;     break;
-                            case 2: damage = 500;   break;
-                            case 3: damage = 1500;  break;
-                            case 4: damage = 4000;  break;
-                            case 5: damage = 12000; break;
-                            case 6: damage = 20000; break;
-                            default:damage = 20000 + 1000 * (GetBase()->GetStackAmount() - 6); break;
-                        }
-                        if (damage)
-                            caster->CastCustomSpell(28836, SPELLVALUE_BASE_POINT0, damage, target, true);
-                    }
-                    break;
-                case 63322: // Saronite Vapors
-                {
-                    int32 mana = int32(100 * pow(2.0f, GetBase()->GetStackAmount() - 1)); // mana restore - 100 * 2^(stackamount - 1)
-                    int32 damage = mana * 2; // damage
-                    if(caster && target)
-                    {
-                        caster->CastCustomSpell(target, 63337, &mana, NULL, NULL, true);
-                        caster->CastCustomSpell(target, 63338, &damage, NULL, NULL, true);
-                    }
-                    break;
-                }
-=======
->>>>>>> KBJ/master
                 case 71563:
                     if (Aura* newAura = target->AddAura(71564, target))
                         newAura->SetStackAmount(newAura->GetSpellInfo()->StackAmount);
@@ -5337,48 +5281,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     target->SetEntry(apply ? 17654 : 17326);
                     break;
                 }
-<<<<<<< HEAD
-                //Summon Fire Elemental
-                case 40133:
-                {
-                    if (!caster)
-                        break;
-
-                    Unit* owner = caster->GetOwner();
-                    if (owner && owner->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        if (apply)
-                            owner->CastSpell(owner, 8985, true);
-                        else
-                            owner->ToPlayer()->RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
-                    }
-                    break;
-                }
-                //Summon Earth Elemental
-                case 40132 :
-                {
-                    if (!caster)
-                        break;
-
-                    Unit* owner = caster->GetOwner();
-                    if (owner && owner->GetTypeId() == TYPEID_PLAYER)
-                    {
-                        if (apply)
-                            owner->CastSpell(owner, 19704, true);
-                        else
-                            owner->ToPlayer()->RemovePet(NULL, PET_SAVE_NOT_IN_SLOT, true);
-                    }
-                    break;
-                }
-                case 57723: // Exhaustion
-                case 57724: // Sated
-                {
-                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 32182, apply); // Heroism
-                    target->ApplySpellImmune(GetId(), IMMUNITY_ID, 2825, apply); // Bloodlust
-                    break; // needs to be after the two immunes
-                }
-=======
->>>>>>> KBJ/master
                 case 57819: // Argent Champion
                 case 57820: // Ebon Champion
                 case 57821: // Champion of the Kirin Tor

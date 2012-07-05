@@ -45,14 +45,9 @@ enum PaladinSpells
     SPELL_DIVINE_STORM_DUMMY                     = 54171,
     SPELL_DIVINE_STORM_HEAL                      = 54172,
 
-<<<<<<< HEAD
-    PALADIN_SPELL_RIGHTEOUS_DEFENCE              = 31789,
-    PALADIN_SPELL_RIGHTEOUS_DEFENCE_EFFECT_1     = 31790,
-=======
     SPELL_FORBEARANCE                            = 25771,
     SPELL_AVENGING_WRATH_MARKER                  = 61987,
     SPELL_IMMUNE_SHIELD_MARKER                   = 61988,
->>>>>>> KBJ/master
 };
 
 // 31850 - Ardent Defender
@@ -446,20 +441,6 @@ class spell_pal_divine_storm_dummy : public SpellScriptLoader
         }
 };
 
-<<<<<<< HEAD
-class spell_pal_righteous_defense : public SpellScriptLoader
-{
-    public:
-        spell_pal_righteous_defense() : SpellScriptLoader("spell_pal_righteous_defense") { }
-
-        class spell_pal_righteous_defense_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_pal_righteous_defense_SpellScript);
-
-            bool Validate(SpellInfo const* /*spellEntry*/)
-            {
-                if (!sSpellMgr->GetSpellInfo(PALADIN_SPELL_RIGHTEOUS_DEFENCE))
-=======
 class spell_pal_lay_on_hands : public SpellScriptLoader
 {
     public:
@@ -476,18 +457,10 @@ class spell_pal_lay_on_hands : public SpellScriptLoader
                 if (!sSpellMgr->GetSpellInfo(SPELL_AVENGING_WRATH_MARKER))
                     return false;
                 if (!sSpellMgr->GetSpellInfo(SPELL_IMMUNE_SHIELD_MARKER))
->>>>>>> KBJ/master
                     return false;
                 return true;
             }
 
-<<<<<<< HEAD
-            void HandleSpellEffectTriggerSpell(SpellEffIndex /*effIndex*/)
-            {
-                if (Unit* caster = GetCaster())
-                    if (Unit* targetUnit = GetHitUnit())
-                        caster->CastSpell(targetUnit, PALADIN_SPELL_RIGHTEOUS_DEFENCE_EFFECT_1, true);
-=======
             SpellCastResult CheckCast()
             {
                 Unit* caster = GetCaster();
@@ -547,16 +520,11 @@ class spell_pal_righteous_defense : public SpellScriptLoader
                     return SPELL_FAILED_BAD_TARGETS;
 
                 return SPELL_CAST_OK;
->>>>>>> KBJ/master
             }
 
             void Register()
             {
-<<<<<<< HEAD
-                OnEffectHitTarget += SpellEffectFn(spell_pal_righteous_defense_SpellScript::HandleSpellEffectTriggerSpell, EFFECT_1, SPELL_EFFECT_TRIGGER_SPELL);
-=======
                 OnCheckCast += SpellCheckCastFn(spell_pal_righteous_defense_SpellScript::CheckCast);
->>>>>>> KBJ/master
             }
         };
 
@@ -576,9 +544,6 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_judgement_of_command();
     new spell_pal_divine_storm();
     new spell_pal_divine_storm_dummy();
-<<<<<<< HEAD
-=======
     new spell_pal_lay_on_hands();
->>>>>>> KBJ/master
     new spell_pal_righteous_defense();
 }
