@@ -1309,7 +1309,7 @@ class npc_dark_nucleus : public CreatureScript
 
             void Reset()
             {
-                me->SetReactState(REACT_PASSIVE);
+                me->SetReactState(REACT_DEFENSIVE);
                 me->CastSpell(me, SPELL_SHADOW_RESONANCE_AURA, true);
             }
 
@@ -1328,15 +1328,12 @@ class npc_dark_nucleus : public CreatureScript
 
             void MoveInLineOfSight(Unit* who)
             {
-                if (me->GetDistance(who) >= 15.0f)
-                    return;
-
                 ScriptedAI::MoveInLineOfSight(who);
             }
 
             void DamageTaken(Unit* attacker, uint32& /*damage*/)
             {
-                if (attacker == me || attacker == me->getVictim())
+                if (attacker == me)
                     return;
 
                 me->DeleteThreatList();
@@ -1358,6 +1355,8 @@ class npc_dark_nucleus : public CreatureScript
                             DoCast(victim, SPELL_SHADOW_RESONANCE_RESIST);
                             me->ClearUnitState(UNIT_STATE_CASTING);
                         }
+                        else
+                            MoveInLineOfSight(me->getVictim());
                 }
                 else
                     _targetAuraCheck -= diff;
