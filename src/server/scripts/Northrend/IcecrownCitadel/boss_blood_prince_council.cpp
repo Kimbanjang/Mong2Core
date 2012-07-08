@@ -1339,9 +1339,8 @@ class npc_dark_nucleus : public CreatureScript
                 if (attacker == me || attacker == me->getVictim())
                     return;
 
-                if (!_lockedTarget)
-                    if (me->getVictim() == attacker)
-                        _lockedTarget = true;
+                me->DeleteThreatList();
+                me->AddThreat(attacker, 500000000.0f);
             }
 
             void UpdateAI(uint32 const diff)
@@ -1362,23 +1361,6 @@ class npc_dark_nucleus : public CreatureScript
                 }
                 else
                     _targetAuraCheck -= diff;
-
-                if (!_lockedTarget)
-                {
-                    if (Unit* victim = me->SelectVictim())
-                    {
-                        if (me->getVictim() && me->getVictim() != victim)
-                        {
-                            me->getVictim()->RemoveAurasDueToSpell(SPELL_SHADOW_RESONANCE_RESIST, me->GetGUID());
-                            _lockedTarget = true;
-                        }
-
-                        _lockedTarget = true;
-                        AttackStart(victim);
-                        DoCast(victim, SPELL_SHADOW_RESONANCE_RESIST);
-                        me->ClearUnitState(UNIT_STATE_CASTING);
-                    }
-                }
             }
 
         private:
