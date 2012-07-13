@@ -1,7 +1,3 @@
--- 고유가방 드랍X
-DELETE FROM `creature_loot_template` WHERE `entry` IN (50317,50316,49295);
-DELETE FROM `reference_loot_template` WHERE `entry` IN (50317,50316,49295);
-
 -- 쿨다운 없는 장신구 내부 쿨다운 구현
 UPDATE `spell_proc_event` SET `Cooldown`='55' WHERE `entry`='33648'; -- 진실의 거울
 DELETE FROM `spell_proc_event` WHERE `entry` IN (33953,60063,63251,67712); -- 필멸의 정수 알, 추방자의 해시계, 창기사의 격노, 생통 상/하급
@@ -32,31 +28,6 @@ UPDATE `spell_enchant_proc_data` SET `PPMChance` = '1' WHERE `entry` = 1898; -- 
 UPDATE `spell_enchant_proc_data` SET `PPMChance` = '0.5' WHERE `entry` = 3273; -- 혹한 분당 0.5회 발동
 UPDATE `spell_enchant_proc_data` SET `PPMChance` = '1.5' WHERE `entry` = 3239; -- 쇄빙 분당 1.5회 발동
 
--- 이상한 알 게임 플레이시간으로 부화되던 것 실시간으로 부화되게 수정
-UPDATE `item_template` SET `Duration` = '-590400' WHERE `entry` IN ('39878', '44717');
-
--- 비정상이던 달라란표 무기 데미지 수정
-UPDATE `item_template` SET `dmg_min1` = FLOOR((`dmg_min1` + `dmg_max1`) / 2), `dmg_max1` = `dmg_min1` WHERE `entry` IN (44635, 44636, 44637, 44638, 44639, 44640, 44641, 44642, 44643, 44644, 44645, 44652, 44654, 44655);
-
--- 누락된 냉혹템
-DELETE FROM `npc_vendor` WHERE `entry` IN (34060, 34078) AND `item` IN (42133, 42134, 42135, 42136, 42137);
-INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES
--- Battlemaster HORDE
-(34060, 0, 42137, 0, 0, 2718),(34060, 0, 42136, 0, 0, 2718),(34060, 0, 42134, 0, 0, 2718),(34060, 0, 42135, 0, 0, 2718),(34060, 0, 42133, 0, 0, 2718),
--- Battlemaster ALLY
-(34078, 0, 42137, 0, 0, 2718),(34078, 0, 42136, 0, 0, 2718),(34078, 0, 42134, 0, 0, 2718),(34078, 0, 42135, 0, 0, 2718),(34078, 0, 42133, 0, 0, 2718);
--- Relentless shields
-DELETE FROM `npc_vendor` WHERE `entry` = 33927 AND `item` IN (42561, 42566, 42572);
-INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES
-(33927, 0, 42561, 0, 0, 2701),(33927, 0, 42566, 0, 0, 2701),(33927, 0, 42572, 0, 0, 2701);
-
--- 버그퀘템 사용제한
-UPDATE `item_template` SET `RequiredLevel`='81' WHERE `entry`=50709; -- 토비 어쩌고 연설문
-UPDATE `item_template` SET `RequiredLevel`='81' WHERE `entry`=30259; -- 보렌살의 헌신
-
--- 자유의지의 물약 쿨타임 30분으로 너프
-UPDATE `item_template` SET `spellcategorycooldown_1`=1800000 WHERE `entry`=5634;
-
 -- 위안 발동효과 수정
 DELETE FROM `spell_proc_event` WHERE `entry` IN (67752,67698);
 INSERT INTO `spell_proc_event` VALUES(67752, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30), (67698, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 30);
@@ -72,14 +43,34 @@ INSERT INTO `spell_proc_event` VALUES(71611, 0, 0, 0, 0, 0, 0, 65536, 0, 0, 45),
 -- 투기 투척무기 수정
 UPDATE `item_template` SET `Flags`=4231168,`RangedModRange`=100,`MaxDurability`=0 WHERE `entry` IN (42449,42444);
 
-/*
--- 포장지 템삭제
-DELETE FROM `item_template` WHERE `entry` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
-DELETE FROM `npc_vendor` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
-DELETE FROM `item_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
-DELETE FROM `reference_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
-DELETE FROM `creature_loot_template` WHERE `item` IN (5042,5043,5044,5048,17302,17303,17304,17305,17307,17308,21830);
-*/
+-- 비정상이던 달라란표 무기 데미지 수정
+UPDATE `item_template` SET `dmg_min1` = FLOOR((`dmg_min1` + `dmg_max1`) / 2), `dmg_max1` = `dmg_min1` WHERE `entry` IN (44635, 44636, 44637, 44638, 44639, 44640, 44641, 44642, 44643, 44644, 44645, 44652, 44654, 44655);
+
+-- 누락된 냉혹템 추가
+DELETE FROM `npc_vendor` WHERE `entry` IN (34060, 34078) AND `item` IN (42133, 42134, 42135, 42136, 42137);
+INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES
+-- HORDE
+(34060, 0, 42137, 0, 0, 2718),(34060, 0, 42136, 0, 0, 2718),(34060, 0, 42134, 0, 0, 2718),(34060, 0, 42135, 0, 0, 2718),(34060, 0, 42133, 0, 0, 2718),
+-- ALLIANCE
+(34078, 0, 42137, 0, 0, 2718),(34078, 0, 42136, 0, 0, 2718),(34078, 0, 42134, 0, 0, 2718),(34078, 0, 42135, 0, 0, 2718),(34078, 0, 42133, 0, 0, 2718);
+-- SHIELDS
+DELETE FROM `npc_vendor` WHERE `entry` = 33927 AND `item` IN (42561, 42566, 42572);
+INSERT INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ExtendedCost`) VALUES
+(33927, 0, 42561, 0, 0, 2701),(33927, 0, 42566, 0, 0, 2701),(33927, 0, 42572, 0, 0, 2701);
+
+-- 이상한 알 게임 플레이시간으로 부화되던 것 실시간으로 부화되게 수정
+UPDATE `item_template` SET `Duration` = '-590400' WHERE `entry` IN ('39878', '44717');
+
+-- 버그퀘템 사용제한
+UPDATE `item_template` SET `RequiredLevel`='81' WHERE `entry`=50709; -- 토비 어쩌고 연설문
+UPDATE `item_template` SET `RequiredLevel`='81' WHERE `entry`=30259; -- 보렌살의 헌신
+
+-- 자유의지의 물약 쿨타임 30분으로 너프
+UPDATE `item_template` SET `spellcategorycooldown_1`=1800000 WHERE `entry`=5634;
+
+-- 고유가방 드랍X
+DELETE FROM `creature_loot_template` WHERE `entry` IN (50317,50316,49295);
+DELETE FROM `reference_loot_template` WHERE `entry` IN (50317,50316,49295);
 
 -- 어둠서리 조각 삭제
 DELETE FROM `item_template` WHERE `entry`=50274;
