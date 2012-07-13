@@ -73,7 +73,6 @@ DELETE FROM `creature_loot_template` WHERE `entry` IN (50317,50316,49295);
 DELETE FROM `reference_loot_template` WHERE `entry` IN (50317,50316,49295);
 
 -- 어둠서리 조각 삭제
-DELETE FROM `item_template` WHERE `entry`=50274;
 DELETE FROM `item_loot_template` WHERE `item`=50274;
 DELETE FROM `creature_loot_template` WHERE `item`=50274;
 DELETE FROM `gameobject_loot_template` WHERE `item`=50274;
