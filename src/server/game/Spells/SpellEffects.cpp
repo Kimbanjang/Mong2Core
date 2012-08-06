@@ -5457,13 +5457,9 @@ void Spell::EffectKnockBack(SpellEffIndex effIndex)
         if (creatureTarget->isWorldBoss() || creatureTarget->IsDungeonBoss())
             return;
 
-<<<<<<< HEAD
 	// Knock Back does not work on Rooted targets and, SOMETIMES, on stunned/incapacitated targets
-    if (unitTarget->HasUnitState(UNIT_STATE_ROOT) || unitTarget->HasAura(46924))
-=======
     // Spells with SPELL_EFFECT_KNOCK_BACK(like Thunderstorm) can't knoback target if target has ROOT/STUN
-    if (unitTarget->HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED))
->>>>>>> TC/master
+    if (unitTarget->HasUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED) || unitTarget->HasAura(46924))
         return;
 
     // Typhoon
