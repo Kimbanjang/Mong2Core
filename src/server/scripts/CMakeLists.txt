@@ -19,6 +19,7 @@ if( USE_SCRIPTPCH AND MSVC )
   set(scripts_STAT_SRCS
     PrecompiledHeaders/ScriptPCH.cpp
     PrecompiledHeaders/ScriptPCH.h
+    PrecompiledHeaders/Lyn_han.h 
   )
 endif()
 
@@ -44,6 +45,7 @@ if(SCRIPTS)
   include(Kalimdor/CMakeLists.txt)
   include(Outland/CMakeLists.txt)
   include(Northrend/CMakeLists.txt)
+  include(Mong/CMakeLists.txt)
 endif()
 
 message(STATUS "SCRIPT PREPARATION COMPLETE")

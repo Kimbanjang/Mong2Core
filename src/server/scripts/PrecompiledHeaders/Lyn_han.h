@@ -1,20 +1,18 @@
 #ifndef Lyn_han_
 #define Lyn_han_
 
-#include "atlbase.h"
-#include "atlconv.h"
-char * Con2U8(char* _szText);
+
 
 //Han_gul Functions
-#define SAY(message)	_Creature->MonsterSay(Con2U8(message),LANG_UNIVERSAL,NULL)
-#define GOSSIP_ITEM(icon, message, iSender, iAction)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem( -1,icon, Con2U8(message), iSender, iAction, "", 0)
-//#define ADD_GOSSIP_ITEM(a, b, c, d)   PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, a, b, c, d, "", 0)
-#define SEND_NOTIFICATION(text)				pPlayer->GetSession()->SendNotification(Con2U8(text))
-#define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, icon, Con2U8(message), iSender, iAction, text, cost)
+#define SAY(message)	_Creature->MonsterSay( message, LANG_UNIVERSAL,NULL)
+#define GOSSIP_ITEM(icon, message, iSender, iAction)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem( -1,icon, message, iSender, iAction, "", 0)
+#define ADD_GOSSIP_ITEM(a, b, c, d)   PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, a, b, c, d, "", 0)
+#define SEND_NOTIFICATION(text)				pPlayer->GetSession()->SendNotification(text)
+#define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, icon, message, iSender, iAction, text, cost)
 
 // Defined Functions
-//#define GOSSIP_ITEM(icon, message, iSender, iAction)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, "", 0)
-//#define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, text, cost)
+#define GOSSIP_ITEM(icon, message, iSender, iAction)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, "", 0)
+#define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, text, cost)
 #define GOSSIP_MENU(textID, objectGUID)			pPlayer->PlayerTalkClass->SendGossipMenu(textID, objectGUID)
 #define GOSSIP_CLOSE()					pPlayer->PlayerTalkClass->SendCloseGossip()
 #define GOSSIP_CLEAR()					pPlayer->PlayerTalkClass->ClearMenus()
