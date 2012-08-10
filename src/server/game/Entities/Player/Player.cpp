@@ -7137,12 +7137,14 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
         {
             Player* victim = uVictim->ToPlayer();
 
-            if (GetTeam() == victim->GetTeam() && !sWorld->IsFFAPvPRealm())
-                return false;
+            //if (GetTeam() == victim->GetTeam() && !sWorld->IsFFAPvPRealm())
+            //    return false;
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->getLevel();
+			uint8 v_honor = victim->GetHonorPoints();
+			uint8 k_honor = cell(v_honor/10);
 
             if (v_level <= k_grey)
                 return false;
@@ -7168,7 +7170,10 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
 
-            honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+            honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey)) + k_honor ;
+			uint32 m_honor = v_honor - k_honor;
+			victim->SetHonorPoints(m_honor);
+
 
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);

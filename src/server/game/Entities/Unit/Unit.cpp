@@ -9493,12 +9493,15 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
                     // however client seems to allow mixed group parties, because in 13850 client it works like:
                     // return GetFactionReactionTo(getFactionTemplateEntry(), target);
             }
-
             // check FFA_PVP
             if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
                 && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
-                return REP_HOSTILE;
-
+			{
+				if(ToPlayer()->GetGuildId() == target-ToPlayer()->GetGuildId() || ToPlayer()->GetGuildId() == NULL || target-ToPlayer()->GetGuildId() == NULL)
+					return REP_FRIENDLY;
+				else
+					return REP_HOSTILE;
+			}
             if (selfPlayerOwner)
             {
                 if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
@@ -12485,6 +12488,11 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell, Wo
     {
         if (playerAttacker->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_UNK19))
             return false;
+		//if (target->GetTypeId() == TYPEID_PLAYER)   //문제점 길드가없으면 결투도 못함
+		//{
+		//	if(playerAttacker->GetGuildId() == NULL || target->ToPlayer()->GetGuildId() == NULL)
+		//		return false;
+		//}
     }
     // check flags
     if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_UNK_16)
@@ -16551,8 +16559,8 @@ bool Unit::IsInRaidWith(Unit const* unit) const
         return true;
 
     if (u1->GetTypeId() == TYPEID_PLAYER && u2->GetTypeId() == TYPEID_PLAYER)
-        return u1->ToPlayer()->IsInSameRaidWith(u2->ToPlayer());
-    else if ((u2->GetTypeId() == TYPEID_PLAYER && u1->GetTypeId() == TYPEID_UNIT && u1->ToCreature()->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_PARTY_MEMBER) ||
+		return u1->ToPlayer()->IsInSameRaidWith(u2->ToPlayer());
+	else if ((u2->GetTypeId() == TYPEID_PLAYER && u1->GetTypeId() == TYPEID_UNIT && u1->ToCreature()->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_PARTY_MEMBER) ||
             (u1->GetTypeId() == TYPEID_PLAYER && u2->GetTypeId() == TYPEID_UNIT && u2->ToCreature()->GetCreatureTemplate()->type_flags & CREATURE_TYPEFLAGS_PARTY_MEMBER))
         return true;
     else
