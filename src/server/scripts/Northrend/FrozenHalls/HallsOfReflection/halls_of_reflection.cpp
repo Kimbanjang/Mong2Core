@@ -15,14 +15,11 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-<<<<<<< HEAD
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
-=======
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
->>>>>>> TC/master
 #include "halls_of_reflection.h"
 #define MAX_ENCOUNTER_TIME                    6 * 60 * 1000
 
