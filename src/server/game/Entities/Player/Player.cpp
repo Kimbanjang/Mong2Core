@@ -39,6 +39,7 @@
 #include "InstanceSaveMgr.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
+#include "Cell.h"
 #include "CellImpl.h"
 #include "ObjectMgr.h"
 #include "ArenaTeamMgr.h"
