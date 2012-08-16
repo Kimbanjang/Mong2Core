@@ -7144,7 +7144,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->getLevel();
 			uint8 v_honor = victim->GetHonorPoints();
-			uint8 k_honor = cell(v_honor/10);
+			uint8 k_honor = v_honor/10;
 
             if (v_level <= k_grey)
                 return false;
