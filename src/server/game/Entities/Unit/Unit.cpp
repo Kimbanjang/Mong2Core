@@ -9497,12 +9497,8 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
             // check FFA_PVP
             if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
                 && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
-			{
-				if(ToPlayer()->GetGuildId() == target-ToPlayer()->GetGuildId() || ToPlayer()->GetGuildId() == NULL || target-ToPlayer()->GetGuildId() == NULL)
-					return REP_FRIENDLY;
-				else
 					return REP_HOSTILE;
-			}
+
             if (selfPlayerOwner)
             {
                 if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
@@ -12489,11 +12485,6 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell, Wo
     {
         if (playerAttacker->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_UNK19))
             return false;
-		//if (target->GetTypeId() == TYPEID_PLAYER)   //문제점 길드가없으면 결투도 못함
-		//{
-		//	if(playerAttacker->GetGuildId() == NULL || target->ToPlayer()->GetGuildId() == NULL)
-		//		return false;
-		//}
     }
     // check flags
     if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_UNK_16)
