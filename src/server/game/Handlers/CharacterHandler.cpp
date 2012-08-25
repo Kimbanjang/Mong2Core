@@ -719,11 +719,15 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recv_data)
     sScriptMgr->OnPlayerDelete(guid);
     sWorld->DeleteCharaceterNameData(GUID_LOPART(guid));
 
-    if (sLog->ShouldLog(LOG_FILTER_CHARACTER, LOG_LEVEL_DEBUG)) // optimize GetPlayerDump call
+    if (sLog->ShouldLog(LOG_FILTER_PLAYER_DUMP, LOG_LEVEL_INFO)) // optimize GetPlayerDump call
     {
         std::string dump;
         if (PlayerDumpWriter().GetDump(GUID_LOPART(guid), dump))
-            sLog->outDebug(LOG_FILTER_CHARACTER, dump.c_str(), GetAccountId(), GUID_LOPART(guid), name.c_str());
+        {
+            std::ostringstream ss;
+            ss << GetAccountId() << '_' << name.c_str();
+            sLog->outCharDump(ss.str().c_str(), dump.c_str(), GetAccountId(), GUID_LOPART(guid), name.c_str());
+        }
     }
 
     Player::DeleteFromDB(guid, GetAccountId());
@@ -967,8 +971,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     pCurrChar->LoadPet();
 
     // Set FFA PvP for non GM in non-rest mode
-    if (sWorld->IsFFAPvPRealm() && !pCurrChar->isGameMaster() && !pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
+    if (sWorld->IsFFAPvPRealm() && !pCurrChar->isGameMaster() && !pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) && pCurrChar->GetGuildId()) // 길드가있어야만 FFA
         pCurrChar->SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP);
+	
+	if(!pCurrChar->GetGuildId())//길드가 없다면 성역으로 수정
+		pCurrChar->SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_SANCTUARY);
 
     if (pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
         pCurrChar->SetContestedPvP();

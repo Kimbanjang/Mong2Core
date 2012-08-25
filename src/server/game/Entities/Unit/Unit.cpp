@@ -57,6 +57,8 @@
 #include "MoveSpline.h"
 #include "ConditionMgr.h"
 #include "UpdateFieldFlags.h"
+#include "Battlefield.h"
+#include "BattlefieldMgr.h"
 
 #include <math.h>
 
@@ -9498,7 +9500,7 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
             if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
                 && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
 			{
-				if(ToPlayer()->GetGuildId() == target-ToPlayer()->GetGuildId() || ToPlayer()->GetGuildId() == NULL || target-ToPlayer()->GetGuildId() == NULL)
+				if(GetUInt32Value(PLAYER_GUILDID) == target->GetUInt32Value(PLAYER_GUILDID))
 					return REP_FRIENDLY;
 				else
 					return REP_HOSTILE;
@@ -12489,11 +12491,6 @@ bool Unit::_IsValidAttackTarget(Unit const* target, SpellInfo const* bySpell, Wo
     {
         if (playerAttacker->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_UNK19))
             return false;
-		//if (target->GetTypeId() == TYPEID_PLAYER)   //문제점 길드가없으면 결투도 못함
-		//{
-		//	if(playerAttacker->GetGuildId() == NULL || target->ToPlayer()->GetGuildId() == NULL)
-		//		return false;
-		//}
     }
     // check flags
     if (target->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_TAXI_FLIGHT | UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_UNK_16)
@@ -15936,8 +15933,13 @@ void Unit::Kill(Unit* victim, bool durabilityLoss)
     // outdoor pvp things, do these after setting the death state, else the player activity notify won't work... doh...
     // handle player kill only if not suicide (spirit of redemption for example)
     if (player && this != victim)
+    {
         if (OutdoorPvP* pvp = player->GetOutdoorPvP())
             pvp->HandleKill(player, victim);
+
+        if (Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(player->GetZoneId()))
+            bf->HandleKill(player, victim);
+    }
 
     //if (victim->GetTypeId() == TYPEID_PLAYER)
     //    if (OutdoorPvP* pvp = victim->ToPlayer()->GetOutdoorPvP())
