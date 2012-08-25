@@ -7143,8 +7143,13 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
             uint8 v_level = victim->getLevel();
-			uint8 v_honor = victim->GetHonorPoints();
-			uint8 k_honor = cell(v_honor/10);
+			uint32 v_honor = victim->GetHonorPoints();
+			uint32 k_honor;
+
+			if(v_honor == 0)
+				k_honor = 0;
+			else
+				k_honor = v_honor/10;
 
             if (v_level <= k_grey)
                 return false;
@@ -7170,8 +7175,12 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
 
-            honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey)) + k_honor ;
+            honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey) + k_honor);
 			uint32 m_honor = v_honor - k_honor;
+			
+			if(0 > m_honor)
+				m_honor = 0;
+			
 			victim->SetHonorPoints(m_honor);
 
 
