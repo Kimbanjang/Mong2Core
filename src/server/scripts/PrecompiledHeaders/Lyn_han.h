@@ -11,8 +11,8 @@
 #define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(-1, icon, message, iSender, iAction, text, cost)
 
 // Defined Functions
-#define GOSSIP_ITEM(icon, message, iSender, iAction)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, "", 0)
-#define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, text, cost)
+//#define GOSSIP_ITEM(icon, message, iSender, iAction)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, "", 0)
+//#define GOSSIP_ITEX(icon, message, iSender, iAction, text, cost)	pPlayer->PlayerTalkClass->GetGossipMenu().AddMenuItem(icon, message, iSender, iAction, text, cost)
 #define GOSSIP_MENU(textID, objectGUID)			pPlayer->PlayerTalkClass->SendGossipMenu(textID, objectGUID)
 #define GOSSIP_CLOSE()					pPlayer->PlayerTalkClass->SendCloseGossip()
 #define GOSSIP_CLEAR()					pPlayer->PlayerTalkClass->ClearMenus()
