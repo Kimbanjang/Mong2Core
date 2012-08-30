@@ -177,7 +177,7 @@ public:
 				//{
 				//	pPlayer->SetMoney(money - 6000000);
 					pPlayer->SetSkill(iAction,pPlayer->GetSkillStep(iAction), 400, 450);
-				}
+				//}
 			}
 			else
 			{
