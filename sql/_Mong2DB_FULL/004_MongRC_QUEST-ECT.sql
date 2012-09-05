@@ -99,6 +99,9 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`,`SourceGroup`,`SourceEntry`,
 -- 흑마 보이드워커퀘 수정
 UPDATE `creature_template` SET `faction_a`=29, `faction_h`=29 WHERE `entry`=36213;
 
+-- 썬더란 젠시간 수정
+UPDATE `quest_end_scripts` SET `datalong2`='1800000' WHERE (`id`='7786');
+
 
 ##### 기타 #####
 
