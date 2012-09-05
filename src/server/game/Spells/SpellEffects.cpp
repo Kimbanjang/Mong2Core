@@ -4523,7 +4523,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     unitTarget->CastSpell(unitTarget, spellTarget[urand(0, 4)], true);
                     break;
                 }
-<<<<<<< HEAD
                 case 64142:                                 // Upper Deck - Create Foam Sword
 				{
                     if (unitTarget->GetTypeId() != TYPEID_PLAYER)
@@ -4537,8 +4536,6 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     DoCreateItem(effIndex, itemId[urand(0, 4)]);
                     return;
 				}
-=======
->>>>>>> TC/master
             }
             break;
         }
