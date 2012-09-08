@@ -1437,7 +1437,7 @@ class spell_halion_mark_of_combustion : public SpellScriptLoader
                 CustomSpellValues values;
                 values.AddSpellMod(SPELLVALUE_BASE_POINT1, stacks);
 
-                target->CastCustomSpell(SPELL_FIERY_COMBUSTION_SUMMON, values, target, true, NULL, NULL, GetCasterGUID());
+                // TEMP FIX : target->CastCustomSpell(SPELL_FIERY_COMBUSTION_SUMMON, values, target, true, NULL, NULL, GetCasterGUID());
             }
 
             void Register()
@@ -1487,7 +1487,7 @@ class spell_halion_mark_of_consumption : public SpellScriptLoader
                 CustomSpellValues values;
                 values.AddSpellMod(SPELLVALUE_BASE_POINT1, stacks);
 
-                target->CastCustomSpell(SPELL_SOUL_CONSUMPTION_SUMMON, values, target, true, NULL, NULL, GetCasterGUID());
+                // TEMP FIX : target->CastCustomSpell(SPELL_SOUL_CONSUMPTION_SUMMON, values, target, true, NULL, NULL, GetCasterGUID());
             }
 
             void Register()
