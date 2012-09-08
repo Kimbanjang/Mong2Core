@@ -130,19 +130,3 @@ DELETE FROM `smart_scripts` WHERE `entryorguid`=67101;
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES 
 (67101, 0, 0, 0, 62, 0, 100, 0, 65001, 1, 0, 0, 85, 68333, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (67101, 0, 1, 0, 62, 0, 100, 0, 65001, 2, 0, 0, 85, 68334, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-
--- GM섬 이동
-DELETE FROM `creature_template` WHERE `entry`=67102;
-INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `HoverHeight`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES 
-(67102, 0, 0, 0, 0, 0, 20085, 0, 0, 0, '원투고', '장비샵 이동도우미', '', 65002, 80, 80, 0, 35, 35, 3, 1, 1.14286, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'SmartAI', 0, 3, 1, 147.371, 147.371, 147.371, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, '', 12340);
-
-DELETE FROM `gossip_menu` WHERE `entry`=65002;
-INSERT INTO `gossip_menu` (`entry`, `text_id`) VALUES (65002, 500002);
-DELETE FROM `npc_text` WHERE `ID`=500002;
-INSERT INTO `npc_text` (`ID`, `text0_0`, `prob0`) VALUES (500002, '테스트서버 장비샵으로 이동합니다.$B원, 투, 고!!', 1);
-DELETE FROM `gossip_menu_option` WHERE `menu_id`=65002;
-INSERT INTO `gossip_menu_option` VALUES
-(65002, 1, 2, '지갑 빵빵! 이동!', 1, 1, 0, 0, 0, 0, NULL);
-DELETE FROM `smart_scripts` WHERE `entryorguid`=67102;
-INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES 
-(67102, 0, 0, 0, 62, 0, 100, 0, 65002, 1, 0, 0, 62, 1, 0, 0, 0, 0, 0, 0, 8, 0, 0, 16208.5635, 16221.2470, 1.514, 1.0948, '');

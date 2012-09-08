@@ -1,6 +1,5 @@
 # Trainer Learn More Spell
-DELETE FROM `npc_trainer` WHERE `spell` IN (28272,10140,53140,20252,71,2458,7386,355,5487,1066,40120,6807,6795,8946,7328,5502,883,6991,2641,982,1515,688,697,712,691,1122,18540,54785,59671,50589,5784,23161,8071,3599,5394,2944,6346,48778,50977,53428);
-INSERT INTO `npc_trainer` (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) VALUES
+REPLACE INTO `npc_trainer` (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) VALUES
 -- Mage
 (67209, 28272, 3000, 0, 0, 30),(67209, 10140, 42000, 0, 0, 60),(67209, 53140, 100000, 0, 0, 71),
 -- Warrior
