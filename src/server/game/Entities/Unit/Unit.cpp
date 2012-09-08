@@ -9512,9 +9512,9 @@ ReputationRank Unit::GetReactionTo(Unit const* target) const
             if (GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP
                 && target->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
 			{
-				if(GetUInt32Value(PLAYER_GUILDID) == target->GetUInt32Value(PLAYER_GUILDID))
-					return REP_FRIENDLY;
-				else
+				//if(GetUInt32Value(PLAYER_GUILDID) == target->GetUInt32Value(PLAYER_GUILDID))
+				//	return REP_FRIENDLY;
+				//else
 					return REP_HOSTILE;
 			}
             if (selfPlayerOwner)
