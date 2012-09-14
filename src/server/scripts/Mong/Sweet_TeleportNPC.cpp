@@ -1,10 +1,10 @@
-#include "ScriptPCH.h"
+ï»¿#include "ScriptPCH.h"
 #include "Lyn_han.h"
 #include "Sweet_TeleportNPC.h"
 #include "InstanceSaveMgr.h"
 
 
-#define GoBack C_WHT"[µÚ·Î]"
+#define GoBack C_WHT"[ë’¤ë¡œ]"
 
 // Teleport NPC GossipHello
 class Sweet_TeleportNPC : public CreatureScript
@@ -16,16 +16,16 @@ public:
 	{
 		if (pPlayer->isInCombat() || pPlayer->HasInvisibilityAura() || pPlayer->HasStealthAura())
 		{
-			SEND_NOTIFICATION(C_YLW"´ç½ÅÀº ÀüÅõ ÁßÀÔ´Ï´Ù.");
+			SEND_NOTIFICATION(C_YLW"ë‹¹ì‹ ì€ ì „íˆ¬ ì¤‘ìž…ë‹ˆë‹¤.");
 			GOSSIP_CLOSE();
 			return true;
 		}
 		
 		
-		//GOSSIP_ITEM(MI_WNG, C_BRW"[ÀÌµ¿ ÇÏ±â]",		SEND_MAIN, PG_TRAVEL);
-		//GOSSIP_ITEM(MI_WNG, C_DGR"[¹öÇÁ ¹Þ±â]",		SEND_MAIN, PG_BUFF);
-		GOSSIP_ITEM(MI_WL1, C_PNK"[Áö¿ø ¹Þ±â]",		SEND_MAIN, PG_SUPPORT);
-		GOSSIP_ITEM(MI_WNG, C_BRW"[½ºÅ³ ¼÷·Ã]",		SEND_MAIN, PG_SKILL);
+		//GOSSIP_ITEM(MI_WNG, C_BRW"[ì´ë™ í•˜ê¸°]",		SEND_MAIN, PG_TRAVEL);
+		//GOSSIP_ITEM(MI_WNG, C_DGR"[ë²„í”„ ë°›ê¸°]",		SEND_MAIN, PG_BUFF);
+		GOSSIP_ITEM(MI_WL1, C_PNK"[ì§€ì› ë°›ê¸°]",		SEND_MAIN, PG_SUPPORT);
+		GOSSIP_ITEM(MI_WNG, C_BRW"[ìŠ¤í‚¬ ìˆ™ë ¨]",		SEND_MAIN, PG_SKILL);
 		  
 
 		GOSSIP_MENU(700000, pCreature->GetGUID());
@@ -37,7 +37,7 @@ public:
 	{
 		if (pPlayer->isInCombat() || pPlayer->HasInvisibilityAura() || pPlayer->HasStealthAura())
 		{
-			SEND_NOTIFICATION(C_YLW"´ç½ÅÀº ÀüÅõ ÁßÀÔ´Ï´Ù.");
+			SEND_NOTIFICATION(C_YLW"ë‹¹ì‹ ì€ ì „íˆ¬ ì¤‘ìž…ë‹ˆë‹¤.");
 			GOSSIP_CLOSE();
 			return true;
 		}
@@ -54,38 +54,38 @@ public:
 
 			if (iAction == PG_TRAVEL)		// Travel Page
 			{
-				GOSSIP_ITEM(MI_WNG, C_BRW"[´ëµµ½Ã]",			SEND_TRAVEL, PG_CITY_T);
-				GOSSIP_ITEM(MI_WNG, C_DGR"[¸¶À»]",			SEND_TRAVEL, PG_TOWN_T);
-				//GOSSIP_ITEM(MI_WNG, C_RED"[PVP & Åõ±âÀå Äù½ºÆ® Áö¿ª]",	SEND_TRAVEL, PG_PVP_T);
-				GOSSIP_ITEM(MI_WNG, C_PRL"[ÀÎ´ø & °ø°Ý´ë]",		SEND_TRAVEL, PG_D_AND_R);
+				GOSSIP_ITEM(MI_WNG, C_BRW"[ëŒ€ë„ì‹œ]",			SEND_TRAVEL, PG_CITY_T);
+				GOSSIP_ITEM(MI_WNG, C_DGR"[ë§ˆì„]",			SEND_TRAVEL, PG_TOWN_T);
+				//GOSSIP_ITEM(MI_WNG, C_RED"[PVP & íˆ¬ê¸°ìž¥ í€˜ìŠ¤íŠ¸ ì§€ì—­]",	SEND_TRAVEL, PG_PVP_T);
+				GOSSIP_ITEM(MI_WNG, C_PRL"[ì¸ë˜ & ê³µê²©ëŒ€]",		SEND_TRAVEL, PG_D_AND_R);
 			}
 
 			if (iAction == PG_BUFF)		// Buff Page
 			{
- 		               GOSSIP_ITEM(MI_BOK, C_BLU"[¹öÇÁ 6Á¾(10+) - 10 °ñµå]",	SEND_BUFF, 0);
+ 		               GOSSIP_ITEM(MI_BOK, C_BLU"[ë²„í”„ 6ì¢…(10+) - 10 ê³¨ë“œ]",	SEND_BUFF, 0);
 					  /* if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
- 						GOSSIP_ITEM(MI_BOK, C_PRL"[GM ¹öÇÁ 6Á¾(60+) - 60 °ñµå]",	SEND_BUFF, 1);*/
+ 						GOSSIP_ITEM(MI_BOK, C_PRL"[GM ë²„í”„ 6ì¢…(60+) - 60 ê³¨ë“œ]",	SEND_BUFF, 1);*/
 			}
 
 			if (iAction == PG_SUPPORT)		// Support Page
 			{
-				GOSSIP_ITEM(MI_WL1, C_GRN"[Æ¯¼º ÃÊ±âÈ­ - ¹«·á!]",			SEND_SUPPORT, 0);
-				GOSSIP_ITEM(MI_WNG, C_PRL"[¼¼°è Å½Çè - 100 °ñµå]",	SEND_SUPPORT, 1);
-				GOSSIP_ITEM(MI_WNG, C_ORG"[ºÎÈ° ÈÄÀ¯Áõ Á¦°Å - 10 °ñµå]",	SEND_SUPPORT, 2);
+				GOSSIP_ITEM(MI_WL1, C_GRN"[íŠ¹ì„± ì´ˆê¸°í™” - ë¬´ë£Œ!]",			SEND_SUPPORT, 0);
+				GOSSIP_ITEM(MI_WNG, C_PRL"[ì„¸ê³„ íƒí—˜ - 100 ê³¨ë“œ]",	SEND_SUPPORT, 1);
+				GOSSIP_ITEM(MI_WNG, C_ORG"[ë¶€í™œ í›„ìœ ì¦ ì œê±° - 10 ê³¨ë“œ]",	SEND_SUPPORT, 2);
 			}
 			if (iAction == PG_SKILL)		//skil Page
 			{
-				GOSSIP_ITEM(MI_WNG, "[´ëÀå - 600 °ñµå]",	SEND_SKILL, 164);				
-				GOSSIP_ITEM(MI_WNG, "[°¡¼¼ - 600 °ñµå]",	SEND_SKILL, 165);
-				GOSSIP_ITEM(MI_WNG, "[¿¬±Ý - 600 °ñµå]",	SEND_SKILL, 171);
-				GOSSIP_ITEM(MI_WNG, "[¾àÃÊ - 600 °ñµå]",	SEND_SKILL, 182);
-				GOSSIP_ITEM(MI_WNG, "[Ã¤±¤ - 600 °ñµå]",	SEND_SKILL, 186);
-				GOSSIP_ITEM(MI_WNG, "[ÀçºÀ - 600 °ñµå]",	SEND_SKILL, 197);
-				GOSSIP_ITEM(MI_WNG, "[±â°è - 600 °ñµå]",	SEND_SKILL, 202);
-				GOSSIP_ITEM(MI_WNG, "[¸¶ºÎ - 600 °ñµå]",	SEND_SKILL, 333);
-				GOSSIP_ITEM(MI_WNG, "[¹«µÎ - 600 °ñµå]",	SEND_SKILL, 393);
-				GOSSIP_ITEM(MI_WNG, "[º¸¼¼ - 600 °ñµå]",	SEND_SKILL, 755);
-				GOSSIP_ITEM(MI_WNG, "[ÁÖ°¢ - 600 °ñµå]",	SEND_SKILL, 773);
+				GOSSIP_ITEM(MI_WNG, "[ëŒ€ìž¥ - 600 ê³¨ë“œ]",	SEND_SKILL, 164);				
+				GOSSIP_ITEM(MI_WNG, "[ê°€ì„¸ - 600 ê³¨ë“œ]",	SEND_SKILL, 165);
+				GOSSIP_ITEM(MI_WNG, "[ì—°ê¸ˆ - 600 ê³¨ë“œ]",	SEND_SKILL, 171);
+				GOSSIP_ITEM(MI_WNG, "[ì•½ì´ˆ - 600 ê³¨ë“œ]",	SEND_SKILL, 182);
+				GOSSIP_ITEM(MI_WNG, "[ì±„ê´‘ - 600 ê³¨ë“œ]",	SEND_SKILL, 186);
+				GOSSIP_ITEM(MI_WNG, "[ìž¬ë´‰ - 600 ê³¨ë“œ]",	SEND_SKILL, 197);
+				GOSSIP_ITEM(MI_WNG, "[ê¸°ê³„ - 600 ê³¨ë“œ]",	SEND_SKILL, 202);
+				GOSSIP_ITEM(MI_WNG, "[ë§ˆë¶€ - 600 ê³¨ë“œ]",	SEND_SKILL, 333);
+				GOSSIP_ITEM(MI_WNG, "[ë¬´ë‘ - 600 ê³¨ë“œ]",	SEND_SKILL, 393);
+				GOSSIP_ITEM(MI_WNG, "[ë³´ì„¸ - 600 ê³¨ë“œ]",	SEND_SKILL, 755);
+				GOSSIP_ITEM(MI_WNG, "[ì£¼ê° - 600 ê³¨ë“œ]",	SEND_SKILL, 773);
 
 			}
 			
@@ -171,7 +171,7 @@ public:
 				//uint32 money = pPlayer->GetMoney();
 				//if (money < 6000000)
 				//{
-				//	SEND_NOTIFICATION(C_RED"°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+				//	SEND_NOTIFICATION(C_RED"ê³¨ë“œê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
 				//}
 				//else
 				//{
@@ -181,7 +181,7 @@ public:
 			}
 			else
 			{
-				SEND_NOTIFICATION(C_RED"¾ÆÁ÷ ¹è¿ìÁö ¸øÇÑ ½ºÅ³ÀÔ´Ï´Ù.");
+				SEND_NOTIFICATION(C_RED"ì•„ì§ ë°°ìš°ì§€ ëª»í•œ ìŠ¤í‚¬ìž…ë‹ˆë‹¤.");
 			}
 		}
 		// Buff
@@ -189,14 +189,14 @@ public:
 		{
 			switch (iAction)
 			{
-			case 0:		// ¹öÇÁ
+			case 0:		// ë²„í”„
 				{
 					if ( pPlayer->getLevel() >= 10 )
 					{
 						uint32 money = pPlayer->GetMoney();
 						if (money < 100000)
 						{
-							SEND_NOTIFICATION(C_RED"°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+							SEND_NOTIFICATION(C_RED"ê³¨ë“œê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
 						}
 						else
 						{
@@ -210,21 +210,21 @@ public:
 							pCreature->CastSpell(pPlayer, 48469, true);
 							pCreature->CastSpell(pPlayer, 57940, true);
 							
-							SEND_NOTIFICATION(C_YLW"¹öÇÁ°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
+							SEND_NOTIFICATION(C_YLW"ë²„í”„ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
 						}
 					}
 					else
-						SEND_NOTIFICATION(C_RED"·¹º§ÀÌ ³·½À´Ï´Ù.");
+						SEND_NOTIFICATION(C_RED"ë ˆë²¨ì´ ë‚®ìŠµë‹ˆë‹¤.");
 				}
 				break;
-            		case 1:		// GM ¹öÇÁ
+            		case 1:		// GM ë²„í”„
 				{
 					if ( pPlayer->getLevel() >= 60 )
 					{
 						uint32 money = pPlayer->GetMoney();
 						if (money < 600000)
 						{
-							SEND_NOTIFICATION(C_RED"°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+							SEND_NOTIFICATION(C_RED"ê³¨ë“œê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
 						}
 						else
 						{
@@ -237,11 +237,11 @@ public:
 							//pCreature->CastSpell(pPlayer, 34410, true);
 							//pCreature->CastSpell(pPlayer, 29235, true);
 							
-							SEND_NOTIFICATION(C_YLW"¹öÇÁ°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
+							SEND_NOTIFICATION(C_YLW"ë²„í”„ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.");
 						}
 					}
 					else
-						SEND_NOTIFICATION(C_RED"·¹º§ÀÌ ³·½À´Ï´Ù.");
+						SEND_NOTIFICATION(C_RED"ë ˆë²¨ì´ ë‚®ìŠµë‹ˆë‹¤.");
 				}
 				break;
 
@@ -256,11 +256,11 @@ public:
 		{
 			switch (iAction)
 			{
-			case 0:		// Repair Items //Æ¯¼ºÃÊ±âÈ­
+			case 0:		// Repair Items //íŠ¹ì„±ì´ˆê¸°í™”
 				{			
 					pPlayer->resetTalents(true);
 					pPlayer->SendTalentsInfoData(false);
-					SEND_NOTIFICATION(C_YLW"Æ¯¼ºÀÌ ÃÊ±âÈ­ µÇ¾ú½À´Ï´Ù.");
+					SEND_NOTIFICATION(C_YLW"íŠ¹ì„±ì´ ì´ˆê¸°í™” ë˜ì—ˆìŠµë‹ˆë‹¤.");
 				}
 				break;
 
@@ -269,7 +269,7 @@ public:
 					uint32 money = pPlayer->GetMoney();
 					if (money < 1000000)
 					{
-						SEND_NOTIFICATION(C_RED"°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+						SEND_NOTIFICATION(C_RED"ê³¨ë“œê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
 					}
 					else
 					{
@@ -278,24 +278,24 @@ public:
 						for (uint8 i = 0; i < 128; i++)
 							pPlayer->SetFlag(PLAYER_EXPLORED_ZONES_1+i, 0xFFFFFFFF);
 
-						SEND_NOTIFICATION(C_YLW"¸ðµç Áöµµ°¡ ¿­·È½À´Ï´Ù.");
+						SEND_NOTIFICATION(C_YLW"ëª¨ë“  ì§€ë„ê°€ ì—´ë ¸ìŠµë‹ˆë‹¤.");
 					}
 				}
 				break;
 
-			case 2:		// ºÎÈ° ÈÄÀ¯Áõ Á¦°Å
+			case 2:		// ë¶€í™œ í›„ìœ ì¦ ì œê±°
 				{
 					uint32 money = pPlayer->GetMoney();
 					if (money < 100000)
 					{
-						SEND_NOTIFICATION(C_RED"°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+						SEND_NOTIFICATION(C_RED"ê³¨ë“œê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
 					}
 					else
 					{
 						pPlayer->SetMoney(money - 100000);
 						pPlayer->learnSpell(DEATHSICK, false);
 						pPlayer->removeSpell(DEATHSICK);
-						SEND_NOTIFICATION(C_YLW"ºÎÈ° ÈÄÀ¯ÁõÀÌ Á¦°ÅµÇ¾ú½À´Ï´Ù.");
+						SEND_NOTIFICATION(C_YLW"ë¶€í™œ í›„ìœ ì¦ì´ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤.");
 					}
 				}
 				break;
@@ -327,66 +327,66 @@ public:
 					{
 						if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
 						{
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¿À±×¸®¸¶]",	SEND_TE_CITY, 0);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¾ð´õ½ÃÆ¼]",	SEND_TE_CITY, 1);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[½ã´õ ºí·¯ÇÁ]",	SEND_TE_CITY, 2);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[½Ç¹ö¹®]",	SEND_TE_CITY, 3);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì˜¤ê·¸ë¦¬ë§ˆ]",	SEND_TE_CITY, 0);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì–¸ë”ì‹œí‹°]",	SEND_TE_CITY, 1);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì¬ë” ë¸”ëŸ¬í”„]",	SEND_TE_CITY, 2);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì‹¤ë²„ë¬¸]",	SEND_TE_CITY, 3);
 						}
 						if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
 						{
-							GOSSIP_ITEM(MI_WNG, C_ORG"[½ºÅèÀ©µå]",	SEND_TE_CITY, 4);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÀÌ¾ðÆ÷Áö]",	SEND_TE_CITY, 5);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[´Ù¸£³ª¼­½º]",	SEND_TE_CITY, 6);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¿¢¼Ò´Ù¸£]",	SEND_TE_CITY, 7);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ìŠ¤í†°ìœˆë“œ]",	SEND_TE_CITY, 4);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ì´ì–¸í¬ì§€]",	SEND_TE_CITY, 5);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ë‹¤ë¥´ë‚˜ì„œìŠ¤]",	SEND_TE_CITY, 6);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì—‘ì†Œë‹¤ë¥´]",	SEND_TE_CITY, 7);
 						}
 
-						GOSSIP_ITEM(MI_WNG, C_YLW"[»þÆ®¶ó½º]",		SEND_TE_CITY, 8);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[´Þ¶ó¶õ]",		SEND_TE_CITY, 9);
+						GOSSIP_ITEM(MI_WNG, C_YLW"[ìƒ¤íŠ¸ë¼ìŠ¤]",		SEND_TE_CITY, 8);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë‹¬ë¼ëž€]",		SEND_TE_CITY, 9);
 					}
 					break;
 		
 				case PG_TOWN_T:			// Town Travel Menu
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÁ¦·Î½º]",		SEND_TRAVEL, PG_AZ_T);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¾Æ¿ô·£µå]",		SEND_TRAVEL, PG_OL_T);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[³ë½º·»µå]",		SEND_TRAVEL, PG_NR_T);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ì œë¡œìŠ¤]",		SEND_TRAVEL, PG_AZ_T);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„ì›ƒëžœë“œ]",		SEND_TRAVEL, PG_OL_T);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë…¸ìŠ¤ë Œë“œ]",		SEND_TRAVEL, PG_NR_T);
 					}
 					break;
 
 				case PG_PVP_T:			// PvP Travel Menu
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[±¸·ç¹Ù½Ã Åõ±âÀå]",SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 0 : 9);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Ç÷ÅõÀÇ ÀüÀå]",SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 1 : 10);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[êµ¬ë£¨ë°”ì‹œ íˆ¬ê¸°ìž¥]",SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 0 : 9);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[í˜ˆíˆ¬ì˜ ì „ìž¥]",SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 1 : 10);
 
 						if (PLAYER_TEAM() == HORDE)
 						{
-							GOSSIP_ITEM(MI_WNG, C_ORG"[½ºÅèÀ©µå Ä§°ø]",	SEND_TE_PVP, 2);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÀÌ¾ðÆ÷Áö Ä§°ø]",		SEND_TE_PVP, 3);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[´Ù¸£³ª¼­½º Ä§°ø]",		SEND_TE_PVP, 4);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¿¢¼Ò´Ù¸£ Ä§°ø]",		SEND_TE_PVP, 5);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ìŠ¤í†°ìœˆë“œ ì¹¨ê³µ]",	SEND_TE_PVP, 2);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ì´ì–¸í¬ì§€ ì¹¨ê³µ]",		SEND_TE_PVP, 3);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ë‹¤ë¥´ë‚˜ì„œìŠ¤ ì¹¨ê³µ]",		SEND_TE_PVP, 4);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì—‘ì†Œë‹¤ë¥´ ì¹¨ê³µ]",		SEND_TE_PVP, 5);
 						}
 						if (PLAYER_TEAM() == ALLIANCE)
 						{
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¿À±×¸®¸¶ Ä§°ø]",		SEND_TE_PVP, 11);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[¾ð´õ½ÃÆ¼ Ä§°ø]",		SEND_TE_PVP, 12);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[½ã´õ ºí·¯ÇÁ Ä§°ø]",	SEND_TE_PVP, 13);
-							GOSSIP_ITEM(MI_WNG, C_ORG"[½Ç¹ö¹® Ä§°ø]",	SEND_TE_PVP, 14);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì˜¤ê·¸ë¦¬ë§ˆ ì¹¨ê³µ]",		SEND_TE_PVP, 11);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì–¸ë”ì‹œí‹° ì¹¨ê³µ]",		SEND_TE_PVP, 12);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì¬ë” ë¸”ëŸ¬í”„ ì¹¨ê³µ]",	SEND_TE_PVP, 13);
+							GOSSIP_ITEM(MI_WNG, C_ORG"[ì‹¤ë²„ë¬¸ ì¹¨ê³µ]",	SEND_TE_PVP, 14);
 						}
 						
-						GOSSIP_ITEM(MI_WNG, C_DGR"[³ª±×¶õµå: ÇÇÀÇ Åõ±âÀå 65+]",	SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 6 : 15);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[ÁÙµå¶ô: °í³úÀÇ Åõ±âÀå 75+]",	SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 7 : 16);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[°Ü¿ï¼Õ¾Æ±Í È£¼ö]",	SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 8 : 17);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ë‚˜ê·¸ëž€ë“œ: í”¼ì˜ íˆ¬ê¸°ìž¥ 65+]",	SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 6 : 15);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì¤„ë“œë½: ê³ ë‡Œì˜ íˆ¬ê¸°ìž¥ 75+]",	SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 7 : 16);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ê²¨ìš¸ì†ì•„ê·€ í˜¸ìˆ˜]",	SEND_TE_PVP, PLAYER_TEAM() == HORDE ? 8 : 17);
 					}
 					break;
 
 				case PG_D_AND_R:		// Dungeons And Raids Menu
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÁ¦·Î½º ÀÎ´ø]",	SEND_TRAVEL, PG_AZ_D_P1);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÁ¦·Î½º °ø°Ý´ë]",	SEND_TRAVEL, PG_AZ_R);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¾Æ¿ô·£µå ÀÎ´ø]",	SEND_TRAVEL, PG_OL_D_P1);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¾Æ¿ô·£µå °ø°Ý´ë]",	SEND_TRAVEL, PG_OL_R);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[³ë½º·»µå ÀÎ´ø]",	SEND_TRAVEL, PG_NR_D_P1);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[³ë½º·»µå °ø°Ý´ë]",	SEND_TRAVEL, PG_NR_R);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ì œë¡œìŠ¤ ì¸ë˜]",	SEND_TRAVEL, PG_AZ_D_P1);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ì œë¡œìŠ¤ ê³µê²©ëŒ€]",	SEND_TRAVEL, PG_AZ_R);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„ì›ƒëžœë“œ ì¸ë˜]",	SEND_TRAVEL, PG_OL_D_P1);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„ì›ƒëžœë“œ ê³µê²©ëŒ€]",	SEND_TRAVEL, PG_OL_R);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë…¸ìŠ¤ë Œë“œ ì¸ë˜]",	SEND_TRAVEL, PG_NR_D_P1);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë…¸ìŠ¤ë Œë“œ ê³µê²©ëŒ€]",	SEND_TRAVEL, PG_NR_R);
 					}
 					break;
 				}
@@ -401,31 +401,31 @@ public:
 				if (iAction == PG_AZ_T)
 				{
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
-						GOSSIP_ITEM(MI_WNG, C_ORG"[È£µå ¸¶À»]",	SEND_TRAVEL, PG_AZ_F_P1);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[í˜¸ë“œ ë§ˆì„]",	SEND_TRAVEL, PG_AZ_F_P1);
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾ó¶óÀÌ¾ð½º ¸¶À»]",SEND_TRAVEL, PG_AZ_F_P1);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì–¼ë¼ì´ì–¸ìŠ¤ ë§ˆì„]",SEND_TRAVEL, PG_AZ_F_P1);
 
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Áß¸³ ¸¶À»]",		SEND_TRAVEL, PG_AZ_N);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì¤‘ë¦½ ë§ˆì„]",		SEND_TRAVEL, PG_AZ_N);
 				}
 
 				if (iAction == PG_OL_T)
 				{
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
-						GOSSIP_ITEM(MI_WNG, C_DGR"[È£µå ¸¶À»]",	SEND_TRAVEL, PG_OL_F);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[í˜¸ë“œ ë§ˆì„]",	SEND_TRAVEL, PG_OL_F);
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¾ó¶óÀÌ¾ð½º ¸¶À»]",SEND_TRAVEL, PG_OL_F);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì–¼ë¼ì´ì–¸ìŠ¤ ë§ˆì„]",SEND_TRAVEL, PG_OL_F);
 
-					GOSSIP_ITEM(MI_WNG, C_DGR"[Áß¸³ ¸¶À»]",		SEND_TRAVEL, PG_OL_N);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì¤‘ë¦½ ë§ˆì„]",		SEND_TRAVEL, PG_OL_N);
 				}
 
 				if (iAction == PG_NR_T)
 				{
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
-						GOSSIP_ITEM(MI_WNG, C_BLU"[È£µå ¸¶À»]",	SEND_TRAVEL, PG_NR_F_P1);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[í˜¸ë“œ ë§ˆì„]",	SEND_TRAVEL, PG_NR_F_P1);
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¾ó¶óÀÌ¾ð½º ¸¶À»]",SEND_TRAVEL, PG_NR_F_P1);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ë¼ì´ì–¸ìŠ¤ ë§ˆì„]",SEND_TRAVEL, PG_NR_F_P1);
 
-					GOSSIP_ITEM(MI_WNG, C_BLU"[Áß¸³ ¸¶À»]",		SEND_TRAVEL, PG_NR_N_P1);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì¤‘ë¦½ ë§ˆì„]",		SEND_TRAVEL, PG_NR_N_P1);
 				}
 			}
 
@@ -437,83 +437,83 @@ public:
 
 				if (iAction == PG_AZ_F_P1)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"[´ÙÀ½ ÆäÀÌÁö] -->",		SEND_TRAVEL, PG_AZ_F_P2);
+					GOSSIP_ITEM(MI_CHD, C_BLK"[ë‹¤ìŒ íŽ˜ì´ì§€] -->",		SEND_TRAVEL, PG_AZ_F_P2);
 
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ÇÇ¸Û¿ï ÃÊ¼Ò]",			SEND_TE_T_AZ, 0);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[´ãÀïÀÌ ¸¶À»]",			SEND_TE_T_AZ, 1);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Æä¶ö¶ó½º: ¸ðÀÚÄÉ ¾ß¿µÁö]",		SEND_TE_T_AZ, 2);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ºÒ¸ðÀÇ ¶¥: Å¸¿ì¶óÁ¶ ¾ß¿µÁö]",		SEND_TE_T_AZ, 3);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[È­¿° ¸¶·ç]",				SEND_TE_T_AZ, 4);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¹ö¼¸±¸¸§ ºÀ¿ì¸®: ³ô»õ¹Ù¶÷ ºÀ¿ì¸®]",	SEND_TE_T_AZ, 5);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[°¡½Ã´ýºÒ °ñÂ¥±â: ±×·Ò°ñ ÁÖµÐÁö]",	SEND_TE_T_AZ, 6);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾Æ¶ó½Ã °í¿ø: ÇØ¸ÓÆú]",			SEND_TE_T_AZ, 7);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[È²¾ßÀÇ ¶¥: Ä«¸£°¡½º]",			SEND_TE_T_AZ, 8);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[µ¿ºÎ ³»·úÁö: ·¹¹ÝÅÍ½ºÅ© ¸¶À»]",		SEND_TE_T_AZ, 9);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ÀØÇôÁø ¶¥: ±×´Ã¼ö·Æ ¸¶À»]",		SEND_TE_T_AZ, 10);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Àíºû °ñÂ¥±â: Åä¸·³ª¹« ÁÖµÐÁö]",		SEND_TE_T_AZ, 11);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[½½ÇÄÀÇ ´Ë: ½ºÅä³ªµå]",			SEND_TE_T_AZ, 12);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[í”¼ë©ìš¸ ì´ˆì†Œ]",			SEND_TE_T_AZ, 0);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë‹´ìŸì´ ë§ˆì„]",			SEND_TE_T_AZ, 1);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[íŽ˜ëž„ë¼ìŠ¤: ëª¨ìžì¼€ ì•¼ì˜ì§€]",		SEND_TE_T_AZ, 2);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë¶ˆëª¨ì˜ ë•…: íƒ€ìš°ë¼ì¡° ì•¼ì˜ì§€]",		SEND_TE_T_AZ, 3);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[í™”ì—¼ ë§ˆë£¨]",				SEND_TE_T_AZ, 4);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë²„ì„¯êµ¬ë¦„ ë´‰ìš°ë¦¬: ë†’ìƒˆë°”ëžŒ ë´‰ìš°ë¦¬]",	SEND_TE_T_AZ, 5);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ê°€ì‹œë¤ë¶ˆ ê³¨ì§œê¸°: ê·¸ë¡¬ê³¨ ì£¼ë‘”ì§€]",	SEND_TE_T_AZ, 6);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ë¼ì‹œ ê³ ì›: í•´ë¨¸í´]",			SEND_TE_T_AZ, 7);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[í™©ì•¼ì˜ ë•…: ì¹´ë¥´ê°€ìŠ¤]",			SEND_TE_T_AZ, 8);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë™ë¶€ ë‚´ë¥™ì§€: ë ˆë°˜í„°ìŠ¤í¬ ë§ˆì„]",		SEND_TE_T_AZ, 9);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìžŠí˜€ì§„ ë•…: ê·¸ëŠ˜ìˆ˜ë µ ë§ˆì„]",		SEND_TE_T_AZ, 10);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìž¿ë¹› ê³¨ì§œê¸°: í† ë§‰ë‚˜ë¬´ ì£¼ë‘”ì§€]",		SEND_TE_T_AZ, 11);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìŠ¬í””ì˜ ëŠª: ìŠ¤í† ë‚˜ë“œ]",			SEND_TE_T_AZ, 12);
 					}
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[µ¿ºÎ³»·úÁö: ¸Í±ÝÀÇ ºÀ¿ì¸®]",		SEND_TE_T_AZ, 20);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Àíºû°ñÂ¥±â: ¾Æ½ºÆ®¶ó³ª¸£]",		SEND_TE_T_AZ, 21);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾îµÒÀÇ ÇØ¾È: ¾Æ¿ì¹ö´ÙÀÎ]",		SEND_TE_T_AZ, 22);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ÇÍºû¾È°³ ¼¶: ÇÍºû °¨½ÃÃÊ¼Ò]",		SEND_TE_T_AZ, 23);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¼­¸®¹Ù¶÷ ¾ß¿µÁö]",			SEND_TE_T_AZ, 24);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[±×´Ã ½£: ´ÙÅ©»þÀÌ¾î]",			SEND_TE_T_AZ, 25);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Æä¶ö¶ó½º: Æä´õ¹® ¿ä»õ]",		SEND_TE_T_AZ, 26);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ºÓÀº¸¶·ç »ê¸Æ: ·¹ÀÌÅ©»þÀÌ¾î]",		SEND_TE_T_AZ, 27);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Àú½ÀÁö: ¸Þ³×½Ç Ç×±¸]",			SEND_TE_T_AZ, 28);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ÀúÁÖ¹ÞÀº ¶¥: ³×´õ°¡µå ¿ä»õ]",			SEND_TE_T_AZ, 29);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ÀØÇôÁø ¶¥: ³ªÀÌÁ©ÀÇ ¾ß¿µÁö]",		SEND_TE_T_AZ, 30);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¹Ý¶õ±º ¾ß¿µÁö]",			SEND_TE_T_AZ, 31);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ÀÓ½Ã ÁÖµÐÁö]",			SEND_TE_T_AZ, 32);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë™ë¶€ë‚´ë¥™ì§€: ë§¹ê¸ˆì˜ ë´‰ìš°ë¦¬]",		SEND_TE_T_AZ, 20);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìž¿ë¹›ê³¨ì§œê¸°: ì•„ìŠ¤íŠ¸ë¼ë‚˜ë¥´]",		SEND_TE_T_AZ, 21);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì–´ë‘ ì˜ í•´ì•ˆ: ì•„ìš°ë²„ë‹¤ì¸]",		SEND_TE_T_AZ, 22);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[í•ë¹›ì•ˆê°œ ì„¬: í•ë¹› ê°ì‹œì´ˆì†Œ]",		SEND_TE_T_AZ, 23);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì„œë¦¬ë°”ëžŒ ì•¼ì˜ì§€]",			SEND_TE_T_AZ, 24);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ê·¸ëŠ˜ ìˆ²: ë‹¤í¬ìƒ¤ì´ì–´]",			SEND_TE_T_AZ, 25);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[íŽ˜ëž„ë¼ìŠ¤: íŽ˜ë”ë¬¸ ìš”ìƒˆ]",		SEND_TE_T_AZ, 26);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë¶‰ì€ë§ˆë£¨ ì‚°ë§¥: ë ˆì´í¬ìƒ¤ì´ì–´]",		SEND_TE_T_AZ, 27);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì €ìŠµì§€: ë©”ë„¤ì‹¤ í•­êµ¬]",			SEND_TE_T_AZ, 28);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì €ì£¼ë°›ì€ ë•…: ë„¤ë”ê°€ë“œ ìš”ìƒˆ]",			SEND_TE_T_AZ, 29);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìžŠí˜€ì§„ ë•…: ë‚˜ì´ì ¤ì˜ ì•¼ì˜ì§€]",		SEND_TE_T_AZ, 30);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë°˜ëž€êµ° ì•¼ì˜ì§€]",			SEND_TE_T_AZ, 31);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìž„ì‹œ ì£¼ë‘”ì§€]",			SEND_TE_T_AZ, 32);
 					}
 				}
 
 				if (iAction == PG_AZ_F_P2)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ÀÌÀü ÆäÀÌÁö]",		SEND_TRAVEL, PG_AZ_F_P1);
+					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ì´ì „ íŽ˜ì´ì§€]",		SEND_TRAVEL, PG_AZ_F_P1);
 
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[µ¹¹ßÅé »ê¸Æ: ÇØ¹ÙÀ§ ¾ß¿µÁö]",		SEND_TE_T_AZ, 13);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Èú½ººê·¡µå ±¸¸ªÁö: Å¸·» ¹Ð³óÀå]",	SEND_TE_T_AZ, 14);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[ºÒ¸ðÀÇ ¶¥: Å©·Î½º·Îµå]",		SEND_TE_T_AZ, 15);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Àººû¼Ò³ª¹« ½£: °øµ¿¹¦Áö]",		SEND_TE_T_AZ, 16);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[À¯·ÉÀÇ ¶¥: Æ®·£Äþ¸®¿£]",		SEND_TE_T_AZ, 17);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÁî»þ¶ó: ¹ß·Î¸£¸ðÅ©]",			SEND_TE_T_AZ, 18);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Àíºû °ñÂ¥±â: Á¶¶÷°¡¸£ ÀüÃÊ±âÁö]",	SEND_TE_T_AZ, 19);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ëŒë°œí†± ì‚°ë§¥: í•´ë°”ìœ„ ì•¼ì˜ì§€]",		SEND_TE_T_AZ, 13);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ížìŠ¤ë¸Œëž˜ë“œ êµ¬ë¦‰ì§€: íƒ€ë Œ ë°€ë†ìž¥]",	SEND_TE_T_AZ, 14);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë¶ˆëª¨ì˜ ë•…: í¬ë¡œìŠ¤ë¡œë“œ]",		SEND_TE_T_AZ, 15);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì€ë¹›ì†Œë‚˜ë¬´ ìˆ²: ê³µë™ë¬˜ì§€]",		SEND_TE_T_AZ, 16);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìœ ë ¹ì˜ ë•…: íŠ¸ëžœí€¼ë¦¬ì—”]",		SEND_TE_T_AZ, 17);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„ì¦ˆìƒ¤ë¼: ë°œë¡œë¥´ëª¨í¬]",			SEND_TE_T_AZ, 18);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ìž¿ë¹› ê³¨ì§œê¸°: ì¡°ëžŒê°€ë¥´ ì „ì´ˆê¸°ì§€]",	SEND_TE_T_AZ, 19);
 					}
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¼­ºÎ ¸ô¶ôÁö´ë: °¨½ÃÀÇ ¾ð´ö]",		SEND_TE_T_AZ, 33);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Èú½ººê·¡µå ±¸¸ªÁö: »ç¿ì½º¼î¾î]",		SEND_TE_T_AZ, 34);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[µ¹¹ßÅé »ê¸Æ: µ¹¹ßÅé ºÀ¿ì¸®]",		SEND_TE_T_AZ, 35);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[°¥Äû°¡Áö ½£]",			SEND_TE_T_AZ, 36);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Å»·»µå¸®½º ÃÊ¼Ò]",			SEND_TE_T_AZ, 37);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[Å»¶ó³ª¸£]",				SEND_TE_T_AZ, 38);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¸ð´Ü È£¼ö: ÅÚ»ç¸¶]",			SEND_TE_T_AZ, 39);
-						GOSSIP_ITEM(MI_WNG, C_ORG"[¸ÕÁöÁøÈë ½ÀÁö´ë: Å×¶ó¸ð¾Æ ¼¶]",		SEND_TE_T_AZ, 40);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ì„œë¶€ ëª°ë½ì§€ëŒ€: ê°ì‹œì˜ ì–¸ë•]",		SEND_TE_T_AZ, 33);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ížìŠ¤ë¸Œëž˜ë“œ êµ¬ë¦‰ì§€: ì‚¬ìš°ìŠ¤ì‡¼ì–´]",		SEND_TE_T_AZ, 34);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ëŒë°œí†± ì‚°ë§¥: ëŒë°œí†± ë´‰ìš°ë¦¬]",		SEND_TE_T_AZ, 35);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ê°ˆí€´ê°€ì§€ ìˆ²]",			SEND_TE_T_AZ, 36);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[íƒˆë Œë“œë¦¬ìŠ¤ ì´ˆì†Œ]",			SEND_TE_T_AZ, 37);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[íƒˆë¼ë‚˜ë¥´]",				SEND_TE_T_AZ, 38);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ëª¨ë‹¨ í˜¸ìˆ˜: í…”ì‚¬ë§ˆ]",			SEND_TE_T_AZ, 39);
+						GOSSIP_ITEM(MI_WNG, C_ORG"[ë¨¼ì§€ì§„í™ ìŠµì§€ëŒ€: í…Œë¼ëª¨ì•„ ì„¬]",		SEND_TE_T_AZ, 40);
 					}
 				}
 
 				if (iAction == PG_AZ_N)
 				{
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°¡½Ã´ýºÒ °ñÂ¥±â: ¹«¹ýÇ×]",			SEND_TE_T_AZ, 41);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[½Ç¸®´õ½º: ¼¼³ª¸®¿Â ¿ä»õ]",			SEND_TE_T_AZ, 42);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¿¡¸Þ¶öµå ¼º¼Ò]",				SEND_TE_T_AZ, 43);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¿©¸íÀÇ ¼³¿ø: ´«¸Á·ç ¸¶À»]",			SEND_TE_T_AZ, 44);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Å¸³ª¸®½º: °¡Á¬ÀÜ]",				SEND_TE_T_AZ, 45);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Äí¿¤´Ù³ª½º ¼¶]",				SEND_TE_T_AZ, 46);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[µ¿ºÎ ¿ªº´Áö´ë: Èñ¸ÁÀÇ ºû ¿¹¹è´ç]",		SEND_TE_T_AZ, 47);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¸¶¼£ÀÇ ¾ß¿µÁö]",				SEND_TE_T_AZ, 48);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[´ÞÀÇ ½£]",					SEND_TE_T_AZ, 49);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[ÁøÈëÅé´Ï °ÅÁ¡]",				SEND_TE_T_AZ, 50);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[ºÒ¸ðÀÇ ¶¥: Åé´ÏÇ×]",				SEND_TE_T_AZ, 51);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Åä·ý Á¶ÇÕ °ÅÁ¡]",				SEND_TE_T_AZ, 52);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê°€ì‹œë¤ë¶ˆ ê³¨ì§œê¸°: ë¬´ë²•í•­]",			SEND_TE_T_AZ, 41);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì‹¤ë¦¬ë”ìŠ¤: ì„¸ë‚˜ë¦¬ì˜¨ ìš”ìƒˆ]",			SEND_TE_T_AZ, 42);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì—ë©”ëž„ë“œ ì„±ì†Œ]",				SEND_TE_T_AZ, 43);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì—¬ëª…ì˜ ì„¤ì›: ëˆˆë§ë£¨ ë§ˆì„]",			SEND_TE_T_AZ, 44);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[íƒ€ë‚˜ë¦¬ìŠ¤: ê°€ì ¯ìž”]",				SEND_TE_T_AZ, 45);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì¿ ì—˜ë‹¤ë‚˜ìŠ¤ ì„¬]",				SEND_TE_T_AZ, 46);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë™ë¶€ ì—­ë³‘ì§€ëŒ€: í¬ë§ì˜ ë¹› ì˜ˆë°°ë‹¹]",		SEND_TE_T_AZ, 47);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë§ˆìƒ¬ì˜ ì•¼ì˜ì§€]",				SEND_TE_T_AZ, 48);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë‹¬ì˜ ìˆ²]",					SEND_TE_T_AZ, 49);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì§„í™í†±ë‹ˆ ê±°ì ]",				SEND_TE_T_AZ, 50);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë¶ˆëª¨ì˜ ë•…: í†±ë‹ˆí•­]",				SEND_TE_T_AZ, 51);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[í† ë¥¨ ì¡°í•© ê±°ì ]",				SEND_TE_T_AZ, 52);
 				}
 			}
 
@@ -527,44 +527,44 @@ public:
 				{
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¹Ýµµ: ¸ÅÀÇ °¨½ÃÅ¾]",		SEND_TE_T_OL, 0);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[³ª±×¶õµå: °¡¶ó´Ù¸£]",			SEND_TE_T_OL, 1);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Ä®³¯ »ê¸Æ: ¸ðÅ©³ªÅ» ¸¶À»]",		SEND_TE_T_OL, 2);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¾îµÒ´Þ °ñÂ¥±â: ¾îµÒ´Þ ¸¶À»]",		SEND_TE_T_OL, 3);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¹Ýµµ: ÇØ°ñ¸ÁÄ¡ ÃÊ¼Ò]",		SEND_TE_T_OL, 4);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Å×·ÎÄ«¸£ ½£: µ¹¸ÁÄ¡ ¿ä»õ]",		SEND_TE_T_OL, 5);	
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Àå°¡¸£ ½ÀÁö´ë: ´ËÁã °¨½ÃÃÊ¼Ò]",		SEND_TE_T_OL, 6);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¹Ýµµ: ½º¶ö¸¶]",			SEND_TE_T_OL, 7);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Ä®³¯ »ê¸Æ: ÃµµÕ±ºÁÖ ¿ä»õ]",		SEND_TE_T_OL, 8);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Àå°¡¸£ ½ÀÁö´ë: ÀÚºê¶óÁø]",		SEND_TE_T_OL, 9);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ë°˜ë„: ë§¤ì˜ ê°ì‹œíƒ‘]",		SEND_TE_T_OL, 0);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ë‚˜ê·¸ëž€ë“œ: ê°€ë¼ë‹¤ë¥´]",			SEND_TE_T_OL, 1);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì¹¼ë‚  ì‚°ë§¥: ëª¨í¬ë‚˜íƒˆ ë§ˆì„]",		SEND_TE_T_OL, 2);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì–´ë‘ ë‹¬ ê³¨ì§œê¸°: ì–´ë‘ ë‹¬ ë§ˆì„]",		SEND_TE_T_OL, 3);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ë°˜ë„: í•´ê³¨ë§ì¹˜ ì´ˆì†Œ]",		SEND_TE_T_OL, 4);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[í…Œë¡œì¹´ë¥´ ìˆ²: ëŒë§ì¹˜ ìš”ìƒˆ]",		SEND_TE_T_OL, 5);	
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ìž¥ê°€ë¥´ ìŠµì§€ëŒ€: ëŠªì¥ ê°ì‹œì´ˆì†Œ]",		SEND_TE_T_OL, 6);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ë°˜ë„: ìŠ¤ëž„ë§ˆ]",			SEND_TE_T_OL, 7);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì¹¼ë‚  ì‚°ë§¥: ì²œë‘¥êµ°ì£¼ ìš”ìƒˆ]",		SEND_TE_T_OL, 8);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ìž¥ê°€ë¥´ ìŠµì§€ëŒ€: ìžë¸Œë¼ì§„]",		SEND_TE_T_OL, 9);
 					}
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¾Ë·¹¸®¾Æ ¼ºÃ¤]",			SEND_TE_T_OL, 10);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¸í¿¹ÀÇ ¿ä»õ]",			SEND_TE_T_OL, 11);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¿À·¹º¸¸£ ÇÇ³­Ã³]",			SEND_TE_T_OL, 12);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Â¡°Ë´Ù¸® °ÅÁ¡]",			SEND_TE_T_OL, 13);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[½Ç¹Ù³ª¸£]",				SEND_TE_T_OL, 14);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[ÅÚ¶ó¾Æ¸£]",				SEND_TE_T_OL, 15);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[ÅÚ·¹µµ¸£]",				SEND_TE_T_OL, 16);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[ÅÚÇÏ¸¶Æ® »ç¿ø]",			SEND_TE_T_OL, 17);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[Åä½¯¸®ÀÇ ¿¬±¸±âÁö]",			SEND_TE_T_OL, 18);
-						GOSSIP_ITEM(MI_WNG, C_DGR"[¿ÍÀÏµåÇØ¸Ó ¼ºÃ¤]",			SEND_TE_T_OL, 19);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì•Œë ˆë¦¬ì•„ ì„±ì±„]",			SEND_TE_T_OL, 10);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ëª…ì˜ˆì˜ ìš”ìƒˆ]",			SEND_TE_T_OL, 11);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì˜¤ë ˆë³´ë¥´ í”¼ë‚œì²˜]",			SEND_TE_T_OL, 12);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì§•ê²€ë‹¤ë¦¬ ê±°ì ]",			SEND_TE_T_OL, 13);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì‹¤ë°”ë‚˜ë¥´]",				SEND_TE_T_OL, 14);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[í…”ë¼ì•„ë¥´]",				SEND_TE_T_OL, 15);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[í…”ë ˆë„ë¥´]",				SEND_TE_T_OL, 16);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[í…”í•˜ë§ˆíŠ¸ ì‚¬ì›]",			SEND_TE_T_OL, 17);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[í† ì‰´ë¦¬ì˜ ì—°êµ¬ê¸°ì§€]",			SEND_TE_T_OL, 18);
+						GOSSIP_ITEM(MI_WNG, C_DGR"[ì™€ì¼ë“œí•´ë¨¸ ì„±ì±„]",			SEND_TE_T_OL, 19);
 					}
 				}
 
 				if (iAction == PG_OL_N)
 				{
-					GOSSIP_ITEM(MI_WNG, C_DGR"[»þÅ¸¸£ Á¦´Ü]",				SEND_TE_T_OL, 20);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[52 ±¸¿ª]",					SEND_TE_T_OL, 21);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[°ËÀº¹Ù¶÷ ºñÇà±âÁö]",				SEND_TE_T_OL, 22);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¼¼³ª¸®¿Â ¾ß¿µÁö]",				SEND_TE_T_OL, 23);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÄÚ½º¸ð·»Ä¡]",					SEND_TE_T_OL, 24);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¿µ¿øÀÇ ½£]",					SEND_TE_T_OL, 25);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¿À±×¸±¶ó]",					SEND_TE_T_OL, 26);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[º°ÀÇ ¼º¼Ò]",					SEND_TE_T_OL, 27);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÆøÇ³ Ã·Å¾]",					SEND_TE_T_OL, 28);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¿î¸íÀÇ °è´Ü]",				SEND_TE_T_OL, 29);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ìƒ¤íƒ€ë¥´ ì œë‹¨]",				SEND_TE_T_OL, 20);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[52 êµ¬ì—­]",					SEND_TE_T_OL, 21);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ê²€ì€ë°”ëžŒ ë¹„í–‰ê¸°ì§€]",				SEND_TE_T_OL, 22);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì„¸ë‚˜ë¦¬ì˜¨ ì•¼ì˜ì§€]",				SEND_TE_T_OL, 23);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì½”ìŠ¤ëª¨ë Œì¹˜]",					SEND_TE_T_OL, 24);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì˜ì›ì˜ ìˆ²]",					SEND_TE_T_OL, 25);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì˜¤ê·¸ë¦´ë¼]",					SEND_TE_T_OL, 26);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ë³„ì˜ ì„±ì†Œ]",					SEND_TE_T_OL, 27);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[í­í’ ì²¨íƒ‘]",					SEND_TE_T_OL, 28);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ìš´ëª…ì˜ ê³„ë‹¨]",				SEND_TE_T_OL, 29);
 				}
 			}
 
@@ -578,48 +578,48 @@ public:
 				{
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_CHD, C_BLK"[´ÙÀ½ ÆäÀÌÁö] -->",	SEND_TRAVEL, PG_NR_F_P2);
+						GOSSIP_ITEM(MI_CHD, C_BLK"[ë‹¤ìŒ íŽ˜ì´ì§€] -->",	SEND_TRAVEL, PG_NR_F_P2);
 
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: ¿¬±Ý¼ú»ç ¾ß¿µÁö(Lv69~71)]",	SEND_TE_T_NR, 1);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: °Ü¿ï¹ß±Á ¾ß¿µÁö(Lv69~71)]",	SEND_TE_T_NR, 5);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: ½Å ¾Æ°¡¸¸µå(Lv69~71)]",		SEND_TE_T_NR, 10);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: º¹¼öÀÇ »ó·úÁö(Lv69~71)]",		SEND_TE_T_NR, 13);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: º¸¸£°í·ÎÅ© ÀüÃÊ±âÁö(Lv69~72)]",	SEND_TE_T_NR, 2);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: Å¸¿îÄ«¸£ ¸¶À»(Lv69~72)]",		SEND_TE_T_NR, 12);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: ÀüÀï³ë·¡ºÎÁ· ¿ä»õ(Lv69~72)]",		SEND_TE_T_NR, 15);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: ¾Æ±×¸¶¸£ÀÇ ¸ÁÄ¡(Lv72~75)]",		SEND_TE_T_NR, 0);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: ÄÚ¸£Å©·Ð ¼±ºÀ±âÁö(Lv72~75)]",	SEND_TE_T_NR, 9);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: ¿øÇÑÀÇ ÃÊ¼Ò(Lv72~75)]",		SEND_TE_T_NR, 14);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[È¸»ö ±¸¸ªÁö: ¿øÅ©¿Í ¾ß¿µÁö(Lv73~75)]",		SEND_TE_T_NR, 3);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[È¸»ö ±¸¸ªÁö: Á¤º¹ÀÇ ¿ä»õ(Lv73~75)]",		SEND_TE_T_NR, 6);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ÁÙµå¶ô: µÎºê¶óÁø(Lv74~77)]",			SEND_TE_T_NR, 7);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ì—°ê¸ˆìˆ ì‚¬ ì•¼ì˜ì§€(Lv69~71)]",	SEND_TE_T_NR, 1);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ê²¨ìš¸ë°œêµ½ ì•¼ì˜ì§€(Lv69~71)]",	SEND_TE_T_NR, 5);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ì‹  ì•„ê°€ë§Œë“œ(Lv69~71)]",		SEND_TE_T_NR, 10);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ë³µìˆ˜ì˜ ìƒë¥™ì§€(Lv69~71)]",		SEND_TE_T_NR, 13);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: ë³´ë¥´ê³ ë¡œí¬ ì „ì´ˆê¸°ì§€(Lv69~72)]",	SEND_TE_T_NR, 2);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: íƒ€ìš´ì¹´ë¥´ ë§ˆì„(Lv69~72)]",		SEND_TE_T_NR, 12);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: ì „ìŸë…¸ëž˜ë¶€ì¡± ìš”ìƒˆ(Lv69~72)]",		SEND_TE_T_NR, 15);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ì•„ê·¸ë§ˆë¥´ì˜ ë§ì¹˜(Lv72~75)]",		SEND_TE_T_NR, 0);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ì½”ë¥´í¬ë¡  ì„ ë´‰ê¸°ì§€(Lv72~75)]",	SEND_TE_T_NR, 9);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ì›í•œì˜ ì´ˆì†Œ(Lv72~75)]",		SEND_TE_T_NR, 14);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[íšŒìƒ‰ êµ¬ë¦‰ì§€: ì›í¬ì™€ ì•¼ì˜ì§€(Lv73~75)]",		SEND_TE_T_NR, 3);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[íšŒìƒ‰ êµ¬ë¦‰ì§€: ì •ë³µì˜ ìš”ìƒˆ(Lv73~75)]",		SEND_TE_T_NR, 6);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ì¤„ë“œë½: ë‘ë¸Œë¼ì§„(Lv74~77)]",			SEND_TE_T_NR, 7);
 					}
 					if (PLAYER_TEAM() == ALLIANCE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: ºô´õ¹Ù¸£ ¿ä»õ(Lv69~71)]",		SEND_TE_T_NR, 19);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: ¹ß°¡µå(Lv69~71)]",		SEND_TE_T_NR, 22);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: ¼­ºÎ°æºñ´ë ¼ºÃ¤(Lv69~71)]",	SEND_TE_T_NR, 25);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: ÇÇÁîÅ©·©Å© ºñÇàÀå(Lv69~72)]",		SEND_TE_T_NR, 17);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: ¿ë¸ÍÀÇ ¼ºÃ¤(Lv69~72)]",		SEND_TE_T_NR, 23);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: Æúµå¶ó°ï ¿ä»õ(Lv72~75)]",		SEND_TE_T_NR, 18);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: º°ÀÇ ½°ÅÍ(Lv72~75)]",		SEND_TE_T_NR, 21);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: À©ÅÍ°¡µå ¼ºÃ¤(Lv72~75)]",		SEND_TE_T_NR, 27);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[È¸»ö ±¸¸ªÁö: È£¹Úºû¼Ò³ª¹« ¿ÀµÎ¸·(Lv73~75)]",	SEND_TE_T_NR, 16);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[È¸»ö ±¸¸ªÁö: ¼­ºÎ ¸ô¶ôÁö´ë ¿©´Ü ¾ß¿µÁö(Lv73~75)]",	SEND_TE_T_NR, 24);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ÆþÇ³¿ì ºÀ¿ì¸®: ¼­¸®¿ä»õ(Lv78~80)]",		SEND_TE_T_NR, 20);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¼öÁ¤³ë·¡ ½£: À©µå·¯³Ê Àü¸Á´ë]",			SEND_TE_T_NR, 26);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ë¹Œë”ë°”ë¥´ ìš”ìƒˆ(Lv69~71)]",		SEND_TE_T_NR, 19);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ë°œê°€ë“œ(Lv69~71)]",		SEND_TE_T_NR, 22);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ì„œë¶€ê²½ë¹„ëŒ€ ì„±ì±„(Lv69~71)]",	SEND_TE_T_NR, 25);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: í”¼ì¦ˆí¬ëž­í¬ ë¹„í–‰ìž¥(Lv69~72)]",		SEND_TE_T_NR, 17);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: ìš©ë§¹ì˜ ì„±ì±„(Lv69~72)]",		SEND_TE_T_NR, 23);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: í´ë“œë¼ê³¤ ìš”ìƒˆ(Lv72~75)]",		SEND_TE_T_NR, 18);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ë³„ì˜ ì‰¼í„°(Lv72~75)]",		SEND_TE_T_NR, 21);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ìœˆí„°ê°€ë“œ ì„±ì±„(Lv72~75)]",		SEND_TE_T_NR, 27);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[íšŒìƒ‰ êµ¬ë¦‰ì§€: í˜¸ë°•ë¹›ì†Œë‚˜ë¬´ ì˜¤ë‘ë§‰(Lv73~75)]",	SEND_TE_T_NR, 16);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[íšŒìƒ‰ êµ¬ë¦‰ì§€: ì„œë¶€ ëª°ë½ì§€ëŒ€ ì—¬ë‹¨ ì•¼ì˜ì§€(Lv73~75)]",	SEND_TE_T_NR, 24);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[íí’ìš° ë´‰ìš°ë¦¬: ì„œë¦¬ìš”ìƒˆ(Lv78~80)]",		SEND_TE_T_NR, 20);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìˆ˜ì •ë…¸ëž˜ ìˆ²: ìœˆë“œëŸ¬ë„ˆ ì „ë§ëŒ€]",			SEND_TE_T_NR, 26);
 					}
 				}
 
 				if (iAction == PG_NR_F_P2)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ÀÌÀü ÆäÀÌÁö]",		SEND_TRAVEL, PG_NR_F_P1);
+					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ì´ì „ íŽ˜ì´ì§€]",		SEND_TRAVEL, PG_NR_F_P1);
 
 					if (PLAYER_TEAM() == HORDE || pPlayer->isGameMaster() )
 					{
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ÆøÇ³¿ì ºÀ¿ì¸®: ±×·Ò¾Æ½¬ Ãß¶ô ÁöÁ¡(Lv78~80)]",	SEND_TE_T_NR, 8);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[ÆøÇ³¿ì ºÀ¿ì¸®: Å÷Ä«·Î ¾ß¿µÁö(Lv78~80)]",		SEND_TE_T_NR, 4);
-						GOSSIP_ITEM(MI_WNG, C_BLU"[¼öÁ¤³ë·¡ ½£: ¼±¸®¹ö ÁöÈÖÃÊ¼Ò]",			SEND_TE_T_NR, 11);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[í­í’ìš° ë´‰ìš°ë¦¬: ê·¸ë¡¬ì•„ì‰¬ ì¶”ë½ ì§€ì (Lv78~80)]",	SEND_TE_T_NR, 8);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[í­í’ìš° ë´‰ìš°ë¦¬: íˆ°ì¹´ë¡œ ì•¼ì˜ì§€(Lv78~80)]",		SEND_TE_T_NR, 4);
+						GOSSIP_ITEM(MI_WNG, C_BLU"[ìˆ˜ì •ë…¸ëž˜ ìˆ²: ì„ ë¦¬ë²„ ì§€íœ˜ì´ˆì†Œ]",			SEND_TE_T_NR, 11);
 					}
 					if (PLAYER_TEAM() == ALLIANCE)
 					{
@@ -628,34 +628,34 @@ public:
 
 				if (iAction == PG_NR_N_P1)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"[´ÙÀ½ ÆäÀÌÁö] -->",		SEND_TRAVEL, PG_NR_N_P2);
+					GOSSIP_ITEM(MI_CHD, C_BLK"[ë‹¤ìŒ íŽ˜ì´ì§€] -->",		SEND_TRAVEL, PG_NR_N_P2);
 
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïºÎÂ¢´Â Çù¸¸: Ä«¸¶±¸¾Æ(Lv69~71)]",			SEND_TE_T_NR, 36);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: È£¹Ú¼® Àýº®(Lv69~72)]",			SEND_TE_T_NR, 28);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: º¯À§ÀÇ º¸È£¸·(Lv69~72)]",			SEND_TE_T_NR, 44);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ºÏÇ³ÀÇ ¶¥: ¿ì´©Æä(Lv69~72)]",				SEND_TE_T_NR, 45);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: ¸ð¾ÆÅ° Ç×±¸(Lv72~75)]",			SEND_TE_T_NR, 39);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ëÀÇ ¾È½ÄÃ³: °í·æ½°ÅÍ »ç¿ø(Lv72~75)]",			SEND_TE_T_NR, 46);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÁÙµå¶ô: ºûÀÇ Æ´(Lv74~77)]",				SEND_TE_T_NR, 38);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÁÙµå¶ô: Ä¥ÈæÀÇ °¨½ÃÃÊ¼Ò(Lv74~77)]",			SEND_TE_T_NR, 34);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÁÙµå¶ô: Àººû½ÊÀÚ±º °ÝÀüÁö(Lv74~77)]",			SEND_TE_T_NR, 41);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÁÙµå¶ô: ÁüÅä¸£°¡(Lv74~77)]",				SEND_TE_T_NR, 47);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¼ñ¶óÀÚ¸£ ºÐÁö: È£¹ÝÀÇ Âø·úÀå(Lv75~78)]",			SEND_TE_T_NR, 37);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¼ñ¶óÀÚ¸£ ºÐÁö: ³×½Ì¿ö¸® ÁÖµÐÁö(Lv75~78)]",		SEND_TE_T_NR, 40);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÆøÇ³¿ì ºÀ¿ì¸®: ´ø ´ÏÆç·½(Lv78~80)]",			SEND_TE_T_NR, 33);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë¶€ì§–ëŠ” í˜‘ë§Œ: ì¹´ë§ˆêµ¬ì•„(Lv69~71)]",			SEND_TE_T_NR, 36);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: í˜¸ë°•ì„ ì ˆë²½(Lv69~72)]",			SEND_TE_T_NR, 28);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: ë³€ìœ„ì˜ ë³´í˜¸ë§‰(Lv69~72)]",			SEND_TE_T_NR, 44);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë¶í’ì˜ ë•…: ìš°ëˆ„íŽ˜(Lv69~72)]",				SEND_TE_T_NR, 45);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ëª¨ì•„í‚¤ í•­êµ¬(Lv72~75)]",			SEND_TE_T_NR, 39);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì˜ ì•ˆì‹ì²˜: ê³ ë£¡ì‰¼í„° ì‚¬ì›(Lv72~75)]",			SEND_TE_T_NR, 46);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì¤„ë“œë½: ë¹›ì˜ í‹ˆ(Lv74~77)]",				SEND_TE_T_NR, 38);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì¤„ë“œë½: ì¹ í‘ì˜ ê°ì‹œì´ˆì†Œ(Lv74~77)]",			SEND_TE_T_NR, 34);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì¤„ë“œë½: ì€ë¹›ì‹­ìžêµ° ê²©ì „ì§€(Lv74~77)]",			SEND_TE_T_NR, 41);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì¤„ë“œë½: ì§í† ë¥´ê°€(Lv74~77)]",				SEND_TE_T_NR, 47);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìˆ„ë¼ìžë¥´ ë¶„ì§€: í˜¸ë°˜ì˜ ì°©ë¥™ìž¥(Lv75~78)]",			SEND_TE_T_NR, 37);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìˆ„ë¼ìžë¥´ ë¶„ì§€: ë„¤ì‹±ì›Œë¦¬ ì£¼ë‘”ì§€(Lv75~78)]",		SEND_TE_T_NR, 40);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[í­í’ìš° ë´‰ìš°ë¦¬: ë˜ ë‹ˆíŽ ë ˜(Lv78~80)]",			SEND_TE_T_NR, 33);
 				}
 
 				if (iAction == PG_NR_N_P2)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ÀÌÀü ÆäÀÌÁö]",		SEND_TRAVEL, PG_NR_N_P1);
+					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ì´ì „ íŽ˜ì´ì§€]",		SEND_TRAVEL, PG_NR_N_P1);
 
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÆøÇ³¿ì ºÀ¿ì¸®: K3(Lv78~80)]",				SEND_TE_T_NR, 35);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[ÆøÇ³¿ì ºÀ¿ì¸®: ¹Ù¿ï´õÅ©·¢ÀÇ Àº°ÅÃ³(Lv78~80)]",		SEND_TE_T_NR, 30);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü: Àººû½ÊÀÚ±º ¼±ºÀ±âÁö(Lv78~80)]",		SEND_TE_T_NR, 42);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü: ¾îµÒÀÇ ¹«±â°í(Lv78~80)]",			SEND_TE_T_NR, 43);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü: Àººû½ÊÀÚ±º ¸¶»ó½ÃÇÕ ±¤Àå(Lv78~80)]",		SEND_TE_T_NR, 29);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü: ½ÊÀÚ±º ºÀ¿ì¸®(Lv78~80)]",			SEND_TE_T_NR, 31);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü: Á×À½ÀÇ ¸¶·ç(Lv78~80)]",			SEND_TE_T_NR, 32);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[í­í’ìš° ë´‰ìš°ë¦¬: K3(Lv78~80)]",				SEND_TE_T_NR, 35);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[í­í’ìš° ë´‰ìš°ë¦¬: ë°”ìš¸ë”í¬ëž™ì˜ ì€ê±°ì²˜(Lv78~80)]",		SEND_TE_T_NR, 30);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€: ì€ë¹›ì‹­ìžêµ° ì„ ë´‰ê¸°ì§€(Lv78~80)]",		SEND_TE_T_NR, 42);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€: ì–´ë‘ ì˜ ë¬´ê¸°ê³ (Lv78~80)]",			SEND_TE_T_NR, 43);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€: ì€ë¹›ì‹­ìžêµ° ë§ˆìƒì‹œí•© ê´‘ìž¥(Lv78~80)]",		SEND_TE_T_NR, 29);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€: ì‹­ìžêµ° ë´‰ìš°ë¦¬(Lv78~80)]",			SEND_TE_T_NR, 31);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€: ì£½ìŒì˜ ë§ˆë£¨(Lv78~80)]",			SEND_TE_T_NR, 32);
 				}
 			}
 
@@ -669,122 +669,122 @@ public:
 
 				if (iAction == PG_AZ_D_P1)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"[´ÙÀ½ ÆäÀÌÁö] -->",		SEND_TRAVEL, PG_AZ_D_P2);
+					GOSSIP_ITEM(MI_CHD, C_BLK"[ë‹¤ìŒ íŽ˜ì´ì§€] -->",		SEND_TRAVEL, PG_AZ_D_P2);
 
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Á×À½ÀÇ Æó±¤(Lv15~28)]",		SEND_TE_D_AZ, 13);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Åë°îÀÇ µ¿±¼(Lv15~28)]",		SEND_TE_D_AZ, 15);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[±×¸²ÀÚ¼Û°÷´Ï ¼ºÃ¤(Lv18~32)]",		SEND_TE_D_AZ, 10);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°ËÀº½É¿¬ÀÇ ³ª¶ô(Lv20~35)]",		SEND_TE_D_AZ, 0);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°¡½Ãµ¢±¼ ¿ì¸®(Lv24~40)]",		SEND_TE_D_AZ, 7);	
-					GOSSIP_ITEM(MI_WNG, C_ORG"[³ð¸®°Ç(Lv24~40)]",			SEND_TE_D_AZ, 4);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[ºÓÀº½ÊÀÚ±º ¼öµµ¿ø(Lv29~45)]",		SEND_TE_D_AZ, 8);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¿ï´Ù¸¸(Lv32~52)]",			SEND_TE_D_AZ, 14);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°¡½Ãµ¢±¼ ±¸¸ª(Lv33~47)]",		SEND_TE_D_AZ, 6);  
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¸¶¶ó¿ìµ·(Lv40~58)]",			SEND_TE_D_AZ, 5);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[ÁÙÆÄ¶ô(Lv43~54)]",			SEND_TE_D_AZ, 16);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÆÅ»ÇÐÄ«¸£ ½ÅÀü(Lv50~55)]",		SEND_TE_D_AZ, 12);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[½ºÆ®¶ó¼Ö¸§(Lv56~61)]",		SEND_TE_D_AZ, 11);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì£½ìŒì˜ íê´‘(Lv15~28)]",		SEND_TE_D_AZ, 13);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[í†µê³¡ì˜ ë™êµ´(Lv15~28)]",		SEND_TE_D_AZ, 15);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê·¸ë¦¼ìžì†¡ê³³ë‹ˆ ì„±ì±„(Lv18~32)]",		SEND_TE_D_AZ, 10);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê²€ì€ì‹¬ì—°ì˜ ë‚˜ë½(Lv20~35)]",		SEND_TE_D_AZ, 0);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê°€ì‹œë©êµ´ ìš°ë¦¬(Lv24~40)]",		SEND_TE_D_AZ, 7);	
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë†ˆë¦¬ê±´(Lv24~40)]",			SEND_TE_D_AZ, 4);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë¶‰ì€ì‹­ìžêµ° ìˆ˜ë„ì›(Lv29~45)]",		SEND_TE_D_AZ, 8);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ìš¸ë‹¤ë§Œ(Lv32~52)]",			SEND_TE_D_AZ, 14);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê°€ì‹œë©êµ´ êµ¬ë¦‰(Lv33~47)]",		SEND_TE_D_AZ, 6);  
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ë§ˆë¼ìš°ëˆ(Lv40~58)]",			SEND_TE_D_AZ, 5);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì¤„íŒŒë½(Lv43~54)]",			SEND_TE_D_AZ, 16);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì•„íƒˆí•™ì¹´ë¥´ ì‹ ì „(Lv50~55)]",		SEND_TE_D_AZ, 12);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ìŠ¤íŠ¸ë¼ì†”ë¦„(Lv56~61)]",		SEND_TE_D_AZ, 11);
 				}
 
 				if (iAction == PG_AZ_D_P2)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ÀÌÀü ÆäÀÌÁö]",		SEND_TRAVEL, PG_AZ_D_P1);
+					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ì´ì „ íŽ˜ì´ì§€]",		SEND_TRAVEL, PG_AZ_D_P1);
 
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°ËÀº¹ÙÀ§ Ã·Å¾ÇÏÃþ(Lv58~60)]",		SEND_TE_D_AZ, 1);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°ËÀº¹ÙÀ§ Ã·Å¾»óÃþ(Lv59~62)]",		SEND_TE_D_AZ, 2);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[Ç÷ÅõÀÇ ÀüÀå(Lv54~61)]",		SEND_TE_D_AZ, 3);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[½ºÄ®·Î¸Ç½º(Lv56~61)]",		SEND_TE_D_AZ, 9);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê²€ì€ë°”ìœ„ ì²¨íƒ‘í•˜ì¸µ(Lv58~60)]",		SEND_TE_D_AZ, 1);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê²€ì€ë°”ìœ„ ì²¨íƒ‘ìƒì¸µ(Lv59~62)]",		SEND_TE_D_AZ, 2);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[í˜ˆíˆ¬ì˜ ì „ìž¥(Lv54~61)]",		SEND_TE_D_AZ, 3);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ìŠ¤ì¹¼ë¡œë§¨ìŠ¤(Lv56~61)]",		SEND_TE_D_AZ, 9);
 				}
 
 				if (iAction == PG_AZ_R)
 				{
-					GOSSIP_ITEM(MI_WNG, C_ORG"[°ËÀº³¯°³ µÕÁö(40ÀÎ)]",			SEND_TE_D_AZ, 17);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[È­»ê½ÉÀåºÎ(40ÀÎ)]",			SEND_TE_D_AZ, 18);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÈÄû¶óÁî ÆóÇã(20ÀÎ)]",			SEND_TE_D_AZ, 19);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[¾ÈÄû¶óÁî »ç¿ø(40ÀÎ)]",			SEND_TE_D_AZ, 20);
-					GOSSIP_ITEM(MI_WNG, C_ORG"[ÁÙ±¸·ì(20ÀÎ)]",			SEND_TE_D_AZ, 21);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ê²€ì€ë‚ ê°œ ë‘¥ì§€(40ì¸)]",			SEND_TE_D_AZ, 17);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[í™”ì‚°ì‹¬ìž¥ë¶€(40ì¸)]",			SEND_TE_D_AZ, 18);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì•ˆí€´ë¼ì¦ˆ íí—ˆ(20ì¸)]",			SEND_TE_D_AZ, 19);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì•ˆí€´ë¼ì¦ˆ ì‚¬ì›(40ì¸)]",			SEND_TE_D_AZ, 20);
+					GOSSIP_ITEM(MI_WNG, C_ORG"[ì¤„êµ¬ë£¹(20ì¸)]",			SEND_TE_D_AZ, 21);
 				}
 
 				if (iAction == PG_OL_D_P1)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"[´ÙÀ½ ÆäÀÌÁö] -->",		SEND_TRAVEL, PG_OL_D_P2);
+					GOSSIP_ITEM(MI_CHD, C_BLK"[ë‹¤ìŒ íŽ˜ì´ì§€] -->",		SEND_TRAVEL, PG_OL_D_P2);
 
-					GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¼ºÃ¤: Áö¿ÁºÒ ¼º·ç(Lv60~62)]",		SEND_TE_D_OL, 9);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¼ºÃ¤: ÇÇÀÇ ¿ë±¤·Î(Lv61~63)]",		SEND_TE_D_OL, 10);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[°¥Äû¼Û°÷´Ï Àú¼öÁö: °­Á¦ ³ë¿ª¼Ò(Lv62~64)]",	SEND_TE_D_OL, 6);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[°¥Äû¼Û°÷´Ï Àú¼öÁö: ÁöÇÏ¼ö··(Lv63~65)]",		SEND_TE_D_OL, 8);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¾ÆÅ²µ·: ¸¶³ª ¹«´ý(Lv64~66)]",			SEND_TE_D_OL, 1);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[½Ã°£ÀÇ µ¿±¼: ¿¾ Èú½ººê·¡µå ±¸¸ªÁö(Lv65~68)]",	SEND_TE_D_OL, 4);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¾ÆÅ²µ·: ¾ÆÅ°³ªÀÌ ³³°ñ´ç(Lv65~67)]",		SEND_TE_D_OL, 0);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¾ÆÅ²µ·: ¼¼Å×Å© Àü´ç(Lv67~69)]",			SEND_TE_D_OL, 2);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¾ÆÅ²µ·: ¾îµÒÀÇ ¹Ì±Ã(Lv70+)]",			SEND_TE_D_OL, 3);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[½Ã°£ÀÇ µ¿±¼: °ËÀº ´Ë(Lv70+)]",			SEND_TE_D_OL, 5);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[°¥Äû¼Û°÷´Ï Àú¼öÁö: Áõ±â ÀúÀå°í(Lv70+)]",		SEND_TE_D_OL, 7);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¼ºÃ¤: À¸½º·¯Áø ¼ÕÀÇ Àü´ç(Lv70+)]",	SEND_TE_D_OL, 11);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[¸¶¹ýÇÐÀÚÀÇ Á¤¿ø(Lv70+)]",			SEND_TE_D_OL, 12);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ì„±ì±„: ì§€ì˜¥ë¶ˆ ì„±ë£¨(Lv60~62)]",		SEND_TE_D_OL, 9);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ì„±ì±„: í”¼ì˜ ìš©ê´‘ë¡œ(Lv61~63)]",		SEND_TE_D_OL, 10);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ê°ˆí€´ì†¡ê³³ë‹ˆ ì €ìˆ˜ì§€: ê°•ì œ ë…¸ì—­ì†Œ(Lv62~64)]",	SEND_TE_D_OL, 6);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ê°ˆí€´ì†¡ê³³ë‹ˆ ì €ìˆ˜ì§€: ì§€í•˜ìˆ˜ë (Lv63~65)]",		SEND_TE_D_OL, 8);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„í‚¨ëˆ: ë§ˆë‚˜ ë¬´ë¤(Lv64~66)]",			SEND_TE_D_OL, 1);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì‹œê°„ì˜ ë™êµ´: ì˜› ížìŠ¤ë¸Œëž˜ë“œ êµ¬ë¦‰ì§€(Lv65~68)]",	SEND_TE_D_OL, 4);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„í‚¨ëˆ: ì•„í‚¤ë‚˜ì´ ë‚©ê³¨ë‹¹(Lv65~67)]",		SEND_TE_D_OL, 0);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„í‚¨ëˆ: ì„¸í…Œí¬ ì „ë‹¹(Lv67~69)]",			SEND_TE_D_OL, 2);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì•„í‚¨ëˆ: ì–´ë‘ ì˜ ë¯¸ê¶(Lv70+)]",			SEND_TE_D_OL, 3);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì‹œê°„ì˜ ë™êµ´: ê²€ì€ ëŠª(Lv70+)]",			SEND_TE_D_OL, 5);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ê°ˆí€´ì†¡ê³³ë‹ˆ ì €ìˆ˜ì§€: ì¦ê¸° ì €ìž¥ê³ (Lv70+)]",		SEND_TE_D_OL, 7);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ì„±ì±„: ìœ¼ìŠ¤ëŸ¬ì§„ ì†ì˜ ì „ë‹¹(Lv70+)]",	SEND_TE_D_OL, 11);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ë§ˆë²•í•™ìžì˜ ì •ì›(Lv70+)]",			SEND_TE_D_OL, 12);
 				}
 
 				if (iAction == PG_OL_D_P2)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ÀÌÀü ÆäÀÌÁö]",		SEND_TRAVEL, PG_OL_D_P1);
+					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ì´ì „ íŽ˜ì´ì§€]",		SEND_TRAVEL, PG_OL_D_P1);
 
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÆøÇ³¿ì ¿ä»õ: ¾ËÄ«Æ®¶óÁî(Lv70+)]",	SEND_TE_D_OL, 13);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÆøÇ³¿ì ¿ä»õ: ½Å·ÏÀÇ Á¤¿ø(Lv70+)]",	SEND_TE_D_OL, 14);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÆøÇ³¿ì ¿ä»õ: ¸ÞÄ«³ª¸£(Lv70+)]",		SEND_TE_D_OL, 15);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[í­í’ìš° ìš”ìƒˆ: ì•Œì¹´íŠ¸ë¼ì¦ˆ(Lv70+)]",	SEND_TE_D_OL, 13);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[í­í’ìš° ìš”ìƒˆ: ì‹ ë¡ì˜ ì •ì›(Lv70+)]",	SEND_TE_D_OL, 14);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[í­í’ìš° ìš”ìƒˆ: ë©”ì¹´ë‚˜ë¥´(Lv70+)]",		SEND_TE_D_OL, 15);
 				}
 
 				if (iAction == PG_OL_R)
 				{	
-					GOSSIP_ITEM(MI_WNG, C_DGR"[Ä«¶óÀÜ]",				SEND_TE_D_OL, 20);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÁÙ¾Æ¸¸]",				SEND_TE_D_OL, 24);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[Áö¿ÁºÒ ¼ºÃ¤: ¸¶±×Å×¸®µ·ÀÇ µÕÁö]",	SEND_TE_D_OL, 19);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[±×·êÀÇ µÕÁö]",			SEND_TE_D_OL, 18);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ºÒ¹ì Á¦´Ü]",				SEND_TE_D_OL, 21);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÆøÇ³¿ì ¿ä»õ: ÆøÇ³¿ì ¿ä»õ]",		SEND_TE_D_OL, 23);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[½Ã°£ÀÇ µ¿±¼: ÇÏÀÌÀß »êÀÇ ÀüÅõ]",		SEND_TE_D_OL, 17);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[°ËÀº »ç¿ø]",				SEND_TE_D_OL, 16);
-					GOSSIP_ITEM(MI_WNG, C_DGR"[ÅÂ¾ç»ù °í¿ø]",			SEND_TE_D_OL, 22);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì¹´ë¼ìž”]",				SEND_TE_D_OL, 20);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì¤„ì•„ë§Œ]",				SEND_TE_D_OL, 24);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì§€ì˜¥ë¶ˆ ì„±ì±„: ë§ˆê·¸í…Œë¦¬ëˆì˜ ë‘¥ì§€]",	SEND_TE_D_OL, 19);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ê·¸ë£°ì˜ ë‘¥ì§€]",			SEND_TE_D_OL, 18);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ë¶ˆë±€ ì œë‹¨]",				SEND_TE_D_OL, 21);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[í­í’ìš° ìš”ìƒˆ: í­í’ìš° ìš”ìƒˆ]",		SEND_TE_D_OL, 23);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ì‹œê°„ì˜ ë™êµ´: í•˜ì´ìž˜ ì‚°ì˜ ì „íˆ¬]",		SEND_TE_D_OL, 17);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[ê²€ì€ ì‚¬ì›]",				SEND_TE_D_OL, 16);
+					GOSSIP_ITEM(MI_WNG, C_DGR"[íƒœì–‘ìƒ˜ ê³ ì›]",			SEND_TE_D_OL, 22);
 				}
 				
 				if (iAction == PG_NR_D_P1)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"[´ÙÀ½ ÆäÀÌÁö] -->",		SEND_TRAVEL, PG_NR_D_P2);
+					GOSSIP_ITEM(MI_CHD, C_BLK"[ë‹¤ìŒ íŽ˜ì´ì§€] -->",		SEND_TRAVEL, PG_NR_D_P2);
 
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¸¶·ÂÀÇ Å¾: ¸¶·ÂÀÇ Å¾(Lv70~72)]",		SEND_TE_D_NR, 8);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ìÆ®°¡µå ¼ºÃ¤: ¿ìÆ®°¡µå ¼ºÃ¤(Lv70~72)]",		SEND_TE_D_NR, 14);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾ÆÁ¹³×·ì: ¾ÆÁ¹³×·ì(Lv72~74)]",			SEND_TE_D_NR, 1);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾ÈÄ«ÇìÆ®: °í´ë ¿Õ±¹(Lv74~76)]",			SEND_TE_D_NR, 0);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[µå¶ôÅ¸·Ð ¼ºÃ¤(Lv74~76)]",			SEND_TE_D_NR, 3);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[º¸¶ùºû ¿ä»õ(Lv75~77)]",			SEND_TE_D_NR, 10);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[±ºµå¶ô(Lv76~78)]",				SEND_TE_D_NR, 4);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïµÎ¾Æ¸£: µ¹ÀÇ Àü´ç(Lv77~79)]",			SEND_TE_D_NR, 13);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ìÆ®°¡µå ¼ºÃ¤: ¿ìÆ®°¡µå Ã·Å¾(Lv80+)]",		SEND_TE_D_NR, 15);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[½Ã°£ÀÇ µ¿±¼: ¿¾ ½ºÆ®¶ó¼Ö¸§(Lv80+)]",		SEND_TE_D_NR, 2);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¸¶·ÂÀÇ Å¾: ¸¶·ÂÀÇ ´«(Lv80+)]",			SEND_TE_D_NR, 9);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïµÎ¾Æ¸£: ¹ø°³ÀÇ Àü´ç(Lv80+)]",			SEND_TE_D_NR, 12);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ë»çÀÇ ½ÃÇèÀå(Lv80+)]",			SEND_TE_D_NR, 11);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë§ˆë ¥ì˜ íƒ‘: ë§ˆë ¥ì˜ íƒ‘(Lv70~72)]",		SEND_TE_D_NR, 8);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš°íŠ¸ê°€ë“œ ì„±ì±„: ìš°íŠ¸ê°€ë“œ ì„±ì±„(Lv70~72)]",		SEND_TE_D_NR, 14);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì•„ì¡¸ë„¤ë£¹: ì•„ì¡¸ë„¤ë£¹(Lv72~74)]",			SEND_TE_D_NR, 1);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì•ˆì¹´í—¤íŠ¸: ê³ ëŒ€ ì™•êµ­(Lv74~76)]",			SEND_TE_D_NR, 0);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë“œë½íƒ€ë¡  ì„±ì±„(Lv74~76)]",			SEND_TE_D_NR, 3);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë³´ëžë¹› ìš”ìƒˆ(Lv75~77)]",			SEND_TE_D_NR, 10);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[êµ°ë“œë½(Lv76~78)]",				SEND_TE_D_NR, 4);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë‘ì•„ë¥´: ëŒì˜ ì „ë‹¹(Lv77~79)]",			SEND_TE_D_NR, 13);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš°íŠ¸ê°€ë“œ ì„±ì±„: ìš°íŠ¸ê°€ë“œ ì²¨íƒ‘(Lv80+)]",		SEND_TE_D_NR, 15);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì‹œê°„ì˜ ë™êµ´: ì˜› ìŠ¤íŠ¸ë¼ì†”ë¦„(Lv80+)]",		SEND_TE_D_NR, 2);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë§ˆë ¥ì˜ íƒ‘: ë§ˆë ¥ì˜ ëˆˆ(Lv80+)]",			SEND_TE_D_NR, 9);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë‘ì•„ë¥´: ë²ˆê°œì˜ ì „ë‹¹(Lv80+)]",			SEND_TE_D_NR, 12);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš©ì‚¬ì˜ ì‹œí—˜ìž¥(Lv80+)]",			SEND_TE_D_NR, 11);
 				}
 
 				if (iAction == PG_NR_D_P2)
 				{
-					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ÀÌÀü ÆäÀÌÁö]",		SEND_TRAVEL, PG_NR_D_P1);
+					GOSSIP_ITEM(MI_CHD, C_BLK"<-- [ì´ì „ íŽ˜ì´ì§€]",		SEND_TRAVEL, PG_NR_D_P1);
 
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü ¼ºÃ¤: Åõ¿µÀÇ Àü´ç(Lv80+)]",		SEND_TE_D_NR, 5);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü ¼ºÃ¤: »ç·ÐÀÇ ±¸µ¢ÀÌ(Lv80+)]",		SEND_TE_D_NR, 6);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü ¼ºÃ¤: ¿µÈ¥ÀÇ Á¦·Ã¼Ò(Lv80+)]",		SEND_TE_D_NR, 7);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€ ì„±ì±„: íˆ¬ì˜ì˜ ì „ë‹¹(Lv80+)]",		SEND_TE_D_NR, 5);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€ ì„±ì±„: ì‚¬ë¡ ì˜ êµ¬ë©ì´(Lv80+)]",		SEND_TE_D_NR, 6);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€ ì„±ì±„: ì˜í˜¼ì˜ ì œë ¨ì†Œ(Lv80+)]",		SEND_TE_D_NR, 7);
 				}
 
 				if (iAction == PG_NR_R)
 				{
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾ÆÄ«º» ¼®½Ç]",				SEND_TE_D_NR, 24);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[Èæ¿ä¼® ¼º¼Ò]",				SEND_TE_D_NR, 20);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿µ¿øÀÇ ´«]",					SEND_TE_D_NR, 19);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[³«½º¶ó¸¶½º]",					SEND_TE_D_NR, 17);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿ïµÎ¾Æ¸£]",					SEND_TE_D_NR, 23);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[½ÊÀÚ±ºÀÇ ½ÃÇèÀå]",				SEND_TE_D_NR, 22);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¿À´Ð½Ã¾ÆÀÇ µÕÁö]",				SEND_TE_D_NR, 18);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[¾óÀ½¿Õ°ü ¼ºÃ¤]",				SEND_TE_D_NR, 16);
-					GOSSIP_ITEM(MI_WNG, C_BLU"[·çºñ ¼º¼Ò]",					SEND_TE_D_NR, 21);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì•„ì¹´ë³¸ ì„ì‹¤]",				SEND_TE_D_NR, 24);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[í‘ìš”ì„ ì„±ì†Œ]",				SEND_TE_D_NR, 20);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì˜ì›ì˜ ëˆˆ]",					SEND_TE_D_NR, 19);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë‚™ìŠ¤ë¼ë§ˆìŠ¤]",					SEND_TE_D_NR, 17);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ìš¸ë‘ì•„ë¥´]",					SEND_TE_D_NR, 23);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì‹­ìžêµ°ì˜ ì‹œí—˜ìž¥]",				SEND_TE_D_NR, 22);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì˜¤ë‹‰ì‹œì•„ì˜ ë‘¥ì§€]",				SEND_TE_D_NR, 18);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ì–¼ìŒì™•ê´€ ì„±ì±„]",				SEND_TE_D_NR, 16);
+					GOSSIP_ITEM(MI_WNG, C_BLU"[ë£¨ë¹„ ì„±ì†Œ]",					SEND_TE_D_NR, 21);
 				}
 			}
 

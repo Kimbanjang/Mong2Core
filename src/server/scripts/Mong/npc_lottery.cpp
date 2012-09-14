@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  * Copyright (C) 2008-2010 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -29,7 +29,7 @@ EndScriptData */
 ## npc_lotto
 ######*/
 
-#define GOSSIP_BUY_TICKET          "·Î¶Ç¸¦ ±¸ÀÔÇÕ´Ï´Ù.! 500°ñµå"
+#define GOSSIP_BUY_TICKET          "ë¡œë˜ë¥¼ êµ¬ì…í•©ë‹ˆë‹¤.! 500ê³¨ë“œ"
 #define TICKET_COST                 5000000
 #define EVENT_BLOODYLOTTO           132
 
@@ -71,7 +71,7 @@ public:
                 uint32 id = result->Fetch()->GetUInt32();
                 WorldDatabase.PExecute("INSERT INTO lotto_tickets (id,name,guid) VALUES (%u,'%s',%u);", id+1, pPlayer->GetName(), pPlayer->GetGUIDLow());
                 char msg[500];
-                sprintf(msg, "Çà¿îÀ» ºô°Ù½À´Ï´Ù, $N. ´ç½ÅÀÇ ·Î¶Ç ±¸ÀÔ¹øÈ£´Â %i ÀÔ´Ï´Ù.", id+1);
+                sprintf(msg, "í–‰ìš´ì„ ë¹Œê²ŸìŠµë‹ˆë‹¤, $N. ë‹¹ì‹ ì˜ ë¡œë˜ êµ¬ì…ë²ˆí˜¸ëŠ” %i ì…ë‹ˆë‹¤.", id+1);
                 pCreature->MonsterWhisper(msg, pPlayer->GetGUID());
                 break;
         }
@@ -123,7 +123,7 @@ public:
                         // Send reward by mail
                         Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(guid);
                         SQLTransaction trans = CharacterDatabase.BeginTransaction();
-						MailDraft("Lotto","´çÃ·À» ÃàÇÏµå¸³´Ï´Ù")
+						MailDraft("Lotto","ë‹¹ì²¨ì„ ì¶•í•˜ë“œë¦½ë‹ˆë‹¤")
                             .AddMoney(reward)
                             .SendMailTo(trans, MailReceiver(pPlayer, GUID_LOPART(guid)), MailSender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM));
                         CharacterDatabase.CommitTransaction(trans);
@@ -144,7 +144,7 @@ public:
                     
                 if (SayTimer <= diff)
                 {
-                    me->MonsterSay("Lotto! °¡ ¿©±â¿Ô½À´Ï´Ù.", 0, NULL);
+                    me->MonsterSay("Lotto! ê°€ ì—¬ê¸°ì™”ìŠµë‹ˆë‹¤.", 0, NULL);
                     SayTimer = 1800*IN_MILLISECONDS;
                 }
                 else SayTimer -= diff;
@@ -187,10 +187,10 @@ public:
 						uint32 m_item_entry=fields[2].GetUInt32();
 						uint32 m_item_stack=fields[3].GetUInt32();
 
-						MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // º¸³»´Â »ç¶÷ÀÌ GMÀ¸·Î µî·Ï
-						Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid °ªÀ» ³ÖÀ¸¸é ÄÉ¸¯ÅÍ¸¦ Ã£À»¼öÀÖ´Ù.
-						SQLTransaction trans = CharacterDatabase.BeginTransaction();   //¸ŞÀÏ°ü·Ã SQLÀ» µî·Ï
-						MailDraft draft("¸ù¼·ÀÌº¥Æ®","´çÃ·À» ÃàÇÏµå¸³´Ï´Ù");
+						MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // ë³´ë‚´ëŠ” ì‚¬ëŒì´ GMìœ¼ë¡œ ë“±ë¡
+						Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid ê°’ì„ ë„£ìœ¼ë©´ ì¼€ë¦­í„°ë¥¼ ì°¾ì„ìˆ˜ìˆë‹¤.
+						SQLTransaction trans = CharacterDatabase.BeginTransaction();   //ë©”ì¼ê´€ë ¨ SQLì„ ë“±ë¡
+						MailDraft draft("ëª½ì„­ì´ë²¤íŠ¸","ë‹¹ì²¨ì„ ì¶•í•˜ë“œë¦½ë‹ˆë‹¤");
 	                     
 						 //Item* Item::CreateItem(uint32 item, uint32 count, Player const* player)   
 				        

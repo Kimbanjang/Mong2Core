@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -187,7 +187,8 @@ void Player::UpdateResistances(uint32 school)
 {
     if (school > SPELL_SCHOOL_NORMAL)
     {
-        float value  = GetTotalAuraModValue(UnitMods(UNIT_MOD_RESISTANCE_START + school));
+        float spirit = GetStat(STAT_SPIRIT) * 0.1;
+		float value  = GetTotalAuraModValue(UnitMods(UNIT_MOD_RESISTANCE_START + school)) + spirit ;
         SetResistance(SpellSchools(school), int32(value));
 
         Pet* pet = GetPet();
@@ -680,7 +681,7 @@ void Player::UpdateParryPercentage()
         0.0f,           // Mage
         0.0f,           // Warlock
         0.0f,           // ??
-        0.0f            // Druid
+        145.560408f     // Druid
     };
 
     // No parry
@@ -1193,7 +1194,7 @@ void Guardian::UpdateResistances(uint32 school)
 
         // hunter and warlock pets gain 40% of owner's resistance
         if (isPet())
-            value += float(CalculatePctN(m_owner->GetResistance(SpellSchools(school)), 40));
+            value += float(CalculatePctN(m_owner->GetResistance(SpellSchools(school)), 40)) + 15 ;
 
         SetResistance(SpellSchools(school), int32(value));
     }
@@ -1237,7 +1238,7 @@ void Guardian::UpdateMaxHealth()
         default:                multiplicator = 10.0f;  break;
     }
 
-    float value = GetModifierValue(unitMod, BASE_VALUE) + GetCreateHealth();
+    float value = GetModifierValue(unitMod, BASE_VALUE) + GetCreateHealth() + 50;
     value *= GetModifierValue(unitMod, BASE_PCT);
     value += GetModifierValue(unitMod, TOTAL_VALUE) + stamina * multiplicator;
     value *= GetModifierValue(unitMod, TOTAL_PCT);
@@ -1250,16 +1251,16 @@ void Guardian::UpdateMaxPower(Powers power)
     UnitMods unitMod = UnitMods(UNIT_MOD_POWER_START + power);
 
     float addValue = (power == POWER_MANA) ? GetStat(STAT_INTELLECT) - GetCreateStat(STAT_INTELLECT) : 0.0f;
-    float multiplicator = 15.0f;
+    float multiplicator = 35.0f;
 
     switch (GetEntry())
     {
-        case ENTRY_IMP:         multiplicator = 4.95f;  break;
+        case ENTRY_IMP:         multiplicator = 8.95f;  break;
         case ENTRY_VOIDWALKER:
         case ENTRY_SUCCUBUS:
         case ENTRY_FELHUNTER:
-        case ENTRY_FELGUARD:    multiplicator = 11.5f;  break;
-        default:                multiplicator = 15.0f;  break;
+        case ENTRY_FELGUARD:    multiplicator = 15.5f;  break;
+        default:                multiplicator = 19.0f;  break;
     }
 
     float value  = GetModifierValue(unitMod, BASE_VALUE) + GetCreatePowers(power);
@@ -1370,14 +1371,14 @@ void Guardian::UpdateDamagePhysical(WeaponAttackType attType)
         {
             int32 spellDmg = int32(m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_NATURE)) - m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_NATURE);
             if (spellDmg > 0)
-                bonusDamage = spellDmg * 0.09f;
+                bonusDamage = spellDmg * 0.19f;
         }
         //greater fire elemental
         else if (GetEntry() == ENTRY_FIRE_ELEMENTAL)
         {
             int32 spellDmg = int32(m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + SPELL_SCHOOL_FIRE)) - m_owner->GetUInt32Value(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + SPELL_SCHOOL_FIRE);
             if (spellDmg > 0)
-                bonusDamage = spellDmg * 0.4f;
+                bonusDamage = spellDmg * 0.6f;
         }
     }
 

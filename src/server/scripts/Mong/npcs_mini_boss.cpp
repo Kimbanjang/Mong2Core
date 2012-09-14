@@ -1,4 +1,4 @@
-/*########################################################
+ï»¿/*########################################################
 #                      Mini Bosses                       #
 #              Case di Gilda - BloodyWars                #
 #             <https://www.bloodywars.net/>              #
@@ -26,10 +26,10 @@ enum LikantropoSpells
 };
 
 // Likantropo yells
-#define SAY_LIKANTROPO_AGGRO    "³ªÀÇ ³ë¿¹°¡ µÇ·ÁÇÏ´À³Ä"
-#define SAY_LIKANTROPO_SLAY     "ºĞ³ë¸¦ ´À²¸º¸¾Æ¶ó!"
-#define SAY_LIKANTROPO_DEATH    " ¾ÈµÅ!!  ³ªÀÇ ¼ºÀ¸·Î....."
-#define SAY_LIKANTROPO_MORPH    "³Í ÈÄÈ¸ÇÏ°ÔµÉ²¨¾ß!"
+#define SAY_LIKANTROPO_AGGRO    "ë‚˜ì˜ ë…¸ì˜ˆê°€ ë˜ë ¤í•˜ëŠëƒ"
+#define SAY_LIKANTROPO_SLAY     "ë¶„ë…¸ë¥¼ ëŠê»´ë³´ì•„ë¼!"
+#define SAY_LIKANTROPO_DEATH    " ì•ˆë¼!!  ë‚˜ì˜ ì„±ìœ¼ë¡œ....."
+#define SAY_LIKANTROPO_MORPH    "ë„Œ í›„íšŒí•˜ê²Œë êº¼ì•¼!"
 
 enum LavaBoostSpells
 {
@@ -46,9 +46,9 @@ enum LavaBoostSpells
 };
 
 // Lava Boost yells
-#define SAY_LAVA_AGGRO          "¾î¶»°Ô ³Í Á¤·ÉÀÇ ºĞ³ë°¡ ¹«¼·Áö¾Ê³ª?!"
-#define SAY_LAVA_SLAY           "Ãæ°İÆÄ!"
-#define SAY_LAVA_DEATH          "ÀÚ¿¬ÀÌ½Ã¿© ¿Ö ³¯ ¹ö¸®½Ã³ªÀÌ±î."
+#define SAY_LAVA_AGGRO          "ì–´ë–»ê²Œ ë„Œ ì •ë ¹ì˜ ë¶„ë…¸ê°€ ë¬´ì„­ì§€ì•Šë‚˜?!"
+#define SAY_LAVA_SLAY           "ì¶©ê²©íŒŒ!"
+#define SAY_LAVA_DEATH          "ìì—°ì´ì‹œì—¬ ì™œ ë‚  ë²„ë¦¬ì‹œë‚˜ì´ê¹Œ."
 #define SAY_LAVA_BLOOD          "Bloodlust!"
 
 enum QuelNagasSpells
@@ -63,10 +63,10 @@ enum QuelNagasSpells
 };
 
 // Quel'Nagas yells
-#define SAY_NAGAS_AGGRO         "½É¿¬ÀÇ °øÆ÷¸¦ º¸¿©ÁÖ¸¶!"
-#define SAY_NAGAS_SLAY          "³ª¿¡°Ô ÀúÇ×ÇÏ·Á´Â°ÍÀÌ³Ä!"
-#define SAY_NAGAS_DEATH         "¹ÏÀ»¼ö ¾ø´Ù. ¾î¶»°Ô..."
-#define SAY_NAGAS_SUMMON        "¸Ö·Ï!"
+#define SAY_NAGAS_AGGRO         "ì‹¬ì—°ì˜ ê³µí¬ë¥¼ ë³´ì—¬ì£¼ë§ˆ!"
+#define SAY_NAGAS_SLAY          "ë‚˜ì—ê²Œ ì €í•­í•˜ë ¤ëŠ”ê²ƒì´ëƒ!"
+#define SAY_NAGAS_DEATH         "ë¯¿ì„ìˆ˜ ì—†ë‹¤. ì–´ë–»ê²Œ..."
+#define SAY_NAGAS_SUMMON        "ë©€ë¡!"
 
 enum SylvanasSpells
 {
@@ -112,10 +112,10 @@ enum PerotharnSpells
 };
 
 // Perotharn yells
-#define SAY_PEROTHARN_AGGRO     "¼¼¹ÙÀÎ´Ô¿¡°Ô µå¸± ¼±¹°ÀÌ ÇÏ³ª ´Ã¾ù±º"
-#define SAY_PEROTHARN_SLAY      "°ğ ¿ì¸° ÇÏ³ª°¡ µÉ°ÍÀÌ´Ù."
-#define SAY_PEROTHARN_DEATH     "ÁË¼ÛÇÕ´Ï´Ù ½º½Â´Ô.."
-#define SAY_PEROTHARN_SOUL      "½º½Â´Ô! ¿©±â ¿µÈ¥ÀÌ ÀÖ½À´Ï´Ù."
+#define SAY_PEROTHARN_AGGRO     "ì„¸ë°”ì¸ë‹˜ì—ê²Œ ë“œë¦´ ì„ ë¬¼ì´ í•˜ë‚˜ ëŠ˜ì—‡êµ°"
+#define SAY_PEROTHARN_SLAY      "ê³§ ìš°ë¦° í•˜ë‚˜ê°€ ë ê²ƒì´ë‹¤."
+#define SAY_PEROTHARN_DEATH     "ì£„ì†¡í•©ë‹ˆë‹¤ ìŠ¤ìŠ¹ë‹˜.."
+#define SAY_PEROTHARN_SOUL      "ìŠ¤ìŠ¹ë‹˜! ì—¬ê¸° ì˜í˜¼ì´ ìˆìŠµë‹ˆë‹¤."
 
 enum UznamSpells
 {
@@ -129,10 +129,10 @@ enum UznamSpells
 };
 
 // Uznam yells
-#define SAY_UZNAM_AGGRO         "³¯ Áö±İ °Çµç°Ç°¡?"
-#define SAY_UZNAM_SLAY          "ÀÌ·±ÀÏÀÌ Á¤¸» °¡Ä¡°¡ ÀÖ´Ù°í »ı°¢ÇÏ³ª?."
-#define SAY_UZNAM_DEATH         "³­ ¶Ç´Ù½Ã ÀÏ¾î³ª´Ï¶ó..¶Ç...´Ù.."
-#define SAY_UZNAM_SPECIAL       "¾Æ~ ÇÇ°ïÇÏ°Ô ÇÏ´Â±¸¸¸!."
+#define SAY_UZNAM_AGGRO         "ë‚  ì§€ê¸ˆ ê±´ë“ ê±´ê°€?"
+#define SAY_UZNAM_SLAY          "ì´ëŸ°ì¼ì´ ì •ë§ ê°€ì¹˜ê°€ ìˆë‹¤ê³  ìƒê°í•˜ë‚˜?."
+#define SAY_UZNAM_DEATH         "ë‚œ ë˜ë‹¤ì‹œ ì¼ì–´ë‚˜ë‹ˆë¼..ë˜...ë‹¤.."
+#define SAY_UZNAM_SPECIAL       "ì•„~ í”¼ê³¤í•˜ê²Œ í•˜ëŠ”êµ¬ë§Œ!."
 #define EMOTE_WHIRL             "begins to cast Whirlwind!"
 
 
@@ -907,7 +907,7 @@ public:
 
 };
 
-#define SAY_WAR         "°æº¸ ¹ß·É!!   Ä§ÀÔÀÚ ¹ß»ı!! Á¦°Å!!"
+#define SAY_WAR         "ê²½ë³´ ë°œë ¹!!   ì¹¨ì…ì ë°œìƒ!! ì œê±°!!"
 class npc_lyn_def : public CreatureScript
 {
 public:
@@ -960,12 +960,12 @@ public:
 };
 	
 
-#define	SAY_AGGRO				"ÇÏÂúÀº °ÍµéÀÌ ÀÚ²Ù ±ÍÂú°Ô ÇÏ´Â±¸³ª! Á×À» ÁØºñ³ª ÇØ¶ó!"		//Your intervention has been a nuisance long enough! Prepare to perish...
-#define	SAY_KILL				"³Ê¹« ¾àÇÏ±º... °ËÀº¿ë±º´ÜÀº ¿µ¿øÇÏ´Ù!"		//Weak.. The twilight dragonflight is infinite!
-#define	SAY_DIE					"ÁÖÀÎ´Ô..´ç½ÅÀÌ.. ¿Ç¾Ò½À´Ï´Ù....¸ğµç °ÍÀº ... Àı...°ÆÁ¤....."		//The master was right... To be concerned... He will unleash devestation upon.. you.. all..
-#define	SAY_BERSERK				"ÃæºĞÈ÷ ´À²¸ºÁ¶ó! ¹«ÇÑÇÑ ÈûÀ». ±×¸®°í ³¡¾ø´Â °øÆ÷¸¦!"		// Enough.. The infinite dragonflight is unboundary in power! FEEL MY EXERTION!
-#define	SAY_CORRUPTINGBLIGHT	"³Ê¿¡°Ô ÁÖ¾îÁø ½Ã°£ÀÌ ³¡³ª°£´Ù."     //Watch as your own timeline becomes deteriorated!
-#define EMOTE_FROSTBOMB			"°æº¸! ÆÄ½ºÅ©¶õÀÌ ¾óÀ½ÆøÅºÀ» ½ÃÀüÇÕ´Ï´Ù."
+#define	SAY_AGGRO				"í•˜ì°®ì€ ê²ƒë“¤ì´ ìê¾¸ ê·€ì°®ê²Œ í•˜ëŠ”êµ¬ë‚˜! ì£½ì„ ì¤€ë¹„ë‚˜ í•´ë¼!"		//Your intervention has been a nuisance long enough! Prepare to perish...
+#define	SAY_KILL				"ë„ˆë¬´ ì•½í•˜êµ°... ê²€ì€ìš©êµ°ë‹¨ì€ ì˜ì›í•˜ë‹¤!"		//Weak.. The twilight dragonflight is infinite!
+#define	SAY_DIE					"ì£¼ì¸ë‹˜..ë‹¹ì‹ ì´.. ì˜³ì•˜ìŠµë‹ˆë‹¤....ëª¨ë“  ê²ƒì€ ... ì ˆ...ê±±ì •....."		//The master was right... To be concerned... He will unleash devestation upon.. you.. all..
+#define	SAY_BERSERK				"ì¶©ë¶„íˆ ëŠê»´ë´ë¼! ë¬´í•œí•œ í˜ì„. ê·¸ë¦¬ê³  ëì—†ëŠ” ê³µí¬ë¥¼!"		// Enough.. The infinite dragonflight is unboundary in power! FEEL MY EXERTION!
+#define	SAY_CORRUPTINGBLIGHT	"ë„ˆì—ê²Œ ì£¼ì–´ì§„ ì‹œê°„ì´ ëë‚˜ê°„ë‹¤."     //Watch as your own timeline becomes deteriorated!
+#define EMOTE_FROSTBOMB			"ê²½ë³´! íŒŒìŠ¤í¬ë€ì´ ì–¼ìŒí­íƒ„ì„ ì‹œì „í•©ë‹ˆë‹¤."
 
 enum
 {
@@ -1300,10 +1300,10 @@ public:
 };
 
 
-#define SAY_anna_AGGRO			"ÃÊ¸é¿¡ ÀÌ°Ç ³Ê¹« ÇÏ´Â°Å ¾Æ´Ï¾ß?"
-#define SAY_anna_SLAY			"¹Ì¾È..½Ç¼ö·Î Á×¿©¹ö·Ç³×?"
-#define SAY_anna_DEATH			"ÀÌ°ÍÀÌ ³¡ÀÌ¶ó°í »ı°¢Áö´Â ¸¶¶ó."
-#define SAY_anna_SPECIAL		"Æ÷°İÁØºñ!! "
+#define SAY_anna_AGGRO			"ì´ˆë©´ì— ì´ê±´ ë„ˆë¬´ í•˜ëŠ”ê±° ì•„ë‹ˆì•¼?"
+#define SAY_anna_SLAY			"ë¯¸ì•ˆ..ì‹¤ìˆ˜ë¡œ ì£½ì—¬ë²„ë ·ë„¤?"
+#define SAY_anna_DEATH			"ì´ê²ƒì´ ëì´ë¼ê³  ìƒê°ì§€ëŠ” ë§ˆë¼."
+#define SAY_anna_SPECIAL		"í¬ê²©ì¤€ë¹„!! "
 #define BLOODY				59682
 #define EVEA				46989
 #define EVEB				4086
@@ -1428,7 +1428,7 @@ public:
 						mirroredSoulTarget = pTarget->GetGUID();
 						DoCast(pTarget, MIRRED);
 					}
-					me->MonsterYell("³Í ³ª¿Í ÇÔ²² °¡´Â°Å´Ù!", LANG_UNIVERSAL, 0);
+					me->MonsterYell("ë„Œ ë‚˜ì™€ í•¨ê»˜ ê°€ëŠ”ê±°ë‹¤!", LANG_UNIVERSAL, 0);
 
 					mirred_timer = 37000;
 				} else mirred_timer -= uiDiff;
@@ -1457,7 +1457,7 @@ public:
 
 				if (death_timer <= uiDiff)
 				{
-					me->MonsterYell("´Ï³à¼®ÀÌ °¡Àå ¾àÇÏ±¸³ª! ÁÖ°Í!", LANG_UNIVERSAL, 0);
+					me->MonsterYell("ë‹ˆë…€ì„ì´ ê°€ì¥ ì•½í•˜êµ¬ë‚˜! ì£¼ê²ƒ!", LANG_UNIVERSAL, 0);
 					if (Unit *pTarget = SelectTarget(SELECT_TARGET_BOTTOMAGGRO,0))  
 						DoCast(pTarget, DEATHS);
 					death_timer = 37000;
@@ -1467,7 +1467,7 @@ public:
 			if (HealthBelowPct(35) && !phase)
 			{
 				phase=true;
-				me->MonsterYell("Æ÷°İ ÁØºñ!", LANG_UNIVERSAL, 0);
+				me->MonsterYell("í¬ê²© ì¤€ë¹„!", LANG_UNIVERSAL, 0);
 			}
 
             DoMeleeAttackIfReady();
@@ -1478,22 +1478,22 @@ public:
     };
 
 };
-// Ãæ°İÆÄ - 57728
-// È­¿°ÆøÇ³ - 66044
-// ±¤ÈÖÀÇ ¿À¶ó - 71953 HP È¸º¹ 3%¾¿
-// º°¶Ëº° - 53195
-// ¾ß¼ºÀÇ µ¹Áø- 45334
-// ½ÅÀÇ °İ³ë  - 57466
+// ì¶©ê²©íŒŒ - 57728
+// í™”ì—¼í­í’ - 66044
+// ê´‘íœ˜ì˜ ì˜¤ë¼ - 71953 HP íšŒë³µ 3%ì”©
+// ë³„ë˜¥ë³„ - 53195
+// ì•¼ì„±ì˜ ëŒì§„- 45334
+// ì‹ ì˜ ê²©ë…¸  - 57466
 
-// ¾îµÒÀÇ Çü»ó - 29406 
-// À½¿¡³ÊÁö - 46009
-// ¾îµÒ ºØ±« 63722
-// ¾îµÒÀÇ ¿À¶ó - 69491 ÁÖº¯¿¡ µ¥¹ÌÁö
+// ì–´ë‘ ì˜ í˜•ìƒ - 29406 
+// ìŒì—ë„ˆì§€ - 46009
+// ì–´ë‘  ë¶•ê´´ 63722
+// ì–´ë‘ ì˜ ì˜¤ë¼ - 69491 ì£¼ë³€ì— ë°ë¯¸ì§€
 
-#define SAY_reona_AGGRO			"¾ğÁ¦³ª Âù¶õÇÑ ºûÀÇ ÈûÀ»!"
-#define SAY_reona_SLAY			"ºûÀÌ ÇÔ²² ÇÏ±â¸¦."
-#define SAY_reona_DEATH			"¸¶....¸¶½ºÅÍ..."
-#define SAY_reona_SPECIAL		"³­...ÀÌ¹Ì  Á×¾î¹ö¸° »ç¶÷ÀÌ¿´±º¿ä..."
+#define SAY_reona_AGGRO			"ì–¸ì œë‚˜ ì°¬ë€í•œ ë¹›ì˜ í˜ì„!"
+#define SAY_reona_SLAY			"ë¹›ì´ í•¨ê»˜ í•˜ê¸°ë¥¼."
+#define SAY_reona_DEATH			"ë§ˆ....ë§ˆìŠ¤í„°..."
+#define SAY_reona_SPECIAL		"ë‚œ...ì´ë¯¸  ì£½ì–´ë²„ë¦° ì‚¬ëŒì´ì˜€êµ°ìš”..."
 
 #define SHOCK_WAVE			57728
 #define FIRE_STOM			66044
@@ -1541,7 +1541,7 @@ public:
 			dark_boom_timer = 30000;
 			Ex_timer = 15000;
 			Ex_number = 0;
-			//ÀÏ´Ü ¿©±â±îÁö
+			//ì¼ë‹¨ ì—¬ê¸°ê¹Œì§€
 			phase = 0;
 			DoCast(HOLY_AURA);
 			DoCastAOE(NEGATIVE_AURA, false);
@@ -1592,7 +1592,7 @@ public:
 					DoCast(pTarget,FIRE_STOM);
                 fire_stom_timer = 45070;
             } else fire_stom_timer -= uiDiff;            			
-			if(phase == 1) // ¿©±â±îÁö
+			if(phase == 1) // ì—¬ê¸°ê¹Œì§€
 			{
 				if (god_fury_timer <= uiDiff)
 				{
@@ -1600,7 +1600,7 @@ public:
 					{	
 						DoCast(pTarget,GOD_FURY);
 					}
-					me->MonsterYell("Á¦°Ô·Î ¸ğÀÌ¼¼¿ä", LANG_UNIVERSAL, 0);
+					me->MonsterYell("ì œê²Œë¡œ ëª¨ì´ì„¸ìš”", LANG_UNIVERSAL, 0);
 					god_fury_timer = 37000;
 				} else god_fury_timer -= uiDiff;
 				
@@ -1608,7 +1608,7 @@ public:
 				{
 					DoCast(STAR_POLL);
 					star_poll_timer= 47000;
-					me->MonsterYell("»õº®ÀÌ ¹à¾Ò½À´Ï´Ù", LANG_UNIVERSAL, 0);
+					me->MonsterYell("ìƒˆë²½ì´ ë°ì•˜ìŠµë‹ˆë‹¤", LANG_UNIVERSAL, 0);
 				} else star_poll_timer-= uiDiff;
 			}
 			else if(phase == 2)
@@ -1632,12 +1632,12 @@ public:
 			if (HealthBelowPct(90) && phase < 1)
 			{
 				phase = 1;
-				me->MonsterYell("´ÙÀ½¹ø¿¡´Â...ÈìÁıÀÌ¶óµµ ³»º¸½ÃÁÒ!", LANG_UNIVERSAL, 0);
+				me->MonsterYell("ë‹¤ìŒë²ˆì—ëŠ”...í ì§‘ì´ë¼ë„ ë‚´ë³´ì‹œì£ !", LANG_UNIVERSAL, 0);
 			}
 			else if (HealthBelowPct(30) && phase < 2)
 			{
 				phase = 2;
-				me->MonsterYell("ÀÌÅ¬¸³½º!", LANG_UNIVERSAL, 0);
+				me->MonsterYell("ì´í´ë¦½ìŠ¤!", LANG_UNIVERSAL, 0);
 				DoCastAOE(DARKNISS, true);
 				DoCastAOE(NEGATIVE_AURA, true);
 				DoCastAOE(DARK_AURA, true);
