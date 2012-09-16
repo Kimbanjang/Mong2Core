@@ -1388,21 +1388,19 @@ void World::SetInitialWorldSettings()
     sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Loading Item set names...");                // must be after LoadItemPrototypes
     sObjectMgr->LoadItemSetNames();
 
-<<<<<<< .mine
+//<<<<<<< .mine
     sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Loading Creature Model Based Info Data...");
 
 
 
 
 
-=======
+//=======
     // Custom
-    sLog->outString("Deleting non-existing transmogrification entries...");
+    sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Deleting non-existing transmogrification entries...");
     CharacterDatabase.Execute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
-    sLog->outString();
-
-    sLog->outString("Loading Creature Model Based Info Data...");
->>>>>>> .theirs
+    sLog->outInfo(LOG_FILTER_SERVER_LOADING,"Loading Creature Model Based Info Data...");
+//>>>>>>> .theirs
     sObjectMgr->LoadCreatureModelInfo();
 
     sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Loading Equipment templates...");

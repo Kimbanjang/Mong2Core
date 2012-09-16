@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -7163,7 +7163,7 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
 			if(v_honor == 0)
 				k_honor = 0;
 			else
-				k_honor = v_honor/10;
+				k_honor = v_honor * 0.1;
 
             if (v_level <= k_grey)
                 return false;

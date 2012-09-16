@@ -1286,10 +1286,10 @@ void AddCustomScripts()
 	AddSC_npcs_mini_boss();
 	AddSC_npc_lottery();
 
-<<<<<<< .mine
-
-=======
+//<<<<<<< .mine
+//
+//=======
     AddSC_NPC_Transmogrify();
->>>>>>> .theirs
+//>>>>>>> .theirs
 #endif
 }
