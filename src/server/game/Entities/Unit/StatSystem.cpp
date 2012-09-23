@@ -187,7 +187,7 @@ void Player::UpdateResistances(uint32 school)
 {
     if (school > SPELL_SCHOOL_NORMAL)
     {
-        float spirit = GetStat(STAT_SPIRIT) * 0.1;
+        float spirit = GetStat(STAT_SPIRIT) * 0.1f;
 		float value  = GetTotalAuraModValue(UnitMods(UNIT_MOD_RESISTANCE_START + school)) + spirit ;
         SetResistance(SpellSchools(school), int32(value));
 

@@ -2503,8 +2503,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo* target)
                 caster->ToPlayer()->CastItemCombatSpell(unitTarget, m_attackType, procVictim, procEx);
         }
 
-        caster->DealSpellDamage(&damageInfo, true);
-
         // Improved Devouring Plague
         if (m_spellInfo->Id == 63675 && damageInfo.damage && caster->isAlive())
         {
