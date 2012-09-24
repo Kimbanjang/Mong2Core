@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 3.2
 Transmogrification 3.3.5a - Gossip Menu
 By Rochet2
@@ -46,8 +46,8 @@ public:
 					if(char* SlotName = GetSlotName(Slot))
 						pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, SlotName, EQUIPMENT_SLOT_END, Slot);
 		}
-		pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "¸ğµç Çü»óº¯È­ Á¦°Å", EQUIPMENT_SLOT_END+2, 0, "¸ğµç Çü»óº¯È­¸¦ Á¦°Å ÇÏ½Ã°Ù½À´Ï±î?", 0, false);
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "¸Ş´º °»½Å", EQUIPMENT_SLOT_END+1, 0);
+		pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "ëª¨ë“  í˜•ìƒë³€í™” ì œê±°", EQUIPMENT_SLOT_END+2, 0, "ëª¨ë“  í˜•ìƒë³€í™”ë¥¼ ì œê±° í•˜ì‹œê²ŸìŠµë‹ˆê¹Œ?", 0, false);
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ë©”ë‰´ ê°±ì‹ ", EQUIPMENT_SLOT_END+1, 0);
 		pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, pUnit->GetGUID());         
 		return true;
 	}
@@ -76,7 +76,7 @@ public:
 								{
 									limit++;
 									Items[GUID][Display] = pItem;
-									pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, pItem->GetTemplate()->Name1, uiAction, Display, "Çü»óº¯È­¸¦ »ç¿ëÇÏ°ÔµÇ¸é ±Í¼ÓµÇ¾î °Å·¡ ¹× È¯ºÒÀÌ ºÒ°¡´É ÇÕ´Ï´Ù.\n°è¼Ó ÁøÇà ÇÏ½Ã°Ù½À´Ï±î?\n\n"+ pItem->GetTemplate()->Name1, GetSellPrice(OLD), false);
+									pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, pItem->GetTemplate()->Name1, uiAction, Display, "í˜•ìƒë³€í™”ë¥¼ ì‚¬ìš©í•˜ê²Œë˜ë©´ ê·€ì†ë˜ì–´ ê±°ë˜ ë° í™˜ë¶ˆì´ ë¶ˆê°€ëŠ¥ í•©ë‹ˆë‹¤.\nê³„ì† ì§„í–‰ í•˜ì‹œê²ŸìŠµë‹ˆê¹Œ?\n\n"+ pItem->GetTemplate()->Name1, GetSellPrice(OLD), false);
 								}
 						}
 					}
@@ -96,14 +96,14 @@ public:
 										{
 											limit++;
 											Items[GUID][Display] = pItem;
-											pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, pItem->GetTemplate()->Name1, uiAction, Display, "Çü»óº¯È­¸¦ »ç¿ëÇÏ°ÔµÇ¸é ±Í¼ÓµÇ¾î °Å·¡ ¹× È¯ºÒÀÌ ºÒ°¡´É ÇÕ´Ï´Ù.\n°è¼Ó ÁøÇà ÇÏ½Ã°Ù½À´Ï±î?\n\n"+ pItem->GetTemplate()->Name1, GetSellPrice(OLD), false);
+											pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, pItem->GetTemplate()->Name1, uiAction, Display, "í˜•ìƒë³€í™”ë¥¼ ì‚¬ìš©í•˜ê²Œë˜ë©´ ê·€ì†ë˜ì–´ ê±°ë˜ ë° í™˜ë¶ˆì´ ë¶ˆê°€ëŠ¥ í•©ë‹ˆë‹¤.\nê³„ì† ì§„í–‰ í•˜ì‹œê²ŸìŠµë‹ˆê¹Œ?\n\n"+ pItem->GetTemplate()->Name1, GetSellPrice(OLD), false);
 										}
 								}
 							}
 					}
 
-					pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "Çü»ó º¯È­ Á¦°Å", EQUIPMENT_SLOT_END+3, uiAction, "Çü»óº¯È­ Á¦°Å "+(std::string)GetSlotName(uiAction)+"?", 0, false);
-					pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "µÚ·Î..", EQUIPMENT_SLOT_END+1, 0);
+					pPlayer->ADD_GOSSIP_ITEM_EXTENDED(GOSSIP_ICON_INTERACT_1, "í˜•ìƒ ë³€í™” ì œê±°", EQUIPMENT_SLOT_END+3, uiAction, "í˜•ìƒë³€í™” ì œê±° "+(std::string)GetSlotName(uiAction)+"?", 0, false);
+					pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ë’¤ë¡œ..", EQUIPMENT_SLOT_END+1, 0);
 					pPlayer->SEND_GOSSIP_MENU(DEFAULT_GOSSIP_MESSAGE, pUnit->GetGUID());
 				}
 				else
@@ -125,11 +125,11 @@ public:
 					}
 					if(removed)
 					{
-						pPlayer->GetSession()->SendAreaTriggerMessage("Âø¿ëÁßÀÎ ¾ÆÀÌÅÛÀÇ ¸ğµç Çü»óº¯È­ Á¦°Å");
+						pPlayer->GetSession()->SendAreaTriggerMessage("ì°©ìš©ì¤‘ì¸ ì•„ì´í…œì˜ ëª¨ë“  í˜•ìƒë³€í™” ì œê±°");
 						pPlayer->PlayDirectSound(3337);
 					}
 					else
-						pPlayer->GetSession()->SendNotification("°¡Áö°íÀÖ´Â ¸ğµç ¾ÆÀÌÅÛÀÇ Çü»óº¯È­ Á¦°Å");
+						pPlayer->GetSession()->SendNotification("ê°€ì§€ê³ ìˆëŠ” ëª¨ë“  ì•„ì´í…œì˜ í˜•ìƒë³€í™” ì œê±°");
 					OnGossipHello(pPlayer, pUnit);
 			} break;
 		case EQUIPMENT_SLOT_END+3: // Remove Transmogrification from single item
@@ -138,11 +138,11 @@ public:
 				{
 					if(RemoveDisplay(pItem))
 					{
-						pPlayer->GetSession()->SendAreaTriggerMessage("[ %s ] Çü»óº¯È­ Á¦°Å", GetSlotName(uiAction));
+						pPlayer->GetSession()->SendAreaTriggerMessage("[ %s ] í˜•ìƒë³€í™” ì œê±°", GetSlotName(uiAction));
 						pPlayer->PlayDirectSound(3337);
 					}
 					else
-						pPlayer->GetSession()->SendNotification("[ %s ]ÀÇ ÇØ´ç Çü»óº¯È­¸¦ Á¦°ÅÇÒ¼ö ¾ø½À´Ï´Ù.", GetSlotName(uiAction));
+						pPlayer->GetSession()->SendNotification("[ %s ]ì˜ í•´ë‹¹ í˜•ìƒë³€í™”ë¥¼ ì œê±°í• ìˆ˜ ì—†ìŠµë‹ˆë‹¤.", GetSlotName(uiAction));
 					pPlayer->SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (uiAction * 2), pItem->GetEntry());
 				}
 				OnGossipSelect(pPlayer, pUnit, EQUIPMENT_SLOT_END, uiAction);
@@ -166,16 +166,16 @@ public:
 							// pPlayer->SetVisibleItemSlot(sender, OLD); // No need to use this, useless checking
 							pPlayer->UpdateUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (sender * 2), FakeEntry); // use this instead
 							pPlayer->PlayDirectSound(3337);
-							pPlayer->GetSession()->SendAreaTriggerMessage("[ %s ] Çü»óº¯È¯¿¡ ¼º°øÇÏ¿´½À´Ï´Ù.!!", GetSlotName(sender));
+							pPlayer->GetSession()->SendAreaTriggerMessage("[ %s ] í˜•ìƒë³€í™˜ì— ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤.!!", GetSlotName(sender));
 						}
 						else
-							pPlayer->GetSession()->SendNotification("ÇØ´ç¾ÆÀÌÅÛÀº º¯È¯ ÇÒ ¼ö ¾ø½À´Ï´Ù.");
+							pPlayer->GetSession()->SendNotification("í•´ë‹¹ì•„ì´í…œì€ ë³€í™˜ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
 					}
 					else
-						pPlayer->GetSession()->SendNotification("¾ÆÀÌÅÛÀÌ ¼±ÅÃµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+						pPlayer->GetSession()->SendNotification("ì•„ì´í…œì´ ì„ íƒë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
 				}
 				else
-					pPlayer->GetSession()->SendNotification("¾ÆÀÌÅÛÀ» Âø¿ëÇØÁÖ¼¼¿ä");
+					pPlayer->GetSession()->SendNotification("ì•„ì´í…œì„ ì°©ìš©í•´ì£¼ì„¸ìš”");
 				Items[GUID].clear();
 				OnGossipSelect(pPlayer, pUnit, EQUIPMENT_SLOT_END, sender);
 			} break;
