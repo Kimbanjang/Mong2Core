@@ -7139,6 +7139,8 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
 
     // Promote to float for calculations
     float honor_f = (float)honor;
+	uint32 k_honor;
+	int32 m_honor;
 
     if (honor_f <= 0)
     {
@@ -7156,14 +7158,13 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
-            uint8 v_level = victim->getLevel();
-			uint32 v_honor = victim->GetHonorPoints();
-			uint32 k_honor;
+            uint8 v_level = uVictim->getLevel();
+			uint32 v_honor = uVictim->GetHonorPoints();
 
-			if(v_honor == 0)
+			if(v_honor < 100)
 				k_honor = 0;
 			else
-				k_honor = v_honor * 0.1;
+				k_honor = v_honor * 0.1f;
 
             if (v_level <= k_grey)
                 return false;
@@ -7189,13 +7190,8 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
 
-            honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey) + k_honor);
-			uint32 m_honor = v_honor - k_honor;
-			
-			if(0 > m_honor)
-				m_honor = 0;
-			
-			victim->SetHonorPoints(m_honor);
+            honor_f = ceil(k_honor + Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+			m_honor = int32(-1 * k_honor);			
 
 
             // count the number of playerkills in one day
@@ -7221,7 +7217,10 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
     if (uVictim != NULL)
     {
         if (groupsize > 1)
+		{
             honor_f /= groupsize;
+			m_honor /= groupsize;
+		}
 
         // apply honor multiplier from aura (not stacking-get highest)
         AddPctN(honor_f, GetMaxPositiveAuraModifier(SPELL_AURA_MOD_HONOR_GAIN_PCT));
@@ -7244,6 +7243,8 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
 
     // add honor points
     ModifyHonorPoints(honor);
+	// minus honor points
+	uVictim->ModifyHonorPoints(m_honor);
 
     ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
 
