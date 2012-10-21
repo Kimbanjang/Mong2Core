@@ -711,7 +711,7 @@ void Map::PlayerRelocation(Player* player, float x, float y, float z, float orie
 
     player->Relocate(x, y, z, orientation);
     if (player->IsVehicle())
-        player->GetVehicleKit()->RelocatePassengers(x, y, z, orientation);
+        player->GetVehicleKit()->RelocatePassengers();
 
     if (old_cell.DiffGrid(new_cell) || old_cell.DiffCell(new_cell))
     {
@@ -757,7 +757,7 @@ void Map::CreatureRelocation(Creature* creature, float x, float y, float z, floa
     {
         creature->Relocate(x, y, z, ang);
         if (creature->IsVehicle())
-            creature->GetVehicleKit()->RelocatePassengers(x, y, z, ang);
+            creature->GetVehicleKit()->RelocatePassengers();
         creature->UpdateObjectVisibility(false);
         RemoveCreatureFromMoveList(creature);
     }
@@ -2415,7 +2415,7 @@ bool InstanceMap::AddPlayerToMap(Player* player)
                 {
                     // solo saves should be reset when entering a group
                     InstanceGroupBind* groupBind = group->GetBoundInstance(this);
-                    if (playerBind)
+                    if (playerBind && playerBind->save != mapSave)
                     {
                         sLog->outError(LOG_FILTER_MAPS, "InstanceMap::Add: player %s(%d) is being put into instance %d, %d, %d, %d, %d, %d but he is in group %d and is bound to instance %d, %d, %d, %d, %d, %d!", player->GetName(), player->GetGUIDLow(), mapSave->GetMapId(), mapSave->GetInstanceId(), mapSave->GetDifficulty(), mapSave->GetPlayerCount(), mapSave->GetGroupCount(), mapSave->CanReset(), GUID_LOPART(group->GetLeaderGUID()), playerBind->save->GetMapId(), playerBind->save->GetInstanceId(), playerBind->save->GetDifficulty(), playerBind->save->GetPlayerCount(), playerBind->save->GetGroupCount(), playerBind->save->CanReset());
                         if (groupBind)
@@ -2468,8 +2468,8 @@ bool InstanceMap::AddPlayerToMap(Player* player)
 
             if (group && group->isLFGGroup())
                 if (uint32 dungeonId = sLFGMgr->GetDungeon(group->GetGUID(), true))
-                    if (LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(dungeonId))
-                        if (LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*(sLFGMgr->GetSelectedDungeons(player->GetGUID()).begin())))
+                    if (LFGDungeonData const* dungeon = sLFGMgr->GetLFGDungeon(dungeonId))
+                        if (LFGDungeonData const* randomDungeon = sLFGMgr->GetLFGDungeon(*(sLFGMgr->GetSelectedDungeons(player->GetGUID()).begin())))
                             if (uint32(dungeon->map) == GetId() && dungeon->difficulty == uint32(GetDifficulty()) && randomDungeon->type == uint32(LFG_TYPE_RANDOM))
                                 player->CastSpell(player, LFG_SPELL_LUCK_OF_THE_DRAW, true);
         }

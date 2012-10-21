@@ -463,7 +463,7 @@ void Battlefield::SendWarningToAllInZone(uint32 entry)
     if (Unit* unit = sObjectAccessor->FindUnit(StalkerGuid))
         if (Creature* stalker = unit->ToCreature())
             // FIXME: replaced CHAT_TYPE_END with CHAT_MSG_BG_SYSTEM_NEUTRAL to fix compile, it's a guessed change :/
-            sCreatureTextMgr->SendChat(stalker, (uint8) entry, NULL, CHAT_MSG_BG_SYSTEM_NEUTRAL, LANG_ADDON, TEXT_RANGE_ZONE);
+            sCreatureTextMgr->SendChat(stalker, (uint8) entry, 0, CHAT_MSG_BG_SYSTEM_NEUTRAL, LANG_ADDON, TEXT_RANGE_ZONE);
 }
 
 /*void Battlefield::SendWarningToAllInWar(int32 entry,...)
@@ -676,8 +676,8 @@ BfGraveyard::BfGraveyard(Battlefield* battlefield)
     m_Bf = battlefield;
     m_GraveyardId = 0;
     m_ControlTeam = TEAM_NEUTRAL;
-    m_SpiritGuide[0] = NULL;
-    m_SpiritGuide[1] = NULL;
+    m_SpiritGuide[0] = 0;
+    m_SpiritGuide[1] = 0;
     m_ResurrectQueue.clear();
 }
 
@@ -999,7 +999,7 @@ bool BfCapturePoint::Update(uint32 diff)
 
     // get the difference of numbers
     float fact_diff = ((float) m_activePlayers[0].size() - (float) m_activePlayers[1].size()) * diff / BATTLEFIELD_OBJECTIVE_UPDATE_INTERVAL;
-    if (!fact_diff)
+    if (G3D::fuzzyEq(fact_diff, 0.0f))
         return false;
 
     uint32 Challenger = 0;
@@ -1069,7 +1069,7 @@ bool BfCapturePoint::Update(uint32 diff)
         m_team = TEAM_NEUTRAL;
     }
 
-    if (m_value != oldValue)
+    if (G3D::fuzzyNe(m_value, oldValue))
         SendChangePhase();
 
     if (m_OldState != m_State)

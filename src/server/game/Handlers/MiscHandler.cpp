@@ -862,8 +862,8 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recv_data)
 
         // 2PI = 360°, keep in mind that ingame orientation is counter-clockwise
         double rotation = 2 * M_PI - atEntry->box_orientation;
-        double sinVal = sin(rotation);
-        double cosVal = cos(rotation);
+        double sinVal = std::sin(rotation);
+        double cosVal = std::cos(rotation);
 
         float playerBoxDistX = player->GetPositionX() - atEntry->x;
         float playerBoxDistY = player->GetPositionY() - atEntry->y;
@@ -1662,7 +1662,7 @@ void WorldSession::HandleQueryInspectAchievements(WorldPacket & recv_data)
     if (!player)
         return;
 
-    player->GetAchievementMgr().SendRespondInspectAchievements(_player);
+    player->SendRespondInspectAchievements(_player);
 }
 
 void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket& /*recv_data*/)
@@ -1741,7 +1741,7 @@ void WorldSession::HandleHearthAndResurrect(WorldPacket& /*recv_data*/)
     if (_player->isInFlight())
         return;
 
-    if(Battlefield* bf = sBattlefieldMgr->GetBattlefieldToZoneId(_player->GetZoneId()))
+    if (/*Battlefield* bf = */sBattlefieldMgr->GetBattlefieldToZoneId(_player->GetZoneId()))
     {
         // bf->PlayerAskToLeave(_player); FIXME
         return;

@@ -29,13 +29,13 @@ class ChatHandler;
 enum GMTicketSystemStatus
 {
     GMTICKET_QUEUE_STATUS_DISABLED = 0,
-    GMTICKET_QUEUE_STATUS_ENABLED = 1,
+    GMTICKET_QUEUE_STATUS_ENABLED  = 1
 };
 
 enum GMTicketStatus
 {
     GMTICKET_STATUS_HASTEXT                      = 0x06,
-    GMTICKET_STATUS_DEFAULT                      = 0x0A,
+    GMTICKET_STATUS_DEFAULT                      = 0x0A
 };
 
 enum GMTicketResponse
@@ -45,7 +45,7 @@ enum GMTicketResponse
     GMTICKET_RESPONSE_CREATE_ERROR                = 3,
     GMTICKET_RESPONSE_UPDATE_SUCCESS              = 4,
     GMTICKET_RESPONSE_UPDATE_ERROR                = 5,
-    GMTICKET_RESPONSE_TICKET_DELETED              = 9,
+    GMTICKET_RESPONSE_TICKET_DELETED              = 9
 };
 
 // from Blizzard LUA:
@@ -58,14 +58,14 @@ enum GMTicketEscalationStatus
     TICKET_UNASSIGNED                             = 0,
     TICKET_ASSIGNED                               = 1,
     TICKET_IN_ESCALATION_QUEUE                    = 2,
-    TICKET_ESCALATED_ASSIGNED                     = 3,
+    TICKET_ESCALATED_ASSIGNED                     = 3
 };
 
 // from blizzard lua
 enum GMTicketOpenedByGMStatus
 {
     GMTICKET_OPENEDBYGM_STATUS_NOT_OPENED = 0,      // ticket has never been opened by a gm
-    GMTICKET_OPENEDBYGM_STATUS_OPENED = 1,          // ticket has been opened by a gm
+    GMTICKET_OPENEDBYGM_STATUS_OPENED     = 1       // ticket has been opened by a gm
 };
 
 enum LagReportType
@@ -82,7 +82,7 @@ class GmTicket
 {
 public:
     GmTicket();
-    explicit GmTicket(Player* player, WorldPacket& recv_data);
+    explicit GmTicket(Player* player, WorldPacket& recvData);
     ~GmTicket();
 
     bool IsClosed() const { return _closedBy; }
@@ -142,6 +142,9 @@ public:
     std::string FormatMessageString(ChatHandler& handler, bool detailed = false) const;
     std::string FormatMessageString(ChatHandler& handler, const char* szClosedName, const char* szAssignedToName, const char* szUnassignedName, const char* szDeletedName) const;
 
+    void SetChatLog(std::list<uint32> time, std::string const& log);
+    std::string GetChatLog() const { return _chatLog; }
+
 private:
     uint32 _id;
     uint64 _playerGuid;
@@ -160,7 +163,9 @@ private:
     GMTicketEscalationStatus _escalatedStatus;
     bool _viewed;
     bool _needResponse; // TODO: find out the use of this, and then store it in DB
+    bool _haveTicket;
     std::string _response;
+    std::string _chatLog; // No need to store in db, will be refreshed every session client side
 };
 typedef std::map<uint32, GmTicket*> GmTicketList;
 
