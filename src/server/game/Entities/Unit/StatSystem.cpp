@@ -1194,11 +1194,7 @@ void Guardian::UpdateResistances(uint32 school)
 
         // hunter and warlock pets gain 40% of owner's resistance
         if (isPet())
-<<<<<<< HEAD
-            value += float(CalculatePctN(m_owner->GetResistance(SpellSchools(school)), 40)) + 15 ;
-=======
             value += float(CalculatePct(m_owner->GetResistance(SpellSchools(school)), 40));
->>>>>>> TC/master
 
         SetResistance(SpellSchools(school), int32(value));
     }

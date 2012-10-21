@@ -464,21 +464,13 @@ enum BaseModType
 
 enum DeathState
 {
-<<<<<<< HEAD
-    ALIVE       = 0,
-    JUST_DIED   = 1,
-    CORPSE      = 2,
-    DEAD        = 3,
-    JUST_RESPAWNED = 4,
-    // DEAD_FALLING= 5,
-	GHOULED     = 6
-=======
     ALIVE          = 0,
     JUST_DIED      = 1,
     CORPSE         = 2,
     DEAD           = 3,
     JUST_RESPAWNED = 4
->>>>>>> TC/master
+    // DEAD_FALLING= 5,
+	GHOULED		   = 6
 };
 
 enum UnitState

@@ -7407,17 +7407,10 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     {
 						if (SpellInfo const* totemSpell = sSpellMgr->GetSpellInfo(totem->m_spells[0]))
                         {
-<<<<<<< HEAD
-                            int32 bp0 = CalculatePctN(totemSpell->Effects[EFFECT_0].CalcValue(), triggerAmount); 
-                            int32 bp1 = CalculatePctN(totemSpell->Effects[EFFECT_1].CalcValue(), triggerAmount); 
-                            CastCustomSpell(this, 63283, &bp0, &bp1, NULL, true); 
-                            return true; 
-=======
                             int32 bp0 = CalculatePct(totemSpell->Effects[EFFECT_0].CalcValue(), triggerAmount);
                             int32 bp1 = CalculatePct(totemSpell->Effects[EFFECT_1].CalcValue(), triggerAmount);
                             CastCustomSpell(this, 63283, &bp0, &bp1, NULL, true);
                             return true;
->>>>>>> TC/master
                         }
                     }
                     return false;

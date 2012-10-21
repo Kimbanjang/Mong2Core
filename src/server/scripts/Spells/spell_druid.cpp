@@ -732,11 +732,8 @@ class spell_dru_t10_restoration_4p_bonus : public SpellScriptLoader
 
 void AddSC_druid_spell_scripts()
 {
-<<<<<<< HEAD
     new spell_dru_berserk();
-=======
     new spell_dru_enrage();
->>>>>>> TC/master
     new spell_dru_glyph_of_starfire();
     new spell_dru_insect_swarm();
     new spell_dru_lifebloom();

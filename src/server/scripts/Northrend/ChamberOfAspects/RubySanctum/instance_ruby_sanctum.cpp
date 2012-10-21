@@ -242,40 +242,25 @@ class instance_ruby_sanctum : public InstanceMapScript
                     {
                         if (GetBossState(DATA_SAVIANA_RAGEFIRE) == DONE && GetBossState(DATA_BALTHARUS_THE_WARBORN) == DONE)
                             HandleGameObject(FlameWallsGUID, state != IN_PROGRESS);
-<<<<<<< HEAD
-                        if (state == DONE)
-=======
 
                         // Not called at instance loading, no big deal.
                         if (state == DONE && GetBossState(DATA_HALION) != DONE)
->>>>>>> TC/master
                             if (Creature* halionController = instance->SummonCreature(NPC_HALION_CONTROLLER, HalionControllerSpawnPos))
                                 halionController->AI()->DoAction(ACTION_INTRO_HALION);
                         break;
                     }
                     case DATA_HALION:
                     {
-<<<<<<< HEAD
-                        if (state == IN_PROGRESS)
-                            break;
-
-=======
->>>>>>> TC/master
                         DoUpdateWorldState(WORLDSTATE_CORPOREALITY_TOGGLE, 0);
                         DoUpdateWorldState(WORLDSTATE_CORPOREALITY_TWILIGHT, 0);
                         DoUpdateWorldState(WORLDSTATE_CORPOREALITY_MATERIAL, 0);
 
-<<<<<<< HEAD
-                        HandleGameObject(FlameRingGUID, true);
-                        HandleGameObject(TwilightFlameRingGUID, true);
-=======
                         // Reopen rings on wipe or success
                         if (state == DONE || state == FAIL)
                         {
                             HandleGameObject(FlameRingGUID, true);
                             HandleGameObject(TwilightFlameRingGUID, true);
                         }
->>>>>>> TC/master
                         break;
                     }
                     default:
