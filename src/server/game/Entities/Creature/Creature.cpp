@@ -1525,7 +1525,7 @@ void Creature::setDeathState(DeathState s)
 
     if (s == JUST_DIED)
     {
-        if (GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_RESPAWN_IGNORE)
+        if (GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_DUNGEON_BOSS)
         {
             m_corpseRemoveTime = time(NULL) + 10;
             m_respawnTime = time(NULL) + m_respawnDelay + 10;

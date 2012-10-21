@@ -5136,7 +5136,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 63305:
                 {
                     // return 60% damage to the attacker
-                    basepoints0 = int32(CalculatePctU(damage, 60));
+                    basepoints0 = int32(CalculatePct(damage, 60));
                     triggered_spell_id = 64039;
                     break;
                 }
@@ -7042,7 +7042,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 case 54936:
                 {
                     triggered_spell_id = 54957;
-                    basepoints0 = CalculatePctN(int32(damage), triggerAmount);
+                    basepoints0 = CalculatePct(int32(damage), triggerAmount);
                     break;
                 }
                 // Glyph of Holy Light
