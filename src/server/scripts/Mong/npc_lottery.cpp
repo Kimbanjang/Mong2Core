@@ -190,7 +190,7 @@ public:
 						MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // 보내는 사람이 GM으로 등록
 						Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid 값을 넣으면 케릭터를 찾을수있다.
 						SQLTransaction trans = CharacterDatabase.BeginTransaction();   //메일관련 SQL을 등록
-						MailDraft draft("몽섭이벤트","당첨을 축하드립니다");
+						MailDraft draft("시간은 금이라구, 친구","당신이 구입 물품을 배송합니다");
 	                     
 						 //Item* Item::CreateItem(uint32 item, uint32 count, Player const* player)   
 				        
