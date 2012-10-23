@@ -7155,7 +7155,6 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
 
     // Promote to float for calculations
     float honor_f = (float)honor;
-	uint32 k_honor;
 	int32 m_honor;
 
     if (honor_f <= 0)
@@ -7174,8 +7173,9 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
-            uint8 v_level = uVictim->getLevel();
-			uint32 v_honor = uVictim->GetHonorPoints();
+            uint8 v_level = victim->getLevel();
+			uint32 v_honor = victim->GetHonorPoints();
+			uint32 k_honor;
 
 			if(v_honor < 100)
 				k_honor = 0;
@@ -7260,7 +7260,8 @@ bool Player::RewardHonor(Unit* uVictim, uint32 groupsize, int32 honor, bool pvpt
     // add honor points
     ModifyHonorPoints(honor);
 	// minus honor points
-	uVictim->ModifyHonorPoints(m_honor);
+	Player* victim = uVictim->ToPlayer();
+    victim->ModifyHonorPoints(m_honor);
 
     ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
 
