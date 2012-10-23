@@ -62,14 +62,6 @@ INSERT INTO `spell_proc_event` VALUES (51459,0,15,0,0,0,4,0,0,100,0),(51462,0,15
 # 사제 
 
 # 성기사 
-/*
--- 정방 수정
-DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_pal_righteous_defense';
-INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES (31789,'spell_pal_righteous_defense');
--- T8 신성 2셋 보너스 효과 구현
-DELETE FROM `spell_bonus_data` WHERE `entry`='64891';
-INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`, `ap_dot_bonus`, `comments`) VALUES ('64891','0','0','0','0','Paladin T8 Holy 2P Bonus');
-*/
 
 # 흑마법사
 -- 임프 마나

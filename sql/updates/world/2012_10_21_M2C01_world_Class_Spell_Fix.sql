@@ -61,6 +61,12 @@ UPDATE `spell_group` SET `spell_id`='68066' WHERE `id`='1091' and `spell_id`='47
 UPDATE `spell_group` SET `spell_id`='20912' WHERE `id`='1092' and `spell_id`='20911';
 -- 성전사의 심장 구현
 UPDATE `spell_proc_event` SET `procFlags`='272', `CustomChance`='100' WHERE `entry` IN (53695,53696,20335,20336,20337);
+-- 정방 수정
+DELETE FROM `spell_script_names` WHERE `ScriptName`='spell_pal_righteous_defense';
+INSERT INTO `spell_script_names` (`spell_id`,`ScriptName`) VALUES (31789,'spell_pal_righteous_defense');
+-- T8 신성 2셋 보너스 효과 구현
+DELETE FROM `spell_bonus_data` WHERE `entry`='64891';
+INSERT INTO `spell_bonus_data` (`entry`, `direct_bonus`, `dot_bonus`, `ap_bonus`, `ap_dot_bonus`, `comments`) VALUES ('64891','0','0','0','0','Paladin T8 Holy 2P Bonus');
 
 # 사제 
 -- 불행 툴팁의 스킬에만 적용 되도록 수정
