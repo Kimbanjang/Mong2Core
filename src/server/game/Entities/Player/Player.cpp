@@ -7171,15 +7171,8 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
         if (Player* plrVictim = victim->ToPlayer())
         {
-<<<<<<< HEAD
-            Player* victim = uVictim->ToPlayer();
-
-            //if (GetTeam() == victim->GetTeam() && !sWorld->IsFFAPvPRealm())
+            //if (GetTeam() == plrVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
             //    return false;
-=======
-            if (GetTeam() == plrVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
-                return false;
->>>>>>> TC/master
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
