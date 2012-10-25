@@ -45,11 +45,8 @@ if(SCRIPTS)
   include(Kalimdor/CMakeLists.txt)
   include(Outland/CMakeLists.txt)
   include(Northrend/CMakeLists.txt)
-<<<<<<< HEAD
-  include(Mong/CMakeLists.txt)
-=======
   include(Events/CMakeLists.txt)
->>>>>>> TC/master
+  include(Mong/CMakeLists.txt)
 endif()
 
 message(STATUS "SCRIPT PREPARATION COMPLETE")
