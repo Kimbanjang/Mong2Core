@@ -131,3 +131,4 @@ UPDATE `creature_loot_template` SET `maxcount`=3 WHERE `entry`=35616 AND `item`=
 ##### 루비 성소 #####
 -- 보스 젠시간 조정
 -- UPDATE `creature` SET `spawntimesecs`='604800' WHERE `id` IN (15348,15341,15340,15370,15369,15339,14517,14507,14510,14509,14515,14834,11382,11380);
+
