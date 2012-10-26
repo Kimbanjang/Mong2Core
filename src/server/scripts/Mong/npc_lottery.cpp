@@ -33,6 +33,7 @@ EndScriptData */
 #define TICKET_COST                 5000000
 #define EVENT_BLOODYLOTTO           132
 
+/*
 class npc_lotto : public CreatureScript
 {
 public:
@@ -55,9 +56,10 @@ public:
         }
         return true;
     }
-
-    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-    {
+*/
+//    bool OnGossipSelect(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+/*
+	{
         pPlayer->PlayerTalkClass->ClearMenus();
         
         if (!pPlayer->HasEnoughMoney(TICKET_COST))
@@ -153,6 +155,7 @@ public:
     };
 
 };
+*/
 
 class npc_Mailsender : public CreatureScript
 {
@@ -214,6 +217,6 @@ public:
 };
 void AddSC_npc_lottery()
 {
-    new npc_lotto();
+    // new npc_lotto();
 	new npc_Mailsender();
 }

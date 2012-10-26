@@ -427,7 +427,7 @@ INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `l
 DELETE FROM `spell_area` WHERE `spell` IN (73822,73828);
 
 -- 얼왕 착귀템 획귀템 변경
-UPDATE `item_template` SET `bonding`=1 WHERE `entry` IN (49967,49994,50001,50015,50020,50038,50069,50175,50182,50472,50444,50447,50449,50450,50451,50452,50453);
+-- UPDATE `item_template` SET `bonding`=1 WHERE `entry` IN (49967,49994,50001,50015,50020,50038,50069,50175,50182,50472,50444,50447,50449,50450,50451,50452,50453);
 
 -- 얼왕평판 수치 변경
 UPDATE `creature_onkill_reputation` SET `RewOnKillRepValue1` ='0' WHERE `RewOnKillRepFaction1` = '1156';
