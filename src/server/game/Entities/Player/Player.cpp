@@ -7171,13 +7171,14 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
         if (Player* plrVictim = victim->ToPlayer())
         {
+
             //if (GetTeam() == plrVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
             //    return false;
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
-            uint8 v_level = victim->getLevel();
-			uint32 v_honor = victim->GetHonorPoints();
+            uint8 v_level = plrVictim->getLevel();
+			uint32 v_honor = plrVictim->GetHonorPoints();
 			uint32 k_honor;
 
 			if(v_honor < 100)
@@ -7263,8 +7264,8 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
     // add honor points
     ModifyHonorPoints(honor);
 	// minus honor points
-	Player* victim = uVictim->ToPlayer();
-    victim->ModifyHonorPoints(m_honor);
+	Player* plrVictim = victim->ToPlayer();
+    plrVictim->ModifyHonorPoints(m_honor);
 
     ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
 
