@@ -7160,8 +7160,9 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
     // Promote to float for calculations
     float honor_f = (float)honor;
+/* evelyn source
 	int32 m_honor;
-
+*/
     if (honor_f <= 0)
     {
         if (!victim || victim == this || victim->HasAuraType(SPELL_AURA_NO_PVP_CREDIT))
@@ -7171,13 +7172,16 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
         if (Player* plrVictim = victim->ToPlayer())
         {
-
-            //if (GetTeam() == plrVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
-            //    return false;
+            if (GetTeam() == plrVictim->GetTeam() && !sWorld->IsFFAPvPRealm())
+                return false;
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
-            uint8 v_level = plrVictim->getLevel();
+// delete original
+            uint8 v_level = victim->getLevel();
+
+/* evelyn source
+            uint8 v_level = victim->getLevel();
 			uint32 v_honor = plrVictim->GetHonorPoints();
 			uint32 k_honor;
 
@@ -7185,7 +7189,7 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 				k_honor = 0;
 			else
 				k_honor = v_honor * 0.1f;
-
+*/
             if (v_level <= k_grey)
                 return false;
 
@@ -7209,10 +7213,13 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
                 victim_rank = victim_title - 14 + 4;
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
+// delete original
+			honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
 
+/* evelyn source
             honor_f = ceil(k_honor + Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
 			m_honor = int32(-1 * k_honor);			
-
+*/
 
             // count the number of playerkills in one day
             ApplyModUInt32Value(PLAYER_FIELD_KILLS, 1, true);
@@ -7239,7 +7246,8 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
         if (groupsize > 1)
 		{
             honor_f /= groupsize;
-			m_honor /= groupsize;
+// delete //
+//			m_honor /= groupsize;
 		}
 
         // apply honor multiplier from aura (not stacking-get highest)
@@ -7263,9 +7271,11 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
     // add honor points
     ModifyHonorPoints(honor);
+/* evelyn source
 	// minus honor points
 	Player* plrVictim = victim->ToPlayer();
     plrVictim->ModifyHonorPoints(m_honor);
+*/
 
     ApplyModUInt32Value(PLAYER_FIELD_TODAY_CONTRIBUTION, honor, true);
 
