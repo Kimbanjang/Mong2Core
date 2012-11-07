@@ -28,6 +28,9 @@ enum eSpells
     SPELL_HELLFIRE              = 69586,
     SPELL_TACTICAL_BLINK        = 69584,
     SPELL_FROST_BREATH          = 69527, //Iceborn Proto-Drake
+    SPELL_BLINDING_DIRT         = 70302, //Wrathbone Laborer
+    SPELL_PUNCTURE_WOUND        = 70278,
+    SPELL_SHOVELLED             = 69572,
     SPELL_LEAPING_FACE_MAUL     = 69504, // Geist Ambusher
 };
 
@@ -36,6 +39,11 @@ enum eEvents
     // Ymirjar Flamebearer
     EVENT_FIREBALL              = 1,
     EVENT_TACTICAL_BLINK        = 2,
+
+    //Wrathbone Laborer
+    EVENT_BLINDING_DIRT         = 3,
+    EVENT_PUNCTURE_WOUND        = 4,
+    EVENT_SHOVELLED             = 5,
 };
 
 class mob_ymirjar_flamebearer : public CreatureScript
@@ -168,13 +176,12 @@ class mob_geist_ambusher : public CreatureScript
                 _leapingFaceMaulCooldown = 9000;
             }
 
-            void EnterCombat(Unit* who)
+            void MoveInLineOfSight(Unit* who)
             {
                 if (who->GetTypeId() != TYPEID_PLAYER)
                     return;
 
-                // the max range is determined by aggro range
-                if (me->GetDistance(who) > 5.0f)
+                if (me->IsWithinDistInMap(who, 30.0f))
                     DoCast(who, SPELL_LEAPING_FACE_MAUL);
             }
 
