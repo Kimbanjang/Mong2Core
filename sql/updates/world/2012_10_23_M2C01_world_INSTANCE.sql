@@ -419,7 +419,7 @@ DELETE FROM `reference_loot_template` WHERE `entry`=34566 AND `item`=47241;
 DELETE FROM `reference_loot_template` WHERE `entry`=35615 AND `item`=47241; 
 DELETE FROM `reference_loot_template` WHERE `entry`=35616 AND `item`=47241;
 INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
-(34564,49426,25,1,0,5,10),(34566,49426,50,1,0,5,10),(35615,49426,50,1,0,5,10),(35616,49426,75,1,0,5,10);
+(34564,49426,25,1,0,2,5),(34566,49426,50,1,0,4,7),(35615,49426,50,1,0,4,7),(35616,49426,75,1,0,5,10);
 
 
 ##### 얼왕성채 #####
