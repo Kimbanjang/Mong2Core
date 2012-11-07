@@ -82,6 +82,8 @@ class boss_bronjahm : public CreatureScript
 
             void Reset()
             {
+                _soulFragmentCount = 0;
+
                 events.Reset();
                 events.SetPhase(PHASE_1);
                 events.ScheduleEvent(EVENT_SHADOW_BOLT, 2000);
@@ -91,10 +93,18 @@ class boss_bronjahm : public CreatureScript
                 instance->SetBossState(DATA_BRONJAHM, NOT_STARTED);
             }
 
-           void JustReachedHome()
-           {
-               DoCast(me, SPELL_SOULSTORM_CHANNEL, true);
-           }
+            uint32 GetData(uint32 type)
+            {
+                if (type == DATA_SOUL_FRAGMENTS)
+                    return _soulFragmentCount;
+
+                return 0;
+            }
+
+            void JustReachedHome()
+            {
+                DoCast(me, SPELL_SOULSTORM_CHANNEL, true);
+            }
 
             void EnterCombat(Unit* /*who*/)
             {
@@ -135,6 +145,12 @@ class boss_bronjahm : public CreatureScript
                 summon->GetMotionMaster()->Clear();
                 summon->GetMotionMaster()->MoveFollow(me, me->GetObjectSize(), 0.0f);
                 summon->CastSpell(summon, SPELL_PURPLE_BANISH_VISUAL, true);
+                _soulFragmentCount++;
+            }
+
+            void SummonedCreatureDespawn(Creature* summon)
+            {
+                _soulFragmentCount--;
             }
 
             void UpdateAI(const uint32 diff)
@@ -185,6 +201,9 @@ class boss_bronjahm : public CreatureScript
 
                 DoMeleeAttackIfReady();
             }
+
+        private:
+            uint8 _soulFragmentCount;
         };
 
         CreatureAI* GetAI(Creature* creature) const
@@ -207,7 +226,7 @@ class mob_corrupted_soul_fragment : public CreatureScript
 
             void MovementInform(uint32 type, uint32 id)
             {
-                if (type != CHASE_MOTION_TYPE)
+                if (type != FOLLOW_MOTION_TYPE)
                     return;
 
                 if (instance)
@@ -407,6 +426,22 @@ class spell_bronjahm_soulstorm_targeting : public SpellScriptLoader
         }
 };
 
+class achievement_soul_power : public AchievementCriteriaScript
+{
+    public:
+        achievement_soul_power() : AchievementCriteriaScript("achievement_soul_power") { }
+
+        bool OnCheck(Player* /*source*/, Unit* target)
+        {
+            if (target)
+                if (Creature* bronjahm = target->ToCreature())
+                    if (bronjahm->AI()->GetData(DATA_SOUL_FRAGMENTS) >= 4)
+                        return true;
+
+            return false;
+        }
+};
+
 void AddSC_boss_bronjahm()
 {
     new boss_bronjahm();
@@ -416,4 +451,5 @@ void AddSC_boss_bronjahm()
     new spell_bronjahm_soulstorm_channel();
     new spell_bronjahm_soulstorm_visual();
     new spell_bronjahm_soulstorm_targeting();
+    new achievement_soul_power();
 }
