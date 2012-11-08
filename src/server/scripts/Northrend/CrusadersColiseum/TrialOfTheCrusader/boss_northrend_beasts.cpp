@@ -442,7 +442,7 @@ struct boss_jormungarAI : public ScriptedAI
         if (who->GetTypeId() == TYPEID_PLAYER)
         {
             if (instanceScript)
-                instanceScript->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
+                instanceScript->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
         }
     }
 
@@ -852,7 +852,7 @@ public:
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
                 if (instance)
-                    instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
+                    instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
             }
         }
 

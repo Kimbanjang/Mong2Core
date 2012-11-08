@@ -395,7 +395,7 @@ class instance_trial_of_the_crusader : public InstanceMapScript
                         else if (data == DECREASE)
                             --MistressOfPainCount;
                         break;
-                    case DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE:
+                    case DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE:
                         TributeToImmortalityElegible = false;
                         break;
                 }
