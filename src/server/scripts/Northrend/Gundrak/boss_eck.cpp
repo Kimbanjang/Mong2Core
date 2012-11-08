@@ -28,6 +28,14 @@ enum Spells
     SPELL_ECK_SPRING_2                            = 55837  //Eck leaps at a distant target.
 };
 
+enum Events
+{
+    EVENT_ECK_BITE,
+    EVENT_ECK_SPIT,
+    EVENT_ECK_SPRING,
+    EVENT_ECK_BERSERK
+};
+
 static Position EckSpawnPoint = { 1643.877930f, 936.278015f, 107.204948f, 0.668432f };
 
 class boss_eck : public CreatureScript
@@ -47,22 +55,14 @@ public:
             instance = creature->GetInstanceScript();
         }
 
-        uint32 uiBerserkTimer;
-        uint32 uiBiteTimer;
-        uint32 uiSpitTimer;
-        uint32 uiSpringTimer;
-
+        EventMap events;
         bool bBerserk;
 
         InstanceScript* instance;
 
         void Reset()
         {
-            uiBerserkTimer = urand(60*IN_MILLISECONDS, 90*IN_MILLISECONDS); //60-90 secs according to wowwiki
-            uiBiteTimer = 5*IN_MILLISECONDS;
-            uiSpitTimer = 10*IN_MILLISECONDS;
-            uiSpringTimer = 8*IN_MILLISECONDS;
-
+            events.Reset();
             bBerserk = false;
 
             if (instance)
@@ -73,6 +73,11 @@ public:
         {
             if (instance)
                 instance->SetData(DATA_ECK_THE_FEROCIOUS_EVENT, IN_PROGRESS);
+
+            events.ScheduleEvent(EVENT_ECK_BITE, 5*IN_MILLISECONDS);
+            events.ScheduleEvent(EVENT_ECK_SPRING, 8*IN_MILLISECONDS);
+            events.ScheduleEvent(EVENT_ECK_SPIT, 10*IN_MILLISECONDS);
+            events.ScheduleEvent(EVENT_ECK_BERSERK, urand(60*IN_MILLISECONDS, 90*IN_MILLISECONDS)); //60-90 secs according to wowwiki
         }
 
         void UpdateAI(const uint32 diff)
@@ -81,47 +86,51 @@ public:
             if (!UpdateVictim())
                 return;
 
-            if (uiBiteTimer <= diff)
-            {
-                DoCast(me->getVictim(), SPELL_ECK_BITE);
-                uiBiteTimer = urand(8*IN_MILLISECONDS, 12*IN_MILLISECONDS);
-            } else uiBiteTimer -= diff;
+            events.Update(diff);            
 
-            if (uiSpitTimer <= diff)
+            while(uint32 event = events.ExecuteEvent()) 
             {
-                DoCast(me->getVictim(), SPELL_ECK_SPIT);
-                uiSpitTimer = urand(6*IN_MILLISECONDS, 14*IN_MILLISECONDS);
-            } else uiSpitTimer -= diff;
-
-            if (uiSpringTimer <= diff)
-            {
-                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
-                if (target && target->GetTypeId() == TYPEID_PLAYER)
+                switch(event)
                 {
-                    DoCast(target, RAND(SPELL_ECK_SPRING_1, SPELL_ECK_SPRING_2));
-                    uiSpringTimer = urand(5*IN_MILLISECONDS, 10*IN_MILLISECONDS);
-                }
-            } else uiSpringTimer -= diff;
-
-            //Berserk on timer or 20% of health
-            if (!bBerserk)
-            {
-                if (uiBerserkTimer <= diff)
-                {
-                    DoCast(me, SPELL_ECK_BERSERK);
-                    bBerserk = true;
-                }
-                else
-                {
-                    uiBerserkTimer -= diff;
-                    if (HealthBelowPct(20))
+                    case EVENT_ECK_BITE:
+                        DoCast(me->getVictim(), SPELL_ECK_BITE);
+                        events.ScheduleEvent(EVENT_ECK_BITE, urand(8*IN_MILLISECONDS, 12*IN_MILLISECONDS));
+                        break;
+                    case EVENT_ECK_SPIT:
+                        DoCast(me->getVictim(), SPELL_ECK_SPIT);
+                        events.ScheduleEvent(EVENT_ECK_SPIT, urand(6*IN_MILLISECONDS, 14*IN_MILLISECONDS));
+                        break;
+                    case EVENT_ECK_SPRING:
                     {
-                        DoCast(me, SPELL_ECK_BERSERK);
-                        bBerserk = true;
+                        if(Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
+                        {
+                            if (target->GetTypeId() == TYPEID_PLAYER)
+                            {
+                                DoCast(target, RAND(SPELL_ECK_SPRING_1, SPELL_ECK_SPRING_2));
+                                events.ScheduleEvent(EVENT_ECK_SPRING, urand(5*IN_MILLISECONDS, 10*IN_MILLISECONDS));
+                            }
+                        }
+
+                        break;
+                    }
+                    case EVENT_ECK_BERSERK:
+                    {
+                        if(!bBerserk)
+                        {
+                            DoCast(me, SPELL_ECK_BERSERK);
+                            bBerserk = true;
+                        }
+                        break;
                     }
                 }
             }
 
+            if(HealthBelowPct(20))    // Automatically go into berserk once we have less than 20% of maximum health.
+            {
+                DoCast(me, SPELL_ECK_BERSERK);
+                events.CancelEvent(EVENT_ECK_BERSERK); // If it's still in there; just to avoid its usage later on.
+                bBerserk = true;
+            }
             DoMeleeAttackIfReady();
         }
 
