@@ -157,6 +157,14 @@ enum eAchievments
     ACHIEV_TIMED_START_EVENT                      = 17726,
 };
 
+enum eDataSkadi
+{
+    DATA_SKADI_ALL_THE_TIME                       = 1,
+    DATA_SKADI_HARPOON_EVENT                      = 2,
+    DATA_SKADI_PHASE                              = 3,
+    DATA_SKADI_MOVE_JUMP_FINISHED                 = 4,
+};
+
 class boss_skadi : public CreatureScript
 {
 public:
@@ -188,7 +196,9 @@ public:
         uint32 m_uiMountTimer;
         uint32 m_uiSummonTimer;
         uint8  m_uiSpellHitCount;
+        uint8  m_uiSpellHitPerPhase;
         bool   m_bSaidEmote;
+        bool   m_bSkadiAllTheTime;
 
         eCombatPhase Phase;
 
@@ -203,6 +213,8 @@ public:
             m_uiWaypointId = 0;
             m_bSaidEmote = false;
             m_uiSpellHitCount = 0;
+            m_uiSpellHitPerPhase = 0;
+            m_bSkadiAllTheTime = false;
 
             Phase = SKADI;
 
@@ -278,13 +290,17 @@ public:
             Summons.Despawn(summoned);
         }
 
-        void SpellHit(Unit* /*caster*/, const SpellInfo* spell)
+        void DoAction(const int32 param)
         {
-            if (spell->Id == SPELL_HARPOON_DAMAGE)
+            if (param == DATA_SKADI_HARPOON_EVENT) // Skadi Harpoon Event
             {
                 m_uiSpellHitCount++;
-                if (m_uiSpellHitCount >= 3)
+                m_uiSpellHitPerPhase++;
+                if (m_uiSpellHitCount >= 3 && Phase == FLYING)
                 {
+                    if (m_uiSpellHitPerPhase == 3)
+                        m_bSkadiAllTheTime = true;
+
                     Phase = SKADI;
                     me->SetCanFly(false);
                     me->Dismount();
@@ -293,15 +309,52 @@ public:
                         pGrauf->GetMotionMaster()->MoveFall();
                         pGrauf->HandleEmoteCommand(EMOTE_ONESHOT_FLYDEATH);
                     }
-                    me->GetMotionMaster()->MoveJump(Location[4].GetPositionX(), Location[4].GetPositionY(), Location[4].GetPositionZ(), 5.0f, 10.0f);
+                    me->GetMotionMaster()->MoveJump(Location[4].GetPositionX(), Location[4].GetPositionY(), Location[4].GetPositionZ(), 20.0f, 20.0f, DATA_SKADI_MOVE_JUMP_FINISHED);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                     DoScriptText(SAY_DRAKE_DEATH, me);
                     m_uiCrushTimer = 8000;
                     m_uiPoisonedSpearTimer = 10000;
                     m_uiWhirlwindTimer = 20000;
-                    me->AI()->AttackStart(SelectTarget(SELECT_TARGET_RANDOM));
+                    // me->AI()->AttackStart(SelectTarget(SELECT_TARGET_RANDOM));
                 }
             }
+
+        }
+
+        uint32 GetData(uint32 type)
+        {
+            if (type == DATA_SKADI_ALL_THE_TIME)
+                return m_bSkadiAllTheTime ? 1 : 0;
+
+            if (type == DATA_SKADI_PHASE)
+                return (uint32)Phase;
+
+            return 0;
+        }
+
+        void MovementInform(uint32 type, uint32 id)
+        {
+            if (type != EFFECT_MOTION_TYPE)
+                return;
+
+            if (id == DATA_SKADI_MOVE_JUMP_FINISHED)
+            {
+                if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                {
+                    if (me->GetMotionMaster())
+                    {
+                        me->GetMotionMaster()->MoveChase(target);
+                        me->SetFullHealth();
+                    }
+                }
+            }
+        }
+
+        void DamageTaken(Unit* /*attacker*/, uint32 &damage)
+        {
+            // Disable any damage until we land
+            if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE)
+                damage = 0;
         }
 
         void UpdateAI(const uint32 diff)
@@ -317,6 +370,7 @@ public:
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                         if (!m_bSaidEmote)
                         {
+                            m_uiSpellHitPerPhase = 0;
                             DoScriptText(EMOTE_RANGE, me);
                             m_bSaidEmote = true;
                         }
@@ -478,15 +532,35 @@ public:
             return false;
 
         if (Creature* pSkadi = Unit::GetCreature(*go, instance->GetData64(DATA_SKADI_THE_RUTHLESS)))
-            player->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
-
+        {
+            if (!(pSkadi->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE)))
+            {
+                if (pSkadi->AI()->GetData(DATA_SKADI_PHASE) == FLYING)
+                {
+                    player->CastSpell(pSkadi, SPELL_RAPID_FIRE, true);
+                    pSkadi->AI()->DoAction(DATA_SKADI_HARPOON_EVENT);
+                }
+            }
+        }
         return false;
     }
 
+};
+
+class achievement_skadi_all_the_time : public AchievementCriteriaScript
+{
+    public:
+        achievement_skadi_all_the_time() : AchievementCriteriaScript("achievement_skadi_all_the_time") { }
+
+        bool OnCheck(Player* /*source*/, Unit* target)
+        {
+            return target && target->GetAI()->GetData(DATA_SKADI_ALL_THE_TIME);
+        }
 };
 
 void AddSC_boss_skadi()
 {
     new boss_skadi();
     new go_harpoon_launcher();
+    new achievement_skadi_all_the_time();
 }

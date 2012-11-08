@@ -403,6 +403,13 @@ public:
 
                             DoCast(me, SPELL_RITUAL_OF_THE_SWORD);
                             sacrificed = true;
+
+                            me->StopMoving();
+                            if (me->GetMotionMaster())
+                            {
+                                me->GetMotionMaster()->Clear(false);
+                                me->GetMotionMaster()->MoveIdle();
+                            }
                         }
                     }
                 }

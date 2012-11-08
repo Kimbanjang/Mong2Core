@@ -158,6 +158,7 @@ public:
 
         void Reset()
         {
+            m_bIsWalking = false;
             m_bIsPause = false;
             m_bIsActiveWithBJORN = false;
             m_bIsActiveWithHALDOR = false;
@@ -178,7 +179,7 @@ public:
 
             m_uiActivedNumber        = 0;
             m_uiHealthAmountModifier = 1;
-            m_uiHealthAmountMultipler = DUNGEON_MODE(20, 25);
+            m_uiHealthAmountMultipler = DUNGEON_MODE(33, 20);
 
             DespawnBoatGhosts(m_uiActivedCreatureGUID);
             DespawnBoatGhosts(m_uiOrbGUID);
@@ -216,9 +217,9 @@ public:
                 if (m_uiPause_Timer <= diff)
                 {
                     DoScriptText(ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].say, me);
-                    DoCast(me, SPELL_CHANNEL_YMIRON_TO_SPIRIT); // should be on spirit
                     if (Creature* temp = me->SummonCreature(ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].npc, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnX, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnY, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnZ, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnO, TEMPSUMMON_CORPSE_DESPAWN, 0))
                     {
+                        DoCast(temp, SPELL_CHANNEL_YMIRON_TO_SPIRIT); // should be on spirit
                         m_uiActivedCreatureGUID = temp->GetGUID();
                         temp->CastSpell(me, SPELL_CHANNEL_SPIRIT_TO_YMIRON, true);
                         temp->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
@@ -333,7 +334,7 @@ public:
                 } else m_uiAbility_TORGYN_Timer -= diff;
 
                 // Health check -----------------------------------------------------------------------------
-                if (me->HealthBelowPct(100 - m_uiHealthAmountMultipler * m_uiHealthAmountModifier))
+                if ((m_uiHealthAmountModifier - 1) < (uint32)DUNGEON_MODE(2, 4) && me->HealthBelowPct(100 - m_uiHealthAmountMultipler * m_uiHealthAmountModifier))
                 {
                     uint8 m_uiOrder = m_uiHealthAmountModifier - 1;
                     ++m_uiHealthAmountModifier;
