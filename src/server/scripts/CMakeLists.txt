@@ -10,20 +10,11 @@
 
 # Enable precompiled headers when using the GCC compiler.
 
-<<<<<<< HEAD
-if( USE_SCRIPTPCH AND MSVC )
-  set(scripts_STAT_SRCS
-    PrecompiledHeaders/ScriptPCH.cpp
-    PrecompiledHeaders/ScriptPCH.h
-    PrecompiledHeaders/Lyn_han.h 
-  )
-endif()
-=======
 if (USE_SCRIPTPCH)
   set(scripts_STAT_PCH_HDR PrecompiledHeaders/ScriptPCH.h)
   set(scripts_STAT_PCH_SRC PrecompiledHeaders/ScriptPCH.cpp)
+  set(scripts_STAT_PCH_SRC PrecompiledHeaders/Lyn_han.h)
 endif ()
->>>>>>> TC/master
 
 message(STATUS "SCRIPT PREPARATIONS")
 include(Spells/CMakeLists.txt)
