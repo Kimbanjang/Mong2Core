@@ -7180,11 +7180,8 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
 
             uint8 k_level = getLevel();
             uint8 k_grey = Trinity::XP::GetGrayLevel(k_level);
-// delete original
             uint8 v_level = victim->getLevel();
-
 /* evelyn source
-            uint8 v_level = victim->getLevel();
 			uint32 v_honor = plrVictim->GetHonorPoints();
 			uint32 k_honor;
 
@@ -7216,8 +7213,8 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
                 victim_rank = victim_title - 14 + 4;
             else
                 victim_guid = 0;                        // Don't show HK: <rank> message, only log.
-// delete original
-			honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
+
+			honor_f = ceil(Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey)); // delete original
 
 /* evelyn source
             honor_f = ceil(k_honor + Trinity::Honor::hk_honor_at_level_f(k_level) * (v_level - k_grey) / (k_level - k_grey));
@@ -7249,8 +7246,9 @@ bool Player::RewardHonor(Unit* victim, uint32 groupsize, int32 honor, bool pvpto
         if (groupsize > 1)
 		{
             honor_f /= groupsize;
-// delete //
-//			m_honor /= groupsize;
+/* evelyn source
+			m_honor /= groupsize;
+*/
 		}
 
         // apply honor multiplier from aura (not stacking-get highest)

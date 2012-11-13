@@ -11,9 +11,9 @@
 # Enable precompiled headers when using the GCC compiler.
 
 if (USE_SCRIPTPCH)
+  set(scripts_STAT_PCH_HDR PrecompiledHeaders/Lyn_han.h)
   set(scripts_STAT_PCH_HDR PrecompiledHeaders/ScriptPCH.h)
   set(scripts_STAT_PCH_SRC PrecompiledHeaders/ScriptPCH.cpp)
-  set(scripts_STAT_PCH_SRC PrecompiledHeaders/Lyn_han.h)
 endif ()
 
 message(STATUS "SCRIPT PREPARATIONS")
