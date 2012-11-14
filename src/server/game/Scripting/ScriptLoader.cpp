@@ -1278,7 +1278,6 @@ void AddBattlegroundScripts()
 #ifdef SCRIPTS
 /* This is where custom scripts' loading functions should be declared. */
 
-void AddSC_NPC_Transmogrify();
 #endif
 
 void AddCustomScripts()
@@ -1290,10 +1289,5 @@ void AddCustomScripts()
 	AddSC_npcs_mini_boss();
 	AddSC_npc_lottery();
 
-//<<<<<<< .mine
-//
-//=======
-    AddSC_NPC_Transmogrify();
-//>>>>>>> .theirs
 #endif
 }
