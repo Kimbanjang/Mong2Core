@@ -9,6 +9,8 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 set(scripts_STAT_SRCS
+    Custom/Transmogrification.cpp
+    Custom/Transmogrification.h
   ${scripts_STAT_SRCS}
 )
 
