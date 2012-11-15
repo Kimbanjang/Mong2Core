@@ -19,7 +19,7 @@
 SDName: Mong2 Postman
 SDAuthor: Lyn & Kimbanjang
 SD%Complete: 90%
-SDComment: ±ÍÂú¾Æ¼­ ¹Ì¹è¼Û ¸í´Ü Ãâ·ÂÀÌ ¾Æ´Ñ, Ä«¿îÅÍ·Î ´ëÃ¼ÇÔ... ½Ã°£ ³ª¸é ¸í´ÜÃâ·ÂÀ¸·Î ¹Ù²Ù°í 100% ¸í±â ÇÒ°Í by Kimbanjang
+SDComment: ê·€ì°®ì•„ì„œ ë¯¸ë°°ì†¡ ëª…ë‹¨ ì¶œë ¥ì´ ì•„ë‹Œ, ì¹´ìš´í„°ë¡œ ëŒ€ì²´í•¨... ì‹œê°„ ë‚˜ë©´ ëª…ë‹¨ì¶œë ¥ìœ¼ë¡œ ë°”ê¾¸ê³  100% ëª…ê¸° í• ê²ƒ by Kimbanjang
 SDCategory: Custom
 EndScriptData */
 
@@ -28,12 +28,6 @@ EndScriptData */
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 
-enum eEnums
-{
-    _mailCheck,
-    _mailQuickSend
-};
-
 class npc_Postman : public CreatureScript
 {
 	public:
@@ -41,8 +35,8 @@ class npc_Postman : public CreatureScript
 
 		bool OnGossipHello(Player* player, Creature* creature)
 		{
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "µµ´ëÃ¼ ÅÃ¹è°¡ ¾ó¸¸Å­ ¹Ğ·ÁÀÖ´Â°Å¿¡¿ä?!", GOSSIP_SENDER_MAIN, _mailCheck);
-			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "³» ÅÃ¹è ¾È¿Ô´Ü ¸»ÀÌ¿¡¿ä! ¼û ¸·È÷´Ï±î »¡¸® º¸³»ÁÖ¼¼¿ä!", GOSSIP_SENDER_MAIN, _mailQuickSend);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "ë„ëŒ€ì²´ íƒë°°ê°€ ì–¼ë§Œí¼ ë°€ë ¤ìˆëŠ”ê±°ì—ìš”?!", GOSSIP_SENDER_MAIN, 1);
+			player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ë‚´ íƒë°° ì•ˆì™”ë‹¨ ë§ì´ì—ìš”! ë¹¨ë¦¬ ë³´ë‚´ì£¼ì„¸ìš”!", GOSSIP_SENDER_MAIN, 2);
 	
 	        player->PlayerTalkClass->SendGossipMenu(907, creature->GetGUID());
 
@@ -51,68 +45,64 @@ class npc_Postman : public CreatureScript
 
 	    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
 	    {
-			switch(action) // switch(action) @START@
+			if(action == 1)
 			{
-				case _mailCheck:
-					QueryResult notSendMailCount = CharacterDatabase.PQuery("SELECT SUM(IF(`flag`='1',0,1)) FROM `kc_item_mail`;");
-					// uint32 notSendMailCountV = notSendMailCount; È¤½Ã Äõ¸®¹®°ªÀ» ¹®ÀÚ¿­·Î ÀÎ½Ä½Ã ³Ö¾î¾ßÇÔ
+				QueryResult result = CharacterDatabase.PQuery("SELECT SUM(IF(`flag`='1',0,1)) FROM `kc_item_mail`;");
+				Field *fields = result->Fetch();
+				uint32 notSendMailCount = fields[0].GetUInt32();
 
-					if(notSendMailCount < 1)
-						player->MonsterWhisper("ÇöÀç ´ë±âÁßÀÎ ÅÃ¹è°¡ ¾ø½À´Ï´Ù.", player->GetGUID());
-					else
+				if(notSendMailCount < 1)
+					creature->MonsterWhisper("í˜„ì¬ ëŒ€ê¸°ì¤‘ì¸ íƒë°°ê°€ ì—†ìŠµë‹ˆë‹¤.", player->GetGUID());
+				else
+				{
+					char checkMSG[50];
+					snprintf(checkMSG, 50, "ë°°ì†¡ ëŒ€ê¸°ì¤‘ íƒë°°ìˆ˜ : %u", notSendMailCount);
+					creature->MonsterWhisper(checkMSG, player->GetGUID());
+				}
+			}
+			else
+			{
+				QueryResult result = CharacterDatabase.PQuery("SELECT idx,cguid,item_entry,item_stack FROM kc_item_mail WHERE flag = '0' LIMIT 1;");
+
+				if(result)
+				{
+					Field *fields = result->Fetch();
+					uint32 m_idx=fields[0].GetUInt32();
+					uint32 m_guid=fields[1].GetUInt32();
+					uint32 m_item_entry=fields[2].GetUInt32();
+					uint32 m_item_stack=fields[3].GetUInt32();
+
+					MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // ë³´ë‚´ëŠ” ì‚¬ëŒì´ GMìœ¼ë¡œ ë“±ë¡
+					Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid ê°’ì„ ë„£ìœ¼ë©´ ì¼€ë¦­í„°ë¥¼ ì°¾ì„ìˆ˜ìˆë‹¤.
+					SQLTransaction trans = CharacterDatabase.BeginTransaction();   //ë©”ì¼ê´€ë ¨ SQLì„ ë“±ë¡
+					MailDraft draft("ëª½ì´ í¬ì¸íŠ¸ìƒµ","í¬ì¸íŠ¸ìƒµì—ì„œ êµ¬ì…í•œ ë¬¼í’ˆì´ ë„ì°© í–ˆìŠµë‹ˆë‹¤.");
+				    
+					if (Item* item = Item::CreateItem(m_item_entry,m_item_stack,pPlayer))
 					{
-						char checkMSG[100];
-						snprintf(checkMSG, 100, "¹è¼Û ´ë±âÁß ÅÃ¹è¼ö : %u", notSendMailCount);
-						player->MonsterWhisper(checkMSG, player->GetGUID());
-					}
+						item->SaveToDB(trans);                               // save for prevent lost at next mail load, if send fail then item will deleted
+						draft.AddItem(item);
+					}         
+					draft.SendMailTo(trans, MailReceiver(pPlayer, GUID_LOPART(m_guid)),sender);
+					CharacterDatabase.CommitTransaction(trans);
+					CharacterDatabase.PQuery("UPDATE kc_item_mail SET flag = '1' WHERE idx= '%d' ",m_idx);
+				}
 
-					break; // case _mailCheck
-
-				case _mailQuickSend:
-					QueryResult result = CharacterDatabase.PQuery("SELECT idx,cguid,item_entry,item_stack FROM kc_item_mail WHERE flag = '0' LIMIT 1;");
-
-					if(result)
-					{
-						Field *fields = result->Fetch();
-						uint32 m_idx=fields[0].GetUInt32();
-						uint32 m_guid=fields[1].GetUInt32();
-						uint32 m_item_entry=fields[2].GetUInt32();
-						uint32 m_item_stack=fields[3].GetUInt32();
-
-						MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // º¸³»´Â »ç¶÷ÀÌ GMÀ¸·Î µî·Ï
-						Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid °ªÀ» ³ÖÀ¸¸é ÄÉ¸¯ÅÍ¸¦ Ã£À»¼öÀÖ´Ù.
-						SQLTransaction trans = CharacterDatabase.BeginTransaction();   //¸ŞÀÏ°ü·Ã SQLÀ» µî·Ï
-						MailDraft draft("½Ã°£Àº ±İÀÌ¶ó±¸, Ä£±¸","Æ÷ÀÎÆ®¼¥¿¡¼­ ±¸ÀÔÇÑ ¹°Ç°ÀÌ µµÂø Çß½À´Ï´Ù.");
-					    
-						if (Item* item = Item::CreateItem(m_item_entry,m_item_stack,pPlayer))
-						{
-							item->SaveToDB(trans);                               // save for prevent lost at next mail load, if send fail then item will deleted
-							draft.AddItem(item);
-						}         
-						draft.SendMailTo(trans, MailReceiver(pPlayer, GUID_LOPART(m_guid)),sender);
-						CharacterDatabase.CommitTransaction(trans);
-						CharacterDatabase.PQuery("UPDATE kc_item_mail SET flag = '1' WHERE idx= '%d' ",m_idx);
-					}
-
-					player->MonsterWhisper("´ÙÀ½ ¹è¼Û¿¹Á¤ ÅÃ¹è¸¦ °­Á¦ ¹è¼Û Çß½À´Ï´Ù.", player->GetGUID());
-
-					break; // _mailQuickSend
-
-				default:
-					break;
-			} // switch (action) #END#
-	
+				creature->MonsterWhisper("ë‹¤ìŒ ë°°ì†¡ì˜ˆì • íƒë°°ë¥¼ ê°•ì œ ë°°ì†¡ í–ˆìŠµë‹ˆë‹¤.", player->GetGUID());
+			}
+		
 			player->CLOSE_GOSSIP_MENU();
+
+			return true;
 		}
 
 		CreatureAI* GetAI(Creature* pCreature) const
 	    {
-	        return new npc_MailsenderAI (pCreature);
+	        return new npc_PostmanAI (pCreature);
 	    }
 
-	    struct npc_MailsenderAI : public ScriptedAI
+	    struct npc_PostmanAI : public ScriptedAI
 	    {
-	        npc_MailsenderAI(Creature* pCreature) : ScriptedAI(pCreature) 
+	        npc_PostmanAI(Creature* pCreature) : ScriptedAI(pCreature) 
 	        {
 	            SendTimer = 500000;
 	        }
@@ -134,10 +124,10 @@ class npc_Postman : public CreatureScript
 							uint32 m_item_entry=fields[2].GetUInt32();
 							uint32 m_item_stack=fields[3].GetUInt32();
 	
-							MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // º¸³»´Â »ç¶÷ÀÌ GMÀ¸·Î µî·Ï
-							Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid °ªÀ» ³ÖÀ¸¸é ÄÉ¸¯ÅÍ¸¦ Ã£À»¼öÀÖ´Ù.
-							SQLTransaction trans = CharacterDatabase.BeginTransaction();   //¸ŞÀÏ°ü·Ã SQLÀ» µî·Ï
-							MailDraft draft("½Ã°£Àº ±İÀÌ¶ó±¸, Ä£±¸","Æ÷ÀÎÆ®¼¥¿¡¼­ ±¸ÀÔÇÑ ¹°Ç°ÀÌ µµÂø Çß½À´Ï´Ù.");
+							MailSender sender(MAIL_NORMAL, 0, MAIL_STATIONERY_GM);  // ë³´ë‚´ëŠ” ì‚¬ëŒì´ GMìœ¼ë¡œ ë“±ë¡
+							Player *pPlayer = sObjectMgr->GetPlayerByLowGUID(m_guid); //guid ê°’ì„ ë„£ìœ¼ë©´ ì¼€ë¦­í„°ë¥¼ ì°¾ì„ìˆ˜ìˆë‹¤.
+							SQLTransaction trans = CharacterDatabase.BeginTransaction();   //ë©”ì¼ê´€ë ¨ SQLì„ ë“±ë¡
+							MailDraft draft("ëª½ì´ í¬ì¸íŠ¸ìƒµ","í¬ì¸íŠ¸ìƒµì—ì„œ êµ¬ì…í•œ ë¬¼í’ˆì´ ë„ì°© í–ˆìŠµë‹ˆë‹¤.");
 			        
 							if (Item* item = Item::CreateItem(m_item_entry,m_item_stack,pPlayer))
 							{
@@ -151,11 +141,9 @@ class npc_Postman : public CreatureScript
 				
 	                SendTimer = 500000;
 		        }
-	            else SendTimer -= diff;
-            
+	            else SendTimer -= diff;            
 	        }
 		};
-
 };
 
 void AddSC_Mong2_Postman()

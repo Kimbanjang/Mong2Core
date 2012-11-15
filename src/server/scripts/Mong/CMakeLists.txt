@@ -8,6 +8,7 @@ set(scripts_STAT_SRCS
   Mong/npc_guildhouses.cpp
   Mong/npc_lottery.cpp
   Mong/npcs_mini_boss.cpp
+  Mong/Mong2_Postman.cpp
 )
 
 message("  -> Prepared: Mong")
