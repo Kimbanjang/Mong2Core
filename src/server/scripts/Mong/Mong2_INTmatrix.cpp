@@ -19,7 +19,7 @@
 SDName: Mong2 In To The Matrix
 SDAuthor: Kimbanjang
 SD%Complete: 0%
-SDComment: 20121115 : ½ÃÀÛ
+SDComment: 20121115 : ì‹œì‘
 SDCategory: Custom
 EndScriptData */
 
@@ -35,7 +35,7 @@ enum eEnums
 	_orangeDrug
 };
 
-// ¸ğÇÇ¾î½º
+// ëª¨í”¼ì–´ìŠ¤
 class npc_Morpheus : public CreatureScript
 {
 	public:
@@ -43,13 +43,15 @@ class npc_Morpheus : public CreatureScript
 
 		bool OnGossipHello(Player* player, Creature* creature)
 		{
-			QueryResult chk_matrix = CharacterDatabase.PQuery("SELECT `matrix` FROM `characters` WHERE `guid`='%u';", player->GetGUID());
+			QueryResult result = CharacterDatabase.PQuery("SELECT `matrix` FROM `characters` WHERE `guid`='%u';", player->GetGUID());
+			Field *fields = result->Fetch();
+			uint32 chk_matrix = fields[0].GetUInt32();
 
-			if(chk_matrix<1)
+			if(chk_matrix < 1)
 			{
-				// ¼à¶ó¼à¶ó¼à¶ó DB ¿¬°á
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "»¡°£¾àÀ» ¸Ô´Â´Ù.", GOSSIP_SENDER_MAIN, _redDrug);
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ÆÄ¶õ¾àÀ» ¸Ô´Â´Ù.", GOSSIP_SENDER_MAIN, _blueDrug);
+				// ì†°ë¼ì†°ë¼ì†°ë¼ DB ì—°ê²°
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ë¹¨ê°„ì•½ì„ ë¨¹ëŠ”ë‹¤.", GOSSIP_SENDER_MAIN, _redDrug);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "íŒŒë€ì•½ì„ ë¨¹ëŠ”ë‹¤.", GOSSIP_SENDER_MAIN, _blueDrug);
 	
 		        player->PlayerTalkClass->SendGossipMenu(907, creature->GetGUID());
 			}
@@ -67,7 +69,7 @@ class npc_Morpheus : public CreatureScript
 			{
 				case _redDrug:
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='1' WHERE `guid`='%u';", player->GetGUID());
-					player->GiveLevel(80); // Player->ApplyLevelInfo(Info, 80); µÑÁß¿¡¼­ ÇÑ°³...
+					player->GiveLevel(80); // Player->ApplyLevelInfo(Info, 80); ë‘˜ì¤‘ì—ì„œ í•œê°œ...
 
 					break; // case _redDrug
 
@@ -83,6 +85,8 @@ class npc_Morpheus : public CreatureScript
 			} // switch (action) #END#
 	
 			player->CLOSE_GOSSIP_MENU();
+
+			return true;
 		}
 
 		CreatureAI* GetAI(Creature* pCreature) const
@@ -92,7 +96,7 @@ class npc_Morpheus : public CreatureScript
 
 };
 
-// Æ®¸®´ÏÆ¼
+// íŠ¸ë¦¬ë‹ˆí‹°
 class npc_Trinity : public CreatureScript
 {
 	public:
@@ -100,13 +104,15 @@ class npc_Trinity : public CreatureScript
 
 		bool OnGossipHello(Player* player, Creature* creature)
 		{
-			QueryResult chk_matrix = CharacterDatabase.PQuery("SELECT `matrix` FROM `characters` WHERE `guid`='%u';", player->GetGUID());
+			QueryResult result = CharacterDatabase.PQuery("SELECT `matrix` FROM `characters` WHERE `guid`='%u';", player->GetGUID());
+			Field *fields = result->Fetch();
+			uint32 chk_matrix = fields[0].GetUInt32();
 
-			if(chk_matrix>1)
+			if(chk_matrix > 1)
 			{
-				// ¼à¶ó¼à¶ó¼à¶ó DB ¿¬°á
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "»¡°£¾àÀ» ¸Ô´Â´Ù.", GOSSIP_SENDER_MAIN, _redDrug);
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ÆÄ¶õ¾àÀ» ¸Ô´Â´Ù.", GOSSIP_SENDER_MAIN, _blueDrug);
+				// ì†°ë¼ì†°ë¼ì†°ë¼ DB ì—°ê²°
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ë¹¨ê°„ì•½ì„ ë¨¹ëŠ”ë‹¤.", GOSSIP_SENDER_MAIN, _redDrug);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "íŒŒë€ì•½ì„ ë¨¹ëŠ”ë‹¤.", GOSSIP_SENDER_MAIN, _blueDrug);
 	
 		        player->PlayerTalkClass->SendGossipMenu(907, creature->GetGUID());
 			}
@@ -124,7 +130,7 @@ class npc_Trinity : public CreatureScript
 			{
 				case _redDrug:
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='1' WHERE `guid`='%u';", player->GetGUID());
-					player->GiveLevel(80); // Player->ApplyLevelInfo(Info, 80); µÑÁß¿¡¼­ ÇÑ°³...
+					player->GiveLevel(80); // Player->ApplyLevelInfo(Info, 80); ë‘˜ì¤‘ì—ì„œ í•œê°œ...
 
 					break; // case _redDrug
 
@@ -149,7 +155,7 @@ class npc_Trinity : public CreatureScript
 
 };
 
-// ´Ï¿À
+// ë‹ˆì˜¤
 class npc_NIO : public CreatureScript
 {
 	public:
@@ -161,9 +167,9 @@ class npc_NIO : public CreatureScript
 
 			if(chk_matrix<1)
 			{
-				// ¼à¶ó¼à¶ó¼à¶ó DB ¿¬°á
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "»¡°£¾àÀ» ¸Ô´Â´Ù.", GOSSIP_SENDER_MAIN, _redDrug);
-				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ÆÄ¶õ¾àÀ» ¸Ô´Â´Ù.", GOSSIP_SENDER_MAIN, _blueDrug);
+				// ì†°ë¼ì†°ë¼ì†°ë¼ DB ì—°ê²°
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "ë¹¨ê°„ì•½ì„ ë¨¹ëŠ”ë‹¤.", GOSSIP_SENDER_MAIN, _redDrug);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "íŒŒë€ì•½ì„ ë¨¹ëŠ”ë‹¤.", GOSSIP_SENDER_MAIN, _blueDrug);
 	
 		        player->PlayerTalkClass->SendGossipMenu(907, creature->GetGUID());
 			}
@@ -181,7 +187,7 @@ class npc_NIO : public CreatureScript
 			{
 				case _redDrug:
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='1' WHERE `guid`='%u';", player->GetGUID());
-					player->GiveLevel(80); // Player->ApplyLevelInfo(Info, 80); µÑÁß¿¡¼­ ÇÑ°³...
+					player->GiveLevel(80); // Player->ApplyLevelInfo(Info, 80); ë‘˜ì¤‘ì—ì„œ í•œê°œ...
 
 					break; // case _redDrug
 
