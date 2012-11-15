@@ -18,6 +18,7 @@
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "InstanceScript.h"
+#include "ScriptPCH.h"
 #include "halls_of_reflection.h"
 #include "World.h"
 
