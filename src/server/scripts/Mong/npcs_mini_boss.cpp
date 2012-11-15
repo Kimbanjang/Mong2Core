@@ -1313,6 +1313,8 @@ public:
 #define SHOT				71251
 #define MIRRED				69051
 #define SPELL_ROCKET_STRIKE 63036
+#define SPELL_COLUMN_OF_FROST               70704
+#define SPELL_COLUMN_OF_FROST_DAMAGE        70702
 
 class npc_lyn_anna : public CreatureScript
 {
@@ -1392,6 +1394,12 @@ public:
                     }
                 }
             }
+		    
+		void JustSummoned(Creature* summon)
+            {
+                if (summon->GetEntry() == 37918)
+                    summon->m_Events.AddEvent(new DelayedCastEvent(summon, SPELL_COLUMN_OF_FROST_DAMAGE, 0, 8000), summon->m_Events.CalculateTime(2000));
+            }
         void UpdateAI(const uint32 uiDiff)
         {
             if (!UpdateVictim())
@@ -1451,7 +1459,7 @@ public:
 				if (posion_timer <= uiDiff && Ex_number < 5)
 				{
 					if (Unit *pTarget = SelectTarget(SELECT_TARGET_RANDOM, 0, 100, true))
-						me->CastSpell(pTarget, SPELL_ROCKET_STRIKE, true);
+						DoCast(pTarget, SPELL_COLUMN_OF_FROST)
 					posion_timer = 1000;
 				} else posion_timer -= uiDiff;
 
@@ -1519,7 +1527,7 @@ public:
     struct npc_lyn_reonaAI : public ScriptedAI
     {
         npc_lyn_reonaAI(Creature *pCreature) : ScriptedAI(pCreature){}
-
+ 
         uint32 shock_wave_timer;
         uint32 fire_stom_timer;
         uint32 god_fury_timer;

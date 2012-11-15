@@ -75,17 +75,17 @@ public:
 			}
 			if (iAction == PG_SKILL)		//skil Page
 			{
-				GOSSIP_ITEM(MI_WNG, "[대장 - 600 골드]",	SEND_SKILL, 164);				
-				GOSSIP_ITEM(MI_WNG, "[가세 - 600 골드]",	SEND_SKILL, 165);
-				GOSSIP_ITEM(MI_WNG, "[연금 - 600 골드]",	SEND_SKILL, 171);
-				GOSSIP_ITEM(MI_WNG, "[약초 - 600 골드]",	SEND_SKILL, 182);
-				GOSSIP_ITEM(MI_WNG, "[채광 - 600 골드]",	SEND_SKILL, 186);
-				GOSSIP_ITEM(MI_WNG, "[재봉 - 600 골드]",	SEND_SKILL, 197);
-				GOSSIP_ITEM(MI_WNG, "[기계 - 600 골드]",	SEND_SKILL, 202);
-				GOSSIP_ITEM(MI_WNG, "[마부 - 600 골드]",	SEND_SKILL, 333);
-				GOSSIP_ITEM(MI_WNG, "[무두 - 600 골드]",	SEND_SKILL, 393);
-				GOSSIP_ITEM(MI_WNG, "[보세 - 600 골드]",	SEND_SKILL, 755);
-				GOSSIP_ITEM(MI_WNG, "[주각 - 600 골드]",	SEND_SKILL, 773);
+				GOSSIP_ITEM(MI_WNG, "[대장기술]",	SEND_SKILL, 164);				
+				GOSSIP_ITEM(MI_WNG, "[가죽세공]",	SEND_SKILL, 165);
+				GOSSIP_ITEM(MI_WNG, "[연금술  ]",	SEND_SKILL, 171);
+				GOSSIP_ITEM(MI_WNG, "[약초학  ]",	SEND_SKILL, 182);
+				GOSSIP_ITEM(MI_WNG, "[채  광  ]",	SEND_SKILL, 186);
+				GOSSIP_ITEM(MI_WNG, "[재  봉  ]",	SEND_SKILL, 197);
+				GOSSIP_ITEM(MI_WNG, "[기계공학]",	SEND_SKILL, 202);
+				GOSSIP_ITEM(MI_WNG, "[마법부여]",	SEND_SKILL, 333);
+				GOSSIP_ITEM(MI_WNG, "[무두질  ]",	SEND_SKILL, 393);
+				GOSSIP_ITEM(MI_WNG, "[보석세공]",	SEND_SKILL, 755);
+				GOSSIP_ITEM(MI_WNG, "[주문각인]",	SEND_SKILL, 773);
 
 			}
 			
