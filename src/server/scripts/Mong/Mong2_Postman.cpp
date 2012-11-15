@@ -158,7 +158,7 @@ class npc_Postman : public CreatureScript
 
 };
 
-void AddSC_npc_Postman()
+void AddSC_Mong2_Postman()
 {
 	new npc_Postman();
 }
