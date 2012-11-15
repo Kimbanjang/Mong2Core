@@ -44,10 +44,10 @@ enum Misc
 {
     DATA_EMBRACE_DMG                              = 20000,
     H_DATA_EMBRACE_DMG                            = 40000,
-    DATA_SPHERE_DISTANCE                          =    15
+    DATA_SPHERE_DISTANCE                          =    60
 };
-#define DATA_SPHERE_ANGLE_OFFSET            0.7f
-#define DATA_GROUND_POSITION_Z             11.30809f
+#define DATA_SPHERE_ANGLE_OFFSET            2.1f
+#define DATA_GROUND_POSITION_Z             11.4f
 
 enum Yells
 {
@@ -80,9 +80,11 @@ public:
 
     struct boss_taldaramAI : public ScriptedAI
     {
-        boss_taldaramAI(Creature* creature) : ScriptedAI(creature)
+        boss_taldaramAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
             instance = creature->GetInstanceScript();
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
+            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             me->SetDisableGravity(true);
         }
 
@@ -99,9 +101,21 @@ public:
         CombatPhase Phase;
 
         InstanceScript* instance;
+        SummonList Summons;
+
+        void JustSummoned(Creature* summon)
+        {
+            Summons.Summon(summon);
+        }
+
+        void SummonedCreatureDespawn(Creature* summon)
+        {
+            Summons.Despawn(summon);
+        }
 
         void Reset()
         {
+            Summons.DespawnAll();
             uiBloodthirstTimer = 10*IN_MILLISECONDS;
             uiVanishTimer = urand(25*IN_MILLISECONDS, 35*IN_MILLISECONDS);
             uiEmbraceTimer = 20*IN_MILLISECONDS;
@@ -263,6 +277,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             Talk(SAY_DEATH);
+            Summons.DespawnAll();
 
             if (instance)
                 instance->SetData(DATA_PRINCE_TALDARAM_EVENT, DONE);
@@ -316,6 +331,8 @@ public:
         {
             if (!instance)
                 return;
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             me->RemoveAurasDueToSpell(SPELL_BEAM_VISUAL);
             me->SetHomePosition(me->GetPositionX(), me->GetPositionY(), DATA_GROUND_POSITION_Z, me->GetOrientation());

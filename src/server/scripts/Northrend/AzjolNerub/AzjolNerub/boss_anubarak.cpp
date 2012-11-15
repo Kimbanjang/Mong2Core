@@ -25,8 +25,12 @@ enum Spells
     SPELL_SUMMON_CARRION_BEETLES                  = 53521,
     SPELL_LEECHING_SWARM                          = 53467,
     SPELL_POUND                                   = 53472,
+    SPELL_POUND_1                                 = 53509,
+    SPELL_POUND_H                                 = 59433,
+    SPELL_POUND_H_1                               = 59432,
     SPELL_SUBMERGE                                = 53421,
     SPELL_IMPALE_DMG                              = 53454,
+    SPELL_IMPALE_DMG_H                            = 59446,
     SPELL_IMPALE_SHAKEGROUND                      = 53455,
     SPELL_IMPALE_SPIKE                            = 53539,   //this is not the correct visual effect
     //SPELL_IMPALE_TARGET                           = 53458,
@@ -142,6 +146,20 @@ public:
             }
         }
 
+        void SpellHitTarget(Unit* target, const SpellInfo* spell)
+        {
+            if (!target)
+                return;
+
+            if (!spell || (spell->Id != SPELL_POUND && spell->Id != SPELL_POUND_H))
+                return;
+
+            if (spell->Id == SPELL_POUND)
+                DoCast(target, SPELL_POUND_1, true);
+            else if (spell->Id == SPELL_POUND_H)
+                DoCast(target, SPELL_POUND_H_1, true);
+        }
+
         Creature* DoSummonImpaleTarget(Unit* target)
         {
             Position targetPos;
@@ -178,6 +196,9 @@ public:
             if (!UpdateVictim())
                 return;
 
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
             if (DelayTimer && DelayTimer > 5000)
                 DelayEventStart();
             else DelayTimer+=diff;
@@ -209,7 +230,7 @@ public:
                         break;
                     case IMPALE_PHASE_DMG:
                         if (Creature* impaleTarget = Unit::GetCreature(*me, ImpaleTarget))
-                            me->CastSpell(impaleTarget, SPELL_IMPALE_DMG, true);
+                            me->CastSpell(impaleTarget, DUNGEON_MODE(SPELL_IMPALE_DMG, SPELL_IMPALE_DMG_H), true);
                         ImpalePhase = IMPALE_PHASE_TARGET;
                         ImpaleTimer = 9*IN_MILLISECONDS;
                         break;
@@ -295,6 +316,7 @@ public:
                     ImpalePhase = 0;
                     ImpaleTimer = 9*IN_MILLISECONDS;
 
+                    me->RemoveAllAuras();
                     DoCast(me, SPELL_SUBMERGE, false);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
 
@@ -326,7 +348,10 @@ public:
                     if (Unit* target = me->getVictim())
                     {
                         if (Creature* pImpaleTarget = DoSummonImpaleTarget(target))
-                            me->CastSpell(pImpaleTarget, SPELL_POUND, false);
+                        {
+                            me->SetFacingToObject(pImpaleTarget);
+                            me->CastSpell(pImpaleTarget, DUNGEON_MODE(SPELL_POUND, SPELL_POUND_H), false);
+                        }
                     }
                     PoundTimer = 16500;
                 } else PoundTimer -= diff;
