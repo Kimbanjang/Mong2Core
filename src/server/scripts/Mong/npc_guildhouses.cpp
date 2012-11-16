@@ -26,12 +26,12 @@ EndScriptData */
 #include "ScriptPCH.h"
 
 #define TELEPORT_ID      1
-#define TELEPORT_TEXT    "Teleportami!"
+#define TELEPORT_TEXT    "이동합니다."
 #define BUFF_ID          1
-#define BUFF_TEXT        "Ho bisogno di Buff!"
-#define GH_LT_80         "Solo i livelli 80 possono essere buffati da me"
-#define GH_NO_GUILDHOUSE "La tua gilda non possiede una casa"
-#define GH_NO_GUILD      "Non hai una gilda"
+#define BUFF_TEXT        "길드 영지 버프!"
+#define GH_LT_80         "80레벨만이 가능합니다."
+#define GH_NO_GUILDHOUSE "길드영지가 없습니다."
+#define GH_NO_GUILD      "길드가 없습니다."
 
 enum Buffs {
     FORTITUDE        = 69377,

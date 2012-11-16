@@ -217,6 +217,6 @@ public:
 };
 void AddSC_npc_lottery()
 {
-    // new npc_lotto();
+    //new npc_lotto();
 	new npc_Mailsender();
 }

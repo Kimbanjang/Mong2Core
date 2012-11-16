@@ -29,8 +29,7 @@ void AddSC_Sweet_TeleportNPC();
 void AddSC_Lyn_change();
 void AddSC_npcs_mini_boss10();
 void AddSC_npc_lottery();
-
-
+void AddSC_Mong2_Postman();
 
 // spells
 void AddSC_deathknight_spell_scripts();
@@ -1289,11 +1288,8 @@ void AddCustomScripts()
 	AddSC_Lyn_change();
 	AddSC_npcs_mini_boss10();
 	AddSC_npc_lottery();
+	AddSC_Mong2_Postman();
 
-//<<<<<<< .mine
-//
-//=======
-    AddSC_NPC_Transmogrify();
-//>>>>>>> .theirs
+	AddSC_NPC_Transmogrify();
 #endif
 }
