@@ -27,7 +27,7 @@ void AddSC_example_commandscript();
 //custom
 void AddSC_Sweet_TeleportNPC();
 void AddSC_Lyn_change();
-void AddSC_npcs_mini_boss();
+void AddSC_npcs_mini_boss10();
 void AddSC_npc_lottery();
 
 
@@ -1287,7 +1287,7 @@ void AddCustomScripts()
     /* This is where custom scripts should be added. */
 	AddSC_Sweet_TeleportNPC();
 	AddSC_Lyn_change();
-	AddSC_npcs_mini_boss();
+	AddSC_npcs_mini_boss10();
 	AddSC_npc_lottery();
 
 //<<<<<<< .mine

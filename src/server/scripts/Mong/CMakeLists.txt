@@ -7,7 +7,7 @@ set(scripts_STAT_SRCS
   Mong/Sweet_TeleportNPC.h
   Mong/npc_guildhouses.cpp
   Mong/npc_lottery.cpp
-  Mong/npcs_mini_boss.cpp
+  Mong/npcs_mini_boss10.cpp
   Mong/Transmogrification.cpp
   Mong/PvP_OnKillHonor.cpp
 )
