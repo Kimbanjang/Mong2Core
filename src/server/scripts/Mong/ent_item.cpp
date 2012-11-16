@@ -27,7 +27,7 @@ public:
 		uint32 item_slot;
 		uint32 item_spell_level;
 		uint32 ent_spell; 
-		uint32 spell_rand = (rand()%10);
+		uint32 spell_rand = (rand()%50); //(rand()%10);
 		
 		Field *fields = result->Fetch();
 		item_slot = fields[0].GetUInt32() ;
@@ -42,38 +42,34 @@ public:
 			SEND_NOTIFICATION(C_YLW"장비가 없습니다. 주문서가 빛나며 사라집니다.");
 			return true;
 		}
-		//   // remove old enchanting before applying new if equipped
-        //item_owner->ApplyEnchantment(itemTarget,PERM_ENCHANTMENT_SLOT,false);
 
-        //itemTarget->SetEnchantment(PERM_ENCHANTMENT_SLOT, enchant_id, 0, 0);
-
-        //// add new enchanting if equipped
-        //item_owner->ApplyEnchantment(itemTarget,PERM_ENCHANTMENT_SLOT,true);
-
-        //itemTarget->SetSoulboundTradeable(NULL, item_owner, false);
 		
 		Item* itemTarget = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, item_slot);
 		pPlayer->ApplyEnchantment(itemTarget, EnchantmentSlot(item_spell_level), false);  // 이전 마법부여를 지운다
 		char msg[500];
+		if(spell_rand < 2 && item_spell_level == 7)
+			item_spell_level += 1;
+
+
 		//확률 계산
-		if(spell_rand < ent_suc)
-		{
+		////if(spell_rand < ent_suc)
+		//{
 			sprintf(msg,"|cffffff00 주문서가 빛을 내며 사라집니다.  %s  마법이 부여되었습니다.",caption);
 			itemTarget->SetEnchantment(EnchantmentSlot(item_spell_level), ent_spell, 0, 0);
 			pPlayer->ApplyEnchantment(itemTarget, EnchantmentSlot(item_spell_level), true);   // 새로운 마법부여
 			SEND_NOTIFICATION(msg);
-		}
-		else if(spell_rand < (ent_suc + 2))
-		{
-			SEND_NOTIFICATION(C_YLW"주문서가 지글거리며 타오릅니다. 주문서 사용에 실패 햇습니다.");
-			itemTarget->ClearEnchantment(EnchantmentSlot(item_spell_level));
-		}
-		else 
-		{
-			itemTarget->IsBroken();
-			//pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, item_slot, true);
-			SEND_NOTIFICATION(C_YLW"무리한 주문을 취급하면서 장비가 손상되었습니다.");
-		}
+		//}
+		//else if(spell_rand < (ent_suc + 2))
+		//{
+		//	SEND_NOTIFICATION(C_YLW"주문서가 지글거리며 타오릅니다. 주문서 사용에 실패 햇습니다.");
+		//	itemTarget->ClearEnchantment(EnchantmentSlot(item_spell_level));
+		//}
+		//else 
+		//{
+		//	itemTarget->IsBroken();
+		//	//pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, item_slot, true);
+		//	SEND_NOTIFICATION(C_YLW"무리한 주문을 취급하면서 장비가 손상되었습니다.");
+		//}
 	return true;	
 	}
 };
