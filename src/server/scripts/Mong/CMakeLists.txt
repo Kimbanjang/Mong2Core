@@ -8,7 +8,6 @@ set(scripts_STAT_SRCS
   Mong/npc_guildhouses.cpp
   Mong/npc_lottery.cpp
   Mong/npcs_mini_boss10.cpp
-  Mong/Transmogrification.cpp
   Mong/PvP_OnKillHonor.cpp
   Mong/Mong2_Postman.cpp
 )
