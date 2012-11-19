@@ -21,7 +21,11 @@
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
 #include "halls_of_reflection.h"
+<<<<<<< HEAD
 #define MAX_ENCOUNTER_TIME                    6 * 60 * 1000
+=======
+#include "Player.h"
+>>>>>>> TC/master
 
 enum
 {

@@ -23,6 +23,7 @@ EndScriptData */
 
 #include "ScriptPCH.h"
 #include "trial_of_the_champion.h"
+#include "Player.h"
 
 #define MAX_ENCOUNTER  4
 

@@ -44,6 +44,7 @@
 #include "Battleground.h"
 #include "AccountMgr.h"
 #include "LFGMgr.h"
+#include "CalendarMgr.h"
 
 class LoginQueryHolder : public SQLQueryHolder
 {
@@ -726,6 +727,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recvData)
             sLog->outCharDump(dump.c_str(), GetAccountId(), GUID_LOPART(guid), name.c_str());
     }
 
+    sCalendarMgr->RemoveAllPlayerEventsAndInvites(guid);
     Player::DeleteFromDB(guid, GetAccountId());
 
     WorldPacket data(SMSG_CHAR_DELETE, 1);
@@ -772,7 +774,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 
     Player* pCurrChar = new Player(this);
      // for send server info and strings (config)
-    ChatHandler chH = ChatHandler(pCurrChar);
+    ChatHandler chH = ChatHandler(pCurrChar->GetSession());
 
     // "GetAccountId() == db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)
     if (!pCurrChar->LoadFromDB(GUID_LOPART(playerGuid), holder))
