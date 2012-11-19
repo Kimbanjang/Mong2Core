@@ -3373,11 +3373,10 @@ void Unit::_UnapplyAura(AuraApplicationMap::iterator &i, AuraRemoveMode removeMo
     ASSERT(!aurApp->GetEffectMask());
 
     // Remove totem at next update if totem loses its aura
-    if (aurApp->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE && GetTypeId() == TYPEID_UNIT && ToCreature()->isTotem()&& ToTotem()->GetSummonerGUID() == aura->GetCasterGUID())
-    {
+	// 토템에 적용되는 대상 번위관련 핵 : 차후 코어수정 되면 고쳐야 함
+    if (aurApp->GetRemoveMode() == AURA_REMOVE_BY_EXPIRE && GetTypeId() == TYPEID_UNIT && ToCreature()->isTotem()) 
         if (ToTotem()->GetSpell() == aura->GetId() && ToTotem()->GetTotemType() == TOTEM_PASSIVE)
             ToTotem()->setDeathState(JUST_DIED);
-    }
 
     // Remove aurastates only if were not found
     if (!auraStateFound)
