@@ -20,9 +20,7 @@
 #include "InstanceScript.h"
 #include "ScriptPCH.h"
 #include "halls_of_reflection.h"
-<<<<<<< HEAD
 #include "World.h"
-=======
 #include "Player.h"
 
 #define MAX_ENCOUNTER 3

@@ -194,7 +194,7 @@ struct boss_twin_baseAI : public BossAI
         {
             Talk(SAY_KILL_PLAYER);
             if (instance)
-                instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
+                instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
         }
     }
 
@@ -596,14 +596,9 @@ class mob_unleashed_dark : public CreatureScript
 
             void UpdateAI(const uint32 diff)
             {
-<<<<<<< HEAD
-                if (Unit* target = me->SelectNearestTarget(2.0f))
-                    if (target->GetTypeId() == TYPEID_PLAYER && target->isAlive())
-=======
                 if (RangeCheckTimer < diff)
                 {
                     if (me->SelectNearestPlayer(3.0f))
->>>>>>> TC/master
                     {
                         DoCastAOE(SPELL_UNLEASHED_DARK_HELPER);
                         me->GetMotionMaster()->MoveIdle();
@@ -633,14 +628,9 @@ class mob_unleashed_light : public CreatureScript
 
             void UpdateAI(const uint32 diff)
             {
-<<<<<<< HEAD
-                if (Unit* target = me->SelectNearestTarget(2.0f))
-                    if (target->GetTypeId() == TYPEID_PLAYER && target->isAlive())
-=======
                 if (RangeCheckTimer < diff)
                 {
                     if (me->SelectNearestPlayer(3.0f))
->>>>>>> TC/master
                     {
                         DoCastAOE(SPELL_UNLEASHED_LIGHT_HELPER);
                         me->GetMotionMaster()->MoveIdle();

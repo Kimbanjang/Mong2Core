@@ -646,7 +646,7 @@ struct boss_faction_championsAI : public BossAI
                         temp->AI()->Talk(SAY_KILL_PLAYER);
 
 
-                instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
+                instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
             }
         }
     }
@@ -877,36 +877,6 @@ class mob_toc_shaman : public CreatureScript
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-<<<<<<< HEAD
-                    case 0:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_LIFEBLOOM);
-                        else
-                            DoCast(me, SPELL_LIFEBLOOM);
-                        break;
-                    case 1:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_NOURISH);
-                        else
-                            DoCast(me, SPELL_NOURISH);
-                        break;
-                    case 2:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_REGROWTH);
-                        else
-                            DoCast(me, SPELL_REGROWTH);
-                        break;
-                    case 3:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_REJUVENATION);
-                        else
-                            DoCast(me, SPELL_REJUVENATION);
-                        break;
-                    case 4:
-                        if (Creature* target = SelectRandomFriendlyMissingBuff(SPELL_THORNS))
-                            DoCast(target, SPELL_THORNS);
-                        break;
-=======
                     switch (eventId)
                     {
                         case EVENT_HEALING_WAVE:
@@ -955,7 +925,6 @@ class mob_toc_shaman : public CreatureScript
                         default:
                             return;
                     }
->>>>>>> TC/master
                 }
             }
         };
@@ -1105,31 +1074,6 @@ class mob_toc_priest : public CreatureScript
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-<<<<<<< HEAD
-                    case 0: case 1:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_HEALING_WAVE);
-                        else
-                            DoCast(me, SPELL_HEALING_WAVE);
-                        break;
-                    case 2:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_RIPTIDE);
-                        else
-                            DoCast(me, SPELL_RIPTIDE);
-                        break;
-                    case 3:
-                        if (Unit* target = SelectEnemyCaster(false))
-                            DoCast(target, SPELL_EARTH_SHOCK);
-                        break;
-                    case 4:
-                        DoCast(me, SPELL_SPIRIT_CLEANSE);
-                        break;
-                    case 5:
-                        if (Unit* target = SelectRandomFriendlyMissingBuff(SPELL_EARTH_SHIELD))
-                            DoCast(target, SPELL_EARTH_SHIELD);
-                        break;
-=======
                     switch (eventId)
                     {
                         case EVENT_RENEW:
@@ -1170,7 +1114,6 @@ class mob_toc_priest : public CreatureScript
                         default:
                             return;
                     }
->>>>>>> TC/master
                 }
             }
         };
@@ -1320,23 +1263,6 @@ class mob_toc_warlock : public CreatureScript
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-<<<<<<< HEAD
-                    case 0: case 1:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_FLASH_OF_LIGHT);
-                        else
-                            DoCast(me, SPELL_FLASH_OF_LIGHT);
-                        break;
-                    case 2: case 3:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_HOLY_LIGHT);
-                        else
-                            DoCast(me, SPELL_HOLY_LIGHT);
-                        break;
-                    case 4:
-                        DoCast(me, SPELL_CLEANSE);
-                        break;
-=======
                     switch (eventId)
                     {
                         case EVENT_HELLFIRE:
@@ -1376,7 +1302,6 @@ class mob_toc_warlock : public CreatureScript
                         default:
                             return;
                     }
->>>>>>> TC/master
                 }
                 DoSpellAttackIfReady(SPELL_SHADOW_BOLT);
             }
@@ -1388,22 +1313,7 @@ class mob_toc_warlock : public CreatureScript
         }
 };
 
-<<<<<<< HEAD
-enum ePriestSpells
-{
-    SPELL_RENEW             = 66177,
-    SPELL_SHIELD            = 66099,
-    SPELL_FLASH_HEAL        = 66104,
-    SPELL_DISPEL            = 65546,
-    SPELL_PSYCHIC_SCREAM    = 65543,
-    SPELL_MANA_BURN         = 66100,
-    SPELL_PENANCE           = 66098,
-};
-
-class mob_toc_priest : public CreatureScript
-=======
 class mob_toc_mage : public CreatureScript
->>>>>>> TC/master
 {
     public:
         mob_toc_mage() : CreatureScript("mob_toc_mage") { }
@@ -1431,45 +1341,6 @@ class mob_toc_mage : public CreatureScript
                 if (!UpdateVictim())
                     return;
 
-<<<<<<< HEAD
-            if (m_uiCommonTimer <= uiDiff)
-            {
-                switch (urand(0, 6))
-                {
-                    case 0:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_RENEW);
-                        else
-                            DoCast(me, SPELL_RENEW);
-                        break;
-                    case 1:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_SHIELD);
-                        else
-                            DoCast(me, SPELL_SHIELD);
-                        break;
-                    case 2: case 3:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_FLASH_HEAL);
-                        else
-                            DoCast(me, SPELL_FLASH_HEAL);
-                        break;
-                    case 4:
-                        if (Unit* target = urand(0, 1) ? SelectTarget(SELECT_TARGET_RANDOM, 0) : DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_DISPEL);
-                        else
-                            DoCast(me, SPELL_DISPEL);
-                        break;
-                    case 5:
-                        if (Unit* target = SelectEnemyCaster(false))
-                            DoCast(target, SPELL_MANA_BURN);
-                        break;
-                    case 6:
-                        if (Unit* target = DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_PENANCE);
-                        else
-                            DoCast(me, SPELL_PENANCE);
-=======
                 events.Update(diff);
                 boss_faction_championsAI::UpdateAI(diff);
 
@@ -1525,7 +1396,6 @@ class mob_toc_mage : public CreatureScript
                         default:
                             return;
                     }
->>>>>>> TC/master
                 }
                 DoSpellAttackIfReady(SPELL_FROSTBOLT);
             }
@@ -1579,26 +1449,6 @@ class mob_toc_hunter : public CreatureScript
 
                 while (uint32 eventId = events.ExecuteEvent())
                 {
-<<<<<<< HEAD
-                    case 0: case 1:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_MIND_FLAY);
-                        break;
-                    case 2:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_VAMPIRIC_TOUCH);
-                        break;
-                   case 3:
-                        if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                            DoCast(target, SPELL_SW_PAIN);
-                        break;
-                   case 4:
-                        if (Unit* target = urand(0, 1) ? SelectTarget(SELECT_TARGET_RANDOM, 0) : DoSelectLowestHpFriendly(40.0f))
-                            DoCast(target, SPELL_DISPEL);
-                        else
-                            DoCast(me, SPELL_DISPEL);
-                        break;
-=======
                     switch (eventId)
                     {
                         case EVENT_AIMED_SHOT:
@@ -1645,7 +1495,6 @@ class mob_toc_hunter : public CreatureScript
                         default:
                             return;
                     }
->>>>>>> TC/master
                 }
                 DoSpellAttackIfReady(SPELL_SHOOT);
             }
@@ -2073,14 +1922,8 @@ class mob_toc_enh_shaman : public CreatureScript
 
             void JustSummoned(Creature* summoned)
             {
-<<<<<<< HEAD
-                DoCastVictim(SPELL_BLADESTORM);
-                m_uiBladestormTimer = urand(40*IN_MILLISECONDS, 60*IN_MILLISECONDS);
-            } else m_uiBladestormTimer -= uiDiff;
-=======
                 summons.Summon(summoned);
             }
->>>>>>> TC/master
 
             void SummonedCreatureDespawn(Creature* /*pSummoned*/)
             {
@@ -2098,17 +1941,8 @@ class mob_toc_enh_shaman : public CreatureScript
 
                 -Healing Stream (unable to find amount of healing in our logs)
 
-<<<<<<< HEAD
-            if (m_uiChargeTimer <= uiDiff)
-            {
-				if (me->IsInRange(me->getVictim(), 8.0f, 25.0f, false))
-                	DoCastVictim(SPELL_CHARGE);
-                m_uiChargeTimer = urand(3*IN_MILLISECONDS, 25*IN_MILLISECONDS);
-            } else m_uiChargeTimer -= uiDiff;
-=======
                 -Tremor (prevents fear effects)
                 -Strength of Earth (155 strength and agil for the opposing team)
->>>>>>> TC/master
 
                 -Searing (average ~3500 damage on a random target every ~3.5 seconds)
                 */

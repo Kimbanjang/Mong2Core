@@ -70,25 +70,17 @@ enum BossSpells
 
     // Scarab
     SPELL_DETERMINATION     = 66092,
-    SPELL_TRIGGERED_ACID_MANDIBLE_0 = 65775,
-    SPELL_TRIGGERED_ACID_MANDIBLE_1 = 67861,
-    SPELL_TRIGGERED_ACID_MANDIBLE_2 = 67862,
-    SPELL_TRIGGERED_ACID_MANDIBLE_3 = 67863,
+    SPELL_ACID_MANDIBLE     = 65774, //Passive - Triggered
 
     // Burrower
-    SPELL_SPIDER_FRENZY     = 66129,
+    SPELL_SPIDER_FRENZY     = 66128,
     SPELL_EXPOSE_WEAKNESS   = 67720, //Passive - Triggered
     SPELL_SHADOW_STRIKE     = 66134,
-<<<<<<< HEAD
-    SPELL_SUBMERGE_EFFECT   = 53421,
-    SPELL_EMERGE_EFFECT     = 66947,
-=======
     SPELL_SUBMERGE_EFFECT   = 68394,
     SPELL_AWAKENED          = 66311,
     SPELL_EMERGE_EFFECT     = 65982,
 
     SPELL_PERSISTENT_DIRT   = 68048,
->>>>>>> TC/master
 
     SUMMON_SCARAB           = NPC_SCARAB,
     SUMMON_FROSTSPHERE      = NPC_FROST_SPHERE,
@@ -96,7 +88,9 @@ enum BossSpells
 
     //Frost Sphere
     SPELL_FROST_SPHERE      = 67539,
+    SPELL_PERMAFROST        = 66193,
     SPELL_PERMAFROST_VISUAL = 65882,
+    SPELL_PERMAFROST_MODEL  = 66185,
 
     //Spike
     SPELL_SUMMON_SPIKE      = 66169,
@@ -108,27 +102,22 @@ enum BossSpells
     SPELL_SPIKE_TELE        = 66170
 };
 
-#define SPELL_PERMAFROST    RAID_MODE(66193, 67855, 67856, 67857)
-#define SPELL_IMPALE        RAID_MODE(65919, 67858, 67859, 67860)
+#define SPELL_PERMAFROST_HELPER RAID_MODE<uint32>(66193, 67855, 67856, 67857)
 
 enum SummonActions
 {
-<<<<<<< HEAD
-    ACTION_SHADOW_STRIKE,
-=======
     ACTION_SHADOW_STRIKE    = 0,
     ACTION_SCARAB_SUBMERGE  = 1
->>>>>>> TC/master
 };
 
 const Position SphereSpawn[6] =
 {
-    { 776.8380f, 125.6795f, 155.6701f, 0 },
-    { 786.4426f, 145.5566f, 155.6701f, 0 },
-    { 759.1386f, 163.9654f, 155.6701f, 0 },
-    { 744.3701f, 119.5211f, 155.6701f, 0 },
-    { 710.0211f, 120.8152f, 155.6701f, 0 },
-    { 706.6383f, 161.5266f, 155.6701f, 0 },
+    {779.8038f, 150.6580f, 158.1426f, 0},
+    {736.0243f, 113.4201f, 158.0226f, 0},
+    {712.5712f, 160.9948f, 158.4368f, 0},
+    {701.4271f, 126.4740f, 158.0205f, 0},
+    {747.9202f, 155.0920f, 158.0613f, 0},
+    {769.6285f, 121.1024f, 158.0504f, 0},
 };
 
 enum MovementPoints
@@ -165,57 +154,8 @@ enum Phases
     PHASE_MELEE                 = 1,
     PHASE_SUBMERGED             = 2,
 
-<<<<<<< HEAD
-        InstanceScript* instance;
-
-        SummonList Summons;
-
-        uint32 m_uiFreezeSlashTimer;
-        uint32 m_uiPenetratingColdTimer;
-        uint32 m_uiSummonNerubianTimer;
-        uint32 m_uiNerubianShadowStrikeTimer;
-        uint32 m_uiSubmergeTimer;
-        float m_posPursuingSpikePositionX;
-        float m_posPursuingSpikePositionY;
-        float m_posPursuingSpikePositionZ;
-        uint32 m_uiPursuingSpikeTimer;
-        uint32 m_uiSummonScarabTimer;
-        uint32 m_uiSummonFrostSphereTimer;
-        uint32 m_uiBerserkTimer;
-
-        uint8  m_uiStage;
-        bool   m_bIntro;
-        bool   m_bReachedPhase3;
-        uint64 m_uiTargetGUID;
-
-        void Reset()
-        {
-            m_uiFreezeSlashTimer = 15*IN_MILLISECONDS;
-            m_uiPenetratingColdTimer = 20*IN_MILLISECONDS;
-            m_uiNerubianShadowStrikeTimer = 30*IN_MILLISECONDS;
-            m_uiSummonNerubianTimer = 10*IN_MILLISECONDS;
-            m_uiSubmergeTimer = 80*IN_MILLISECONDS;
-
-            m_posPursuingSpikePositionX = 0.0f;
-            m_posPursuingSpikePositionY = 0.0f;
-            m_posPursuingSpikePositionZ = 0.0f;
-            m_uiPursuingSpikeTimer = 2*IN_MILLISECONDS;
-
-            m_uiSummonFrostSphereTimer = urand(20, 30)*1000;
-
-            m_uiBerserkTimer = 10*MINUTE*IN_MILLISECONDS;
-            m_uiStage = 0;
-            m_bIntro = true;
-            m_bReachedPhase3 = false;
-            m_uiTargetGUID = 0;
-            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-            me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_PERMAFROST, true);
-            Summons.DespawnAll();
-        }
-=======
     PHASE_MASK_MELEE            = 1 << PHASE_MELEE
 };
->>>>>>> TC/master
 
 class boss_anubarak_trial : public CreatureScript
 {
@@ -226,12 +166,6 @@ class boss_anubarak_trial : public CreatureScript
         {
             boss_anubarak_trialAI(Creature* creature) : BossAI(creature, BOSS_ANUBARAK)
             {
-<<<<<<< HEAD
-                Talk(SAY_KILL_PLAYER);
-                if (instance)
-                    instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
-=======
->>>>>>> TC/master
             }
 
             void Reset()
@@ -262,47 +196,6 @@ class boss_anubarak_trial : public CreatureScript
                 _burrowGUID.clear();
             }
 
-<<<<<<< HEAD
-        void JustReachedHome()
-        {
-            if (instance)
-                instance->SetData(TYPE_ANUBARAK, FAIL);
-        }
-
-        void JustDied(Unit* /*killer*/)
-        {
-            Summons.DespawnAll();
-            Talk(SAY_DEATH);
-            if (instance)
-                instance->SetData(TYPE_ANUBARAK, DONE);
-        }
-
-        void JustSummoned(Creature* summoned)
-        {
-            switch (summoned->GetEntry())
-            {
-                case NPC_BURROW:
-                    summoned->SetReactState(REACT_PASSIVE);
-                    summoned->CastSpell(summoned, SPELL_CHURNING_GROUND, false);
-                    break;
-                case NPC_SPIKE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
-                    {
-                        summoned->AI()->AttackStart(target);
-                        Talk(EMOTE_SPIKE, target->GetGUID());
-                    }
-                    else
-                        m_uiPursuingSpikeTimer = 2000;
-                    break;
-                case NPC_BURROWER:
-                case NPC_SCARAB:
-                    summoned->setFaction(14);
-                    DoZoneInCombat(summoned);
-                    break;
-            }
-            Summons.Summon(summoned);
-        }
-=======
             void KilledUnit(Unit* who)
             {
                 if (who->GetTypeId() == TYPEID_PLAYER)
@@ -312,70 +205,15 @@ class boss_anubarak_trial : public CreatureScript
                         instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
                 }
             }
->>>>>>> TC/master
 
             void MoveInLineOfSight(Unit* /*who*/)
             {
-<<<<<<< HEAD
-                case NPC_SPIKE:
-                    m_posPursuingSpikePositionX = summoned->GetPositionX();
-                    m_posPursuingSpikePositionY = summoned->GetPositionY();
-                    m_posPursuingSpikePositionZ = summoned->GetPositionZ();
-                    m_uiPursuingSpikeTimer = 2*IN_MILLISECONDS;
-                    break;
-            }
-
-            Summons.Despawn(summoned);
-        }
-
-        uint32 GetPlayerCountInFrostSphereZones()
-        {
-            uint32 counter = 0;
-            Map* map = me->GetMap();
-
-            if (map && map->IsDungeon())
-            {
-                Map::PlayerList const &PlayerList = map->GetPlayers();
-
-                if (PlayerList.isEmpty())
-                    return 0;
-
-                for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
-                {
-                    if (i->getSource())
-                    {
-                        if (i->getSource()->isAlive())
-                        {
-                            if (i->getSource()->HasAura(SPELL_PERMAFROST))
-                                counter++;
-                        }
-                    }
-               }
-            }
-
-            return counter;
-        }
-
-        void EnterCombat(Unit* /*who*/)
-        {
-            Talk(SAY_AGGRO);
-            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-            DoZoneInCombat();
-            if (instance)
-                instance->SetData(TYPE_ANUBARAK, IN_PROGRESS);
-
-            //Spawn Frost Spheres
-            for (int i=0; i < 6; i++)
-                me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]);
-        }
-=======
                 if (!_intro)
                 {
                     Talk(SAY_INTRO);
                     _intro = false;
                 }
             }
->>>>>>> TC/master
 
             void JustReachedHome()
             {
@@ -406,164 +244,6 @@ class boss_anubarak_trial : public CreatureScript
 
             void JustSummoned(Creature* summoned)
             {
-<<<<<<< HEAD
-                case 0:
-                    if (m_uiFreezeSlashTimer <= uiDiff)
-                    {
-                        DoCastVictim(SPELL_FREEZE_SLASH);
-                        m_uiFreezeSlashTimer = urand(8*1000, 10*1000);
-                    } else m_uiFreezeSlashTimer -= uiDiff;
-
-                    if (m_uiPenetratingColdTimer <= uiDiff)
-                    {
-                        me->CastCustomSpell(SPELL_PENETRATING_COLD, SPELLVALUE_MAX_TARGETS, RAID_MODE(2, 5, 2, 5));
-                        m_uiPenetratingColdTimer = 18000;
-                    } else m_uiPenetratingColdTimer -= uiDiff;
-
-                    if (IsHeroic() || !m_bReachedPhase3)
-                    {
-                        if (m_uiSummonNerubianTimer <= uiDiff)
-                        {
-                            uint8 maxSpawns = RAID_MODE(1, 2, 2, 4);
-
-                            for (uint8 i = 0; i < maxSpawns; i++)
-                                me->SummonCreature(NPC_BURROWER, AnubarakLoc[i+2], TEMPSUMMON_CORPSE_DESPAWN);
-
-                            m_uiSummonNerubianTimer = 40000;
-                        } else m_uiSummonNerubianTimer -= uiDiff;
-                    }
-
-                    if (IsHeroic())
-                    {
-                        if (m_uiNerubianShadowStrikeTimer <= uiDiff)
-                        {
-                            EntryCheckPredicate pred(NPC_BURROWER);
-                            Summons.DoAction(ACTION_SHADOW_STRIKE, pred);
-                            m_uiNerubianShadowStrikeTimer = urand(20*1000, 30*1000);
-                        } else m_uiNerubianShadowStrikeTimer -= uiDiff;
-                    }
-
-                    if (!m_bReachedPhase3 && !me->HasAura(SPELL_BERSERK))
-                    {
-                        if (m_uiSubmergeTimer <= uiDiff)
-                        {
-                            m_uiStage = 1;
-                            m_uiSubmergeTimer = 60*1000;
-                        } else m_uiSubmergeTimer -= uiDiff;
-                    }
-                    break;
-                case 1:
-                    DoCast(me, SPELL_SUBMERGE_ANUBARAK);
-                    DoCast(me, SPELL_CLEAR_ALL_DEBUFFS);
-                    me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-                    Talk(EMOTE_BURROWER);
-                    m_uiPursuingSpikeTimer = 2000;
-                    m_uiSummonScarabTimer = 4*IN_MILLISECONDS;
-                    m_uiStage = 2;
-                    break;
-                case 2:
-                    if (m_uiPursuingSpikeTimer <= uiDiff)
-                    {
-                        // replace spell with manual spawning so we can restart the spike where it left off.
-                        //DoCast(SPELL_SPIKE_CALL);
-                        if (m_posPursuingSpikePositionX == 0.0f || m_posPursuingSpikePositionY == 0.0f || m_posPursuingSpikePositionZ == 0.0f)
-                            me->SummonCreature(NPC_SPIKE, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
-                        else
-                            me->SummonCreature(NPC_SPIKE, m_posPursuingSpikePositionX, m_posPursuingSpikePositionY, m_posPursuingSpikePositionZ);
-                        // Just to make sure it won't happen again in this phase
-                        m_uiPursuingSpikeTimer = 90*IN_MILLISECONDS;
-                    } else m_uiPursuingSpikeTimer -= uiDiff;
-
-                    if (m_uiSummonScarabTimer <= uiDiff)
-                    {
-                        uint32 playersInFrostSphere = GetPlayerCountInFrostSphereZones();
-
-                        if (playersInFrostSphere > 0)
-                        {
-                            uint8 location = 2;
-                            for (uint8 i = 0; i < playersInFrostSphere * RAID_MODE(1, 2, 2, 3); i++)
-                            {
-                                location++;
-
-                                if (location >= 6)
-                                    location = 2;
-
-                                me->SummonCreature(NPC_SCARAB, AnubarakLoc[location], TEMPSUMMON_CORPSE_DESPAWN);
-                            }
-                        }
-                        else
-                        {
-                            if (!me->GetMap())
-                                return;
-
-                            if (!me->GetMap()->IsDungeon())
-                                return;
-
-                            uint32 count = 0;
-
-                            switch (me->GetMap()->GetDifficulty())
-                            {
-                                case RAID_DIFFICULTY_10MAN_NORMAL:
-                                    count = urand(1, 2);
-                                    break;
-                                case RAID_DIFFICULTY_25MAN_NORMAL:
-                                    count = 2;
-                                    break;
-                                case RAID_DIFFICULTY_10MAN_HEROIC:
-                                    count = 2;
-                                    break;
-                                case RAID_DIFFICULTY_25MAN_HEROIC:
-                                    count = urand(2, 3);
-                                    break;
-                            }
-
-                            for (uint8 i = 0; i < count; i++)
-                                me->SummonCreature(NPC_SCARAB, AnubarakLoc[i+2], TEMPSUMMON_CORPSE_DESPAWN);
-                        }
-
-                        m_uiSummonScarabTimer = 10000;
-                    } else m_uiSummonScarabTimer -= uiDiff;
-
-                    if (m_uiSubmergeTimer <= uiDiff)
-                    {
-                        m_uiStage = 3;
-                        m_uiSubmergeTimer = 80*IN_MILLISECONDS;
-                    } else m_uiSubmergeTimer -= uiDiff;
-                    break;
-                case 3:
-                    m_uiStage = 0;
-                    Summons.DespawnEntry(NPC_SPIKE);
-                    m_posPursuingSpikePositionX = 0.0f;
-                    m_posPursuingSpikePositionY = 0.0f;
-                    m_posPursuingSpikePositionZ = 0.0f;
-                    me->RemoveAurasDueToSpell(SPELL_SUBMERGE_ANUBARAK);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
-                    DoCast(me, SPELL_EMERGE_ANUBARAK);
-                    me->GetMotionMaster()->MoveChase(me->getVictim());
-                    m_uiSummonNerubianTimer = 10*1000;
-                    m_uiNerubianShadowStrikeTimer = urand(20*1000, 30*1000);
-                    break;
-            }
-
-            if (!IsHeroic())
-            {
-                if (m_uiSummonFrostSphereTimer <= uiDiff)
-                {
-                    uint8 frostSpheresWithAuraCount = 0;
-                    for(std::list<uint64>::const_iterator itr = Summons.begin(); itr != Summons.end(); ++itr)
-                    {
-                        if (Creature* temp = Unit::GetCreature(*me,* itr))
-                        {
-                            if (temp)
-                            {
-                                if (temp->GetEntry() == NPC_FROST_SPHERE)
-                                {
-                                    if (temp->HasAura(SPELL_FROST_SPHERE))
-                                    {
-                                        frostSpheresWithAuraCount++;
-                                    }
-                                }
-=======
                 Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true);
                 switch (summoned->GetEntry())
                 {
@@ -649,7 +329,6 @@ class boss_anubarak_trial : public CreatureScript
                                 events.ScheduleEvent(EVENT_PURSUING_SPIKE, 2*IN_MILLISECONDS, 0, PHASE_SUBMERGED);
                                 events.ScheduleEvent(EVENT_SUMMON_SCARAB, 4*IN_MILLISECONDS, 0, PHASE_SUBMERGED);
                                 events.ScheduleEvent(EVENT_EMERGE, 1*MINUTE*IN_MILLISECONDS, 0, PHASE_SUBMERGED);
->>>>>>> TC/master
                             }
                             break;
                         case EVENT_PURSUING_SPIKE:
@@ -676,24 +355,6 @@ class boss_anubarak_trial : public CreatureScript
                             m_uiSummonScarabTimer = 90*IN_MILLISECONDS;*/
                             break;
                         }
-<<<<<<< HEAD
-                    }
-
-                    for(uint8 i = 0; i < 6 - frostSpheresWithAuraCount; i++)
-                        me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[urand(0, 5)]);
-
-                    m_uiSummonFrostSphereTimer = urand(20, 30)*1000;
-                } else m_uiSummonFrostSphereTimer -= uiDiff;
-            }
-
-            if (HealthBelowPct(30) && m_uiStage == 0 && !m_bReachedPhase3)
-            {
-                m_bReachedPhase3 = true;
-                DoCastAOE(SPELL_LEECHING_SWARM, true);
-                Talk(EMOTE_LEECHING_SWARM);
-                Talk(SAY_LEECHING_SWARM);
-            }
-=======
                         case EVENT_EMERGE:
                             events.ScheduleEvent(EVENT_SUBMERGE, 80*IN_MILLISECONDS, 0, PHASE_MELEE);
                             DoCast(SPELL_SPIKE_TELE);
@@ -739,7 +400,6 @@ class boss_anubarak_trial : public CreatureScript
                     }
 
                 }
->>>>>>> TC/master
 
                 if (HealthBelowPct(30) && events.GetPhaseMask() & PHASE_MASK_MELEE && !_reachedPhase3)
                 {
@@ -770,42 +430,11 @@ class boss_anubarak_trial : public CreatureScript
 
 class mob_swarm_scarab : public CreatureScript
 {
-<<<<<<< HEAD
-public:
-    mob_swarm_scarab() : CreatureScript("mob_swarm_scarab") { }
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new mob_swarm_scarabAI(creature);
-    };
-
-    struct mob_swarm_scarabAI : public ScriptedAI
-    {
-        mob_swarm_scarabAI(Creature* creature) : ScriptedAI(creature)
-        {
-            instance = creature->GetInstanceScript();
-        }
-
-        InstanceScript* instance;
-
-        uint32 m_uiDeterminationTimer;
-        uint32 m_uiAcidMandibleTimer;
-=======
     public:
         mob_swarm_scarab() : CreatureScript("mob_swarm_scarab") { }
->>>>>>> TC/master
 
         struct mob_swarm_scarabAI : public ScriptedAI
         {
-<<<<<<< HEAD
-            me->SetCorpseDelay(0);
-            me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_PERMAFROST, true);
-            m_uiDeterminationTimer = urand(5*1000, 60*1000);
-            m_uiAcidMandibleTimer = 3500;
-            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                me->AddThreat(target, 20000.0f);
-        }
-=======
             mob_swarm_scarabAI(Creature* creature) : ScriptedAI(creature)
             {
                 _instance = creature->GetInstanceScript();
@@ -821,7 +450,6 @@ public:
                     if (Creature* Anubarak = ObjectAccessor::GetCreature(*me, _instance->GetData64(NPC_ANUBARAK)))
                         Anubarak->AI()->JustSummoned(me);
             }
->>>>>>> TC/master
 
             void DoAction(const int32 actionId)
             {
@@ -846,43 +474,8 @@ public:
                 if (_instance && _instance->GetBossState(BOSS_ANUBARAK) != IN_PROGRESS)
                     me->DisappearAndDie();
 
-<<<<<<< HEAD
-            if (m_uiAcidMandibleTimer <= uiDiff)
-            {
-                m_uiAcidMandibleTimer = 3500;
-
-                if (!me->getVictim() || !instance)
-                    return;
-
-                //If we are within range melee the target
-                if (me->IsWithinMeleeRange(me->getVictim()))
-                {
-                    if (me->getVictim()->HasAura(RAID_MODE(SPELL_TRIGGERED_ACID_MANDIBLE_0, SPELL_TRIGGERED_ACID_MANDIBLE_1, SPELL_TRIGGERED_ACID_MANDIBLE_2, SPELL_TRIGGERED_ACID_MANDIBLE_3)))
-                    {
-                        if (Aura* aur = me->getVictim()->GetAura(RAID_MODE(SPELL_TRIGGERED_ACID_MANDIBLE_0, SPELL_TRIGGERED_ACID_MANDIBLE_1, SPELL_TRIGGERED_ACID_MANDIBLE_2, SPELL_TRIGGERED_ACID_MANDIBLE_3)))
-                        {
-                            if (aur->GetStackAmount() < 40)
-                                aur->SetStackAmount(aur->GetStackAmount() + 1);
-
-                            if (aur->GetStackAmount() == 40)
-                                aur->SetStackAmount(40);
-                        }
-                    }
-                    else
-                    {
-                        if (Creature* anubarak = Unit::GetCreature(*me, instance->GetData64(NPC_ANUBARAK)))
-                            me->CastSpell(me->getVictim(), RAID_MODE(SPELL_TRIGGERED_ACID_MANDIBLE_0, SPELL_TRIGGERED_ACID_MANDIBLE_1, SPELL_TRIGGERED_ACID_MANDIBLE_2, SPELL_TRIGGERED_ACID_MANDIBLE_3), true, 0, 0, instance->GetData64(NPC_ANUBARAK));
-                    }
-                }
-            } else m_uiAcidMandibleTimer -= uiDiff;
-
-            DoMeleeAttackIfReady();
-        }
-    };
-=======
                 if (!UpdateVictim())
                     return;
->>>>>>> TC/master
 
                 /* Bosskillers don't recognize */
                 if (_determinationTimer <= diff)
@@ -907,39 +500,18 @@ public:
         };
 };
 
-<<<<<<< HEAD
-        void Reset()
-        {
-            me->SetCorpseDelay(0);
-            m_uiSpiderFrenzyTimer = 2000;
-            m_uiSubmergeTimer = 30*1000;
-            me->ApplySpellImmune(0, IMMUNITY_ID, SPELL_PERMAFROST, true);
-            DoCast(me, SPELL_EXPOSE_WEAKNESS);
-        }
-=======
 class mob_nerubian_burrower : public CreatureScript
 {
     public:
         mob_nerubian_burrower() : CreatureScript("mob_nerubian_burrower") { }
->>>>>>> TC/master
 
         struct mob_nerubian_burrowerAI : public ScriptedAI
         {
             mob_nerubian_burrowerAI(Creature* creature) : ScriptedAI(creature)
             {
-<<<<<<< HEAD
-                case ACTION_SHADOW_STRIKE:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
-                        DoCast(target, SPELL_SHADOW_STRIKE);
-                    break;
-=======
                 _instance = creature->GetInstanceScript();
->>>>>>> TC/master
             }
 
-<<<<<<< HEAD
-            if (m_uiSubmergeTimer <= uiDiff)
-=======
             void Reset()
             {
                 me->SetCorpseDelay(10);
@@ -954,15 +526,9 @@ class mob_nerubian_burrower : public CreatureScript
             }
 
             void DoAction(const int32 actionId)
->>>>>>> TC/master
             {
                 switch (actionId)
                 {
-<<<<<<< HEAD
-                    me->RemoveAurasDueToSpell(SPELL_SUBMERGE_EFFECT);
-                    DoCast(me, SPELL_EMERGE_EFFECT);
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
-=======
                     case ACTION_SHADOW_STRIKE:
                         if (!me->HasAura(SPELL_AWAKENED))
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0))
@@ -970,7 +536,6 @@ class mob_nerubian_burrower : public CreatureScript
                         break;
                     default:
                         break;
->>>>>>> TC/master
                 }
             }
 
@@ -987,48 +552,6 @@ class mob_nerubian_burrower : public CreatureScript
 
                 if ((_submergeTimer <= diff) && HealthBelowPct(80))
                 {
-<<<<<<< HEAD
-                    // Just for security purposes, sometimes they get stuck unattackable, this one should solve the problem
-                    me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
-
-                    if (HealthBelowPct(80))
-                    {
-                        std::list<Creature*> sphereList;
-                        me->GetCreatureListWithEntryInGrid(sphereList, NPC_FROST_SPHERE, 6.0f);
-
-                        bool readyToSubmerge = true;
-
-                        if (!sphereList.empty())
-                        {
-                            for (std::list<Creature*>::const_iterator itr = sphereList.begin(); itr != sphereList.end(); ++itr)
-                            {
-                                if (Creature* creature = (*itr))
-                                {
-                                    if (creature->GetDynObject(SPELL_PERMAFROST))
-                                    {
-                                        readyToSubmerge = false;
-                                    }
-                                }
-                            }
-                        }
-
-                        if (readyToSubmerge)
-                        {
-                            uint32 setHealthVal = 0;
-
-                            uint32 percentageAddVal = (uint32)(me->GetMaxHealth() * 0.4);
-                            uint32 currentHealthVal = me->GetHealth();
-
-                            setHealthVal = percentageAddVal + currentHealthVal;
-
-                            if (setHealthVal > me->GetMaxHealth())
-                                setHealthVal = me->GetMaxHealth();
-
-                            me->SetHealth(setHealthVal);
-
-                            DoCast(me, SPELL_SUBMERGE_EFFECT);
-                            me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_NOT_SELECTABLE);
-=======
                     if (me->HasAura(SPELL_SUBMERGE_EFFECT))
                     {
                         me->RemoveAurasDueToSpell(SPELL_SUBMERGE_EFFECT);
@@ -1043,50 +566,10 @@ class mob_nerubian_burrower : public CreatureScript
                             DoCast(me, SPELL_SUBMERGE_EFFECT);
                             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             DoCast(me, SPELL_PERSISTENT_DIRT, true);
->>>>>>> TC/master
                         }
                     }
                     _submergeTimer = 20*IN_MILLISECONDS;
                 }
-<<<<<<< HEAD
-                m_uiSubmergeTimer = 20*1000;
-            } else m_uiSubmergeTimer -= uiDiff;
-
-            if (m_uiSpiderFrenzyTimer <= uiDiff)
-            {
-                std::list<Creature*> burrowerCreatureList;
-                me->GetCreatureListWithEntryInGrid(burrowerCreatureList, me->GetEntry(), 12.0f);
-
-                bool doCastFrenzy = false;
-
-                if (!burrowerCreatureList.empty())
-                {
-                    for (std::list<Creature*>::const_iterator itr = burrowerCreatureList.begin(); itr != burrowerCreatureList.end(); ++itr)
-                    {
-                        if (Creature* creature = (*itr))
-                        {
-                            if (creature->GetGUID() != me->GetGUID())
-                            {
-                                if (!creature->HasAura(SPELL_SUBMERGE_EFFECT))
-                                {
-                                    doCastFrenzy = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (doCastFrenzy)
-                    me->AddAura(SPELL_SPIDER_FRENZY, me);
-
-                m_uiSpiderFrenzyTimer = 2000;
-            } else m_uiSpiderFrenzyTimer -= uiDiff;
-
-            DoMeleeAttackIfReady();
-        }
-    };
-=======
                 else
                     _submergeTimer -= diff;
 
@@ -1099,7 +582,6 @@ class mob_nerubian_burrower : public CreatureScript
                 EventMap _events;
                 InstanceScript* _instance;
         };
->>>>>>> TC/master
 
         CreatureAI* GetAI(Creature* creature) const
         {
@@ -1120,16 +602,10 @@ class mob_frost_sphere : public CreatureScript
 
             void Reset()
             {
-                _isFalling = false;
                 me->SetReactState(REACT_PASSIVE);
-                //! Confirmed sniff 3.3.5.a
-                me->SetDisableGravity(true);
-                me->SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND | UNIT_BYTE1_FLAG_HOVER);
-                //! end
-                me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
-                me->SetSpeed(MOVE_FLIGHT, 0.5f, false);
-                me->GetMotionMaster()->MoveRandom(20.0f);
                 DoCast(SPELL_FROST_SPHERE);
+                me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
+                me->GetMotionMaster()->MoveRandom(20.0f);
             }
 
             void DamageTaken(Unit* /*who*/, uint32& damage)
@@ -1137,33 +613,24 @@ class mob_frost_sphere : public CreatureScript
                 if (me->GetHealth() <= damage)
                 {
                     damage = 0;
-                    if (!_isFalling)
+                    float floorZ = me->GetMap()->GetHeight(me->GetPhaseMask(), me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
+                    if (fabs(me->GetPositionZ() - floorZ) < 0.1f)
                     {
-                        _isFalling = true;
+                        // we are close to the ground
+                        me->GetMotionMaster()->MoveIdle();
+                        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                        me->RemoveAurasDueToSpell(SPELL_FROST_SPHERE);
+                        DoCast(SPELL_PERMAFROST_MODEL);
+                        DoCast(SPELL_PERMAFROST);
+                        me->SetObjectScale(2.0f);
+                    }
+                    else
+                    {
+                        // we are in air
                         me->GetMotionMaster()->MoveIdle();
                         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         //At hit the ground
                         me->HandleEmoteCommand(EMOTE_ONESHOT_FLYDEATH);
-
-                        // In this case MoveFall might fail, but we are close to ground, so create permafrost now
-                        float tz = me->GetMap()->GetHeight(me->GetPhaseMask(), me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), true, MAX_FALL_DISTANCE);
-                        if (tz > INVALID_HEIGHT)
-                        {
-                            if (fabs(me->GetPositionZ() - tz) < 0.1f)
-                            {
-                                DoTeleportTo(me->GetPositionX(), me->GetPositionY(), tz);
-                                me->StopMoving();
-                                me->GetMotionMaster()->Clear();
-                                me->GetMotionMaster()->MoveIdle();
-                                me->RemoveAurasDueToSpell(SPELL_FROST_SPHERE);
-                                me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
-                                DoCast(SPELL_PERMAFROST_VISUAL);
-                                DoCast(SPELL_PERMAFROST);
-                                me->SetObjectScale(2.0f);
-                                return;
-                            }
-                        }
-
                         me->GetMotionMaster()->MoveFall(POINT_FALL_GROUND);
                     }
                 }
@@ -1178,7 +645,7 @@ class mob_frost_sphere : public CreatureScript
                 {
                     case POINT_FALL_GROUND:
                         me->RemoveAurasDueToSpell(SPELL_FROST_SPHERE);
-                        me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
+                        DoCast(SPELL_PERMAFROST_MODEL);
                         DoCast(SPELL_PERMAFROST_VISUAL);
                         DoCast(SPELL_PERMAFROST);
                         me->SetObjectScale(2.0f);
@@ -1187,18 +654,6 @@ class mob_frost_sphere : public CreatureScript
                         break;
                 }
             }
-
-            // Empty EnterEvadeMode and UpdateAI, so it will not reset if victim died, will be despawned by Anub'Arak anyways
-            void EnterEvadeMode()
-            {
-            }
-
-            void UpdateAI(const uint32 /*diff*/)
-            {
-            }
-
-        private:
-            bool _isFalling;
         };
 
         CreatureAI* GetAI(Creature* creature) const
@@ -1218,12 +673,6 @@ class mob_anubarak_spike : public CreatureScript
             {
             }
 
-<<<<<<< HEAD
-        void Reset()
-        {
-            m_uiTargetGUID = 0;
-        }
-=======
             void Reset()
             {
                 _phase = PHASE_NO_MOVEMENT;
@@ -1231,29 +680,12 @@ class mob_anubarak_spike : public CreatureScript
                 // make sure the spike has everyone on threat list
                 me->SetInCombatWithZone();
             }
->>>>>>> TC/master
 
             bool CanAIAttack(Unit const* victim) const
             {
                 return victim->GetTypeId() == TYPEID_PLAYER;
             }
 
-<<<<<<< HEAD
-        void AttackStart(Unit* who)
-        {
-            if (!who)
-                return;
-
-            me->AddThreat(who, 5000000.0f);
-            m_uiTargetGUID = who->GetGUID();
-            DoCast(me, SPELL_SPIKE_TRAIL, true);
-            Talk(EMOTE_SPIKE, who->GetGUID());
-            me->SetSpeed(MOVE_RUN, 0.5f);
-            m_uiSpeed = 0;
-            m_uiIncreaseSpeedTimer = 1*1000;
-            UnitAI::AttackStart(who);
-        }
-=======
             void EnterCombat(Unit* who)
             {
                 if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 0.0f, true))
@@ -1262,64 +694,20 @@ class mob_anubarak_spike : public CreatureScript
                     Talk(EMOTE_SPIKE, who->GetGUID());
                 }
             }
->>>>>>> TC/master
 
             void DamageTaken(Unit* /*who*/, uint32& uiDamage)
             {
                 uiDamage = 0;
             }
 
-<<<<<<< HEAD
-        void UpdateAI(const uint32 uiDiff)
-        {
-            std::list<Creature*> sphereList;
-            me->GetCreatureListWithEntryInGrid(sphereList, NPC_FROST_SPHERE, 6.0f);
-
-            if (!sphereList.empty())
-            {
-                for (std::list<Creature*>::const_iterator itr = sphereList.begin(); itr != sphereList.end(); ++itr)
-                {
-                    if (Creature* creature = (*itr))
-                    {
-                        if (creature->GetDynObject(SPELL_PERMAFROST))
-                        {
-                            creature->DisappearAndDie();
-                            me->DisappearAndDie();
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (m_uiTargetGUID)
-            {
-                Unit* target = Unit::GetUnit((*me), m_uiTargetGUID);
-
-                if (!target || !target->isAlive())
-=======
             void UpdateAI(const uint32 diff)
             {
                 if (!UpdateVictim())
->>>>>>> TC/master
                 {
                     me->DisappearAndDie();
                     return;
                 }
 
-<<<<<<< HEAD
-                if (target)
-                {
-                    if (!target->HasAura(SPELL_MARK))
-                    {
-                        DoCast(target, SPELL_MARK, true);
-                    }
-
-                    if (!me->getVictim())
-                    {
-                        AttackStart(target);
-                        me->AddThreat(target, 5000000.0f);
-                    }
-=======
                 if (_phaseSwitchTimer)
                 {
                     if (_phaseSwitchTimer <= diff)
@@ -1353,7 +741,6 @@ class mob_anubarak_spike : public CreatureScript
                     }
                     else
                         _phaseSwitchTimer -= diff;
->>>>>>> TC/master
                 }
             }
 
@@ -1372,21 +759,6 @@ class mob_anubarak_spike : public CreatureScript
                 {
                     switch (_phase)
                     {
-<<<<<<< HEAD
-                        case 0:
-                            DoCast(me, SPELL_SPIKE_SPEED1, true);
-                            m_uiSpeed = 1;
-                            m_uiIncreaseSpeedTimer = 7*IN_MILLISECONDS;
-                            break;
-                        case 1:
-                            DoCast(me, SPELL_SPIKE_SPEED2, true);
-                            m_uiSpeed = 2;
-                            m_uiIncreaseSpeedTimer = 7*IN_MILLISECONDS;
-                            break;
-                        case 2:
-                            DoCast(me, SPELL_SPIKE_SPEED3, true);
-                            m_uiIncreaseSpeedTimer = 0;
-=======
                         case PHASE_IMPALE_NORMAL:
                             me->RemoveAurasDueToSpell(SPELL_SPIKE_SPEED1);
                             break;
@@ -1397,7 +769,6 @@ class mob_anubarak_spike : public CreatureScript
                             me->RemoveAurasDueToSpell(SPELL_SPIKE_SPEED3);
                             break;
                         default:
->>>>>>> TC/master
                             break;
                     }
 

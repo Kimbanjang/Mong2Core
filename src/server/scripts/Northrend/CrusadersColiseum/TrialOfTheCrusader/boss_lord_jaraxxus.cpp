@@ -116,13 +116,9 @@ class boss_jaraxxus : public CreatureScript
             {
                 _JustReachedHome();
                 if (instance)
-<<<<<<< HEAD
-                    instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
-=======
                     instance->SetBossState(BOSS_JARAXXUS, FAIL);
                 DoCast(me, SPELL_JARAXXUS_CHAINS);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
->>>>>>> TC/master
             }
 
             void KilledUnit(Unit* who)

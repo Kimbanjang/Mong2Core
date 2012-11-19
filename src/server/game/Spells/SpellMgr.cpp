@@ -81,13 +81,11 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
             // Gnaw
             else if (spellproto->Id == 47481)
                 return DIMINISHING_CONTROLLED_STUN;
-<<<<<<< HEAD
             // Screams of the Dead
             else if (spellproto->Id == 51750)
-=======
+				return DIMINISHING_NONE;
             // ToC Icehowl Arctic Breath
             else if (spellproto->SpellVisual[0] == 14153)
->>>>>>> TC/master
                 return DIMINISHING_NONE;
             break;
         }

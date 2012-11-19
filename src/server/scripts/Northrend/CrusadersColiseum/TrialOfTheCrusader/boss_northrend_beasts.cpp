@@ -547,15 +547,8 @@ struct boss_jormungarAI : public BossAI
     void KilledUnit(Unit* who)
     {
         if (who->GetTypeId() == TYPEID_PLAYER)
-<<<<<<< HEAD
-        {
-            if (instanceScript)
-                instanceScript->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
-        }
-=======
             if (instance)
                 instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELEGIBLE, 0);
->>>>>>> TC/master
     }
 
     void EnterCombat(Unit* /*who*/)
@@ -945,15 +938,11 @@ class boss_icehowl : public CreatureScript
             void JustReachedHome()
             {
                 if (instance)
-<<<<<<< HEAD
-                    instance->SetData(DATA_TRIBUTE_TO_IMMORTALITY_ELIGIBLE, 0);
-=======
                 {
                     instance->DoUseDoorOrButton(instance->GetData64(GO_MAIN_GATE_DOOR));
                     instance->SetData(TYPE_NORTHREND_BEASTS, FAIL);
                 }
                 me->DespawnOrUnsummon();
->>>>>>> TC/master
             }
 
             void KilledUnit(Unit* who)
