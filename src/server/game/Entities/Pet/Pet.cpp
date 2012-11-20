@@ -872,6 +872,32 @@ bool Guardian::InitStatsForLevel(uint8 petlevel)
         SetObjectScale(scale);
     }
 
+	/* 팻 크기 관련 패치 / 인식범위 패치 해보고 나서 조정할 것
+	//scale 
+    CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->family); 
+    if (cFamily && petType == HUNTER_PET) 
+    { 
+        float scale, minscale, maxscale, maxlevel; 
+        minscale = 0.8f; 
+        maxscale = 1.2f; 
+        if (getLevel() > 70) 
+        { 
+            if (cinfo->type_flags & CREATURE_TYPEFLAGS_EXOTIC) 
+                if (getLevel() > 80) 
+                    maxlevel = 80; //for gms and fun servers 
+                else 
+                    maxlevel = getLevel(); 
+            else 
+                maxlevel = 70; 
+        } 
+        else 
+	        maxlevel = getLevel(); 
+
+		scale = minscale + (maxlevel * ((maxscale - minscale) / 80)); 
+		SetObjectScale(scale); 
+	}
+	*/
+
     // Resistance
     for (uint8 i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
         SetModifierValue(UnitMods(UNIT_MOD_RESISTANCE_START + i), BASE_VALUE, float(cinfo->resistance[i]));
