@@ -377,7 +377,11 @@ public:
             return strSaveData.c_str();
         }
 
+<<<<<<< HEAD
         uint32 GetData(uint32 uiType)
+=======
+        uint32 GetData(uint32 type) const
+>>>>>>> TC/master
         {
             switch(uiType)
             {
@@ -400,7 +404,11 @@ public:
             return 0;
         }
 
+<<<<<<< HEAD
         void SetData64(uint32 uiData, uint64 uiGuid)
+=======
+        uint64 GetData64(uint32 identifier) const
+>>>>>>> TC/master
         {
             switch(uiData)
             {
