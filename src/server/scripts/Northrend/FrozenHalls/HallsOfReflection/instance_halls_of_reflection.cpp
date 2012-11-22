@@ -100,7 +100,6 @@ static Position RiflemanSpawnPos[ENCOUNTER_WAVE_RIFLEMAN] =
     {5295.64f, 1973.76f, 707.778f, 1.18682f},
     {5282.9f, 2019.6f, 707.778f, 5.88176f},
 };
->>>>>>> TC/master
 
 class instance_halls_of_reflection : public InstanceMapScript
 {
@@ -377,11 +376,7 @@ public:
             return strSaveData.c_str();
         }
 
-<<<<<<< HEAD
-        uint32 GetData(uint32 uiType)
-=======
-        uint32 GetData(uint32 type) const
->>>>>>> TC/master
+        uint32 GetData(uint32 uiType) const
         {
             switch(uiType)
             {
@@ -404,11 +399,7 @@ public:
             return 0;
         }
 
-<<<<<<< HEAD
         void SetData64(uint32 uiData, uint64 uiGuid)
-=======
-        uint64 GetData64(uint32 identifier) const
->>>>>>> TC/master
         {
             switch(uiData)
             {

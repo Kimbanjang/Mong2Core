@@ -16,7 +16,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-<<<<<<< HEAD
 #include "../../../scripts/Custom/Transmogrification.h"
 #include "Common.h"
 #include "Language.h"
@@ -28,8 +27,6 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "UpdateMask.h"
-=======
->>>>>>> TC/master
 #include "Player.h"
 #include "AccountMgr.h"
 #include "AchievementMgr.h"
@@ -25704,7 +25701,6 @@ Guild* Player::GetGuild()
     return guildId ? sGuildMgr->GetGuildById(guildId) : NULL;
 }
 
-<<<<<<< HEAD
 uint32 Player::SuitableForTransmogrification(Item* oldItem, Item* newItem) // custom
 {
     // not possibly the best structure here, but atleast I got my head around this
@@ -25748,7 +25744,8 @@ uint32 Player::SuitableForTransmogrification(Item* oldItem, Item* newItem) // cu
         else
             return ERR_FAKE_BAD_SUBLCASS;
     return ERR_FAKE_BAD_CLASS;
-=======
+}
+
 Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 duration)
 {
     Pet* pet = new Pet(this, petType);
@@ -25860,5 +25857,4 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
     //ObjectAccessor::UpdateObjectVisibility(pet);
 
     return pet;
->>>>>>> TC/master
 }
