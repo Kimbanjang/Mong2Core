@@ -25693,52 +25693,6 @@ Guild* Player::GetGuild()
     uint32 guildId = GetGuildId();
     return guildId ? sGuildMgr->GetGuildById(guildId) : NULL;
 }
-<<<<<<< HEAD
-
-uint32 Player::SuitableForTransmogrification(Item* oldItem, Item* newItem) // custom
-{
-    // not possibly the best structure here, but atleast I got my head around this
-    if (!sTransmogrification->AllowedQuality(newItem->GetTemplate()->Quality))
-        return ERR_FAKE_NEW_BAD_QUALITY;
-    if (!sTransmogrification->AllowedQuality(oldItem->GetTemplate()->Quality))
-        return ERR_FAKE_OLD_BAD_QUALITY;
-
-    if (oldItem->GetTemplate()->DisplayInfoID == newItem->GetTemplate()->DisplayInfoID)
-        return ERR_FAKE_SAME_DISPLAY;
-    if (oldItem->GetFakeEntry())
-        if (const ItemTemplate* fakeItemTemplate = sObjectMgr->GetItemTemplate(oldItem->GetFakeEntry()))
-            if (fakeItemTemplate->DisplayInfoID == newItem->GetTemplate()->DisplayInfoID)
-                return ERR_FAKE_SAME_DISPLAY_FAKE;
-    if (CanUseItem(newItem, false) != EQUIP_ERR_OK)
-        return ERR_FAKE_CANT_USE;
-    uint32 newClass = newItem->GetTemplate()->Class;
-    uint32 oldClass = oldItem->GetTemplate()->Class;
-    uint32 newSubClass = newItem->GetTemplate()->SubClass;
-    uint32 oldSubClass = oldItem->GetTemplate()->SubClass;
-    uint32 newInventorytype = newItem->GetTemplate()->InventoryType;
-    uint32 oldInventorytype = oldItem->GetTemplate()->InventoryType;
-    if (newClass != oldClass)
-        return ERR_FAKE_NOT_SAME_CLASS;
-    if (newClass == ITEM_CLASS_WEAPON && newSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE && oldSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
-    {
-        if (newSubClass == oldSubClass || ((newSubClass == ITEM_SUBCLASS_WEAPON_BOW || newSubClass == ITEM_SUBCLASS_WEAPON_GUN || newSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW) && (oldSubClass == ITEM_SUBCLASS_WEAPON_BOW || oldSubClass == ITEM_SUBCLASS_WEAPON_GUN || oldSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW)))
-            if (newInventorytype == oldInventorytype || (newInventorytype == INVTYPE_WEAPON && (oldInventorytype == INVTYPE_WEAPONMAINHAND || oldInventorytype == INVTYPE_WEAPONOFFHAND)))
-                return ERR_FAKE_OK;
-            else
-                return ERR_FAKE_BAD_INVENTORYTYPE;
-        else
-            return ERR_FAKE_BAD_SUBLCASS;
-    }
-    else if (newClass == ITEM_CLASS_ARMOR)
-        if (newSubClass == oldSubClass)
-            if (newInventorytype == oldInventorytype || (newInventorytype == INVTYPE_CHEST && oldInventorytype == INVTYPE_ROBE) || (newInventorytype == INVTYPE_ROBE && oldInventorytype == INVTYPE_CHEST))
-                return ERR_FAKE_OK;
-            else
-                return ERR_FAKE_BAD_INVENTORYTYPE;
-        else
-            return ERR_FAKE_BAD_SUBLCASS;
-    return ERR_FAKE_BAD_CLASS;
-}
 
 Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 duration)
 {
@@ -25852,5 +25806,3 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
 
     return pet;
 }
-=======
->>>>>>> parent of 6cb743d... 형상변환 v3.9
