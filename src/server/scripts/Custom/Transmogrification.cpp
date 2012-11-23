@@ -1,5 +1,5 @@
 /*
-3.7
+4.0
 Transmogrification 3.3.5a - Gossip Menu
 By Rochet2
 
@@ -28,6 +28,95 @@ Item link icon to Are You sure text
 
 #include "ScriptPCH.h"
 #include "Transmogrification.h"
+
+typedef UNORDERED_MAP<uint32, uint32> transmogData;
+typedef UNORDERED_MAP<uint32, transmogData> transmogMap;
+transmogMap entryMap; // entryMap[pGUID][iGUID] = entry
+transmogData dataMap; // dataMap[iGUID] = pGUID
+
+uint32 Transmogrification::GetFakeEntry(Item* item)
+{
+    transmogData::iterator itr = dataMap.find(item->GetGUIDLow());
+    if (itr == dataMap.end()) return 0;
+    transmogMap::iterator itr2 = entryMap.find(itr->second);
+    if (itr2 == entryMap.end()) return 0;
+    transmogData::iterator itr3 = itr2->second.find(item->GetGUIDLow());
+    if (itr3 == itr2->second.end()) return 0;
+    return itr3->second;
+}
+void Transmogrification::DeleteFakeFromDB(uint32 itemGUID)
+{
+    if (dataMap.find(itemGUID) != dataMap.end())
+    {
+        entryMap.erase(dataMap[itemGUID]);
+        dataMap.erase(itemGUID);
+    }
+    CharacterDatabase.PExecute("DELETE FROM custom_transmogrification WHERE GUID = %u", itemGUID);
+}
+bool Transmogrification::DeleteFakeEntry(Item* item)
+{
+    if (!GetFakeEntry(item))
+        return false;
+    item->GetOwner()->UpdateUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (item->GetSlot() * 2), item->GetEntry());
+    DeleteFakeFromDB(item->GetGUIDLow());
+    return true;
+}
+void Transmogrification::SetFakeEntry(Item* item, uint32 entry)
+{
+    if(Player* player = item->GetOwner())
+    {
+        uint32 pGUID = player->GetGUIDLow();
+        uint32 iGUID = item->GetGUIDLow();
+        player->UpdateUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (item->GetSlot() * 2), entry);
+        entryMap[pGUID][iGUID] = entry;
+        dataMap[iGUID] = pGUID;
+        CharacterDatabase.PExecute("REPLACE INTO custom_transmogrification (GUID, FakeEntry, Owner) VALUES (%u, %u, %u)", iGUID, entry, pGUID);
+    }
+}
+uint32 Transmogrification::SuitableForTransmogrification(Player* player, Item* oldItem, Item* newItem)
+{
+    // not possibly the best structure here, but atleast I got my head around this
+    if (!sTransmogrification->AllowedQuality(newItem->GetTemplate()->Quality))
+        return ERR_FAKE_NEW_BAD_QUALITY;
+    if (!sTransmogrification->AllowedQuality(oldItem->GetTemplate()->Quality))
+        return ERR_FAKE_OLD_BAD_QUALITY;
+
+    if (oldItem->GetTemplate()->DisplayInfoID == newItem->GetTemplate()->DisplayInfoID)
+        return ERR_FAKE_SAME_DISPLAY;
+    if (GetFakeEntry(oldItem))
+        if (const ItemTemplate* fakeItemTemplate = sObjectMgr->GetItemTemplate(GetFakeEntry(oldItem)))
+            if (fakeItemTemplate->DisplayInfoID == newItem->GetTemplate()->DisplayInfoID)
+                return ERR_FAKE_SAME_DISPLAY_FAKE;
+    if (player->CanUseItem(newItem, false) != EQUIP_ERR_OK)
+        return ERR_FAKE_CANT_USE;
+    uint32 newClass = newItem->GetTemplate()->Class;
+    uint32 oldClass = oldItem->GetTemplate()->Class;
+    uint32 newSubClass = newItem->GetTemplate()->SubClass;
+    uint32 oldSubClass = oldItem->GetTemplate()->SubClass;
+    uint32 newInventorytype = newItem->GetTemplate()->InventoryType;
+    uint32 oldInventorytype = oldItem->GetTemplate()->InventoryType;
+    if (newClass != oldClass)
+        return ERR_FAKE_NOT_SAME_CLASS;
+    if (newClass == ITEM_CLASS_WEAPON && newSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE && oldSubClass != ITEM_SUBCLASS_WEAPON_FISHING_POLE)
+    {
+        if (newSubClass == oldSubClass || ((newSubClass == ITEM_SUBCLASS_WEAPON_BOW || newSubClass == ITEM_SUBCLASS_WEAPON_GUN || newSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW) && (oldSubClass == ITEM_SUBCLASS_WEAPON_BOW || oldSubClass == ITEM_SUBCLASS_WEAPON_GUN || oldSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW)))
+            if (newInventorytype == oldInventorytype || (newInventorytype == INVTYPE_WEAPON && (oldInventorytype == INVTYPE_WEAPONMAINHAND || oldInventorytype == INVTYPE_WEAPONOFFHAND)))
+                return ERR_FAKE_OK;
+            else
+                return ERR_FAKE_BAD_INVENTORYTYPE;
+        else
+            return ERR_FAKE_BAD_SUBLCASS;
+    }
+    else if (newClass == ITEM_CLASS_ARMOR)
+        if (newSubClass == oldSubClass)
+            if (newInventorytype == oldInventorytype || (newInventorytype == INVTYPE_CHEST && oldInventorytype == INVTYPE_ROBE) || (newInventorytype == INVTYPE_ROBE && oldInventorytype == INVTYPE_CHEST))
+                return ERR_FAKE_OK;
+            else
+                return ERR_FAKE_BAD_INVENTORYTYPE;
+        else
+            return ERR_FAKE_BAD_SUBLCASS;
+    return ERR_FAKE_BAD_CLASS;
+}
 
 class NPC_Transmogrify : public CreatureScript
 {
@@ -84,7 +173,7 @@ public:
                         if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
                         {
                             uint32 display = newItem->GetTemplate()->DisplayInfoID;
-                            if (player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
+                            if (Transmogrification::SuitableForTransmogrification(player, oldItem, newItem) == ERR_FAKE_OK)
                             {
                                 if (_items[lowGUID].find(display) == _items[lowGUID].end())
                                 {
@@ -107,7 +196,7 @@ public:
                                 if (Item* newItem = player->GetItemByPos(i, j))
                                 {
                                     uint32 display = newItem->GetTemplate()->DisplayInfoID;
-                                    if (player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
+                                    if (Transmogrification::SuitableForTransmogrification(player, oldItem, newItem) == ERR_FAKE_OK)
                                     {
                                         if (_items[lowGUID].find(display) == _items[lowGUID].end())
                                         {
@@ -141,7 +230,7 @@ public:
                 {
                     if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, Slot))
                     {
-                        if (newItem->DeleteFakeEntry() && !removed)
+                        if (Transmogrification::DeleteFakeEntry(newItem) && !removed)
                             removed = true;
                     }
                 }
@@ -158,7 +247,7 @@ public:
             {
                 if (Item* newItem = player->GetItemByPos(INVENTORY_SLOT_BAG_0, uiAction))
                 {
-                    if (newItem->DeleteFakeEntry())
+                    if (Transmogrification::DeleteFakeEntry(newItem))
                     {
                         session->SendAreaTriggerMessage(session->GetTrinityString(LANG_REM_TRANSMOGRIFICATION_ITEM), GetSlotName(uiAction, session));
                         player->PlayDirectSound(3337);
@@ -178,7 +267,7 @@ public:
                         if (_items[lowGUID].find(uiAction) != _items[lowGUID].end() && _items[lowGUID][uiAction]->IsInWorld())
                         {
                             Item* newItem = _items[lowGUID][uiAction];
-                            if (newItem->GetOwnerGUID() == player->GetGUIDLow() && (newItem->IsInBag() || newItem->GetBagSlot() == INVENTORY_SLOT_BAG_0) && player->SuitableForTransmogrification(oldItem, newItem) == ERR_FAKE_OK)
+                            if (newItem->GetOwnerGUID() == player->GetGUIDLow() && (newItem->IsInBag() || newItem->GetBagSlot() == INVENTORY_SLOT_BAG_0) && Transmogrification::SuitableForTransmogrification(player, oldItem, newItem) == ERR_FAKE_OK)
                             {
                                 switch(sTransmogrification->GetRequireGold())
                                 {
@@ -187,7 +276,7 @@ public:
                                 }
                                 if(sTransmogrification->GetRequireToken())
                                     player->DestroyItemCount(sTransmogrification->GetTokenEntry(), sTransmogrification->GetTokenAmount(), true);
-                                oldItem->SetFakeEntry(newItem->GetEntry());
+                                Transmogrification::SetFakeEntry(oldItem, newItem->GetEntry());
                                 newItem->SetNotRefundable(player);
                                 newItem->SetBinding(true);
                                 player->PlayDirectSound(3337);
@@ -256,19 +345,77 @@ private:
     }
 };
 
-class config_Transmogrify : public WorldScript
+class Player_Transmogrify : public PlayerScript
 {
 public:
-    config_Transmogrify() : WorldScript("config_Transmogrify") { }
+    Player_Transmogrify() : PlayerScript("Player_Transmogrify") { }
+
+    void OnLogin(Player* player)
+    {
+        uint32 playerGUID = player->GetGUIDLow();
+        entryMap.erase(playerGUID);
+        QueryResult result = CharacterDatabase.PQuery("SELECT GUID, FakeEntry FROM custom_transmogrification WHERE Owner = %u", playerGUID);
+        if (result)
+        {
+            do
+            {
+                uint32 itemGUID = (*result)[0].GetUInt32();
+                uint32 fakeEntry = (*result)[1].GetUInt32();
+                if (sObjectMgr->GetItemTemplate(fakeEntry))
+                {
+                    dataMap[itemGUID] = playerGUID;
+                    entryMap[playerGUID][itemGUID] = fakeEntry;
+                }
+                else
+                {
+                    sLog->outError(LOG_FILTER_SQL, "Item entry (Entry: %u, itemGUID: %u, playerGUID: %u) does not exist, deleting.", fakeEntry, itemGUID, playerGUID);
+                    Transmogrification::DeleteFakeFromDB(itemGUID);
+                }
+            } while (result->NextRow());
+
+            for (uint8 Slot = EQUIPMENT_SLOT_START; Slot < EQUIPMENT_SLOT_END; Slot++)
+            {
+                if (Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, Slot))
+                    if(entryMap.find(playerGUID) != entryMap.end())
+                        if(entryMap[playerGUID].find(item->GetGUIDLow()) != entryMap[playerGUID].end())
+                            player->UpdateUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (item->GetSlot() * 2), entryMap[playerGUID][item->GetGUIDLow()]);
+            }
+        }
+    }
+
+    void OnLogout(Player* player)
+    {
+        uint32 pGUID = player->GetGUIDLow();
+        if(entryMap.find(pGUID) == entryMap.end())
+            return;
+        for(transmogData::iterator it = entryMap[pGUID].begin(); it != entryMap[pGUID].end(); ++it)
+        {
+            dataMap.erase(it->first);
+        }
+        entryMap.erase(pGUID);
+    }
+};
+
+class Config_Transmogrify : public WorldScript
+{
+public:
+    Config_Transmogrify() : WorldScript("Config_Transmogrify") { }
 
     void OnConfigLoad(bool reload)
     {
         sTransmogrification->LoadConfig();
+    }
+
+    void OnStartup()
+    {
+        sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Deleting non-existing transmogrification entries...");
+        CharacterDatabase.Execute("DELETE FROM custom_transmogrification WHERE NOT EXISTS (SELECT 1 FROM item_instance WHERE item_instance.guid = custom_transmogrification.GUID)");
     }
 };
 
 void AddSC_NPC_Transmogrify()
 {
     new NPC_Transmogrify();
-    new config_Transmogrify();
+    new Player_Transmogrify();
+    new Config_Transmogrify();
 }
