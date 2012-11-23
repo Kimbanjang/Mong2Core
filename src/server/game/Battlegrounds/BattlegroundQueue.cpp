@@ -154,8 +154,11 @@ GroupQueueInfo* BattlegroundQueue::AddGroup(Player* leader, Group* grp, Battlegr
     uint32 index = 0;
     if (!isRated && !isPremade)
         index += BG_TEAMS_COUNT;
-    if (ginfo->Team == HORDE)
-        index++;
+    //if (ginfo->Team == HORDE)
+    //    index++;
+	if (m_QueuedGroups[bracketId][BG_QUEUE_NORMAL_HORDE].max_size() < m_QueuedGroups[bracketId][BG_QUEUE_NORMAL_ALLIANCE].max_size())
+		index++;
+
     sLog->outDebug(LOG_FILTER_BATTLEGROUND, "Adding Group to BattlegroundQueue bgTypeId : %u, bracket_id : %u, index : %u", BgTypeId, bracketId, index);
 
     uint32 lastOnlineTime = getMSTime();
