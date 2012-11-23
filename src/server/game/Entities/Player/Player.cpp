@@ -16,7 +16,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../../../scripts/Custom/Transmogrification.h"
 #include "Common.h"
 #include "Language.h"
 #include "DatabaseEnv.h"
@@ -12444,12 +12443,7 @@ void Player::SetVisibleItemSlot(uint8 slot, Item* pItem)
 {
     if (pItem)
     {
-        // custom
-        if (pItem->GetFakeEntry())
-            SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetFakeEntry());
-        else
-            SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
-
+        SetUInt32Value(PLAYER_VISIBLE_ITEM_1_ENTRYID + (slot * 2), pItem->GetEntry());
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 0, pItem->GetEnchantmentId(PERM_ENCHANTMENT_SLOT));
         SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (slot * 2), 1, pItem->GetEnchantmentId(TEMP_ENCHANTMENT_SLOT));
     }
@@ -12570,8 +12564,7 @@ void Player::MoveItemFromInventory(uint8 bag, uint8 slot, bool update)
 {
     if (Item* it = GetItemByPos(bag, slot))
     {
-        it->DeleteFakeFromDB(it->GetGUIDLow()); // custom
-		ItemRemovedQuestCheck(it->GetEntry(), it->GetCount());
+        ItemRemovedQuestCheck(it->GetEntry(), it->GetCount());
         RemoveItem(bag, slot, update);
         it->SetNotRefundable(this, false);
         it->RemoveFromUpdateQueueOf(this);
@@ -25700,6 +25693,7 @@ Guild* Player::GetGuild()
     uint32 guildId = GetGuildId();
     return guildId ? sGuildMgr->GetGuildById(guildId) : NULL;
 }
+<<<<<<< HEAD
 
 uint32 Player::SuitableForTransmogrification(Item* oldItem, Item* newItem) // custom
 {
@@ -25858,3 +25852,5 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, PetTy
 
     return pet;
 }
+=======
+>>>>>>> parent of 6cb743d... 형상변환 v3.9
