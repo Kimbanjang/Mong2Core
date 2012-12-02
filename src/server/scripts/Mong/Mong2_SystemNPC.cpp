@@ -184,8 +184,6 @@ class npc_Morpheus : public CreatureScript
 
 	    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
 	    {
-			FactionEntry const* factionEntry = sFactionStore.LookupEntry(63);
-
 			switch(action)
 			{
 				case 1:
@@ -198,7 +196,7 @@ class npc_Morpheus : public CreatureScript
 				case 2:
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='2' WHERE `guid`='%u';", player->GetGUID());
 					player->GiveLevel(70);
-					player->GetReputationMgr().SetReputation(factionEntry, 1);
+					// player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(63), 42999);
 					creature->MonsterWhisper("Welcome To The Real World", player->GetGUID());
 
 					break;
