@@ -1,0 +1,11 @@
+DELETE FROM `creature_template` WHERE `entry` IN (67105);
+INSERT INTO `creature_template` (`entry`, `difficulty_entry_1`, `difficulty_entry_2`, `difficulty_entry_3`, `KillCredit1`, `KillCredit2`, `modelid1`, `modelid2`, `modelid3`, `modelid4`, `name`, `subname`, `IconName`, `gossip_menu_id`, `minlevel`, `maxlevel`, `exp`, `faction_A`, `faction_H`, `npcflag`, `speed_walk`, `speed_run`, `scale`, `rank`, `mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `dmg_multiplier`, `baseattacktime`, `rangeattacktime`, `unit_class`, `unit_flags`, `dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`, `type_flags`, `lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `spell5`, `spell6`, `spell7`, `spell8`, `PetSpellDataId`, `VehicleId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `HoverHeight`, `Health_mod`, `Mana_mod`, `Armor_mod`, `RacialLeader`, `questItem1`, `questItem2`, `questItem3`, `questItem4`, `questItem5`, `questItem6`, `movementId`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName`, `WDBVerified`) VALUES 
+(67105, 0, 0, 0, 0, 0, 29626, 0, 0, 0, '모피어스', '반몽이교단 사령관', '', 65002, 80, 80, 0, 35, 35, 3, 1, 1.14286, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 1, 147.371, 147.371, 147.371, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 'npc_Morpheus', 12340);
+
+DELETE FROM `gossip_menu` WHERE `entry` in (65002);
+INSERT INTO `gossip_menu` (`entry`, `text_id`) VALUES (65002, 500002),(65002, 500003);
+
+DELETE FROM `npc_text` WHERE `ID` in (500002,500003);
+INSERT INTO `npc_text` (`ID`, `text0_0`, `prob0`) VALUES 
+(500002, '새롭게 이 세계에 도착한 것을 환영한다.$B나는 모피어스. 이 부조리한 세계를 지배하고 있는 몽이교단에 대항하는 선구자다. 그리고 여기 두개의 약을 통해 너에게 기회를 주려 한다.$B$B파란약을 고른다면 너는 교단의 의도에 따라 80렙으로 시작하여 그들이 정해 놓은 틀 속에서 살아가게 될 것이다.$B$B빨간약을 고른다면 너는 교단이 의도치 않은 70렙으로 시작할 것이고, 나는 너에게 그들이 생각지 않은 칭호와 탈것들을 거머 쥘 기회를 줄 것이다.$B$B선택은 한번뿐... 너는 무엇을 선택 할 것인가?', 1),
+(500003, '요즘.. 이상하게 워든의 활동이 활발하군... 이래선 [그]를 찾는게 쉽지 않겠어...', 1);
