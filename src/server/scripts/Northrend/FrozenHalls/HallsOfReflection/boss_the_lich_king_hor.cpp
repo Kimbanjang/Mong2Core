@@ -25,6 +25,7 @@ EndScriptData */
 #include "ScriptPCH.h"
 #include "halls_of_reflection.h"
 #include "ScriptedEscortAI.h"
+#include "Unit.h"
 
 enum
 {
