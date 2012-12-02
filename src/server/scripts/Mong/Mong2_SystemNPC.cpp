@@ -15,18 +15,17 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* ScriptData
-SDName: Mong2 Postman
-SDAuthor: Lyn & Kimbanjang
-SD%Complete: 90%
-SDComment: 귀찮아서 미배송 명단 출력이 아닌, 카운터로 대체함... 시간 나면 명단출력으로 바꾸고 100% 명기 할것 by Kimbanjang
-SDCategory: Custom
-EndScriptData */
-
 #include "ScriptPCH.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
+
+/* ScriptData
+SD%Name:	npc_Postman
+Author:		Lyn & Kimbanjang
+Comment:	귀찮아서 미배송 명단 출력이 아닌, 카운터로 대체함... by Kimbanjang
+LinkSQL:	없음
+EndScriptData */
 
 class npc_Postman : public CreatureScript
 {
@@ -146,7 +145,76 @@ class npc_Postman : public CreatureScript
 		};
 };
 
-void AddSC_Mong2_Postman()
+/* ScriptData
+SD%Name:	npc_Morpheus
+Author:		Kimbanjang
+Comment:	트리니티/니오 해고... 의미없음 by Kimbanjang
+LinkSQL:	2012_11_17_M2C01_world_misc.sql
+EndScriptData */
+
+class npc_Morpheus : public CreatureScript
+{
+	public:
+	    npc_Morpheus() : CreatureScript("npc_Morpheus") { }
+
+		bool OnGossipHello(Player* player, Creature* creature)
+		{
+			QueryResult result = CharacterDatabase.PQuery("SELECT `matrix` FROM `characters` WHERE `guid`='%u';", player->GetGUID());
+			Field *fields = result->Fetch();
+			uint32 chk_matrix = fields[0].GetUInt32();
+
+			if(chk_matrix < 1)
+			{
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "파란약을 먹는다.", GOSSIP_SENDER_MAIN, 1);
+				player->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "빨간약을 먹는다.", GOSSIP_SENDER_MAIN, 2);
+	
+		        player->PlayerTalkClass->SendGossipMenu(500002, creature->GetGUID());
+			}
+			else if(chk_matrix == 1) // 다시 빨간약 먹는 이벤트용
+			{
+				player->SEND_GOSSIP_MENU(500003, creature->GetGUID());
+			}
+			else
+			{
+				player->SEND_GOSSIP_MENU(500003, creature->GetGUID());
+			}
+
+	        return true;
+		}
+
+	    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+	    {
+			FactionEntry const* factionEntry = sFactionStore.LookupEntry(63);
+
+			switch(action)
+			{
+				case 1:
+					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='1' WHERE `guid`='%u';", player->GetGUID());
+					player->GiveLevel(80);
+					creature->MonsterWhisper("좋네... 그렇게 계속 현재에 만족하면서 살도록 하게.", player->GetGUID());
+
+					break;
+
+				case 2:
+					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='2' WHERE `guid`='%u';", player->GetGUID());
+					player->GiveLevel(70);
+					player->GetReputationMgr().SetReputation(factionEntry, 1);
+					creature->MonsterWhisper("Welcome To The Real World", player->GetGUID());
+
+					break;
+
+				default:
+					break;
+			}
+	
+			player->CLOSE_GOSSIP_MENU();
+
+			return true;
+		}
+};
+
+void AddSC_Mong2_SystemNPC()
 {
 	new npc_Postman();
+	new npc_Morpheus();
 }

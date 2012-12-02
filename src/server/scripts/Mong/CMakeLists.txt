@@ -9,7 +9,7 @@ set(scripts_STAT_SRCS
   Mong/npc_lottery.cpp
   Mong/npcs_mini_boss10.cpp
   Mong/PvP_OnKillHonor.cpp
-  Mong/Mong2_Postman.cpp
+  Mong/Mong2_SystemNPC.cpp
 )
 
 message("  -> Prepared: Mong")
