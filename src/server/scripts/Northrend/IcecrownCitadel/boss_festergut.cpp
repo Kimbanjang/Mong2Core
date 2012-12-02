@@ -90,6 +90,7 @@ class boss_festergut : public CreatureScript
             void Reset()
             {
                 _Reset();
+                instance->DoRemoveAurasDueToSpellOnPlayers(SPELL_INOCULATED);
                 me->SetReactState(REACT_DEFENSIVE);
                 events.ScheduleEvent(EVENT_BERSERK, 300000);
                 events.ScheduleEvent(EVENT_INHALE_BLIGHT, urand(25000, 30000));
@@ -123,16 +124,23 @@ class boss_festergut : public CreatureScript
                 if (Creature* gasDummy = me->FindNearestCreature(NPC_GAS_DUMMY, 100.0f, true))
                     _gasDummyGUID = gasDummy->GetGUID();
                 if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
-                    professor->AI()->DoAction(ACTION_FESTERGUT_COMBAT);
+                    if (professor->isAlive())
+                        professor->AI()->DoAction(ACTION_FESTERGUT_COMBAT);
                 DoZoneInCombat();
             }
 
             void JustDied(Unit* /*killer*/)
             {
+                // Remove Gastric Bloat on all players
+                if (instance)
+                    instance->DoRemoveAurasDueToSpellOnPlayers(RAID_MODE(72219, 72551, 72552, 72553));
+
                 _JustDied();
                 Talk(SAY_DEATH);
+
                 if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
-                    professor->AI()->DoAction(ACTION_FESTERGUT_DEATH);
+                    if (professor->isAlive())
+                        professor->AI()->DoAction(ACTION_FESTERGUT_DEATH);
 
                 RemoveBlight();
             }
@@ -185,8 +193,11 @@ class boss_festergut : public CreatureScript
                                 Talk(SAY_PUNGENT_BLIGHT);
                                 DoCast(me, SPELL_PUNGENT_BLIGHT);
                                 _inhaleCounter = 0;
+
                                 if (Creature* professor = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_PROFESSOR_PUTRICIDE)))
-                                    professor->AI()->DoAction(ACTION_FESTERGUT_GAS);
+                                    if (professor->isAlive())
+                                        professor->AI()->DoAction(ACTION_FESTERGUT_GAS);
+
                                 events.RescheduleEvent(EVENT_GAS_SPORE, urand(20000, 25000));
                             }
                             else
@@ -470,6 +481,54 @@ class achievement_flu_shot_shortage : public AchievementCriteriaScript
         }
 };
 
+class PlagueStenchTargetSelector
+{
+    public:
+        PlagueStenchTargetSelector(Unit* caster) : _caster(caster) { }
+
+        bool operator()(WorldObject* unit)
+        {
+            return !unit->IsWithinLOSInMap(_caster);
+        }
+    private:
+        Unit* _caster;
+};
+
+class spell_stinky_plague_stench : public SpellScriptLoader
+{
+    public:
+        spell_stinky_plague_stench() : SpellScriptLoader("spell_stinky_plague_stench") { }
+
+        class spell_stinky_plague_stench_SpellScript : public SpellScript
+        {
+            PrepareSpellScript(spell_stinky_plague_stench_SpellScript);
+
+            bool Validate(SpellEntry const* spellEntry)
+            {
+                if (!sSpellStore.LookupEntry(71160))
+                    return false;
+                if (!sSpellStore.LookupEntry(71161))
+                    return false;
+                return true;
+            }
+
+            void FilterTargets(std::list<WorldObject*>& unitList)
+            {
+                unitList.remove_if(PlagueStenchTargetSelector(GetCaster()));
+            }
+
+            void Register()
+            {
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_stinky_plague_stench_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ENEMY);
+            }
+        };
+
+        SpellScript* GetSpellScript() const
+        {
+            return new spell_stinky_plague_stench_SpellScript();
+        }
+};
+
 void AddSC_boss_festergut()
 {
     new boss_festergut();
@@ -478,4 +537,5 @@ void AddSC_boss_festergut()
     new spell_festergut_gastric_bloat();
     new spell_festergut_blighted_spores();
     new achievement_flu_shot_shortage();
+	new spell_stinky_plague_stench();
 }
