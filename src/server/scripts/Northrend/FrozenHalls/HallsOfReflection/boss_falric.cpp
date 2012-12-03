@@ -21,21 +21,12 @@
 
 enum
 {
-<<<<<<< HEAD
     SAY_FALRIC_AGGRO                        = -1668050,
     SAY_FALRIC_DEATH                        = -1668053,
     SAY_FALRIC_SLAY01                       = -1668051,
     SAY_FALRIC_SLAY02                       = -1668052,
     SAY_FALRIC_SP01                         = -1668054,
     SAY_FALRIC_SP02                         = -1668055,
-=======
-    SAY_AGGRO                                     = 0,
-    SAY_SLAY                                      = 1,
-    SAY_DEATH                                     = 2,
-    SAY_IMPENDING_DESPAIR                         = 3,
-    SAY_DEFILING_HORROR                           = 4,
-};
->>>>>>> TC/master
 
     SPELL_HOPELESSNESS                      = 72395,
     SPELL_IMPENDING_DESPAIR                 = 72426,
@@ -109,7 +100,6 @@ public:
 
         void JustDied(Unit* pKiller)
         {
-<<<<<<< HEAD
           if(!m_pInstance) return;
              m_pInstance->SetData(TYPE_MARWYN, SPECIAL);
           DoScriptText(SAY_FALRIC_DEATH, me);
@@ -118,11 +108,6 @@ public:
         void AttackStart(Unit* who) 
         { 
             if(!m_pInstance) return;
-=======
-            Talk(SAY_AGGRO);
-            if (instance)
-                instance->SetData(DATA_FALRIC_EVENT, IN_PROGRESS);
->>>>>>> TC/master
 
                if(m_pInstance->GetData(TYPE_FALRIC) != IN_PROGRESS)
                  return; 
@@ -132,7 +117,6 @@ public:
 
         void Summon()
         {
-<<<<<<< HEAD
              m_uiLocNo = 0;
 
              for(uint8 i = 0; i < 14; i++)
@@ -172,9 +156,6 @@ public:
                        }
                        break;
                  }
-=======
-            Talk(SAY_DEATH);
->>>>>>> TC/master
 
                  m_uiCheckSummon = 0;
 
@@ -191,7 +172,6 @@ public:
 
         void CallFallSoldier()
         {
-<<<<<<< HEAD
              for(uint8 i = 0; i < 4; i++)
              {
                 if(Creature* Summon = m_pInstance->instance->GetCreature(m_uiSummonGUID[m_uiCheckSummon]))
@@ -203,9 +183,6 @@ public:
                 }
                 m_uiCheckSummon++;
              }
-=======
-            Talk(SAY_SLAY);
->>>>>>> TC/master
         }
 
         void UpdateAI(const uint32 uiDiff)
@@ -239,27 +216,8 @@ public:
 
             if(m_uiStrikeTimer < uiDiff)
             {
-<<<<<<< HEAD
                 DoCast(me->getVictim(), Regular ? SPELL_QUIVERING_STRIKE_N : SPELL_QUIVERING_STRIKE_H);
                 m_uiStrikeTimer = (urand(7000, 14000));
-=======
-                case EVENT_QUIVERING_STRIKE:
-                    DoCast(SPELL_QUIVERING_STRIKE);
-                    events.ScheduleEvent(EVENT_QUIVERING_STRIKE, 10000);
-                    break;
-                case EVENT_IMPENDING_DESPAIR:
-                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
-                    {
-                        Talk(SAY_IMPENDING_DESPAIR);
-                        DoCast(target, SPELL_IMPENDING_DESPAIR);
-                    }
-                    events.ScheduleEvent(EVENT_IMPENDING_DESPAIR, 13000);
-                    break;
-                case EVENT_DEFILING_HORROR:
-                    DoCast(SPELL_DEFILING_HORROR);
-                    events.ScheduleEvent(EVENT_DEFILING_HORROR, urand(25000, 45000)); // TODO adjust timer.
-                    break;
->>>>>>> TC/master
             }
             else m_uiStrikeTimer -= uiDiff;
 

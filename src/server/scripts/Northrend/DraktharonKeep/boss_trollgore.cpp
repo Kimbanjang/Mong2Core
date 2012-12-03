@@ -132,7 +132,6 @@ public:
             } else uiSpawnTimer -= diff;
 
             if (uiConsumeTimer <= diff)
-<<<<<<< HEAD
            {
                 std::list<HostileReference *> t_list = me->getThreatManager().getThreatList();
 
@@ -152,10 +151,7 @@ public:
                 }
 
                 DoScriptText(SAY_CONSUME, me);
-=======
-            {
-                Talk(SAY_CONSUME);
->>>>>>> TC/master
+
                 DoCast(SPELL_CONSUME);
                 uiConsumeTimer = 15*IN_MILLISECONDS;
             } else uiConsumeTimer -= diff;
@@ -181,7 +177,6 @@ public:
 
             if (uiExplodeCorpseTimer <= diff)
             {
-<<<<<<< HEAD
                 std::list<Creature*> addList;
                 me->GetCreatureListWithEntryInGrid(addList,NPC_DRAKKARI_INVADER_1, 10.0f);
                 me->GetCreatureListWithEntryInGrid(addList,NPC_DRAKKARI_INVADER_2, 10.0f);
@@ -203,10 +198,6 @@ public:
                         }
                     }
                 }
-=======
-                DoCast(SPELL_CORPSE_EXPLODE);
-                Talk(SAY_EXPLODE);
->>>>>>> TC/master
                 uiExplodeCorpseTimer = urand(15*IN_MILLISECONDS, 19*IN_MILLISECONDS);
             } else uiExplodeCorpseTimer -= diff;
 
