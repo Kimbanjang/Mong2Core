@@ -252,7 +252,7 @@ void WorldSession::HandleCharEnumOpcode(WorldPacket & /*recvData*/)
     _charEnumCallback = CharacterDatabase.AsyncQuery(stmt);
 }
 
-void WorldSession::HandleCharCreateOpcode(WorldPacket & recvData)
+void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
 {
     std::string name;
     uint8 race_, class_;
@@ -673,7 +673,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
     }
 }
 
-void WorldSession::HandleCharDeleteOpcode(WorldPacket & recvData)
+void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
 {
     uint64 guid;
     recvData >> guid;
@@ -683,6 +683,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recvData)
         return;
 
     uint32 accountId = 0;
+    uint8 level = 0;
     std::string name;
 
     // is guild leader
@@ -703,14 +704,15 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recvData)
         return;
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_ACCOUNT_NAME_BY_GUID);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SEL_CHARACTER_DATA_BY_GUID);
     stmt->setUInt32(0, GUID_LOPART(guid));
 
     if (PreparedQueryResult result = CharacterDatabase.Query(stmt))
     {
         Field* fields = result->Fetch();
-        accountId     = fields[0].GetUInt32();
-        name          = fields[1].GetString();
+        accountId = fields[0].GetUInt32();
+        name = fields[1].GetString();
+        level = fields[2].GetUInt8();
     }
 
     // prevent deleting other players' characters using cheating tools
@@ -718,7 +720,7 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recvData)
         return;
 
     std::string IP_str = GetRemoteAddress();
-    sLog->outInfo(LOG_FILTER_CHARACTER, "Account: %d (IP: %s) Delete Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), GUID_LOPART(guid));
+    sLog->outInfo(LOG_FILTER_CHARACTER, "Account: %d, IP: %s deleted character: %s, GUID: %u, Level: %u", accountId, IP_str.c_str(), name.c_str(), GUID_LOPART(guid), level);
     sScriptMgr->OnPlayerDelete(guid);
     sWorld->DeleteCharaceterNameData(GUID_LOPART(guid));
 
@@ -726,18 +728,18 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket & recvData)
     {
         std::string dump;
         if (PlayerDumpWriter().GetDump(GUID_LOPART(guid), dump))
-            sLog->outCharDump(dump.c_str(), GetAccountId(), GUID_LOPART(guid), name.c_str());
+            sLog->outCharDump(dump.c_str(), accountId, GUID_LOPART(guid), name.c_str());
     }
 
     sCalendarMgr->RemoveAllPlayerEventsAndInvites(guid);
-    Player::DeleteFromDB(guid, GetAccountId());
+    Player::DeleteFromDB(guid, accountId);
 
     WorldPacket data(SMSG_CHAR_DELETE, 1);
     data << uint8(CHAR_DELETE_SUCCESS);
     SendPacket(&data);
 }
 
-void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recvData)
+void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
 {
     if (PlayerLoading() || GetPlayer() != NULL)
     {
@@ -1024,7 +1026,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     delete holder;
 }
 
-void WorldSession::HandleSetFactionAtWar(WorldPacket & recvData)
+void WorldSession::HandleSetFactionAtWar(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_SET_FACTION_ATWAR");
 
@@ -1044,7 +1046,7 @@ void WorldSession::HandleSetFactionCheat(WorldPacket & /*recvData*/)
     GetPlayer()->GetReputationMgr().SendStates();
 }
 
-void WorldSession::HandleTutorialFlag(WorldPacket & recvData)
+void WorldSession::HandleTutorialFlag(WorldPacket& recvData)
 {
     uint32 data;
     recvData >> data;
@@ -1072,7 +1074,7 @@ void WorldSession::HandleTutorialReset(WorldPacket & /*recvData*/)
         SetTutorialInt(i, 0x00000000);
 }
 
-void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket & recvData)
+void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_SET_WATCHED_FACTION");
     uint32 fact;
@@ -1080,7 +1082,7 @@ void WorldSession::HandleSetWatchedFactionOpcode(WorldPacket & recvData)
     GetPlayer()->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fact);
 }
 
-void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket & recvData)
+void WorldSession::HandleSetFactionInactiveOpcode(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_SET_FACTION_INACTIVE");
     uint32 replistid;
@@ -1297,7 +1299,7 @@ void WorldSession::HandleSetPlayerDeclinedNames(WorldPacket& recvData)
     SendPacket(&data);
 }
 
-void WorldSession::HandleAlterAppearance(WorldPacket & recvData)
+void WorldSession::HandleAlterAppearance(WorldPacket& recvData)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "CMSG_ALTER_APPEARANCE");
 
@@ -1369,7 +1371,7 @@ void WorldSession::HandleAlterAppearance(WorldPacket & recvData)
     _player->SetStandState(0);                              // stand up
 }
 
-void WorldSession::HandleRemoveGlyph(WorldPacket & recvData)
+void WorldSession::HandleRemoveGlyph(WorldPacket& recvData)
 {
     uint32 slot;
     recvData >> slot;
