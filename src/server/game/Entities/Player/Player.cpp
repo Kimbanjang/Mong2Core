@@ -12516,13 +12516,13 @@ void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
                     {
                         if (pItem->GetItemSuffixFactor())
                         {
-                            pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_3);
-                            pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_4);
+                            //pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_3);
+                            //pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_4);
                         }
                         else
                         {
-                            pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_0);
-                            pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_1);
+                            //pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_0);
+                            //pItem->ClearEnchantment(PROP_ENCHANTMENT_SLOT_1);
                         }
 
                         UpdateExpertise(BASE_ATTACK);

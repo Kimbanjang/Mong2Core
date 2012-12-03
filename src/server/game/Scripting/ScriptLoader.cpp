@@ -31,6 +31,8 @@ void AddSC_npcs_mini_boss10();
 void AddSC_npc_lottery();
 void AddSC_Mong2_SystemNPC();
 void AddSC_NPC_Transmogrify();
+void AddSC_ent_item();
+void AddSC_PvP_OnKillHonor();
 
 // spells
 void AddSC_deathknight_spell_scripts();
@@ -1298,5 +1300,7 @@ void AddCustomScripts()
 	AddSC_npc_lottery();
 	AddSC_Mong2_SystemNPC();
 	AddSC_NPC_Transmogrify();
+	AddSC_ent_item();
+	AddSC_PvP_OnKillHonor();
 #endif
 }
