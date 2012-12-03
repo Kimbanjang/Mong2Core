@@ -21,6 +21,7 @@
 
 enum
 {
+<<<<<<< HEAD
     SAY_MARWYN_INTRO                        = -1594506,
     SAY_MARWYN_AGGRO                        = -1668060,
     SAY_MARWYN_DEATH                        = -1668063,
@@ -28,6 +29,13 @@ enum
     SAY_MARWYN_SLAY02                       = -1668062,
     SAY_MARWYN_SP01                         = -1668064,
     SAY_MARWYN_SP02                         = -1668065,
+=======
+    SAY_AGGRO                                     = 0,
+    SAY_SLAY                                      = 1,
+    SAY_DEATH                                     = 2,
+    SAY_CORRUPTED_FLESH                           = 3
+};
+>>>>>>> TC/master
 
     SPELL_OBLITERATE_N                      = 72360,
     SPELL_OBLITERATE_H                      = 72434,
@@ -147,6 +155,7 @@ public:
 
         void CallFallSoldier()
         {
+<<<<<<< HEAD
              for(uint8 i = 0; i < 4; i++)
              {
                 if(Creature* Summon = m_pInstance->instance->GetCreature(m_uiSummonGUID[m_uiCheckSummon]))
@@ -158,26 +167,44 @@ public:
                 }
                 m_uiCheckSummon++;
              }
+=======
+            Talk(SAY_AGGRO);
+            if (instance)
+                instance->SetData(DATA_MARWYN_EVENT, IN_PROGRESS);
+
+            events.ScheduleEvent(EVENT_OBLITERATE, 30000);          // TODO Check timer
+            events.ScheduleEvent(EVENT_WELL_OF_CORRUPTION, 13000);
+            events.ScheduleEvent(EVENT_CORRUPTED_FLESH, 20000);
+            events.ScheduleEvent(EVENT_SHARED_SUFFERING, 20000);    // TODO Check timer
+>>>>>>> TC/master
         }
 
         void JustDied(Unit* pKiller)
         {
+<<<<<<< HEAD
           if(m_pInstance)
           {
              m_pInstance->SetData(TYPE_MARWYN, DONE);
              m_pInstance->SetData(TYPE_PHASE, 3);
           }
+=======
+            Talk(SAY_DEATH);
+>>>>>>> TC/master
 
           DoScriptText(SAY_MARWYN_DEATH, me);
         }
 
         void KilledUnit(Unit* pVictim)
         {
+<<<<<<< HEAD
             switch(urand(0,1))
             {
                 case 0: DoScriptText(SAY_MARWYN_SLAY01, me); break;
                 case 1: DoScriptText(SAY_MARWYN_SLAY02, me); break;
             }
+=======
+            Talk(SAY_SLAY);
+>>>>>>> TC/master
         }
 
         void EnterCombat(Unit* pVictim)
@@ -212,6 +239,7 @@ public:
 
             if(m_pInstance->GetData(TYPE_MARWYN) == SPECIAL) 
             {
+<<<<<<< HEAD
                if(m_uiSummonTimer < uiDiff) 
                {
                        ++SummonCount;
@@ -228,6 +256,26 @@ public:
                        else CallFallSoldier();
                        m_uiSummonTimer = 60000;
                } else m_uiSummonTimer -= uiDiff;
+=======
+                case EVENT_OBLITERATE:
+                    DoCast(SPELL_OBLITERATE);
+                    events.ScheduleEvent(EVENT_OBLITERATE, 30000);
+                    break;
+                case EVENT_WELL_OF_CORRUPTION:
+                    DoCast(SPELL_WELL_OF_CORRUPTION);
+                    events.ScheduleEvent(EVENT_WELL_OF_CORRUPTION, 13000);
+                    break;
+                case EVENT_CORRUPTED_FLESH:
+                    Talk(SAY_CORRUPTED_FLESH);
+                    DoCast(SPELL_CORRUPTED_FLESH);
+                    events.ScheduleEvent(EVENT_CORRUPTED_FLESH, 20000);
+                    break;
+                case EVENT_SHARED_SUFFERING:
+                    if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
+                        DoCast(target, SPELL_SHARED_SUFFERING);
+                    events.ScheduleEvent(EVENT_SHARED_SUFFERING, 20000);
+                    break;
+>>>>>>> TC/master
             }
 
             if(!UpdateVictim())

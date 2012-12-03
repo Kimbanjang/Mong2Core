@@ -41,11 +41,11 @@ enum Spells
 
 enum Yells
 {
-    SAY_AGGRO                                     = -1600006,
-    SAY_KILL                                      = -1600007,
-    SAY_CONSUME                                   = -1600008,
-    SAY_EXPLODE                                   = -1600009,
-    SAY_DEATH                                     = -1600010
+    SAY_AGGRO                                     = 0,
+    SAY_KILL                                      = 1,
+    SAY_CONSUME                                   = 2,
+    SAY_EXPLODE                                   = 3,
+    SAY_DEATH                                     = 4
 };
 
 enum Creatures
@@ -104,7 +104,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            DoScriptText(SAY_AGGRO, me);
+            Talk(SAY_AGGRO);
 
             if (instance)
                 instance->SetData(DATA_TROLLGORE_EVENT, IN_PROGRESS);
@@ -132,6 +132,7 @@ public:
             } else uiSpawnTimer -= diff;
 
             if (uiConsumeTimer <= diff)
+<<<<<<< HEAD
            {
                 std::list<HostileReference *> t_list = me->getThreatManager().getThreatList();
 
@@ -151,6 +152,10 @@ public:
                 }
 
                 DoScriptText(SAY_CONSUME, me);
+=======
+            {
+                Talk(SAY_CONSUME);
+>>>>>>> TC/master
                 DoCast(SPELL_CONSUME);
                 uiConsumeTimer = 15*IN_MILLISECONDS;
             } else uiConsumeTimer -= diff;
@@ -176,6 +181,7 @@ public:
 
             if (uiExplodeCorpseTimer <= diff)
             {
+<<<<<<< HEAD
                 std::list<Creature*> addList;
                 me->GetCreatureListWithEntryInGrid(addList,NPC_DRAKKARI_INVADER_1, 10.0f);
                 me->GetCreatureListWithEntryInGrid(addList,NPC_DRAKKARI_INVADER_2, 10.0f);
@@ -197,6 +203,10 @@ public:
                         }
                     }
                 }
+=======
+                DoCast(SPELL_CORPSE_EXPLODE);
+                Talk(SAY_EXPLODE);
+>>>>>>> TC/master
                 uiExplodeCorpseTimer = urand(15*IN_MILLISECONDS, 19*IN_MILLISECONDS);
             } else uiExplodeCorpseTimer -= diff;
 
@@ -205,7 +215,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            DoScriptText(SAY_DEATH, me);
+            Talk(SAY_DEATH);
 
             lSummons.DespawnAll();
 
@@ -225,7 +235,7 @@ public:
         {
             if (victim == me)
                 return;
-            DoScriptText(SAY_KILL, me);
+            Talk(SAY_KILL);
         }
 
         void JustSummoned(Creature* summon)
