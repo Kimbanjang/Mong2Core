@@ -323,7 +323,7 @@ public:
 
         }
 
-        uint32 GetData(uint32 type)
+        uint32 GetData(uint32 type) const
         {
             if (type == DATA_SKADI_ALL_THE_TIME)
                 return m_bSkadiAllTheTime ? 1 : 0;

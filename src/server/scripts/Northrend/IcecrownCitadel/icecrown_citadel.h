@@ -25,7 +25,7 @@
 
 #define ICCScriptName "instance_icecrown_citadel"
 
-uint32 const EncounterCount = 13;
+uint32 const EncounterCount = 14;
 uint32 const WeeklyNPCs = 9;
 uint32 const MaxHeroicAttempts = 50;
 
@@ -83,35 +83,36 @@ enum DataTypes
     DATA_VALITHRIA_DREAMWALKER      = 10,
     DATA_SINDRAGOSA                 = 11,
     DATA_THE_LICH_KING              = 12,
+    DATA_SINDRAGOSA_GAUNTLET        = 13,
 
     // Additional data
-    DATA_SAURFANG_EVENT_NPC         = 13,
-    DATA_BONED_ACHIEVEMENT          = 14,
-    DATA_OOZE_DANCE_ACHIEVEMENT     = 15,
-    DATA_PUTRICIDE_TABLE            = 16,
-    DATA_NAUSEA_ACHIEVEMENT         = 17,
-    DATA_ORB_WHISPERER_ACHIEVEMENT  = 18,
-    DATA_PRINCE_KELESETH_GUID       = 19,
-    DATA_PRINCE_TALDARAM_GUID       = 20,
-    DATA_PRINCE_VALANAR_GUID        = 21,
-    DATA_BLOOD_PRINCES_CONTROL      = 22,
-    DATA_SINDRAGOSA_FROSTWYRMS      = 23,
-    DATA_SPINESTALKER               = 24,
-    DATA_RIMEFANG                   = 25,
-    DATA_COLDFLAME_JETS             = 26,
-    DATA_TEAM_IN_INSTANCE           = 27,
-    DATA_BLOOD_QUICKENING_STATE     = 28,
-    DATA_HEROIC_ATTEMPTS            = 29,
-    DATA_CROK_SCOURGEBANE           = 30,
-    DATA_CAPTAIN_ARNATH             = 31,
-    DATA_CAPTAIN_BRANDON            = 32,
-    DATA_CAPTAIN_GRONDEL            = 33,
-    DATA_CAPTAIN_RUPERT             = 34,
-    DATA_VALITHRIA_TRIGGER          = 35,
-    DATA_VALITHRIA_LICH_KING        = 36,
-    DATA_HIGHLORD_TIRION_FORDRING   = 37,
-    DATA_ARTHAS_PLATFORM            = 38,
-    DATA_TERENAS_MENETHIL           = 39,
+    DATA_SAURFANG_EVENT_NPC         = 14,
+    DATA_BONED_ACHIEVEMENT          = 15,
+    DATA_OOZE_DANCE_ACHIEVEMENT     = 16,
+    DATA_PUTRICIDE_TABLE            = 17,
+    DATA_NAUSEA_ACHIEVEMENT         = 18,
+    DATA_ORB_WHISPERER_ACHIEVEMENT  = 19,
+    DATA_PRINCE_KELESETH_GUID       = 20,
+    DATA_PRINCE_TALDARAM_GUID       = 21,
+    DATA_PRINCE_VALANAR_GUID        = 22,
+    DATA_BLOOD_PRINCES_CONTROL      = 23,
+    DATA_SINDRAGOSA_FROSTWYRMS      = 24,
+    DATA_SPINESTALKER               = 25,
+    DATA_RIMEFANG                   = 26,
+    DATA_COLDFLAME_JETS             = 27,
+    DATA_TEAM_IN_INSTANCE           = 28,
+    DATA_BLOOD_QUICKENING_STATE     = 29,
+    DATA_HEROIC_ATTEMPTS            = 30,
+    DATA_CROK_SCOURGEBANE           = 31,
+    DATA_CAPTAIN_ARNATH             = 32,
+    DATA_CAPTAIN_BRANDON            = 33,
+    DATA_CAPTAIN_GRONDEL            = 34,
+    DATA_CAPTAIN_RUPERT             = 35,
+    DATA_VALITHRIA_TRIGGER          = 36,
+    DATA_VALITHRIA_LICH_KING        = 37,
+    DATA_HIGHLORD_TIRION_FORDRING   = 38,
+    DATA_ARTHAS_PLATFORM            = 39,
+    DATA_TERENAS_MENETHIL           = 40,
 };
 
 enum CreaturesIds
@@ -280,6 +281,14 @@ enum CreaturesIds
 
     // Generic
     NPC_INVISIBLE_STALKER                       = 30298,
+
+    // Sindragosas Ward
+    NPC_SINDRAGOSAS_WARD                        = 37503,
+    NPC_NERUBAR_WEBWEAVER                       = 37502,
+    NPC_NERUBAR_CHAMPION                        = 37501,
+    NPC_NERUBAR_BROODLING                       = 37232,
+    NPC_FROSTWARDEN_WARRIOR                     = 37228,
+    NPC_FROSTWARDEN_SORCERESS                   = 37229,
 };
 
 enum GameObjectsIds
@@ -298,6 +307,16 @@ enum GameObjectsIds
     // Lady Deathwhisper
     GO_ORATORY_OF_THE_DAMNED_ENTRANCE       = 201563,
     GO_LADY_DEATHWHISPER_ELEVATOR           = 202220,
+
+    // Gunship Battle
+    GO_GUNSHIP_BATTLE_CACHE_A_10N             = 201872,
+    GO_GUNSHIP_BATTLE_CACHE_A_25N             = 201874,
+    GO_GUNSHIP_BATTLE_CACHE_A_10H             = 201873,
+    GO_GUNSHIP_BATTLE_CACHE_A_25H             = 201875,
+    GO_GUNSHIP_BATTLE_CACHE_H_10N             = 202177,
+    GO_GUNSHIP_BATTLE_CACHE_H_25N             = 202180,
+    GO_GUNSHIP_BATTLE_CACHE_H_10H             = 202178,
+    GO_GUNSHIP_BATTLE_CACHE_H_25H             = 202179,
 
     // Deathbringer Saurfang
     GO_SAURFANG_S_DOOR                      = 201825,
@@ -346,7 +365,7 @@ enum GameObjectsIds
     GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR    = 201369,
     GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR        = 201379,
     GO_ICE_WALL                             = 202396,
-    GO_ICE_BLOCK                            = 201722,
+    GO_ICE_BLOCK                            = 188142,
     GO_SIGIL_OF_THE_FROSTWING               = 202181,
 
     // The Lich King

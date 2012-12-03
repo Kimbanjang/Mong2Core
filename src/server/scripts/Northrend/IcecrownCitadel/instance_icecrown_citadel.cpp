@@ -24,6 +24,7 @@
 #include "AccountMgr.h"
 #include "icecrown_citadel.h"
 #include "Player.h"
+#include "Group.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
 
@@ -63,7 +64,8 @@ DoorData const doorData[] =
     {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_S   },
     {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_N   },
     {GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_04,  DATA_VALITHRIA_DREAMWALKER, DOOR_TYPE_SPAWN_HOLE, BOUNDARY_S   },
-    {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_S   },
+    // {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA_GAUNTLET,   DOOR_TYPE_PASSAGE,    BOUNDARY_N   },
+    // {GO_SINDRAGOSA_ENTRANCE_DOOR,            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_S   },
     {GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR,   DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE,    BOUNDARY_E   },
     {GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR,       DATA_SINDRAGOSA,            DOOR_TYPE_PASSAGE,    BOUNDARY_NONE},
     {GO_ICE_WALL,                            DATA_SINDRAGOSA,            DOOR_TYPE_ROOM,       BOUNDARY_SE  },
@@ -106,6 +108,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 TeamInInstance = 0;
                 HeroicAttempts = MaxHeroicAttempts;
                 LadyDeathwisperElevatorGUID = 0;
+                GunshipBattleCacheGUID = 0;
                 DeathbringerSaurfangGUID = 0;
                 DeathbringerSaurfangDoorGUID = 0;
                 DeathbringerSaurfangEventGUID = 0;
@@ -131,6 +134,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 ValithriaLichKingGUID = 0;
                 ValithriaTriggerGUID = 0;
                 SindragosaGUID = 0;
+                SindragosaDoorGUID = 0;
                 SpinestalkerGUID = 0;
                 RimefangGUID = 0;
                 TheLichKingTeleportGUID = 0;
@@ -149,6 +153,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 ColdflameJetsState = NOT_STARTED;
                 BloodQuickeningState = NOT_STARTED;
                 BloodQuickeningMinutes = 0;
+                SindragosasWardGUID = 0;
             }
 
             void FillInitialWorldStates(WorldPacket& data)
@@ -304,6 +309,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                         creature->SetCorpseDelay(0);
                         creature->SetReactState(REACT_PASSIVE);
                         break;
+                    case NPC_SINDRAGOSAS_WARD:
+                        SindragosasWardGUID = creature->GetGUID();
+                        break;
                     default:
                         break;
                 }
@@ -316,7 +324,7 @@ class instance_icecrown_citadel : public InstanceMapScript
             }
 
             // Weekly quest spawn prevention
-            uint32 GetCreatureEntry(uint32 /*guidLow*/, CreatureData const* data)
+            /*uint32 GetCreatureEntry(uint32 guidLow, CreatureData const* data)
             {
                 uint32 entry = data->id;
                 switch (entry)
@@ -346,7 +354,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 }
 
                 return entry;
-            }
+            }*/
 
             void OnUnitDeath(Unit* unit)
             {
@@ -426,7 +434,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_GREEN_DRAGON_BOSS_EXIT:
                     case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02:
                     case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03:
-                    case GO_SINDRAGOSA_ENTRANCE_DOOR:
+                    // case GO_SINDRAGOSA_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR:
                     case GO_ICE_WALL:
@@ -449,6 +457,16 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_SAURFANG_S_DOOR:
                         DeathbringerSaurfangDoorGUID = go->GetGUID();
                         AddDoor(go, true);
+                        break;
+                    case GO_GUNSHIP_BATTLE_CACHE_A_10N:
+                    case GO_GUNSHIP_BATTLE_CACHE_A_25N:
+                    case GO_GUNSHIP_BATTLE_CACHE_A_10H:
+                    case GO_GUNSHIP_BATTLE_CACHE_A_25H:
+                    case GO_GUNSHIP_BATTLE_CACHE_H_10N:
+                    case GO_GUNSHIP_BATTLE_CACHE_H_25N:
+                    case GO_GUNSHIP_BATTLE_CACHE_H_10H:
+                    case GO_GUNSHIP_BATTLE_CACHE_H_25H:
+                        GunshipBattleCacheGUID = go->GetGUID();
                         break;
                     case GO_DEATHBRINGER_S_CACHE_10N:
                     case GO_DEATHBRINGER_S_CACHE_25N:
@@ -513,6 +531,9 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (Creature* valithria = instance->GetCreature(ValithriaDreamwalkerGUID))
                             go->SetLootRecipient(valithria->GetLootRecipient());
                         go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_LOCKED | GO_FLAG_NOT_SELECTABLE | GO_FLAG_NODESPAWN);
+                        break;
+                    case GO_SINDRAGOSA_ENTRANCE_DOOR:
+                        SindragosaDoorGUID = go->GetGUID();
                         break;
                     case GO_SCOURGE_TRANSPORTER_LK:
                         TheLichKingTeleportGUID = go->GetGUID();
@@ -581,7 +602,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_02:
                     case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_03:
                     case GO_DOODAD_ICECROWN_ROOSTPORTCULLIS_04:
-                    case GO_SINDRAGOSA_ENTRANCE_DOOR:
+                    // case GO_SINDRAGOSA_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR:
                     case GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR:
                     case GO_ICE_WALL:
@@ -676,6 +697,12 @@ class instance_icecrown_citadel : public InstanceMapScript
                         return ArthasPlatformGUID;
                     case DATA_TERENAS_MENETHIL:
                         return TerenasMenethilGUID;
+                    case DATA_SINDRAGOSA_GAUNTLET:
+                        return SindragosasWardGUID;
+                    case GO_SINDRAGOSA_ENTRANCE_DOOR:
+                        return SindragosaDoorGUID;
+                    case DATA_GUNSHIP_EVENT:
+                        return GunshipBattleCacheGUID;
                     default:
                         break;
                 }
@@ -760,52 +787,28 @@ class instance_icecrown_citadel : public InstanceMapScript
                         if (state == DONE)
                             CheckLichKingAvailability();
                         if (instance->IsHeroic())
-                        {
                             if (state == FAIL && HeroicAttempts)
-                            {
-                                --HeroicAttempts;
-                                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
-                                if (!HeroicAttempts)
-                                    if (Creature* putricide = instance->GetCreature(ProfessorPutricideGUID))
-                                        putricide->DespawnOrUnsummon();
-                            }
-                        }
+                                DoFailAttemptOnHeroic();
                         break;
                     case DATA_BLOOD_QUEEN_LANA_THEL:
                         HandleGameObject(BloodwingSigilGUID, state != DONE);
                         if (state == DONE)
                             CheckLichKingAvailability();
                         if (instance->IsHeroic())
-                        {
                             if (state == FAIL && HeroicAttempts)
-                            {
-                                --HeroicAttempts;
-                                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
-                                if (!HeroicAttempts)
-                                    if (Creature* bq = instance->GetCreature(BloodQueenLanaThelGUID))
-                                        bq->DespawnOrUnsummon();
-                            }
-                        }
+                                DoFailAttemptOnHeroic();
                         break;
                     case DATA_VALITHRIA_DREAMWALKER:
-                        if (state == DONE && sPoolMgr->IsSpawnedObject<Quest>(WeeklyQuestData[8].questId[instance->GetSpawnMode() & 1]))
-                            instance->SummonCreature(NPC_VALITHRIA_DREAMWALKER_QUEST, ValithriaSpawnPos);
+                        /*if (state == DONE && sPoolMgr->IsSpawnedObject<Quest>(WeeklyQuestData[8].questId[instance->GetSpawnMode() & 1]))
+                            instance->SummonCreature(NPC_VALITHRIA_DREAMWALKER_QUEST, ValithriaSpawnPos);*/
                         break;
                     case DATA_SINDRAGOSA:
                         HandleGameObject(FrostwingSigilGUID, state != DONE);
                         if (state == DONE)
                             CheckLichKingAvailability();
                         if (instance->IsHeroic())
-                        {
                             if (state == FAIL && HeroicAttempts)
-                            {
-                                --HeroicAttempts;
-                                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
-                                if (!HeroicAttempts)
-                                    if (Creature* sindra = instance->GetCreature(SindragosaGUID))
-                                        sindra->DespawnOrUnsummon();
-                            }
-                        }
+                                DoFailAttemptOnHeroic();
                         break;
                     case DATA_THE_LICH_KING:
                     {
@@ -817,16 +820,11 @@ class instance_icecrown_citadel : public InstanceMapScript
                             platform->setActive(state == IN_PROGRESS);
 
                         if (instance->IsHeroic())
-                        {
                             if (state == FAIL && HeroicAttempts)
-                            {
-                                --HeroicAttempts;
-                                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
-                                if (!HeroicAttempts)
-                                    if (Creature* theLichKing = instance->GetCreature(TheLichKingGUID))
-                                        theLichKing->DespawnOrUnsummon();
-                            }
-                        }
+                                DoFailAttemptOnHeroic();
+
+                        if (state == FAIL)
+                            Events.CancelEvent(EVENT_QUAKE_SHATTER);
 
                         if (state == DONE)
                         {
@@ -883,8 +881,8 @@ class instance_icecrown_citadel : public InstanceMapScript
                             break;
 
                         // 5 is the index of Blood Quickening
-                        if (!sPoolMgr->IsSpawnedObject<Quest>(WeeklyQuestData[5].questId[instance->GetSpawnMode() & 1]))
-                            break;
+                        /*if (!sPoolMgr->IsSpawnedObject<Quest>(WeeklyQuestData[5].questId[instance->GetSpawnMode() & 1]))
+                            break;*/
 
                         switch (data)
                         {
@@ -952,10 +950,69 @@ class instance_icecrown_citadel : public InstanceMapScript
                 return false;
             }
 
+            void DoFailAttemptOnHeroic()
+            {
+                --HeroicAttempts;
+                DoUpdateWorldState(WORLDSTATE_SHOW_ATTEMPTS, 1);
+                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_REMAINING, HeroicAttempts);
+                DoUpdateWorldState(WORLDSTATE_ATTEMPTS_MAX, MaxHeroicAttempts);
+
+                // Despawn all wing bosses if no attempts left
+                if (!HeroicAttempts)
+                {
+                    if (Creature* putricide = instance->GetCreature(ProfessorPutricideGUID))
+                        putricide->DespawnOrUnsummon();
+
+                    if (Creature* bq = instance->GetCreature(BloodQueenLanaThelGUID))
+                        bq->DespawnOrUnsummon();
+
+                    if (Creature* sindra = instance->GetCreature(SindragosaGUID))
+                        sindra->DespawnOrUnsummon();
+
+                    if (Creature* theLichKing = instance->GetCreature(TheLichKingGUID))
+                        theLichKing->DespawnOrUnsummon();
+                }
+            }
+
             bool CheckRequiredBosses(uint32 bossId, Player const* player = NULL) const
             {
                 if (player && AccountMgr::IsGMAccount(player->GetSession()->GetSecurity()))
                     return true;
+
+                // In heroic mode, leader must have NH Lich King achievement
+                bool heroicCheckFailed = true;
+                if (instance->IsHeroic())
+                {
+                    if (!player && instance->GetPlayersCountExceptGMs() > 0)
+                    {
+                        Map::PlayerList const& playerList = instance->GetPlayers();
+
+                        if (!playerList.isEmpty())
+                        {
+                            for (Map::PlayerList::const_iterator i = playerList.begin(); i != playerList.end(); ++i)
+                            {
+                                if (i->getSource())
+                                {
+                                    if (!i->getSource()->isGameMaster())
+                                    {
+                                        player = i->getSource();
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (player)
+                        if (const Group* group = player->GetGroup())
+                            if (group->GetLeaderGUID() && group->isRaidGroup())
+                                if (Player* leader = ObjectAccessor::GetPlayer(*player, group->GetLeaderGUID()))
+                                    if (leader->GetInstanceId() == instance->GetInstanceId())
+                                        if (leader->HasAchieved(instance->Is25ManRaid() ? 4597 : 4530))
+                                            heroicCheckFailed = false;
+                }
+                else
+                    heroicCheckFailed = false;
 
                 switch (bossId)
                 {
@@ -990,7 +1047,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                 if (!CheckLowerSpire(bossId))
                     return false;
 
-                return true;
+                return !heroicCheckFailed;
             }
 
             bool CheckPlagueworks(uint32 bossId) const
@@ -1261,6 +1318,7 @@ class instance_icecrown_citadel : public InstanceMapScript
         protected:
             EventMap Events;
             uint64 LadyDeathwisperElevatorGUID;
+            uint64 GunshipBattleCacheGUID;
             uint64 DeathbringerSaurfangGUID;
             uint64 DeathbringerSaurfangDoorGUID;
             uint64 DeathbringerSaurfangEventGUID;   // Muradin Bronzebeard or High Overlord Saurfang
@@ -1286,6 +1344,7 @@ class instance_icecrown_citadel : public InstanceMapScript
             uint64 ValithriaLichKingGUID;
             uint64 ValithriaTriggerGUID;
             uint64 SindragosaGUID;
+            uint64 SindragosaDoorGUID;
             uint64 SpinestalkerGUID;
             uint64 RimefangGUID;
             uint64 TheLichKingTeleportGUID;
@@ -1312,6 +1371,7 @@ class instance_icecrown_citadel : public InstanceMapScript
             bool IsOozeDanceEligible;
             bool IsNauseaEligible;
             bool IsOrbWhispererEligible;
+            uint64 SindragosasWardGUID;
         };
 
         InstanceScript* GetInstanceScript(InstanceMap* map) const

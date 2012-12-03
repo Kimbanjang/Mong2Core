@@ -93,7 +93,7 @@ class boss_bronjahm : public CreatureScript
                 instance->SetBossState(DATA_BRONJAHM, NOT_STARTED);
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 if (type == DATA_SOUL_FRAGMENTS)
                     return _soulFragmentCount;
