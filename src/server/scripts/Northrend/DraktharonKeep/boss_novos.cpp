@@ -165,7 +165,7 @@ public:
                     {
                         if (uiCrystalHandlerTimer <= diff)
                         {
-                            DoScriptText(SAY_NECRO_ADD, me);
+                            Talk(SAY_NECRO_ADD);
 
                             if (Creature* pCrystalHandler = me->SummonCreature(CREATURE_CRYSTAL_HANDLER, CrystalHandlerSpawnPoint, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 20*IN_MILLISECONDS))
                                 pCrystalHandler->GetMotionMaster()->MovePoint(0, AddDestinyPoint);

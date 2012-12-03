@@ -150,7 +150,7 @@ public:
                     }
                 }
 
-                DoScriptText(SAY_CONSUME, me);
+                Talk(SAY_CONSUME);
 
                 DoCast(SPELL_CONSUME);
                 uiConsumeTimer = 15*IN_MILLISECONDS;
@@ -184,7 +184,7 @@ public:
                 if(!addList.empty())
                 {
                     DoCast(SPELL_CORPSE_EXPLODE);
-                    DoScriptText(SAY_EXPLODE, me);
+                    Talk(SAY_EXPLODE);
 
                     for(std::list<Creature*>::iterator i = addList.begin(); i != addList.end(); i++)
                     {
