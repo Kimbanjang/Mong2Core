@@ -697,7 +697,7 @@ class npc_rotting_frost_giant : public CreatureScript
                             break;
                         case EVENT_FROST_GIANT_FRENZY:
                             DoCast(SPELL_FRENZY);
-                            _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, IsHeroic() ? 28000 : 31000);
+                            _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, IsHeroic() ? 28000 : 34000);
                             break;
                         default:
                             break;
