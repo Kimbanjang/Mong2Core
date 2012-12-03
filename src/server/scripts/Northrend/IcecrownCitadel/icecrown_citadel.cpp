@@ -684,20 +684,20 @@ class npc_rotting_frost_giant : public CreatureScript
                             break;
                         case EVENT_STOMP:
                             DoCastVictim(RAID_MODE(SPELL_STOMP, SPELL_STOMP_H, SPELL_STOMP, SPELL_STOMP_H), true);
-                            _events.ScheduleEvent(EVENT_STOMP, (IsHeroic() ? urand(10000, 15000) : urand(12000, 17000)));
+                            _events.ScheduleEvent(EVENT_STOMP, (IsHeroic() ? urand(10000, 15000) : urand(13000, 18000)));
                             break;
                         case EVENT_WHITEOUT:
                             DoCastVictim(RAID_MODE(SPELL_WHITEOUT, SPELL_WHITEOUT_H, SPELL_WHITEOUT, SPELL_WHITEOUT_H), true);
-                            _events.ScheduleEvent(EVENT_WHITEOUT, (IsHeroic() ? 25000 : 30000));
+                            _events.ScheduleEvent(EVENT_WHITEOUT, (IsHeroic() ? 25000 : 31000));
                             break;
                         case EVENT_FROST_GIANT_BLIZZARD:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                 DoCast(target, SPELL_BLIZZARD, true);
-                            _events.ScheduleEvent(EVENT_FROST_GIANT_BLIZZARD, IsHeroic() ? urand(8000, 12000) : urand(10000, 14000));
+                            _events.ScheduleEvent(EVENT_FROST_GIANT_BLIZZARD, IsHeroic() ? urand(8000, 12000) : urand(11000, 15000));
                             break;
                         case EVENT_FROST_GIANT_FRENZY:
                             DoCast(SPELL_FRENZY);
-                            _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, IsHeroic() ? 28000 : 33000);
+                            _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, IsHeroic() ? 28000 : 31000);
                             break;
                         default:
                             break;
