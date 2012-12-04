@@ -51,10 +51,12 @@ INSERT INTO `quest_template` (`Id`, `Method`, `Level`, `MinLevel`, `MaxLevel`, `
 -- 영제/샤론/투영 토큰 드랍(23961,23964,23967)
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (36658,2,3,1,0,-90005,1),(36938,2,3,1,0,-90005,1),(36502,2,6,1,0,-90005,1),(37677,2,6,1,0,-90005,1), -- 등외급 팻/탈것
-(36658,23961,10,1,0,5,5),(36938,23961,10,1,0,5,5),(36502,23964,100,1,0,5,5),(37677,23964,100,1,0,5,5); -- 토큰
+(36658,23964,10,1,0,5,5),(36938,23964,100,1,0,5,5),(36502,23961,10,1,0,5,5),(37677,23961,100,1,0,5,5); -- 토큰
+
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (27993,2,5,1,0,-90005,1),(27985,2,10,1,0,-90005,1), -- 등외급 팻/탈것
 (27993,23967,20,1,0,5,5),(27985,23967,100,1,0,5,5); -- 토큰
+
 -- 투영 상급 우상 드랍
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES 
 (27993,23970,3,1,0,5,5),(27985,23970,6,1,0,5,5);
