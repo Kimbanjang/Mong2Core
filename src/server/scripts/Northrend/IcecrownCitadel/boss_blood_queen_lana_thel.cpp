@@ -37,7 +37,6 @@ enum Texts
     SAY_WIPE                    = 9,
     SAY_BERSERK                 = 10,
     SAY_DEATH                   = 11,
-    EMOTE_BERSERK_RAID          = 12
 };
 
 enum Spells
@@ -352,7 +351,7 @@ class boss_blood_queen_lana_thel : public CreatureScript
                     switch (eventId)
                     {
                         case EVENT_BERSERK:
-                            Talk(EMOTE_BERSERK_RAID);
+                            DoScriptText(EMOTE_GENERIC_BERSERK_RAID, me);
                             Talk(SAY_BERSERK);
                             DoCast(me, SPELL_BERSERK);
                             break;
