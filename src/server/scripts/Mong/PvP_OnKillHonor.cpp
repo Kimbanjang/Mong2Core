@@ -26,8 +26,8 @@ class PvP_OnKillHonor : public PlayerScript
 						//pKiller->ModifyArenaPoints(Victim_arena); 
 				
                     //    char msg[250];
-                    //    sprintf(msg, "[ %s ] 님이  [ %s ] 를 처치햇습니다.", pKiller->GetName(), pKiller->GetName());
-                    //sWorld->SendServerMessage(SERVER_MSG_STRING, msg);
+                        sprintf(msg, "[ %s ] 님이  [ %s ] 를 처치햇습니다.", pKiller->GetName(), pKiller->GetName());
+						sWorld->SendServerMessage(SERVER_MSG_STRING, msg);
                 }
 };
 
