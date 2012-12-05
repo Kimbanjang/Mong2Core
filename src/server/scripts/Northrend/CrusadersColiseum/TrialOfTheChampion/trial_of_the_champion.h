@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -82,7 +82,7 @@ enum eNpcs
     NPC_GNOMERAGN_CHAMPION      = 35331,
     NPC_EXODAR_CHAMPION         = 35330,
     NPC_DRNASSUS_CHAMPION       = 35332,
-    NPC_IRONFORGE_CHAMPION      = 35329,    
+    NPC_IRONFORGE_CHAMPION      = 35329,
 
     NPC_EADRIC                  = 35119,
     NPC_PALETRESS               = 34928,
@@ -177,9 +177,8 @@ enum eVehicles
 
     VEHICLE_ARGENT_WARHORSE                         = 35644,
     VEHICLE_ARGENT_BATTLEWORG                       = 36558,
-
-	VEHICLE_GR                                      = 35492, 
-	VEHICLE_BLACK_KNIGHT                            = 35491
+    VEHICLE_GR                                      = 35492, 
+    VEHICLE_BLACK_KNIGHT                            = 35491
 };
 
 void HandleSpellOnPlayersInInstanceToC5(Unit* caller, uint32 spellId);
