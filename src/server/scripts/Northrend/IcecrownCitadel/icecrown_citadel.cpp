@@ -636,7 +636,7 @@ class npc_rotting_frost_giant : public CreatureScript
                 _events.Reset();
                 _events.ScheduleEvent(EVENT_CHECK_POSITION, 5000);
                 _events.ScheduleEvent(EVENT_STOMP, urand(10000, 15000));
-                _events.ScheduleEvent(EVENT_WHITEOUT, 15000);
+                _events.ScheduleEvent(EVENT_WHITEOUT, 18000);
                 _events.ScheduleEvent(EVENT_FROST_GIANT_BLIZZARD, urand(4000, 8000));
                 _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, urand(5000, 15000));
             }
