@@ -688,7 +688,7 @@ class npc_rotting_frost_giant : public CreatureScript
                             _events.ScheduleEvent(EVENT_CHECK_POSITION, 5000);
                             break;
                         case EVENT_STOMP:
-							if(whiteoutDelay = 1)
+							if (whiteoutDelay = 1)
 							{
 		                        DoCastVictim(RAID_MODE(SPELL_STOMP, SPELL_STOMP_H, SPELL_STOMP, SPELL_STOMP_H), true);
 			                    _events.ScheduleEvent(EVENT_STOMP, (IsHeroic() ? urand(10000, 15000) : urand(12000, 17000)));
@@ -699,7 +699,7 @@ class npc_rotting_frost_giant : public CreatureScript
 								_events.ScheduleEvent(EVENT_STOMP, 1000);
                             break;
                         case EVENT_WHITEOUT:
-							if(stompDelay = 1)
+							if (stompDelay = 1)
 							{
 								DoCastVictim(RAID_MODE(SPELL_WHITEOUT, SPELL_WHITEOUT_H, SPELL_WHITEOUT, SPELL_WHITEOUT_H), true);
 	                            _events.ScheduleEvent(EVENT_WHITEOUT, (IsHeroic() ? 28000 : 30000));

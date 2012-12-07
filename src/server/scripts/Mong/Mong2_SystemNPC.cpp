@@ -189,7 +189,7 @@ class npc_Morpheus : public CreatureScript
 				case 1:
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='1' WHERE `guid`='%u';", player->GetGUID());
 					player->GiveLevel(80);
-					creature->MonsterWhisper("좋네... 그렇게 계속 현재에 만족하면서 살도록 하게.", player->GetGUID());
+					creature->MonsterWhisper("알았네... 그렇게 계속 현재에 만족하면서 살도록 하게.", player->GetGUID());
 
 					break;
 

@@ -268,7 +268,8 @@ class boss_anubarak_trial : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 _EnterCombat();
-                Talk(SAY_AGGRO);
+                Talk(SAY_AGGRO);				
+                DoTeleportAll(742.3334f,136.538f,142.2003f,6.19f);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
 
                 // Despawn Scarab Swarms neutral
