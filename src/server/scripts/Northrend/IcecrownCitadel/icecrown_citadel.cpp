@@ -270,6 +270,7 @@ enum EventTypes
     // Rotting Frost Giant extended
     EVENT_FROST_GIANT_BLIZZARD          = 59,
     EVENT_FROST_GIANT_FRENZY            = 60,
+	EVENT_STOMP_DELAY					= 61,
 };
 
 enum DataTypesICC
@@ -658,6 +659,9 @@ class npc_rotting_frost_giant : public CreatureScript
 
             void UpdateAI(uint32 const diff)
             {
+				uint32 stompDelay = 0;
+				uint32 whiteoutDelay = 0;
+
                 if (!UpdateVictim())
                     return;
 
@@ -667,7 +671,7 @@ class npc_rotting_frost_giant : public CreatureScript
                     return;
 
                 while (uint32 eventId = _events.ExecuteEvent())
-                {
+                {					
                     switch (eventId)
                     {
                         case EVENT_CHECK_POSITION:
@@ -683,21 +687,41 @@ class npc_rotting_frost_giant : public CreatureScript
                             _events.ScheduleEvent(EVENT_CHECK_POSITION, 5000);
                             break;
                         case EVENT_STOMP:
-                            DoCastVictim(RAID_MODE(SPELL_STOMP, SPELL_STOMP_H, SPELL_STOMP, SPELL_STOMP_H), true);
-                            _events.ScheduleEvent(EVENT_STOMP, (IsHeroic() ? urand(10000, 15000) : urand(13000, 18000)));
+							if(whiteoutDelay = 1)
+							{
+		                        DoCastVictim(RAID_MODE(SPELL_STOMP, SPELL_STOMP_H, SPELL_STOMP, SPELL_STOMP_H), true);
+			                    _events.ScheduleEvent(EVENT_STOMP, (IsHeroic() ? urand(10000, 15000) : urand(12000, 17000)));
+								_events.ScheduleEvent(EVENT_STOMP_DELAY, (IsHeroic() ? 3000 : 4000));
+								whiteoutDelay = 0;
+							}
+							else
+								_events.ScheduleEvent(EVENT_STOMP, 1000);
                             break;
                         case EVENT_WHITEOUT:
-                            DoCastVictim(RAID_MODE(SPELL_WHITEOUT, SPELL_WHITEOUT_H, SPELL_WHITEOUT, SPELL_WHITEOUT_H), true);
-                            _events.ScheduleEvent(EVENT_WHITEOUT, (IsHeroic() ? 25000 : 31000));
+							if(stompDelay = 1)
+							{
+								DoCastVictim(RAID_MODE(SPELL_WHITEOUT, SPELL_WHITEOUT_H, SPELL_WHITEOUT, SPELL_WHITEOUT_H), true);
+	                            _events.ScheduleEvent(EVENT_WHITEOUT, (IsHeroic() ? 28000 : 30000));
+								_events.ScheduleEvent(EVENT_WHITEOUT_DELAY, (IsHeroic() ? 1000 : 2000));
+								stompDelay = 0;
+							}
+							else
+								_events.ScheduleEvent(EVENT_WHITEOUT,1000);
                             break;
                         case EVENT_FROST_GIANT_BLIZZARD:
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1))
                                 DoCast(target, SPELL_BLIZZARD, true);
-                            _events.ScheduleEvent(EVENT_FROST_GIANT_BLIZZARD, IsHeroic() ? urand(8000, 12000) : urand(11000, 15000));
+                            _events.ScheduleEvent(EVENT_FROST_GIANT_BLIZZARD, IsHeroic() ? urand(8000, 12000) : urand(10000, 14000));
                             break;
                         case EVENT_FROST_GIANT_FRENZY:
                             DoCast(SPELL_FRENZY);
-                            _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, IsHeroic() ? 28000 : 34000);
+                            _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, IsHeroic() ? 28000 : 33000);
+                            break;
+                        case EVENT_STOMP_DELAY:
+							stompDelay = 1;
+                            break;
+						case EVENT_WHITEOUT_DELAY:
+							whiteoutDelay = 1;
                             break;
                         default:
                             break;
