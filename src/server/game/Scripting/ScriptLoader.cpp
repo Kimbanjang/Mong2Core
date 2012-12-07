@@ -33,7 +33,7 @@ void AddSC_Mong2_SystemNPC();
 void AddSC_NPC_Transmogrify();
 void AddSC_PvP_OnKillHonor();
 void AddSC_ent_item();
-void AddSC_mong_guild_object();
+void AddSC_Mong2_Master_Book();
 
 // spells
 void AddSC_deathknight_spell_scripts();
@@ -1303,6 +1303,6 @@ void AddCustomScripts()
 	AddSC_NPC_Transmogrify();
 	AddSC_PvP_OnKillHonor();
 	AddSC_ent_item();
-	AddSC_mong_guild_object();
+	AddSC_Mong2_Master_Book();
 #endif
 }
