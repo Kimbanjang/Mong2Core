@@ -271,6 +271,7 @@ enum EventTypes
     EVENT_FROST_GIANT_BLIZZARD          = 59,
     EVENT_FROST_GIANT_FRENZY            = 60,
 	EVENT_STOMP_DELAY					= 61,
+	EVENT_WHITEOUT_DELAY				= 62,
 };
 
 enum DataTypesICC
@@ -637,7 +638,7 @@ class npc_rotting_frost_giant : public CreatureScript
                 _events.Reset();
                 _events.ScheduleEvent(EVENT_CHECK_POSITION, 5000);
                 _events.ScheduleEvent(EVENT_STOMP, urand(10000, 15000));
-                _events.ScheduleEvent(EVENT_WHITEOUT, 18000);
+                _events.ScheduleEvent(EVENT_WHITEOUT, 15000);
                 _events.ScheduleEvent(EVENT_FROST_GIANT_BLIZZARD, urand(4000, 8000));
                 _events.ScheduleEvent(EVENT_FROST_GIANT_FRENZY, urand(5000, 15000));
             }
@@ -660,7 +661,7 @@ class npc_rotting_frost_giant : public CreatureScript
             void UpdateAI(uint32 const diff)
             {
 				uint32 stompDelay = 0;
-				uint32 whiteoutDelay = 0;
+				uint32 whiteoutDelay = 1;
 
                 if (!UpdateVictim())
                     return;
