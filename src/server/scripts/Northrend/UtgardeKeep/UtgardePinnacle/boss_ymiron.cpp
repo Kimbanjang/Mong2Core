@@ -214,12 +214,8 @@ public:
             {
                 if (m_uiPause_Timer <= diff)
                 {
-<<<<<<< HEAD
                     DoScriptText(ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].say, me);
-=======
-                    Talk(ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].say);
-                    DoCast(me, SPELL_CHANNEL_YMIRON_TO_SPIRIT); // should be on spirit
->>>>>>> TC/master
+
                     if (Creature* temp = me->SummonCreature(ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].npc, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnX, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnY, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnZ, ActiveBoat[m_uiActiveOrder[m_uiActivedNumber]].SpawnO, TEMPSUMMON_CORPSE_DESPAWN, 0))
                     {
                         DoCast(temp, SPELL_CHANNEL_YMIRON_TO_SPIRIT); // should be on spirit
