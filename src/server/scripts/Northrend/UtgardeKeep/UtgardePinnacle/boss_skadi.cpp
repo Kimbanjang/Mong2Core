@@ -369,12 +369,9 @@ public:
                         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                         if (!m_bSaidEmote)
                         {
-<<<<<<< HEAD
                             m_uiSpellHitPerPhase = 0;
                             DoScriptText(EMOTE_RANGE, me);
-=======
-                            Talk(EMOTE_RANGE);
->>>>>>> TC/master
+
                             m_bSaidEmote = true;
                         }
                     }
