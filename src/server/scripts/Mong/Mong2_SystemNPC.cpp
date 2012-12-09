@@ -15,10 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScriptPCH.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "ScriptedGossip.h"
+#include "ReputationMgr.h"
 
 /* ScriptData
 SD%Name:	npc_Postman
@@ -170,10 +170,12 @@ class npc_Morpheus : public CreatureScript
 	
 		        player->PlayerTalkClass->SendGossipMenu(500002, creature->GetGUID());
 			}
-			else if(chk_matrix == 1) // 다시 빨간약 먹는 이벤트용
+			/* 다시 빨간약 먹는 이벤트 미구현
+			else if(chk_matrix == 1)
 			{
 				player->SEND_GOSSIP_MENU(500003, creature->GetGUID());
 			}
+			*/
 			else
 			{
 				player->SEND_GOSSIP_MENU(500003, creature->GetGUID());
@@ -190,7 +192,6 @@ class npc_Morpheus : public CreatureScript
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='1' WHERE `guid`='%u';", player->GetGUID());
 					player->GiveLevel(80);
 					creature->MonsterWhisper("알았네... 그렇게 계속 현재에 만족하면서 살도록 하게.", player->GetGUID());
-
 					break;
 
 				case 2:
@@ -198,7 +199,6 @@ class npc_Morpheus : public CreatureScript
 					player->GiveLevel(70);
 					// player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(63), 42999);
 					creature->MonsterWhisper("Welcome To The Real World", player->GetGUID());
-
 					break;
 
 				default:
