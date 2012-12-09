@@ -197,7 +197,7 @@ class npc_Morpheus : public CreatureScript
 				case 2:
 					CharacterDatabase.PQuery("UPDATE `characters` SET `matrix`='2' WHERE `guid`='%u';", player->GetGUID());
 					player->GiveLevel(70);
-					// player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(63), 42999);
+					player->GetReputationMgr().SetReputation(sFactionStore.LookupEntry(63), 85000);
 					creature->MonsterWhisper("Welcome To The Real World", player->GetGUID());
 					break;
 
