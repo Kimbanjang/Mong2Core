@@ -1,4 +1,5 @@
 ﻿#include "ScriptPCH.h"
+#include "ScriptMgr.h"
 
 class PvP_OnKillHonor : public PlayerScript
 {
