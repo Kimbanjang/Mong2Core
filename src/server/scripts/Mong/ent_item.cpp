@@ -1,4 +1,4 @@
-#include "ScriptPCH.h"
+Ôªø#include "ScriptPCH.h"
 #include "ScriptMgr.h"
 #include "Lyn_han.h"
 
@@ -39,36 +39,36 @@ public:
 		
 		if(pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0,item_slot) == NULL)
 		{
-			SEND_NOTIFICATION(C_YLW"¿Â∫Ò∞° æ¯Ω¿¥œ¥Ÿ. ¡÷πÆº≠∞° ∫˚≥™∏Á ªÁ∂Û¡˝¥œ¥Ÿ.");
+			SEND_NOTIFICATION(C_YLW"Ïû•ÎπÑÍ∞Ä ÏóÜÏäµÎãàÎã§. Ï£ºÎ¨∏ÏÑúÍ∞Ä ÎπõÎÇòÎ©∞ ÏÇ¨ÎùºÏßëÎãàÎã§.");
 			return true;
 		}
 
 		
 		Item* itemTarget = pPlayer->GetItemByPos(INVENTORY_SLOT_BAG_0, item_slot);
-		pPlayer->ApplyEnchantment(itemTarget, EnchantmentSlot(item_spell_level), false);  // ¿Ã¿¸ ∏∂π˝∫Œø©∏¶ ¡ˆøÓ¥Ÿ
+		pPlayer->ApplyEnchantment(itemTarget, EnchantmentSlot(item_spell_level), false);  // Ïù¥Ï†Ñ ÎßàÎ≤ïÎ∂ÄÏó¨Î•º ÏßÄÏö¥Îã§
 		char msg[500];
 		if(spell_rand < 2 && item_spell_level == 7)
 			item_spell_level += 1;
 
 
-		//»Æ∑¸ ∞ËªÍ
+		//ÌôïÎ•† Í≥ÑÏÇ∞
 		////if(spell_rand < ent_suc)
 		//{
-			sprintf(msg,"|cffffff00 ¡÷πÆº≠∞° ∫˚¿ª ≥ª∏Á ªÁ∂Û¡˝¥œ¥Ÿ.  %s  ∏∂π˝¿Ã ∫Œø©µ«æ˙Ω¿¥œ¥Ÿ.",caption);
+			sprintf(msg,"|cffffff00 Ï£ºÎ¨∏ÏÑúÍ∞Ä ÎπõÏùÑ ÎÇ¥Î©∞ ÏÇ¨ÎùºÏßëÎãàÎã§.  %s  ÎßàÎ≤ïÏù¥ Î∂ÄÏó¨ÎêòÏóàÏäµÎãàÎã§.",caption);
 			itemTarget->SetEnchantment(EnchantmentSlot(item_spell_level), ent_spell, 0, 0);
-			pPlayer->ApplyEnchantment(itemTarget, EnchantmentSlot(item_spell_level), true);   // ªı∑ŒøÓ ∏∂π˝∫Œø©
+			pPlayer->ApplyEnchantment(itemTarget, EnchantmentSlot(item_spell_level), true);   // ÏÉàÎ°úÏö¥ ÎßàÎ≤ïÎ∂ÄÏó¨
 			SEND_NOTIFICATION(msg);
 		//}
 		//else if(spell_rand < (ent_suc + 2))
 		//{
-		//	SEND_NOTIFICATION(C_YLW"¡÷πÆº≠∞° ¡ˆ±€∞≈∏Æ∏Á ≈∏ø¿∏®¥œ¥Ÿ. ¡÷πÆº≠ ªÁøÎø° Ω«∆– «ﬁΩ¿¥œ¥Ÿ.");
+		//	SEND_NOTIFICATION(C_YLW"Ï£ºÎ¨∏ÏÑúÍ∞Ä ÏßÄÍ∏ÄÍ±∞Î¶¨Î©∞ ÌÉÄÏò§Î¶ÖÎãàÎã§. Ï£ºÎ¨∏ÏÑú ÏÇ¨Ïö©Ïóê Ïã§Ìå® ÌñáÏäµÎãàÎã§.");
 		//	itemTarget->ClearEnchantment(EnchantmentSlot(item_spell_level));
 		//}
 		//else 
 		//{
 		//	itemTarget->IsBroken();
 		//	//pPlayer->DestroyItem(INVENTORY_SLOT_BAG_0, item_slot, true);
-		//	SEND_NOTIFICATION(C_YLW"π´∏Æ«— ¡÷πÆ¿ª √Î±ﬁ«œ∏Èº≠ ¿Â∫Ò∞° º’ªÛµ«æ˙Ω¿¥œ¥Ÿ.");
+		//	SEND_NOTIFICATION(C_YLW"Î¨¥Î¶¨Ìïú Ï£ºÎ¨∏ÏùÑ Ï∑®Í∏âÌïòÎ©¥ÏÑú Ïû•ÎπÑÍ∞Ä ÏÜêÏÉÅÎêòÏóàÏäµÎãàÎã§.");
 		//}
 	return true;	
 	}
@@ -79,7 +79,7 @@ void AddSC_ent_item()
 	new ent_item();
 }
 /*
-#define  	PROP_ENCHANTMENT_SLOT_0          7                  	// +1  ¿Œ√æ∆Æ ΩΩ∑‘
+#define  	PROP_ENCHANTMENT_SLOT_0          7                  	// +1  Ïù∏Ï≤∏Ìä∏ Ïä¨Î°Ø
 #define     PROP_ENCHANTMENT_SLOT_1          8                  	// +2
 #define     PROP_ENCHANTMENT_SLOT_2          9                  	// +3
 #define     PROP_ENCHANTMENT_SLOT_3          10                 	// +4
@@ -88,30 +88,30 @@ void AddSC_ent_item()
 /*
 enum EquipmentSlots                                         // 19 slots
 {
-    EQUIPMENT_SLOT_HEAD         = 0,	∏”∏Æ
-    EQUIPMENT_SLOT_NECK         = 1,	∏Ò∞…¿Ã
-    EQUIPMENT_SLOT_SHOULDERS    = 2,	æÓ±˙
-    EQUIPMENT_SLOT_BODY         = 3,	∞°Ωø  «ﬁ∞•∏≤
-    EQUIPMENT_SLOT_CHEST        = 4,  	º”ø   «ﬁ∞•∏≤ ¿Ã∞‘ ∞°Ωø∞∞¿∫µ•??
-    EQUIPMENT_SLOT_WAIST        = 5, 	«„∏Æ
-    EQUIPMENT_SLOT_LEGS         = 6,	¥Ÿ∏Æ
-    EQUIPMENT_SLOT_FEET         = 7,	πﬂ
-    EQUIPMENT_SLOT_WRISTS       = 8,	º’∏Ò
-    EQUIPMENT_SLOT_HANDS        = 9,	¿Â∞©
-    EQUIPMENT_SLOT_FINGER1      = 10,	º’∞°∂Ù
-    EQUIPMENT_SLOT_FINGER2      = 11,	º’∞°∂Ù
-    EQUIPMENT_SLOT_TRINKET1     = 12,	¿ÂΩ≈±∏1
-    EQUIPMENT_SLOT_TRINKET2     = 13,	¿ÂΩ≈±∏2
-    EQUIPMENT_SLOT_BACK         = 14,	µÓ
-    EQUIPMENT_SLOT_MAINHAND     = 15,	¡÷π´±‚
-    EQUIPMENT_SLOT_OFFHAND      = 16,	∫∏¡∂π´±‚
-    EQUIPMENT_SLOT_RANGED       = 17,	ø¯∞≈∏Æ
-    EQUIPMENT_SLOT_TABARD       = 18,	∞—ø 
+    EQUIPMENT_SLOT_HEAD         = 0,	Î®∏Î¶¨
+    EQUIPMENT_SLOT_NECK         = 1,	Î™©Í±∏Ïù¥
+    EQUIPMENT_SLOT_SHOULDERS    = 2,	Ïñ¥Íπ®
+    EQUIPMENT_SLOT_BODY         = 3,	Í∞ÄÏä¥  ÌñáÍ∞àÎ¶º
+    EQUIPMENT_SLOT_CHEST        = 4,  	ÏÜçÏò∑  ÌñáÍ∞àÎ¶º Ïù¥Í≤å Í∞ÄÏä¥Í∞ôÏùÄÎç∞??
+    EQUIPMENT_SLOT_WAIST        = 5, 	ÌóàÎ¶¨
+    EQUIPMENT_SLOT_LEGS         = 6,	Îã§Î¶¨
+    EQUIPMENT_SLOT_FEET         = 7,	Î∞ú
+    EQUIPMENT_SLOT_WRISTS       = 8,	ÏÜêÎ™©
+    EQUIPMENT_SLOT_HANDS        = 9,	Ïû•Í∞ë
+    EQUIPMENT_SLOT_FINGER1      = 10,	ÏÜêÍ∞ÄÎùΩ
+    EQUIPMENT_SLOT_FINGER2      = 11,	ÏÜêÍ∞ÄÎùΩ
+    EQUIPMENT_SLOT_TRINKET1     = 12,	Ïû•Ïã†Íµ¨1
+    EQUIPMENT_SLOT_TRINKET2     = 13,	Ïû•Ïã†Íµ¨2
+    EQUIPMENT_SLOT_BACK         = 14,	Îì±
+    EQUIPMENT_SLOT_MAINHAND     = 15,	Ï£ºÎ¨¥Í∏∞
+    EQUIPMENT_SLOT_OFFHAND      = 16,	Î≥¥Ï°∞Î¨¥Í∏∞
+    EQUIPMENT_SLOT_RANGED       = 17,	ÏõêÍ±∞Î¶¨
+    EQUIPMENT_SLOT_TABARD       = 18,	Í≤âÏò∑
     EQUIPMENT_SLOT_END          = 19
 };
 */
 //
-//-- ∞ÀªˆΩƒ
+//-- Í≤ÄÏÉâÏãù
 //
 //select A.entry AS entry,A.slot AS slot,A.level AS level,B.spell AS spell 
 //from (M1_R_C.ent_item A join M1_R_C.ent_spell B on((A.level = B.level))) 
@@ -122,7 +122,7 @@ enum EquipmentSlots                                         // 19 slots
 //
 //
 //-- ----------------------------
-//-- Table structure for ent_item ≈◊¿Ã∫Ì 
+//-- Table structure for ent_item ÌÖåÏù¥Î∏î 
 //-- ----------------------------
 //CREATE TABLE ent_item (
 //  entry int(11) NOT NULL DEFAULT '0',
@@ -132,7 +132,7 @@ enum EquipmentSlots                                         // 19 slots
 //) DEFAULT CHARSET=utf8;
 //
 //-- ----------------------------
-//-- Table structure for ent_spell ≈◊¿Ã∫Ì
+//-- Table structure for ent_spell ÌÖåÏù¥Î∏î
 //-- ----------------------------
 //CREATE TABLE ent_spell (
 //  spell int(7) NOT NULL DEFAULT '0',
